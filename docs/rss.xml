@@ -1,5 +1,78 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGT note</title><link>/note</link><description>生生不息，止于至善</description><copyright>MGT note</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>./favicon.ico</url><title>avatar</title><link>/note</link></image><lastBuildDate>Wed, 26 Feb 2025 17:02:27 +0000</lastBuildDate><managingEditor>MGT note</managingEditor><ttl>60</ttl><webMaster>MGT note</webMaster><item><title>Markdown语法总览</title><link>/note/post/Markdown-yu-fa-zong-lan.html</link><description>markdown测试页面
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGT note</title><link>/note</link><description>生生不息，止于至善</description><copyright>MGT note</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>./favicon.ico</url><title>avatar</title><link>/note</link></image><lastBuildDate>Wed, 26 Feb 2025 17:03:39 +0000</lastBuildDate><managingEditor>MGT note</managingEditor><ttl>60</ttl><webMaster>MGT note</webMaster><item><title>CloudFlare优选汇总</title><link>/note/post/CloudFlare-you-xuan-hui-zong.html</link><description>https://cf.090227.xyz维护的优选官方域名
+cf.090227.xyz#三网自适应分流官方优选
+ct.090227.xyz#电信官方优选
+cmcc.090227.xyz#移动官方优选
+
+------
+
+常用的优选官方域名
+shopify.com
+time.is
+icook.hk
+icook.tw
+ip.sb
+japan.com
+malaysia.com
+russia.com
+singapore.com
+skk.moe
+www.visa.com.sg
+www.visa.com.hk
+www.visa.com.tw
+www.visa.co.jp
+www.visakorea.com
+www.gco.gov.qa
+www.gov.se
+www.gov.ua
+
+------
+
+第三方维护的优选官方域名（未备注出处的为未知）
+cfip.xxxxxxxx.tk#OTC提供维护官方优选
+bestcf.onecf.eu.org#Mingyu提供维护官方优选
+cf.zhetengsha.eu.org#小一提供维护官方优选
+acjp2.cloudflarest.link#KJKKK维护官方优选
+achk.cloudflarest.link#KJKKK维护官方优选
+xn--b6gac.eu.org
+yx.887141.xyz
+8.889288.xyz
+cfip.1323123.xyz
+cf.515188.xyz
+cf-st.annoy.eu.org
+cf.0sm.com
+cf.877771.xyz
+cf.345673.xyz
+
+------
+
+第三方维护的优选反代域名
+bestproxy.onecf.eu.org#Mingyu提供维护反代优选
+proxy.xxxxxxxx.tk#OTC提供维护反代优选
+47.243.237.160   proxy.xxxxxxxx.tk   ts.hpc.tw   edgetunnel.anycast.eu.org   bestproxy.onecf.eu.org   cdn-all.xn--b6gac.eu.org   cdn.xn--b6gac.eu.org
+
+------
+
+第三方维护的优选官方IP的API
+https://ipdb.api.030101.xyz/?type=bestcf&amp;country=true
+https://addressesapi.090227.xyz/CloudFlareYes
+https://addressesapi.090227.xyz/ip.164746.xyz
+第三方维护的优选反代IP的API
+https://ipdb.api.030101.xyz/?type=bestproxy&amp;country=true
+
+------
+
+更多优选内容可自行查看
+https://cf.090227.xyz
+https://ipdb.api.030101.xyz
+https://monitor.gacjie.cn/page/cloudflare/cname.html
+https://ip.164746.xyz
+https://stock.hostmonit.com/CloudFlareYes
+
+------
+
+HTTP支持端口：80，8080，8880，2052，2082，2086，2095；
+HTTPS支持端口：443，2053，2083，2087，2096，8443。</description><guid isPermaLink="true">/note/post/CloudFlare-you-xuan-hui-zong.html</guid><pubDate>Wed, 26 Feb 2025 17:03:07 +0000</pubDate></item><item><title>Markdown语法总览</title><link>/note/post/Markdown-yu-fa-zong-lan.html</link><description>markdown测试页面
 ============
 
 [](https://blog.meekdai.com/ '首页')[](https://github.com/Meekdai/meekdai.github.io/issues/4 'Issue')[](https://blog.meekdai.com/post/markdown-ce-shi-ye-mian.html '切换主题')
