@@ -2,7 +2,7 @@
 name: GitHub
 about: Describe this issue template's purpose here.
 title: ''
-labels: GitHub
+labels: GitHub, 软件
 assignees: ''
 
 ---
