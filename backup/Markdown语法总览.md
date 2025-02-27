@@ -101,7 +101,7 @@ print("Hello World")
 
 [![这是我的头像PNG](https://github.com/Meekdai/meekdai.github.io/assets/11755104/e4da3470-d4b1-4cc7-9d84-f7da69f90a76)](https://github.com/Meekdai/meekdai.github.io/assets/11755104/e4da3470-d4b1-4cc7-9d84-f7da69f90a76)
 
-[![这是我的头像SVG](https://camo.githubusercontent.com/18745789fceeb9c56af5f0a23bc9b6f81b4c882f7964ef8b0b01f8b2dc9ea815/68747470733a2f2f626c6f672e6d65656b6461692e636f6d2f6176617461722e737667)](https://camo.githubusercontent.com/18745789fceeb9c56af5f0a23bc9b6f81b4c882f7964ef8b0b01f8b2dc9ea815/68747470733a2f2f626c6f672e6d65656b6461692e636f6d2f6176617461722e737667)
+[![这是我的头像SVG](https://fjvi.github.io/note/favicon.ico)](https://fjvi.github.io/note/favicon.ico)
 
 表格
 --
