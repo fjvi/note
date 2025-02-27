@@ -95,11 +95,11 @@ print("Hello World")
 --
 
 ```md
-![这是我的头像PNG](https://github.com/692.png)
-![这是我的头像SVG](https://note.mgta.us.kg/avatar.svg)
+![这是我的头像PNG](https://fjvi.github.io/note/favicon.ico)
+![这是我的头像SVG](https://fjvi.github.io/note/favicon.ico)
 ```
 
-[![这是我的头像PNG](https://github.com/Meekdai/meekdai.github.io/assets/11755104/e4da3470-d4b1-4cc7-9d84-f7da69f90a76)](https://github.com/Meekdai/meekdai.github.io/assets/11755104/e4da3470-d4b1-4cc7-9d84-f7da69f90a76)
+[![这是我的头像PNG](https://fjvi.github.io/note/favicon.ico)](https://fjvi.github.io/note/favicon.ico)
 
 [![这是我的头像SVG](https://fjvi.github.io/note/favicon.ico)](https://fjvi.github.io/note/favicon.ico)
 
