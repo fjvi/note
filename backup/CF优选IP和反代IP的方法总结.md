@@ -43,7 +43,8 @@ server=="cloudflare" && port=="80" && header="Forbidden" && country=="SG" && asn
 
 4.本地优选和测速工具
 
-Github：https://github.com/XIU2/CloudflareSpeedTest/ 这个工具自带Cloudflare官方IP库，大约有5955个CF的ip,只要一运行就会自动扫出前10个优选IP。但它没有反代IP库哈，另外它还是一个好用的测速工具。
+Github：https://github.com/XIU2/CloudflareSpeedTest
+ 这个工具自带Cloudflare官方IP库，大约有5955个CF的ip,只要一运行就会自动扫出前10个优选IP。但它没有反代IP库哈，另外它还是一个好用的测速工具。
 
 其它可能用到的工具
 
