@@ -9,5 +9,5 @@
     "startSite": ["tag"],
     "singlePage":["about"],
     "showPostSource":1,
-    "script":"<script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script><script src='https://code.buxiantang.top/assets/articletoc.js'></script>"
+    "script":"<script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script><script src='<script src="https://code.buxiantang.top/assets/backtop.js"></script>'></script><script src='https://code.buxiantang.top/assets/articletoc.js'></script>"
 }
