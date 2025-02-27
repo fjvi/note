@@ -9,5 +9,5 @@
     "startSite": ["tag"],
     "singlePage":["about"],
     "showPostSource":1,
-    "script":"<script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>"
+    "script":"<script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script><script src='https://raw.githubusercontent.com/tiengming/tiengming.github.io/refs/heads/main/static/assets/articletoc.js'></script><script src='https://blog.liyifan.xyz/assets/cat_backtotop.js'></script><script src='https://blog.liyifan.xyz/assets/lazyload.js'></script><script src='https://blog.liyifan.xyz/assets/viewimg.js'></script><script src='https://blog.liyifan.xyz/assets/subtitle_id.js'></script>"
 }
