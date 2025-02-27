@@ -99,7 +99,7 @@ print("Hello World")
 ![这是我的头像SVG](https://fjvi.github.io/note/favicon.ico)
 ```
 
-[![这是我的头像PNG](favicon.ico)](favicon.ico)
+[![这是我的头像PNG](/favicon.ico)](favicon.ico)
 
 [![这是我的头像SVG](https://fjvi.github.io/note/favicon.ico)](https://fjvi.github.io/note/favicon.ico)
 
