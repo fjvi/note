@@ -1,5 +1,27 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGT note</title><link>/note</link><description>生生不息，止于至善</description><copyright>MGT note</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>favicon.ico</url><title>avatar</title><link>/note</link></image><lastBuildDate>Thu, 27 Feb 2025 19:25:08 +0000</lastBuildDate><managingEditor>MGT note</managingEditor><ttl>60</ttl><webMaster>MGT note</webMaster><item><title>CF优选IP和反代IP的方法总结</title><link>/note/post/CF-you-xuan-IP-he-fan-dai-IP-de-fang-fa-zong-jie.html</link><description>blog.onetwoone.eu.org 
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGT note</title><link>/note</link><description>生生不息，止于至善</description><copyright>MGT note</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>favicon.ico</url><title>avatar</title><link>/note</link></image><lastBuildDate>Thu, 06 Mar 2025 16:57:17 +0000</lastBuildDate><managingEditor>MGT note</managingEditor><ttl>60</ttl><webMaster>MGT note</webMaster><item><title>Actionsflow 项目使用教程</title><link>/note/post/Actionsflow%20-xiang-mu-shi-yong-jiao-cheng.html</link><description>## Actionsflow 项目使用教程
+
+[actionsflow The free Zapier/IFTTT alternative for developers to automate your workflows based on Github actions 项目地址: https://gitcode.com/gh\_mirrors/ac/actionsflow](https://gitcode.com/gh_mirrors/ac/actionsflow/?utm_source=replace_article_gitcode&amp;index=top&amp;type=card&amp; 'actionsflow')
+
+### 1\. 项目的目录结构及介绍
+
+Actionsflow 项目的目录结构如下：
+
+```
+├── .github
+│   └── workflows
+│       └── actionsflow.yml
+├── .gitignore
+├── README.md
+├── workflows
+│   ├── rss.yml
+│   └── webhook.yml
+└── package.json
+```
+
+#### 目录结构介绍
+
+-   **.github/workflows/actionsflow.yml**: 这是 Actionsflow 的主要配置文件，定义了工作流的执行计划和触发条件。</description><guid isPermaLink="true">/note/post/Actionsflow%20-xiang-mu-shi-yong-jiao-cheng.html</guid><pubDate>Thu, 06 Mar 2025 16:56:50 +0000</pubDate></item><item><title>CF优选IP和反代IP的方法总结</title><link>/note/post/CF-you-xuan-IP-he-fan-dai-IP-de-fang-fa-zong-jie.html</link><description>blog.onetwoone.eu.org 
 
 Cloudflare的workers和pages搭建的免费vpn节点简单好用，但要保证速度我们必须优化CF的IP和反代CF的IP。</description><guid isPermaLink="true">/note/post/CF-you-xuan-IP-he-fan-dai-IP-de-fang-fa-zong-jie.html</guid><pubDate>Thu, 27 Feb 2025 19:24:34 +0000</pubDate></item><item><title>注册serv00的新方法，测试非常好</title><link>/note/post/zhu-ce-serv00-de-xin-fang-fa-%EF%BC%8C-ce-shi-fei-chang-hao.html</link><description> 1、打开谷歌云：
 &gt; [点击前往](https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Fconsole.cloud.google.com%2F&amp;followup=https%3A%2F%2Fconsole.cloud.google.com%2F&amp;ifkv=AeZLP9-0IQSq05xeTMuW_HTDcW960bBquuu4bZzNRa3Y1JiTKCW9rsteltb7DqePmwSSYv987u3_oA&amp;osid=1&amp;passive=1209600&amp;service=cloudconsole&amp;flowName=GlifWebSignIn&amp;flowEntry=ServiceLogin&amp;dsh=S-550021044%3A1734529949831903&amp;ddm=1) {:target='_blank'}
