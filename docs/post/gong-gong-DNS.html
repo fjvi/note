@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="favicon.ico"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="# 国内
+## 114DNS
+```md
+114.114.114.114
+```
+## 阿里公共DNS:
+
+IPv4：
+```md
+223.5.5.5  
+```
+备选：223.6.6.6  
+IPv6：2400:3200::1  
+IPV6: 2400:3200:baba::1  
+DoH：https://223.5.5.5/dns-query  
+DoH：https://223.6.6.6/dns-query  
+DoH：https://dns.alidns.com/dns-query  
+DoT：dns.alidns.com  
+DoT：223.5.5.5  
+DoT：223.6.6.6
+
+## 腾讯公共DNS(DNSPod):
+
+IPv4： 
+```md
+119.29.29.29
+```
+IPV6:2402:4e00::  
+DoH：https://doh.pub/dns-query  
+DoH：https://1.12.12.12/dns-query  
+DoH：https://120.53.53.53/dns-query  
+DoH：https://sm2.doh.pub/dns-query (国密)  
+DoT：dot.pub  
+DoT：1.12.12.12  
+DoT：120.53.53.53
+
+## 百度公共DNS：
+
+IPv4: 
+```md
+180.76.76.76
+```
+IPV6: 2400:da00::6666
+
+## 360公共DNS:
+
+电信/铁通/移动IPv4: 101.226.4.6  
+电信/铁通/移动IPv4: 218.30.118.6  
+联通IPv4: 123.125.81.6  
+联通IPv4: 140.207.198.6  
+DoH: https://doh.360.cn  
+DoT: dot.360.cn
+
+## CNNIC DNS:
+
+IPV4: 1.2.4.8  
+IPV4: 210.2.4.8
+
+IPV6: 2001:dc7:1000::1
+
+# 境外
+## Google公共DNS
+
+IPv4：
+```md
+8.8.8.8
+```
+IPv4：8.8.4.4  
+IPV6: 2001:4860:4860::8888  
+IPV6: 2001:4860:4860::8844)  
+DoH地址：https://dns.google/dns-query  
+DoH地址：https://8.8.8.8/dns-query  
+DoH地址：https://8.8.4.4/dns-query  
+DoT:dns.google  
+DoT:8.8.8.8  
+DoT:8.8.4.4
+
+## Cloudflare公共DNS:
+
+IPv4: 
+```md
+1.1.1.1
+```
+IPV4: 1.0.0.1  
+IPV6: 2606:4700:4700::1111  
+IPV6: 2606:4700:4700::1001  
+DoH: https://1.1.1.1/dns-query  
+DoH: https://1.0.0.1/dns-query  
+DoH: https://cloudflare-dns.com/dns-query  
+DoT：1.1.1.1
+
+DoT：1.0.0.1
+
+DoT：1dot1dot1dot1.cloudflare-dns.com
+
+DoT：cloudflare-dns.com
+
+DoT：one.one.one.one
+
+  
+
+## 台湾Quad 101(twnic):
+
+IPV4: 101.101.101.101
+
+IPV4: 101.102.103.104
+
+IPV6: 2001:de4::101
+
+IPV6: 2001:de4::102
+
+DoH: https://dns.twnic.tw/dns-query
+
+ 
+
+## DNS.SB公共DNS:
+
+IPv4: 185.222.222.222  
+IPV4: 45.11.45.11  
+IPV6: 2a09::  
+IPV6: 2a11::
+
+DoH: https://doh.sb/dns-query (或者：https://doh.dns.sb/dns-query两个指向一样，只是域名不一样)
+
+DoH: https://45.11.45.11/dns-query  
+DoH: https://185.222.222.222/dns-query  
+DoT: dot.sb  
+DoT: 185.222.222.222
+
+DoT: 45.11.45.11
+
+DoH香港节点: https://hk-hkg.doh.sb/dns-query  (更多分节点：[https://dns.sb/doh/](https://dns.sb/doh/)，可以根据自己的位置选择速度快一些的节点。">
+<meta property="og:title" content="公共DNS">
+<meta property="og:description" content="# 国内
+## 114DNS
+```md
+114.114.114.114
+```
+## 阿里公共DNS:
+
+IPv4：
+```md
+223.5.5.5  
+```
+备选：223.6.6.6  
+IPv6：2400:3200::1  
+IPV6: 2400:3200:baba::1  
+DoH：https://223.5.5.5/dns-query  
+DoH：https://223.6.6.6/dns-query  
+DoH：https://dns.alidns.com/dns-query  
+DoT：dns.alidns.com  
+DoT：223.5.5.5  
+DoT：223.6.6.6
+
+## 腾讯公共DNS(DNSPod):
+
+IPv4： 
+```md
+119.29.29.29
+```
+IPV6:2402:4e00::  
+DoH：https://doh.pub/dns-query  
+DoH：https://1.12.12.12/dns-query  
+DoH：https://120.53.53.53/dns-query  
+DoH：https://sm2.doh.pub/dns-query (国密)  
+DoT：dot.pub  
+DoT：1.12.12.12  
+DoT：120.53.53.53
+
+## 百度公共DNS：
+
+IPv4: 
+```md
+180.76.76.76
+```
+IPV6: 2400:da00::6666
+
+## 360公共DNS:
+
+电信/铁通/移动IPv4: 101.226.4.6  
+电信/铁通/移动IPv4: 218.30.118.6  
+联通IPv4: 123.125.81.6  
+联通IPv4: 140.207.198.6  
+DoH: https://doh.360.cn  
+DoT: dot.360.cn
+
+## CNNIC DNS:
+
+IPV4: 1.2.4.8  
+IPV4: 210.2.4.8
+
+IPV6: 2001:dc7:1000::1
+
+# 境外
+## Google公共DNS
+
+IPv4：
+```md
+8.8.8.8
+```
+IPv4：8.8.4.4  
+IPV6: 2001:4860:4860::8888  
+IPV6: 2001:4860:4860::8844)  
+DoH地址：https://dns.google/dns-query  
+DoH地址：https://8.8.8.8/dns-query  
+DoH地址：https://8.8.4.4/dns-query  
+DoT:dns.google  
+DoT:8.8.8.8  
+DoT:8.8.4.4
+
+## Cloudflare公共DNS:
+
+IPv4: 
+```md
+1.1.1.1
+```
+IPV4: 1.0.0.1  
+IPV6: 2606:4700:4700::1111  
+IPV6: 2606:4700:4700::1001  
+DoH: https://1.1.1.1/dns-query  
+DoH: https://1.0.0.1/dns-query  
+DoH: https://cloudflare-dns.com/dns-query  
+DoT：1.1.1.1
+
+DoT：1.0.0.1
+
+DoT：1dot1dot1dot1.cloudflare-dns.com
+
+DoT：cloudflare-dns.com
+
+DoT：one.one.one.one
+
+  
+
+## 台湾Quad 101(twnic):
+
+IPV4: 101.101.101.101
+
+IPV4: 101.102.103.104
+
+IPV6: 2001:de4::101
+
+IPV6: 2001:de4::102
+
+DoH: https://dns.twnic.tw/dns-query
+
+ 
+
+## DNS.SB公共DNS:
+
+IPv4: 185.222.222.222  
+IPV4: 45.11.45.11  
+IPV6: 2a09::  
+IPV6: 2a11::
+
+DoH: https://doh.sb/dns-query (或者：https://doh.dns.sb/dns-query两个指向一样，只是域名不一样)
+
+DoH: https://45.11.45.11/dns-query  
+DoH: https://185.222.222.222/dns-query  
+DoT: dot.sb  
+DoT: 185.222.222.222
+
+DoT: 45.11.45.11
+
+DoH香港节点: https://hk-hkg.doh.sb/dns-query  (更多分节点：[https://dns.sb/doh/](https://dns.sb/doh/)，可以根据自己的位置选择速度快一些的节点。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="/note/post/gong-gong-DNS.html">
+<meta property="og:image" content="favicon.ico">
+<title>公共DNS</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">公共DNS</h1>
+<div class="title-right">
+    <a href="/note" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/fjvi/note/issues/14" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h1>国内</h1>
+<h2>114DNS</h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">114.114.114.114</pre></div>
+<h2>阿里公共DNS:</h2>
+<p>IPv4：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">223.5.5.5  </pre></div>
+<p>备选：223.6.6.6<br>
+IPv6：2400:3200::1<br>
+IPV6: 2400:3200:baba::1<br>
+DoH：<a href="https://223.5.5.5/dns-query" rel="nofollow">https://223.5.5.5/dns-query</a><br>
+DoH：<a href="https://223.6.6.6/dns-query" rel="nofollow">https://223.6.6.6/dns-query</a><br>
+DoH：<a href="https://dns.alidns.com/dns-query" rel="nofollow">https://dns.alidns.com/dns-query</a><br>
+DoT：dns.alidns.com<br>
+DoT：223.5.5.5<br>
+DoT：223.6.6.6</p>
+<h2>腾讯公共DNS(DNSPod):</h2>
+<p>IPv4：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">119.29.29.29</pre></div>
+<p>IPV6:2402:4e00::<br>
+DoH：<a href="https://doh.pub/dns-query" rel="nofollow">https://doh.pub/dns-query</a><br>
+DoH：<a href="https://1.12.12.12/dns-query" rel="nofollow">https://1.12.12.12/dns-query</a><br>
+DoH：<a href="https://120.53.53.53/dns-query" rel="nofollow">https://120.53.53.53/dns-query</a><br>
+DoH：<a href="https://sm2.doh.pub/dns-query" rel="nofollow">https://sm2.doh.pub/dns-query</a> (国密)<br>
+DoT：dot.pub<br>
+DoT：1.12.12.12<br>
+DoT：120.53.53.53</p>
+<h2>百度公共DNS：</h2>
+<p>IPv4:</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">180.76.76.76</pre></div>
+<p>IPV6: 2400:da00::6666</p>
+<h2>360公共DNS:</h2>
+<p>电信/铁通/移动IPv4: 101.226.4.6<br>
+电信/铁通/移动IPv4: 218.30.118.6<br>
+联通IPv4: 123.125.81.6<br>
+联通IPv4: 140.207.198.6<br>
+DoH: <a href="https://doh.360.cn" rel="nofollow">https://doh.360.cn</a><br>
+DoT: dot.360.cn</p>
+<h2>CNNIC DNS:</h2>
+<p>IPV4: 1.2.4.8<br>
+IPV4: 210.2.4.8</p>
+<p>IPV6: 2001:dc7:1000::1</p>
+<h1>境外</h1>
+<h2>Google公共DNS</h2>
+<p>IPv4：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">8.8.8.8</pre></div>
+<p>IPv4：8.8.4.4<br>
+IPV6: 2001:4860:4860::8888<br>
+IPV6: 2001:4860:4860::8844)<br>
+DoH地址：<a href="https://dns.google/dns-query" rel="nofollow">https://dns.google/dns-query</a><br>
+DoH地址：<a href="https://8.8.8.8/dns-query" rel="nofollow">https://8.8.8.8/dns-query</a><br>
+DoH地址：<a href="https://8.8.4.4/dns-query" rel="nofollow">https://8.8.4.4/dns-query</a><br>
+DoT:dns.google<br>
+DoT:8.8.8.8<br>
+DoT:8.8.4.4</p>
+<h2>Cloudflare公共DNS:</h2>
+<p>IPv4:</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">1.1.1.1</pre></div>
+<p>IPV4: 1.0.0.1<br>
+IPV6: 2606:4700:4700::1111<br>
+IPV6: 2606:4700:4700::1001<br>
+DoH: <a href="https://1.1.1.1/dns-query" rel="nofollow">https://1.1.1.1/dns-query</a><br>
+DoH: <a href="https://1.0.0.1/dns-query" rel="nofollow">https://1.0.0.1/dns-query</a><br>
+DoH: <a href="https://cloudflare-dns.com/dns-query" rel="nofollow">https://cloudflare-dns.com/dns-query</a><br>
+DoT：1.1.1.1</p>
+<p>DoT：1.0.0.1</p>
+<p>DoT：1dot1dot1dot1.cloudflare-dns.com</p>
+<p>DoT：cloudflare-dns.com</p>
+<p>DoT：one.one.one.one</p>
+<h2>台湾Quad 101(twnic):</h2>
+<p>IPV4: 101.101.101.101</p>
+<p>IPV4: 101.102.103.104</p>
+<p>IPV6: 2001:de4::101</p>
+<p>IPV6: 2001:de4::102</p>
+<p>DoH: <a href="https://dns.twnic.tw/dns-query" rel="nofollow">https://dns.twnic.tw/dns-query</a></p>
+<h2>DNS.SB公共DNS:</h2>
+<p>IPv4: 185.222.222.222<br>
+IPV4: 45.11.45.11<br>
+IPV6: 2a09::<br>
+IPV6: 2a11::</p>
+<p>DoH: <a href="https://doh.sb/dns-query" rel="nofollow">https://doh.sb/dns-query</a> (或者：<a href="https://doh.dns.sb/dns-query%E4%B8%A4%E4%B8%AA%E6%8C%87%E5%90%91%E4%B8%80%E6%A0%B7%EF%BC%8C%E5%8F%AA%E6%98%AF%E5%9F%9F%E5%90%8D%E4%B8%8D%E4%B8%80%E6%A0%B7" rel="nofollow">https://doh.dns.sb/dns-query两个指向一样，只是域名不一样</a>)</p>
+<p>DoH: <a href="https://45.11.45.11/dns-query" rel="nofollow">https://45.11.45.11/dns-query</a><br>
+DoH: <a href="https://185.222.222.222/dns-query" rel="nofollow">https://185.222.222.222/dns-query</a><br>
+DoT: dot.sb<br>
+DoT: 185.222.222.222</p>
+<p>DoT: 45.11.45.11</p>
+<p>DoH香港节点: <a href="https://hk-hkg.doh.sb/dns-query%C2%A0" rel="nofollow">https://hk-hkg.doh.sb/dns-query </a> (更多分节点：<a href="https://dns.sb/doh/" rel="nofollow">https://dns.sb/doh/</a>，可以根据自己的位置选择速度快一些的节点。)</p>
+<h2>AdGuard 公共DNS:</h2>
+<p>IPV4默认过滤广告: 94.140.14.14<br>
+IPV4默认过滤广告：94.140.15.15<br>
+IPV4无过滤: 94.140.14.140<br>
+IPV4无过滤:94.140.14.141<br>
+IPV4家庭保护(过滤广告与成人内容)：94.140.14.15<br>
+IPV4家庭保护(过滤广告与成人内容)：94.140.15.16<br>
+DoH默认过滤广告：<a href="https://dns.adguard.com/dns-query" rel="nofollow">https://dns.adguard.com/dns-query</a><br>
+DoH家庭保护(过滤广告与成人内容)：<a href="https://dns-family.adguard.com/dns-query" rel="nofollow">https://dns-family.adguard.com/dns-query</a><br>
+DoH非过滤：<a href="https://dns-unfiltered.adguard.com/dns-query" rel="nofollow">https://dns-unfiltered.adguard.com/dns-query</a><br>
+DoT默认过滤广告：dns.adguard.com<br>
+DoT家庭保护(过滤广告与成人内容)：dns-family.adguard.com<br>
+DoT非过滤：dns-unfiltered.adguard.com</p>
+<h2>OpenDNS(Cisco):</h2>
+<p>IPv4：208.67.222.222<br>
+IPv4：208.67.220.220<br>
+IPV4 Family: 208.67.222.123<br>
+IPV4 Family: 208.67.220.123<br>
+IPV6: 2620:0:ccc::2<br>
+IPV6: 2620:0:ccd::2<br>
+DoH：<a href="https://doh.opendns.com/dns-query" rel="nofollow">https://doh.opendns.com/dns-query</a><br>
+DoH Family：<a href="https://doh.familyshield.opendns.com/dns-query" rel="nofollow">https://doh.familyshield.opendns.com/dns-query</a><br>
+DoT: dns.umbrella.com</p>
+<h2>IBM Quad9:</h2>
+<p>IPv4默认安全：9.9.9.9<br>
+IPv4默认安全：149.112.112.112<br>
+IPv6默认安全: 2620:fe::fe<br>
+IPv6默认安全: 2620:fe::fe:9<br>
+DoH默认：<a href="https://dns.quad9.net/dns-query" rel="nofollow">https://dns.quad9.net/dns-query</a><br>
+DoT默认：dns.quad9.net<br>
+IPv4无过滤：9.9.9.10<br>
+IPv4无过滤：149.112.112.10<br>
+IPv6无过滤: 2620:fe::10<br>
+IPv6无过滤: 2620:fe::fe:10<br>
+DoH无过滤：<a href="https://dns10.quad9.net/dns-query" rel="nofollow">https://dns10.quad9.net/dns-query</a><br>
+DoT无过滤：dns10.quad9.net<br>
+IPv4 ECS保护：9.9.9.11<br>
+IPv4 ECS保护：149.112.112.11<br>
+IPv6 ECS保护: 2620:fe::11<br>
+IPv6 ECS保护: 2620:fe::fe:11<br>
+DoH ECS保护：<a href="https://dns11.quad9.net/dns-query" rel="nofollow">https://dns11.quad9.net/dns-query</a><br>
+DoT ECS保护：dns11.quad9.net</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="/note">MGT note</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if("['tag']"!=""){
+    var startSite=new Date("['tag']");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","fjvi/note");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+<script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script><script src='<script src='https://code.buxiantang.top/assets/backtop.js'></script>'></script><script src='https://code.buxiantang.top/assets/articletoc.js'></script>
+
+</html>
