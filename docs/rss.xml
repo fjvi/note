@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGT note</title><link>/note</link><description>生生不息，止于至善</description><copyright>MGT note</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>favicon.ico</url><title>avatar</title><link>/note</link></image><lastBuildDate>Mon, 10 Mar 2025 11:33:32 +0000</lastBuildDate><managingEditor>MGT note</managingEditor><ttl>60</ttl><webMaster>MGT note</webMaster><item><title>替换Google文档共享链接URL中的 edit ，转换为预览、复制、模板或导出PDF链接</title><link>/note/post/ti-huan-Google-wen-dang-gong-xiang-lian-jie-URL-zhong-de-%20edit%20%EF%BC%8C-zhuan-huan-wei-yu-lan-%E3%80%81-fu-zhi-%E3%80%81-mo-ban-huo-dao-chu-PDF-lian-jie.html</link><description>通过替换Google文档共享链接URL中的 *edit* ，您可以做一些非常巧妙的技巧。</description><guid isPermaLink="true">/note/post/ti-huan-Google-wen-dang-gong-xiang-lian-jie-URL-zhong-de-%20edit%20%EF%BC%8C-zhuan-huan-wei-yu-lan-%E3%80%81-fu-zhi-%E3%80%81-mo-ban-huo-dao-chu-PDF-lian-jie.html</guid><pubDate>Mon, 10 Mar 2025 11:20:47 +0000</pubDate></item><item><title>公共DNS</title><link>/note/post/gong-gong-DNS.html</link><description># 国内
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGT note</title><link>/note</link><description>生生不息，止于至善</description><copyright>MGT note</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>favicon.ico</url><title>avatar</title><link>/note</link></image><lastBuildDate>Mon, 10 Mar 2025 12:29:43 +0000</lastBuildDate><managingEditor>MGT note</managingEditor><ttl>60</ttl><webMaster>MGT note</webMaster><item><title>替换Google文档共享链接URL中的 edit ，转换为预览、复制、模板或导出PDF链接</title><link>/note/post/ti-huan-Google-wen-dang-gong-xiang-lian-jie-URL-zhong-de-%20edit%20%EF%BC%8C-zhuan-huan-wei-yu-lan-%E3%80%81-fu-zhi-%E3%80%81-mo-ban-huo-dao-chu-PDF-lian-jie.html</link><description>通过替换Google文档共享链接URL中的 *edit* ，您可以做一些非常巧妙的技巧。</description><guid isPermaLink="true">/note/post/ti-huan-Google-wen-dang-gong-xiang-lian-jie-URL-zhong-de-%20edit%20%EF%BC%8C-zhuan-huan-wei-yu-lan-%E3%80%81-fu-zhi-%E3%80%81-mo-ban-huo-dao-chu-PDF-lian-jie.html</guid><pubDate>Mon, 10 Mar 2025 11:20:47 +0000</pubDate></item><item><title>公共DNS</title><link>/note/post/gong-gong-DNS.html</link><description># 国内
+
 ## 114DNS
 ```md
 114.114.114.114
 ```
 ## 阿里公共DNS:
-
 IPv4：
 ```md
 223.5.5.5  
@@ -21,7 +21,6 @@ DoT：223.5.5.5
 DoT：223.6.6.6
 
 ## 腾讯公共DNS(DNSPod):
-
 IPv4： 
 ```md
 119.29.29.29
@@ -36,7 +35,6 @@ DoT：1.12.12.12
 DoT：120.53.53.53
 
 ## 百度公共DNS：
-
 IPv4: 
 ```md
 180.76.76.76
@@ -44,7 +42,6 @@ IPv4:
 IPV6: 2400:da00::6666
 
 ## 360公共DNS:
-
 电信/铁通/移动IPv4: 101.226.4.6  
 电信/铁通/移动IPv4: 218.30.118.6  
 联通IPv4: 123.125.81.6  
@@ -53,15 +50,13 @@ DoH: https://doh.360.cn
 DoT: dot.360.cn
 
 ## CNNIC DNS:
-
 IPV4: 1.2.4.8  
 IPV4: 210.2.4.8
-
 IPV6: 2001:dc7:1000::1
 
 # 境外
-## Google公共DNS
 
+## Google公共DNS：
 IPv4：
 ```md
 8.8.8.8
@@ -77,7 +72,6 @@ DoT:8.8.8.8
 DoT:8.8.4.4
 
 ## Cloudflare公共DNS:
-
 IPv4: 
 ```md
 1.1.1.1
@@ -89,47 +83,27 @@ DoH: https://1.1.1.1/dns-query
 DoH: https://1.0.0.1/dns-query  
 DoH: https://cloudflare-dns.com/dns-query  
 DoT：1.1.1.1
-
 DoT：1.0.0.1
-
 DoT：1dot1dot1dot1.cloudflare-dns.com
-
 DoT：cloudflare-dns.com
-
 DoT：one.one.one.one
 
-  
-
 ## 台湾Quad 101(twnic):
-
 IPV4: 101.101.101.101
-
 IPV4: 101.102.103.104
-
 IPV6: 2001:de4::101
-
 IPV6: 2001:de4::102
-
-DoH: https://dns.twnic.tw/dns-query
-
- 
+DoH: https://dns.twnic.tw/dns-query 
 
 ## DNS.SB公共DNS:
-
 IPv4: 185.222.222.222  
 IPV4: 45.11.45.11  
-IPV6: 2a09::  
-IPV6: 2a11::
-
 DoH: https://doh.sb/dns-query (或者：https://doh.dns.sb/dns-query两个指向一样，只是域名不一样)
-
 DoH: https://45.11.45.11/dns-query  
 DoH: https://185.222.222.222/dns-query  
 DoT: dot.sb  
 DoT: 185.222.222.222
-
 DoT: 45.11.45.11
-
 DoH香港节点: https://hk-hkg.doh.sb/dns-query  (更多分节点：[https://dns.sb/doh/](https://dns.sb/doh/)，可以根据自己的位置选择速度快一些的节点。</description><guid isPermaLink="true">/note/post/gong-gong-DNS.html</guid><pubDate>Sun, 09 Mar 2025 12:12:46 +0000</pubDate></item><item><title>好用的网页内容转markdown工具</title><link>/note/post/hao-yong-de-wang-ye-nei-rong-zhuan-markdown-gong-ju.html</link><description>一.在线工具推荐：
 
 **1.devtool**

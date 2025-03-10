@@ -1,10 +1,10 @@
 # 国内
+
 ## 114DNS
 ```md
 114.114.114.114
 ```
 ## 阿里公共DNS:
-
 IPv4：
 ```md
 223.5.5.5  
@@ -20,7 +20,6 @@ DoT：223.5.5.5
 DoT：223.6.6.6
 
 ## 腾讯公共DNS(DNSPod):
-
 IPv4： 
 ```md
 119.29.29.29
@@ -35,7 +34,6 @@ DoT：1.12.12.12
 DoT：120.53.53.53
 
 ## 百度公共DNS：
-
 IPv4: 
 ```md
 180.76.76.76
@@ -43,7 +41,6 @@ IPv4:
 IPV6: 2400:da00::6666
 
 ## 360公共DNS:
-
 电信/铁通/移动IPv4: 101.226.4.6  
 电信/铁通/移动IPv4: 218.30.118.6  
 联通IPv4: 123.125.81.6  
@@ -52,15 +49,13 @@ DoH: https://doh.360.cn
 DoT: dot.360.cn
 
 ## CNNIC DNS:
-
 IPV4: 1.2.4.8  
 IPV4: 210.2.4.8
-
 IPV6: 2001:dc7:1000::1
 
 # 境外
-## Google公共DNS
 
+## Google公共DNS：
 IPv4：
 ```md
 8.8.8.8
@@ -76,7 +71,6 @@ DoT:8.8.8.8
 DoT:8.8.4.4
 
 ## Cloudflare公共DNS:
-
 IPv4: 
 ```md
 1.1.1.1
@@ -88,53 +82,30 @@ DoH: https://1.1.1.1/dns-query
 DoH: https://1.0.0.1/dns-query  
 DoH: https://cloudflare-dns.com/dns-query  
 DoT：1.1.1.1
-
 DoT：1.0.0.1
-
 DoT：1dot1dot1dot1.cloudflare-dns.com
-
 DoT：cloudflare-dns.com
-
 DoT：one.one.one.one
 
-  
-
 ## 台湾Quad 101(twnic):
-
 IPV4: 101.101.101.101
-
 IPV4: 101.102.103.104
-
 IPV6: 2001:de4::101
-
 IPV6: 2001:de4::102
-
-DoH: https://dns.twnic.tw/dns-query
-
- 
+DoH: https://dns.twnic.tw/dns-query 
 
 ## DNS.SB公共DNS:
-
 IPv4: 185.222.222.222  
 IPV4: 45.11.45.11  
-IPV6: 2a09::  
-IPV6: 2a11::
-
 DoH: https://doh.sb/dns-query (或者：https://doh.dns.sb/dns-query两个指向一样，只是域名不一样)
-
 DoH: https://45.11.45.11/dns-query  
 DoH: https://185.222.222.222/dns-query  
 DoT: dot.sb  
 DoT: 185.222.222.222
-
 DoT: 45.11.45.11
-
-DoH香港节点: https://hk-hkg.doh.sb/dns-query  (更多分节点：[https://dns.sb/doh/](https://dns.sb/doh/)，可以根据自己的位置选择速度快一些的节点。)
-
-  
+DoH香港节点: https://hk-hkg.doh.sb/dns-query  (更多分节点：[https://dns.sb/doh/](https://dns.sb/doh/)，可以根据自己的位置选择速度快一些的节点。)  
 
 ## AdGuard 公共DNS:
-
 IPV4默认过滤广告: 94.140.14.14  
 IPV4默认过滤广告：94.140.15.15  
 IPV4无过滤: 94.140.14.140  
@@ -149,7 +120,6 @@ DoT家庭保护(过滤广告与成人内容)：dns-family.adguard.com
 DoT非过滤：dns-unfiltered.adguard.com
 
 ## OpenDNS(Cisco):
-
 IPv4：208.67.222.222  
 IPv4：208.67.220.220  
 IPV4 Family: 208.67.222.123  
@@ -161,7 +131,6 @@ DoH Family：https://doh.familyshield.opendns.com/dns-query
 DoT: dns.umbrella.com
 
 ## IBM Quad9:
-
 IPv4默认安全：9.9.9.9  
 IPv4默认安全：149.112.112.112  
 IPv6默认安全: 2620:fe::fe  
