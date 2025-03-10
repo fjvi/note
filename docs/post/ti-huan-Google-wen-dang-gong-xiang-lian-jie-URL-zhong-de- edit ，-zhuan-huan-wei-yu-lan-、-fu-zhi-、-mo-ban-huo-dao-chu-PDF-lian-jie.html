@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="../favicon.ico"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="通过替换Google文档共享链接URL中的 *edit* ，您可以做一些非常巧妙的技巧。">
+<meta property="og:title" content="替换Google文档共享链接URL中的 edit ，转换为预览、复制、模板或导出PDF链接">
+<meta property="og:description" content="通过替换Google文档共享链接URL中的 *edit* ，您可以做一些非常巧妙的技巧。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="/note/post/ti-huan-Google-wen-dang-gong-xiang-lian-jie-URL-zhong-de-%20edit%20%EF%BC%8C-zhuan-huan-wei-yu-lan-%E3%80%81-fu-zhi-%E3%80%81-mo-ban-huo-dao-chu-PDF-lian-jie.html">
+<meta property="og:image" content="favicon.ico">
+<title>替换Google文档共享链接URL中的 edit ，转换为预览、复制、模板或导出PDF链接</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">替换Google文档共享链接URL中的 edit ，转换为预览、复制、模板或导出PDF链接</h1>
+<div class="title-right">
+    <a href="/note" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/fjvi/note/issues/15" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p>通过替换Google文档共享链接URL中的 <em>edit</em> ，您可以做一些非常巧妙的技巧。您可以将可共享链接转换为<strong>预览</strong>、<strong>复制</strong>、<strong>模板</strong>或<strong>导出PDF</strong>链接。</p>
+<p>方法是将 <code class="notranslate">/edit</code> 替换为 <code class="notranslate">preview、copy、templatepreview、export?format=pdf 或 export/pdf</code>。</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">preview</pre></div>
+<div class="highlight highlight-text-md"><pre class="notranslate">copy</pre></div>
+<div class="highlight highlight-text-md"><pre class="notranslate">template/preview</pre></div>
+<div class="highlight highlight-text-md"><pre class="notranslate">export?format=/pdf</pre></div>
+<div class="highlight highlight-text-md"><pre class="notranslate">mdexport/pdf</pre></div>
+<h2>预览链接</h2>
+<p><em><strong>共享文档的整洁视图</strong></em><br>
+→ 将*/edit<em>替换 为</em>/preview*</p>
+<p>将 Google文档、表格、幻灯片或绘图中创建的内容发布为预览链接，可呈现没有菜单栏和按钮的文档。</p>
+<p>示例：<a href="https://docs.google.com/drawings/d/1sVZYYazblxw5lhO8ZlblHSe42y0ZhJpb1kTK-vYT9eM/preview" rel="nofollow">优雅的图形宣言</a></p>
+<ul>
+<li>
+<p>与标准共享版本相比，预览文档在移动浏览器中的加载速度更快，效果也更好。对于没有移动应用的 Google Drawings 来说尤其如此。</p>
+</li>
+<li>
+<p>预览文档中不会显示注释和幻灯片或画布之外的任何内容。此外，幻灯片演示文稿没有幻灯片分类器 — 演示文稿显示在演示文稿视图中。</p>
+</li>
+<li>
+<p>预览链接的受众无法实时看到编辑内容。但是，每次加载页面时都会显示文档的最新版本。无需重新发布或重新共享文档即可更新预览版本。请注意，预览可能需要几分钟才能更新。</p>
+</li>
+<li>
+<p>您从 Google 文档中获取的可共享链接可能在 /edit 后有一些额外的字符。不必担心。只需将 /edit 替换为 /preview。您可以保留或删除 /edit 后的内容，您的链接应该可以正常工作。</p>
+</li>
+<li>
+<p>在 Google Slides中将*/edit<em>更改为</em>/preview?rm=minimal*可呈现底部没有导航栏的幻灯片。当您不希望观众跳过幻灯片时，这非常方便。（感谢 Shaun Creighton 在评论中提供此提示！）</p>
+</li>
+<li>
+<p>由于预览链接会删除菜单，因此文档查看者将无法选择文件 → 制作副本以将副本添加到自己的 Google Drive。但是，如果您遇到文档的预览版本并希望制作副本，请尝试以下操作：将 URL 中的 /preview 替换为 /edit。然后您将看到带有菜单的版本，然后可以访问文件菜单来制作副本。</p>
+</li>
+<li>
+<p>Google Doc 的预览链接不显示文档大纲（左侧的标题列表）。但是，您可以将 URL 修改为预览链接<em>并</em>显示文档大纲。只需将 /edit 替换为 /preview?rm=demo 即可。感谢<a href="https://ignitionedu.com/2024/06/google-doc-demo-mode" rel="nofollow">Wanda Terral</a>提供的此提示。</p>
+</li>
+<li>
+<p>将文档的预览 URL 添加到 Google 课堂帖子最终会恢复为原始版本，而不是预览版本。如果您想添加预览链接，请先将预览链接粘贴到<a href="http://bitly.com/" rel="nofollow">Bitly</a>等 URL 缩短器中。复制 Bitly 提供的新链接。将缩短的链接添加到 Google 课堂中的帖子最终会打开预览版本。或者，您可以将预览链接粘贴到帖子正文中（而不是使用链接按钮添加链接）。</p>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/9beece312fa1d7a8f65ad2d93dc26f9e059a74bcae5c286f817efff6eb8fc944/68747470733a2f2f696d616765732e73717561726573706163652d63646e2e636f6d2f636f6e74656e742f76312f3530656361383535653462303933396165386262313264392f313530323938323832333831352d534d4c50533849515a414d555658473353304b342f696d6167652d61737365742e706e67"><img src="https://camo.githubusercontent.com/9beece312fa1d7a8f65ad2d93dc26f9e059a74bcae5c286f817efff6eb8fc944/68747470733a2f2f696d616765732e73717561726573706163652d63646e2e636f6d2f636f6e74656e742f76312f3530656361383535653462303933396165386262313264392f313530323938323832333831352d534d4c50533849515a414d555658473353304b342f696d6167652d61737365742e706e67" alt="制作复制图标" data-canonical-src="https://images.squarespace-cdn.com/content/v1/50eca855e4b0939ae8bb12d9/1502982823815-SMLPS8IQZAMUVXG3S0K4/image-asset.png" style="max-width: 100%;"></a></p>
+<h2>制作复制链接</h2>
+<p><em><strong>强制其他人在查看您的文档之前进行复制</strong></em><br>
+→ 将*/edit<em>替换 为</em>/copy*</p>
+<p>您可能点击了 Google 文档、幻灯片、表格或绘图文件的链接，并且必须点击“制作副本”按钮才能继续。这种共享方法迫使用户复制原始文件，副本现在完全归用户所有并放置在她的 Google Drive 中。</p>
+<p>如果您在 Google Workspace 中创建了文档，并希望学生拥有自己的副本，那么“制作副本”链接就非常适合。学生可以在自己的文档中填写空白、完成幻灯片、标记绘图、注释文本或完成某些任务（然后可能将其分享给老师）。这种共享方式还可用于与其他老师共享模板。他们只需点击即可制作自己的副本并对其进行自定义，而不会影响您的原件。</p>
+<p>示例：<a href="https://docs.google.com/presentation/d/1qf_TVpBxkVgBdp-X22x99u8_WYM3x8axrzX1Hi1ewbM/copy?usp=sharing" rel="nofollow">鼓励便条（打印在 1.5 x 2 英寸便签上）</a></p>
+<ul>
+<li>
+<p>当教师发布包含 Google 文档的作业时，Google Classroom 会自动执行此过程。Classroom 提供了为每个学生制作副本的选项。</p>
+</li>
+<li>
+<p>您从 Google 文档中获取的可共享链接可能在 /edit 后有一些额外的字符。不必担心。只需将 /edit 替换为 /copy。您可以保留或删除 /edit 后的内容，您的链接应该可以正常工作。</p>
+</li>
+<li>
+<p>当您将 /edit 更改为 /copy 时，评论不会被复制。如果您想包含评论，请参阅下面的<em>使用评论链接制作副本</em>**。**</p>
+</li>
+<li>
+<p>当学生和教师制作副本时，他们拥有副本的全部所有权，原始文档所有者不再与副本相关联。如果第一个文档所有者对原始文档进行了更改，则这些更改将反映在未来的副本中，但不会更改已制作的文档副本。</p>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/64b97c9978e36e57161f3d1469cfb766a72ad426024a667572a0248e043db801/68747470733a2f2f696d616765732e73717561726573706163652d63646e2e636f6d2f636f6e74656e742f76312f3530656361383535653462303933396165386262313264392f313532333937353736363732342d3650544a375442554159303259525446454431452f436f70792b776974682b436f6d6d656e74732e706e67"><img src="https://camo.githubusercontent.com/64b97c9978e36e57161f3d1469cfb766a72ad426024a667572a0248e043db801/68747470733a2f2f696d616765732e73717561726573706163652d63646e2e636f6d2f636f6e74656e742f76312f3530656361383535653462303933396165386262313264392f313532333937353736363732342d3650544a375442554159303259525446454431452f436f70792b776974682b436f6d6d656e74732e706e67" alt="复制评论图标" data-canonical-src="https://images.squarespace-cdn.com/content/v1/50eca855e4b0939ae8bb12d9/1523975766724-6PTJ7TBUAY02YRTFED1E/Copy+with+Comments.png" style="max-width: 100%;"></a></p>
+<h2>使用评论链接进行复制</h2>
+<p><em><strong>强制其他人在查看您的文档之前复制一份包含原始文档注释的副本</strong></em><br>
+→ 将*/edit<em>替换 为</em>/copy?copyComments=true*</p>
+<p>*此链接的作用与常规的“制作副本”*链接相同 ，但它还会将原始文档中的任何评论复制到副本中。如果您希望查看者看到并可能回复评论，这会很方便。评论可能包括附加信息、说明、清单和超链接。</p>
+<p>示例：<a href="https://docs.google.com/document/d/18ox23HzI4g0C0aJgi6ITLwpWD46Rd5ofvkWH2DJLzCA/copy?copyComments=true" rel="nofollow">Eric Curts 的《对称线》</a></p>
+<ul>
+<li>
+<p>从原始文档复制的评论包含以下注释：“以上评论从原始文档复制”。</p>
+</li>
+<li>
+<p>有关此类链接的更多信息，请阅读 Eric Curt 的文章《<a href="http://www.controlaltachieve.com/2017/11/force-copy-comments.html" rel="nofollow">如何强制复制带有预加载评论的文档来帮助您的学生》。</a></p>
+</li>
+<li>
+<p>如果您在单击“评论”按钮之前突出显示文本或选择图像，则评论将与该选择相关联。</p>
+</li>
+<li>
+<p>将文档的“制作带评论的副本”URL 添加到 Google 课堂帖子中最终会恢复为原始版本，而不是“复制带评论”版本。如果您想添加“复制带评论”链接，请先将链接粘贴到<a href="http://bitly.com/" rel="nofollow">Bitly</a>等 URL 缩短器中。复制 Bitly 提供的新链接。将缩短的链接添加到 Google 课堂中的帖子最终会打开“制作带评论的副本”版本。或者，您可以将“制作带评论的副本”链接粘贴到帖子正文中（而不是使用链接按钮添加链接）。</p>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/6ece2c3543680c938ee9769f2ef016d04317e58493ec6e3ec2faeaee8e91b340/68747470733a2f2f696d616765732e73717561726573706163652d63646e2e636f6d2f636f6e74656e742f76312f3530656361383535653462303933396165386262313264392f313536313732393635303137352d5832314c3557495633334d424c46304b32354e532f4d616b652b612b436f70792b776974682b436f6d6d656e74732e706e67"><img src="https://camo.githubusercontent.com/6ece2c3543680c938ee9769f2ef016d04317e58493ec6e3ec2faeaee8e91b340/68747470733a2f2f696d616765732e73717561726573706163652d63646e2e636f6d2f636f6e74656e742f76312f3530656361383535653462303933396165386262313264392f313536313732393635303137352d5832314c3557495633334d424c46304b32354e532f4d616b652b612b436f70792b776974682b436f6d6d656e74732e706e67" alt="制作带有评论的副本" data-canonical-src="https://images.squarespace-cdn.com/content/v1/50eca855e4b0939ae8bb12d9/1561729650175-X21L5WIV33MBLF0K25NS/Make+a+Copy+with+Comments.png" style="max-width: 100%;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/4e024861056875695afc4086dad012af57cb479ef473805329cab6446a6304b7/68747470733a2f2f696d616765732e73717561726573706163652d63646e2e636f6d2f636f6e74656e742f76312f3530656361383535653462303933396165386262313264392f313530323938323835373433322d4c57484e4c4f52324949554c4c56344e305430412f696d6167652d61737365742e706e67"><img src="https://camo.githubusercontent.com/4e024861056875695afc4086dad012af57cb479ef473805329cab6446a6304b7/68747470733a2f2f696d616765732e73717561726573706163652d63646e2e636f6d2f636f6e74656e742f76312f3530656361383535653462303933396165386262313264392f313530323938323835373433322d4c57484e4c4f52324949554c4c56344e305430412f696d6167652d61737365742e706e67" alt="模板图标" data-canonical-src="https://images.squarespace-cdn.com/content/v1/50eca855e4b0939ae8bb12d9/1502982857432-LWHNLOR2IIULLV4N0T0A/image-asset.png" style="max-width: 100%;"></a></p>
+<h2>模板链接</h2>
+<p><em><strong>共享易于复制的文档预览</strong></em><br>
+→将*/edit<em>替换 为</em>/template/preview*</p>
+<p>使用模板链接共享文档内容并可选择复制 - 它是预览链接和复制链接的组合。</p>
+<p>模板链接会显示文档的简洁版本。它还会显示“*使用模板”*按钮。单击此按钮会复制原始文档，副本现在完全归用户所有，并放置在她的 Google Drive 中。</p>
+<p>模板链接非常适合让其他人在将文档复制到 Google Drive 之前查看文档。在网站和社交媒体上发布时，这些链接通常比“制作副本”链接更受欢迎，因为它们允许在盲目复制之前查看文档。</p>
+<p>示例：<a href="https://docs.google.com/drawings/d/1VceC_EgHOvzJ-mxMCJW1e7d9ipEFB3qF9sAvuoGTJJg/template/preview" rel="nofollow">磁性诗歌</a></p>
+<ul>
+<li>
+<p>与单击*“制作副本”<em>按钮不同，单击</em>“使用模板”*不会在新复制的文档的文件名中添加“副本”。</p>
+</li>
+<li>
+<p>模板链接的受众无法实时看到编辑内容。但是，每次加载页面时都会显示文档的最新版本。无需重新发布或重新共享文档即可更新模板版本。请注意，文档的预览可能需要几分钟才能更新。</p>
+</li>
+<li>
+<p>您从 Google 文档中获取的可共享链接可能在 /edit 后有一些额外的字符。不必担心。只需将 /edit 替换为 /copy。您可以保留或删除 /edit 后的内容，您的链接应该可以正常工作。</p>
+</li>
+<li>
+<p>iPhone 和 iPad 在模板链接方面有点奇怪。单击*“使用模板”<em>后，新复制的文档不会自动在文档、表格或幻灯片应用中打开。但是，当打开应用时，新文档就在那里。按</em>上次修改时间*排序可以更轻松地找到文档。</p>
+</li>
+<li>
+<p>将文档的模板 URL 添加到 Google 课堂帖子最终会恢复为原始版本，而不是模板版本。如果您想添加模板链接，请先将模板链接粘贴到<a href="http://bitly.com/" rel="nofollow">Bitly</a>等 URL 缩短器中。复制 Bitly 提供的新链接。将缩短的链接添加到 Google 课堂中的帖子最终会打开模板版本。或者，您可以将模板链接粘贴到帖子正文中（而不是使用链接按钮添加链接）。</p>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/5a40db1a7b98a79055c73933523df858db789db731114febfc86ffccf2ff7185/68747470733a2f2f696d616765732e73717561726573706163652d63646e2e636f6d2f636f6e74656e742f76312f3530656361383535653462303933396165386262313264392f313530323938323838303531382d55555345304251424754575659394653543243392f696d6167652d61737365742e706e67"><img src="https://camo.githubusercontent.com/5a40db1a7b98a79055c73933523df858db789db731114febfc86ffccf2ff7185/68747470733a2f2f696d616765732e73717561726573706163652d63646e2e636f6d2f636f6e74656e742f76312f3530656361383535653462303933396165386262313264392f313530323938323838303531382d55555345304251424754575659394653543243392f696d6167652d61737365742e706e67" alt="PDF 图标" data-canonical-src="https://images.squarespace-cdn.com/content/v1/50eca855e4b0939ae8bb12d9/1502982880518-UUSE0BQBGTWVY9FST2C9/image-asset.png" style="max-width: 100%;"></a></p>
+<h2>PDF 链接</h2>
+<p><em><strong>共享文档 PDF 版本的直接下载</strong></em><br>
+→ Google 文档和表格：将*/edit<em>替换 为</em>/export?format=pdf*<br>
+→ Google 幻灯片和绘图：将*/edit<em>替换 为</em>/export/pdf*</p>
+<p>让网络浏览器通过 PDF 链接下载文档的 PDF 版本。点击链接后，会自动下载 PDF 版本，而不是在 Google 查看器或应用中显示文档。</p>
+<p>当您想让其他人打印或保存您的文档时，PDF 链接非常有用。它们对于共享海报、信息图表和备忘单非常有用。</p>
+<p>示例：<a href="https://docs.google.com/drawings/d/1fvtnOG9iJRjtyKHxKeD2alssU635mhGHYqwzYITszys/export/pdf" rel="nofollow">Google 课堂帖子选项</a> </p>
+<ul>
+<li>
+<p>由于 PDF 是一种通用格式，因此不需要 Google 帐户即可下载，也不需要打开该文件。</p>
+</li>
+<li>
+<p>PDF 文件可以在任意应用程序中打开：Adobe Reader、Preview、Google Drive、Foxit Reader、Explain Everything 等。</p>
+</li>
+<li>
+<p>自动下载不会出现在电脑的浏览器窗口中。点击后，人们很容易忘记文件已被下载。请务必标记您的 PDF 链接，以便其他人知道将下载文件。</p>
+</li>
+<li>
+<p>下载文件存放的位置取决于浏览器、计算机和设置。收件人可能会被提示重命名文件并选择位置。或者，下载的文件可能会自动放置在“下载”文件夹或桌面上。</p>
+</li>
+<li>
+<p>超链接在 PDF 中有效。文档中已超链接的任何文本、图像或形状都将在 PDF 版本中保持链接状态。</p>
+</li>
+<li>
+<p>直接下载不仅限于 PDF。其他文件类型也适用。不要在 URL 中使用<em>pdf</em>，请尝试使用<em>png、jpg、pptx、xlsx、docx、html</em>或<em>txt</em>。</p>
+</li>
+<li>
+<p>您从 Google 文档中获取的可共享链接可能在 /edit 后有一些额外的字符。不必担心。只需将 /edit 替换为 /copy。您可以保留或删除 /edit 后的内容，您的链接应该可以正常工作。</p>
+</li>
+<li>
+<p>如果您希望 PDF 显示在浏览器中，您可以使用 Google 的在线文档查看器。在 PDF 链接开头添加<em><a href="https://docs.google.com/viewer?url=" rel="nofollow">https://docs.google.com/viewer?url=</a> 。</em><a href="https://docs.google.com/viewer?url=https://docs.google.com/drawings/d/1fvtnOG9iJRjtyKHxKeD2alssU635mhGHYqwzYITszys/export/pdf" rel="nofollow">单击查看示例。</a></p>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/f705aef184e80be7416ccb63116ad8d0344c5974dede08dcfd029b2815132971/68747470733a2f2f696d616765732e73717561726573706163652d63646e2e636f6d2f636f6e74656e742f76312f3530656361383535653462303933396165386262313264392f313530323938333331393033382d384f34424f3545425934585436344d54495349542f696d6167652d61737365742e706e67"><img src="https://camo.githubusercontent.com/f705aef184e80be7416ccb63116ad8d0344c5974dede08dcfd029b2815132971/68747470733a2f2f696d616765732e73717561726573706163652d63646e2e636f6d2f636f6e74656e742f76312f3530656361383535653462303933396165386262313264392f313530323938333331393033382d384f34424f3545425934585436344d54495349542f696d6167652d61737365742e706e67" alt="撤销" data-canonical-src="https://images.squarespace-cdn.com/content/v1/50eca855e4b0939ae8bb12d9/1502983319038-8O4BO5EBY4XT64MTISIT/image-asset.png" style="max-width: 100%;"></a></p>
+<h3><strong>额外提示</strong></h3>
+<p>遇到别人伪造的链接？您可以对预览、制作副本、模板或 PDF 链接进行逆向工程，以常规方式查看文档，方法是将*/preview、/copy、/template/preview、/export?format=pdf 或 /export/pdf<em>替换为</em>/edit*。</p>
+<p><a href="https://chrome.google.com/webstore/detail/sir-links-a-lot/cggpkbnlnicoanmphgkkcmidbpdacepn/related?hl=en-US" rel="nofollow">chrome相关插件</a></p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="/note">MGT note</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if("['tag']"!=""){
+    var startSite=new Date("['tag']");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","fjvi/note");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+<script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script><script src='<script src='https://code.buxiantang.top/assets/backtop.js'></script>'></script><script src='https://code.buxiantang.top/assets/articletoc.js'></script>
+
+</html>
