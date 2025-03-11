@@ -4,9 +4,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //主页主题------------------------------------------------------------------------------
     
-    if (currentUrl.includes('/index.html')) {
+    if (currentUrl.includes('/') || currentUrl.includes('/index.html')) {
         console.log('应用主页主题');
-        let style = document.createElement("style");
+        letif (currentUrl.includes('/post/') ||  style = document.createElement("style");
         style.innerHTML = `
         html {    
             background: url('https://fjvi.github.io/note/home-bg.jpg') no-repeat center center fixed;
