@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //主页主题------------------------------------------------------------------------------
     
-    if (currentUrl.includes('/') || currentUrl.includes('/index.html')) {
+    if (currentUrl＝('/') )) {
         console.log('应用主页主题');
         letif (currentUrl.includes('/post/') ||  style = document.createElement("style");
         style.innerHTML = `
