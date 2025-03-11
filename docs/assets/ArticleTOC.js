@@ -67,7 +67,7 @@ function toggleTOC() {
     if (tocElement) {
         tocElement.classList.toggle('show');
         tocIcon.classList.toggle('active');
-        tocIcon.textContent = tocElement.classList.contains('show') ? '✖' : '☰';
+        tocIcon.textContent = tocElement.classList.contains ? '✖' : '☰';
     }
 }
 
