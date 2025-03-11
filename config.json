@@ -5,10 +5,21 @@
     "faviconUrl":"../favicon.ico",
     "GMEEK_VERSION":"last",    
     "homeUrl":"/note",
+    "singlePage":["about"],
     "onePageListNum":20,
     "yearColorList":["#bbb", "#aaa", "#999", "#888"],
     "startSite": ["tag"],
     "singlePage":["about"],
     "showPostSource":1,
-    "script":"<script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script><script src='<script src='https://code.buxiantang.top/assets/backtop.js'></script>'></script><script src='https://code.buxiantang.top/assets/articletoc.js'></script>"
+    "needComment":1,
+    "script":"<script src="https://giscus.app/client.js" data-repo="fjvi/note"  data-repo-id="R_kgDON_5bvA"  data-category="Ideas"        data-category-id="DIC_kwDON_5bvM4CnYg_"        data-mapping="url"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script><script src='https://fjvi.github.io/code/lightbox.js'></script><script src='<script src='https://fjvi.github.io/code/backtop.js'></script>'></script><script src='https://fjvi.github.io/code/articletoc.js'></script>"
 }
