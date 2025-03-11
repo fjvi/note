@@ -30,8 +30,8 @@
     "urlMode":"issue",
     
     "style":"",
-    "script":"<script src='/assets/ArticleTOC.js'></script><script src='/assets/lightbox.js'></script><script>document.querySelectorAll('a').forEach(anchor => {const img = anchor.querySelector('img');if (img && img.hasAttribute('data-canonical-src')) {const canonicalSrc = img.getAttribute('data-canonical-src');anchor.setAttribute('href', canonicalSrc);img.setAttribute('src', canonicalSrc);img.removeAttribute('data-canonical-src');}});</script>",
-    "allHead":"<script src='/assets/RonanTheme.js'></script><script src='/assets/GmeekVercount.js'></script><script async src='https://cdn.seline.so/seline.js' data-token='5b15b5092d4879e'></script>",
+    "script":"<script src='assets/ArticleTOC.js'></script><script src='assets/lightbox.js'></script><script>document.querySelectorAll('a').forEach(anchor => {const img = anchor.querySelector('img');if (img && img.hasAttribute('data-canonical-src')) {const canonicalSrc = img.getAttribute('data-canonical-src');anchor.setAttribute('href', canonicalSrc);img.setAttribute('src', canonicalSrc);img.removeAttribute('data-canonical-src');}});</script>",
+    "allHead":"<script src='assets/RonanTheme.js'></script><script src='assets/GmeekVercount.js'></script><script async src='https://cdn.seline.so/seline.js' data-token='5b15b5092d4879e'></script>",
     "head":"",
     "indexStyle":"",
     "indexScript":"",
@@ -42,7 +42,7 @@
     "lived2D_script":"<script src='https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js'></script><script src='https://cdn.jsdelivr.net/npm/jquery-ui@1.14.1/dist/jquery-ui.min.js'></script><script src='https://cdn.jsdelivr.net/gh/hst1189/live2d-widget/autoload.js'></script>",
 
     "sakuraPlus":1,
-    "sakuraPlus_script":"<script src='../assets/sakuraPlus.js'></script>",
+    "sakuraPlus_script":"<script src='assets/sakuraPlus.js'></script>",
     
     "rssSplit":"sentence",
     "bottomText":"My good time-我的好时光！",
