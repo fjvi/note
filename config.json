@@ -3,7 +3,6 @@
     "subTitle":"My good time-我的好时光！",
     "avatarUrl":"favicon.ico",
     "faviconUrl":"../favicon.ico",
-    "GMEEK_VERSION":"last",    
     "homeUrl":"/note",
     "singlePage":["about"],
     "onePageListNum":20,
@@ -14,4 +13,5 @@
     "showPostSource":1,
     "needComment":1,
     "script":"<script src='https://fjvi.github.io/code/lightbox.js'></script><script src='https://fjvi.github.io/code/backtop.js'></script>'><script src='https://fjvi.github.io/code/articletoc.js'></script>",
+    "GMEEK_VERSION":"last"
 }
