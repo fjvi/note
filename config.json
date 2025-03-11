@@ -31,15 +31,17 @@
     
     "style":"",
     "script":"<script src='https://fjvi.github.io/note/assets/ArticleTOC.js'></script><script src='https://fjvi.github.io/note/assets/lightbox.js'></script>",
-    "allHead":"<script src='https://fjvi.github.io/note/assets/RonanTheme.js'></script><script src='https://fjvi.github.io/note/assets/GmeekVercount.js'></script><script async src='https://cdn.seline.so/seline.js' data-token='5b15b5092d4879e'></script><script src='https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js'></script><script src='https://cdn.jsdelivr.net/npm/jquery-ui@1.14.1/dist/jquery-ui.min.js'></script>",
+    "allHead":"<script src='https://fjvi.github.io/note/assets/RonanTheme.js'></script><script src='https://fjvi.github.io/note/assets/GmeekVercount.js'></script><script async src='https://cdn.seline.so/seline.js' data-token='5b15b5092d4879e'></script><script async src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9661896697976587' crossorigin='anonymous'></script>",
     "head":"",
     "indexStyle":"",
     "indexScript":"",
-    
+    "lived2D":1,
+    "lived2D_script":"<script src='https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js'></script><script src='https://cdn.jsdelivr.net/npm/jquery-ui@1.14.1/dist/jquery-ui.min.js'></script><script src='https://cdn.jsdelivr.net/gh/hst1189/live2d-widget/autoload.js'></script>",
+
     "rssSplit":"sentence",
     "bottomText":"My good time-我的好时光！",
     "ogImage":"",
     "primerCSS":"<link href='https://cdn.jsdelivr.net/npm/@primer/css@21.5.1/dist/primer.min.css' rel='stylesheet' />",
-    "showPostSource":0,
+    "showPostSource":1,
     "needComment":1
 }
