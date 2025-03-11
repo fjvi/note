@@ -30,8 +30,8 @@
     "urlMode":"issue",
     
     "style":"",
-    "script":"<script src='../assets/ArticleTOC.js'></script><script src='../assets/lightbox.js'></script><script>document.querySelectorAll('a').forEach(anchor => {const img = anchor.querySelector('img');if (img && img.hasAttribute('data-canonical-src')) {const canonicalSrc = img.getAttribute('data-canonical-src');anchor.setAttribute('href', canonicalSrc);img.setAttribute('src', canonicalSrc);img.removeAttribute('data-canonical-src');}});</script>",
-    "allHead":"<script src='../assets/RonanTheme.js'></script><script src='../assets/GmeekVercount.js'></script><script async src='https://cdn.seline.so/seline.js' data-token='5b15b5092d4879e'></script>",
+    "script":"<script src='/assets/ArticleTOC.js'></script><script src='/assets/lightbox.js'></script><script>document.querySelectorAll('a').forEach(anchor => {const img = anchor.querySelector('img');if (img && img.hasAttribute('data-canonical-src')) {const canonicalSrc = img.getAttribute('data-canonical-src');anchor.setAttribute('href', canonicalSrc);img.setAttribute('src', canonicalSrc);img.removeAttribute('data-canonical-src');}});</script>",
+    "allHead":"<script src='/assets/RonanTheme.js'></script><script src='/assets/GmeekVercount.js'></script><script async src='https://cdn.seline.so/seline.js' data-token='5b15b5092d4879e'></script>",
     "head":"",
     "indexStyle":"",
     "indexScript":"",
