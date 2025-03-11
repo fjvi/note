@@ -1,6 +1,6 @@
 {
-    "title":"MGT note",
-    "subTitle":"生生不息，止于至善",
+    "title":"MGTnote",
+    "subTitle":"My good time-我的好时光！",
     "avatarUrl":"favicon.ico",
     "faviconUrl":"../favicon.ico",
     "GMEEK_VERSION":"last",    
@@ -8,7 +8,6 @@
     "singlePage":["about"],
     "onePageListNum":20,
     "yearColorList":["#bbb", "#aaa", "#999", "#888"],
-    "startSite": ["tag"],
     "singlePage":["about"],
     "showPostSource":1,
     "needComment":1,
