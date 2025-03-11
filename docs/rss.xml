@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTnote</title><link>/note</link><description>My good time-我的好时光！</description><copyright>MGTnote</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>favicon.ico</url><title>avatar</title><link>/note</link></image><lastBuildDate>Tue, 11 Mar 2025 09:13:24 +0000</lastBuildDate><managingEditor>MGTnote</managingEditor><ttl>60</ttl><webMaster>MGTnote</webMaster><item><title>替换Google文档共享链接URL中的 edit ，转换为预览、复制、模板或导出PDF链接</title><link>/note/post/ti-huan-Google-wen-dang-gong-xiang-lian-jie-URL-zhong-de-%20edit%20%EF%BC%8C-zhuan-huan-wei-yu-lan-%E3%80%81-fu-zhi-%E3%80%81-mo-ban-huo-dao-chu-PDF-lian-jie.html</link><description>通过替换Google文档共享链接URL中的 *edit* ，您可以做一些非常巧妙的技巧。</description><guid isPermaLink="true">/note/post/ti-huan-Google-wen-dang-gong-xiang-lian-jie-URL-zhong-de-%20edit%20%EF%BC%8C-zhuan-huan-wei-yu-lan-%E3%80%81-fu-zhi-%E3%80%81-mo-ban-huo-dao-chu-PDF-lian-jie.html</guid><pubDate>Mon, 10 Mar 2025 11:20:47 +0000</pubDate></item><item><title>公共DNS</title><link>/note/post/gong-gong-DNS.html</link><description># 国内
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTnote</title><link>/note</link><description>My good time-我的好时光！</description><copyright>MGTnote</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>favicon.ico</url><title>avatar</title><link>/note</link></image><lastBuildDate>Tue, 11 Mar 2025 12:37:48 +0000</lastBuildDate><managingEditor>MGTnote</managingEditor><ttl>60</ttl><webMaster>MGTnote</webMaster><item><title>替换Google文档共享链接URL中的 edit ，转换为预览、复制、模板或导出PDF链接</title><link>/note/post/15.html</link><description>通过替换Google文档共享链接URL中的 *edit* ，您可以做一些非常巧妙的技巧。</description><guid isPermaLink="true">/note/post/15.html</guid><pubDate>Mon, 10 Mar 2025 11:20:47 +0000</pubDate></item><item><title>公共DNS</title><link>/note/post/14.html</link><description># 国内
 
 ## 114DNS
 ```md
@@ -104,17 +104,17 @@ DoH: https://185.222.222.222/dns-query
 DoT: dot.sb  
 DoT: 185.222.222.222
 DoT: 45.11.45.11
-DoH香港节点: https://hk-hkg.doh.sb/dns-query  (更多分节点：[https://dns.sb/doh/](https://dns.sb/doh/)，可以根据自己的位置选择速度快一些的节点。</description><guid isPermaLink="true">/note/post/gong-gong-DNS.html</guid><pubDate>Sun, 09 Mar 2025 12:12:46 +0000</pubDate></item><item><title>好用的网页内容转markdown工具</title><link>/note/post/hao-yong-de-wang-ye-nei-rong-zhuan-markdown-gong-ju.html</link><description>一.在线工具推荐：
+DoH香港节点: https://hk-hkg.doh.sb/dns-query  (更多分节点：[https://dns.sb/doh/](https://dns.sb/doh/)，可以根据自己的位置选择速度快一些的节点。</description><guid isPermaLink="true">/note/post/14.html</guid><pubDate>Sun, 09 Mar 2025 12:12:46 +0000</pubDate></item><item><title>好用的网页内容转markdown工具</title><link>/note/post/13.html</link><description>一.在线工具推荐：
 
 **1.devtool**
 
 在线地址：[https://devtool.tech/html-md](https://devtool.tech/html-md)  
-用法一：十分简单，只需要在左边页面地址处填入网址，并按Enter，就可以在右边看见生成的markdown格式的内容，复制使用即可。</description><guid isPermaLink="true">/note/post/hao-yong-de-wang-ye-nei-rong-zhuan-markdown-gong-ju.html</guid><pubDate>Sat, 08 Mar 2025 16:28:46 +0000</pubDate></item><item><title>世界上最小办公套件：文本编辑、表格、绘图、幻灯片……</title><link>/note/post/shi-jie-shang-zui-xiao-ban-gong-tao-jian-%EF%BC%9A-wen-ben-bian-ji-%E3%80%81-biao-ge-%E3%80%81-hui-tu-%E3%80%81-huan-deng-pian-%E2%80%A6%E2%80%A6.html</link><description>**Awfice** 是一款世界上最小的办公套件工具，包括文本编辑、表格、绘图、幻灯片、代码编辑器、计算器，每款工具均不到 1KB，实际上都只是一行代码，纯 HTML 网页，即开即用，无任何附加功能，包括保存。</description><guid isPermaLink="true">/note/post/shi-jie-shang-zui-xiao-ban-gong-tao-jian-%EF%BC%9A-wen-ben-bian-ji-%E3%80%81-biao-ge-%E3%80%81-hui-tu-%E3%80%81-huan-deng-pian-%E2%80%A6%E2%80%A6.html</guid><pubDate>Sat, 08 Mar 2025 10:57:21 +0000</pubDate></item><item><title>分享个一键查当前网站 IP 归属地的「书签」（附带查是不是 Cloudflare CDN）</title><link>/note/post/fen-xiang-ge-yi-jian-cha-dang-qian-wang-zhan-%20IP%20-gui-shu-di-de-%E3%80%8C-shu-qian-%E3%80%8D%EF%BC%88-fu-dai-cha-shi-bu-shi-%20Cloudflare%20CDN%EF%BC%89.html</link><description>我平时可能经常需要**查一下当前网站的 IP 地址及归属地**，为了方便我自己写了个简短的脚本放在书签中。</description><guid isPermaLink="true">/note/post/fen-xiang-ge-yi-jian-cha-dang-qian-wang-zhan-%20IP%20-gui-shu-di-de-%E3%80%8C-shu-qian-%E3%80%8D%EF%BC%88-fu-dai-cha-shi-bu-shi-%20Cloudflare%20CDN%EF%BC%89.html</guid><pubDate>Fri, 07 Mar 2025 07:36:36 +0000</pubDate></item><item><title>特殊符号</title><link>/note/post/te-shu-fu-hao.html</link><description>## 这是什么？
+用法一：十分简单，只需要在左边页面地址处填入网址，并按Enter，就可以在右边看见生成的markdown格式的内容，复制使用即可。</description><guid isPermaLink="true">/note/post/13.html</guid><pubDate>Sat, 08 Mar 2025 16:28:46 +0000</pubDate></item><item><title>世界上最小办公套件：文本编辑、表格、绘图、幻灯片……</title><link>/note/post/12.html</link><description>**Awfice** 是一款世界上最小的办公套件工具，包括文本编辑、表格、绘图、幻灯片、代码编辑器、计算器，每款工具均不到 1KB，实际上都只是一行代码，纯 HTML 网页，即开即用，无任何附加功能，包括保存。</description><guid isPermaLink="true">/note/post/12.html</guid><pubDate>Sat, 08 Mar 2025 10:57:21 +0000</pubDate></item><item><title>分享个一键查当前网站 IP 归属地的「书签」（附带查是不是 Cloudflare CDN）</title><link>/note/post/11.html</link><description>我平时可能经常需要**查一下当前网站的 IP 地址及归属地**，为了方便我自己写了个简短的脚本放在书签中。</description><guid isPermaLink="true">/note/post/11.html</guid><pubDate>Fri, 07 Mar 2025 07:36:36 +0000</pubDate></item><item><title>特殊符号</title><link>/note/post/10.html</link><description>## 这是什么？
 
-这些特殊符号是真实的文字和可复制并粘贴到任何地方，比如像微软的Word，脸谱，微博，HTML或博客。</description><guid isPermaLink="true">/note/post/te-shu-fu-hao.html</guid><pubDate>Fri, 07 Mar 2025 07:03:20 +0000</pubDate></item><item><title>用Actionsflow在Github上免费部署Rsshub</title><link>/note/post/yong-Actionsflow-zai-Github-shang-mian-fei-bu-shu-Rsshub.html</link><description>
+这些特殊符号是真实的文字和可复制并粘贴到任何地方，比如像微软的Word，脸谱，微博，HTML或博客。</description><guid isPermaLink="true">/note/post/10.html</guid><pubDate>Fri, 07 Mar 2025 07:03:20 +0000</pubDate></item><item><title>用Actionsflow在Github上免费部署Rsshub</title><link>/note/post/9.html</link><description>
 ## 正文
 
-Rsshub是一个很棒的工具，把很多知名或不知名的网页数据通通统一为RSS 格式，堪称中文互联网的 W3C. 但是官方推荐的部署方式是Docker 部署，对于大多数轻量使用的用户来说有点重，所以这里介绍一种免费，轻量，按需使用的部署方式，利用Actionsflow部署在 GitHub 的 Actions 上。</description><guid isPermaLink="true">/note/post/yong-Actionsflow-zai-Github-shang-mian-fei-bu-shu-Rsshub.html</guid><pubDate>Thu, 06 Mar 2025 17:10:12 +0000</pubDate></item><item><title>Actionsflow 项目使用教程</title><link>/note/post/Actionsflow%20-xiang-mu-shi-yong-jiao-cheng.html</link><description>## Actionsflow 项目使用教程
+Rsshub是一个很棒的工具，把很多知名或不知名的网页数据通通统一为RSS 格式，堪称中文互联网的 W3C. 但是官方推荐的部署方式是Docker 部署，对于大多数轻量使用的用户来说有点重，所以这里介绍一种免费，轻量，按需使用的部署方式，利用Actionsflow部署在 GitHub 的 Actions 上。</description><guid isPermaLink="true">/note/post/9.html</guid><pubDate>Thu, 06 Mar 2025 17:10:12 +0000</pubDate></item><item><title>Actionsflow 项目使用教程</title><link>/note/post/8.html</link><description>## Actionsflow 项目使用教程
 
 [actionsflow The free Zapier/IFTTT alternative for developers to automate your workflows based on Github actions 项目地址: https://gitcode.com/gh\_mirrors/ac/actionsflow](https://gitcode.com/gh_mirrors/ac/actionsflow/?utm_source=replace_article_gitcode&amp;index=top&amp;type=card&amp; 'actionsflow')
 
@@ -136,9 +136,9 @@ Actionsflow 项目的目录结构如下：
 
 #### 目录结构介绍
 
--   **.github/workflows/actionsflow.yml**: 这是 Actionsflow 的主要配置文件，定义了工作流的执行计划和触发条件。</description><guid isPermaLink="true">/note/post/Actionsflow%20-xiang-mu-shi-yong-jiao-cheng.html</guid><pubDate>Thu, 06 Mar 2025 16:56:50 +0000</pubDate></item><item><title>CF优选IP和反代IP的方法总结</title><link>/note/post/CF-you-xuan-IP-he-fan-dai-IP-de-fang-fa-zong-jie.html</link><description>blog.onetwoone.eu.org 
+-   **.github/workflows/actionsflow.yml**: 这是 Actionsflow 的主要配置文件，定义了工作流的执行计划和触发条件。</description><guid isPermaLink="true">/note/post/8.html</guid><pubDate>Thu, 06 Mar 2025 16:56:50 +0000</pubDate></item><item><title>CF优选IP和反代IP的方法总结</title><link>/note/post/7.html</link><description>blog.onetwoone.eu.org 
 
-Cloudflare的workers和pages搭建的免费vpn节点简单好用，但要保证速度我们必须优化CF的IP和反代CF的IP。</description><guid isPermaLink="true">/note/post/CF-you-xuan-IP-he-fan-dai-IP-de-fang-fa-zong-jie.html</guid><pubDate>Thu, 27 Feb 2025 19:24:34 +0000</pubDate></item><item><title>注册serv00的新方法，测试非常好</title><link>/note/post/zhu-ce-serv00-de-xin-fang-fa-%EF%BC%8C-ce-shi-fei-chang-hao.html</link><description> 1、打开谷歌云：
+Cloudflare的workers和pages搭建的免费vpn节点简单好用，但要保证速度我们必须优化CF的IP和反代CF的IP。</description><guid isPermaLink="true">/note/post/7.html</guid><pubDate>Thu, 27 Feb 2025 19:24:34 +0000</pubDate></item><item><title>注册serv00的新方法，测试非常好</title><link>/note/post/6.html</link><description> 1、打开谷歌云：
 &gt; [点击前往](https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Fconsole.cloud.google.com%2F&amp;followup=https%3A%2F%2Fconsole.cloud.google.com%2F&amp;ifkv=AeZLP9-0IQSq05xeTMuW_HTDcW960bBquuu4bZzNRa3Y1JiTKCW9rsteltb7DqePmwSSYv987u3_oA&amp;osid=1&amp;passive=1209600&amp;service=cloudconsole&amp;flowName=GlifWebSignIn&amp;flowEntry=ServiceLogin&amp;dsh=S-550021044%3A1734529949831903&amp;ddm=1) {:target='_blank'}
 
 
@@ -162,7 +162,7 @@ docker run -p 8080:80 dorowu/ubuntu-desktop-lxde-vnc
 
 
 
-这火狐浏览器中，打开serv00的注册页面，多刷新几次，就可以注册成功了。</description><guid isPermaLink="true">/note/post/zhu-ce-serv00-de-xin-fang-fa-%EF%BC%8C-ce-shi-fei-chang-hao.html</guid><pubDate>Thu, 27 Feb 2025 18:07:12 +0000</pubDate></item><item><title>gitblog博客安装教程</title><link>/note/post/gitblog-bo-ke-an-zhuang-jiao-cheng.html</link><description># 新建一个仓库gitblog
+这火狐浏览器中，打开serv00的注册页面，多刷新几次，就可以注册成功了。</description><guid isPermaLink="true">/note/post/6.html</guid><pubDate>Thu, 27 Feb 2025 18:07:12 +0000</pubDate></item><item><title>gitblog博客安装教程</title><link>/note/post/5.html</link><description># 新建一个仓库gitblog
 
 ## 新建仓库G_KEY
 
@@ -176,7 +176,7 @@ settings--&gt;secrets and variables--&gt;Actions--&gt;new repository secrets,名
 &gt; 注意：这个G_KEY会在后面的gene_readme.yml文件中使用
 
 ------
-下载yihong0618开源的[这个项目](https://github.com/yihong0618/gitblog)，将其中除了feed.xml的文件全部copy到第一步项目中。</description><guid isPermaLink="true">/note/post/gitblog-bo-ke-an-zhuang-jiao-cheng.html</guid><pubDate>Wed, 26 Feb 2025 17:03:56 +0000</pubDate></item><item><title>CloudFlare优选汇总</title><link>/note/post/CloudFlare-you-xuan-hui-zong.html</link><description>https://cf.090227.xyz维护的优选官方域名
+下载yihong0618开源的[这个项目](https://github.com/yihong0618/gitblog)，将其中除了feed.xml的文件全部copy到第一步项目中。</description><guid isPermaLink="true">/note/post/5.html</guid><pubDate>Wed, 26 Feb 2025 17:03:56 +0000</pubDate></item><item><title>CloudFlare优选汇总</title><link>/note/post/4.html</link><description>https://cf.090227.xyz维护的优选官方域名
 cf.090227.xyz#三网自适应分流官方优选
 ct.090227.xyz#电信官方优选
 cmcc.090227.xyz#移动官方优选
@@ -249,15 +249,15 @@ https://stock.hostmonit.com/CloudFlareYes
 ------
 
 HTTP支持端口：80，8080，8880，2052，2082，2086，2095；
-HTTPS支持端口：443，2053，2083，2087，2096，8443。</description><guid isPermaLink="true">/note/post/CloudFlare-you-xuan-hui-zong.html</guid><pubDate>Wed, 26 Feb 2025 17:03:07 +0000</pubDate></item><item><title>Markdown语法总览</title><link>/note/post/Markdown-yu-fa-zong-lan.html</link><description>markdown测试页面
+HTTPS支持端口：443，2053，2083，2087，2096，8443。</description><guid isPermaLink="true">/note/post/4.html</guid><pubDate>Wed, 26 Feb 2025 17:03:07 +0000</pubDate></item><item><title>Markdown语法总览</title><link>/note/post/3.html</link><description>markdown测试页面
 ============
 
 [](https://blog.meekdai.com/ '首页')[](https://github.com/Meekdai/meekdai.github.io/issues/4 'Issue')[](https://blog.meekdai.com/post/markdown-ce-shi-ye-mian.html '切换主题')
 
-这是一个markdown格式的测试页面，也是个人经常会使用的格式记录。</description><guid isPermaLink="true">/note/post/Markdown-yu-fa-zong-lan.html</guid><pubDate>Wed, 26 Feb 2025 17:01:59 +0000</pubDate></item><item><title>Gmeek快速上手</title><link>/note/post/Gmeek-kuai-su-shang-shou.html</link><description>Gmeek快速上手
+这是一个markdown格式的测试页面，也是个人经常会使用的格式记录。</description><guid isPermaLink="true">/note/post/3.html</guid><pubDate>Wed, 26 Feb 2025 17:01:59 +0000</pubDate></item><item><title>Gmeek快速上手</title><link>/note/post/2.html</link><description>Gmeek快速上手
 ==========
 
 [](https://blog.meekdai.com/ '首页')[](https://github.com/Meekdai/meekdai.github.io/issues/39 'Issue')[](https://blog.meekdai.com/post/Gmeek-kuai-su-shang-shou.html '切换主题')
 
-[Gmeek](https://github.com/Meekdai/Gmeek) 一个博客框架，超轻量级个人博客模板，完全基于`Github Pages` 、 `Github Issues` 和 `Github Actions`，可以称作`All in Github`。</description><guid isPermaLink="true">/note/post/Gmeek-kuai-su-shang-shou.html</guid><pubDate>Wed, 26 Feb 2025 14:43:04 +0000</pubDate></item><item><title>about</title><link>/note/about.html</link><description>`Gmeek-html&lt;iframe id='contentFrame' src='https://fjvi.github.io/sq/' frameborder='0' style='border: none;' width='100%'  height='1080px' &gt;&lt;/iframe&gt;`
+[Gmeek](https://github.com/Meekdai/Gmeek) 一个博客框架，超轻量级个人博客模板，完全基于`Github Pages` 、 `Github Issues` 和 `Github Actions`，可以称作`All in Github`。</description><guid isPermaLink="true">/note/post/2.html</guid><pubDate>Wed, 26 Feb 2025 14:43:04 +0000</pubDate></item><item><title>about</title><link>/note/about.html</link><description>`Gmeek-html&lt;iframe id='contentFrame' src='https://fjvi.github.io/sq/' frameborder='0' style='border: none;' width='100%'  height='1080px' &gt;&lt;/iframe&gt;`
 。</description><guid isPermaLink="true">/note/about.html</guid><pubDate>Wed, 26 Feb 2025 14:06:12 +0000</pubDate></item></channel></rss>
