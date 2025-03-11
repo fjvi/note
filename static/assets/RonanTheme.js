@@ -1,10 +1,10 @@
-document.addEventListener('DOMContentLoaded', function() {    
+document.addEventListener('DOMContentLoaded', function() {
     let currentUrl = window.location.pathname;
     //let currentHost = window.location.hostname;
 
     //主页主题------------------------------------------------------------------------------
     
-    if (currentUrl == '/note' || currentUrl.includes('/index.html') || currentUrl.includes('/page')) {
+    if (currentUrl == 'https://fjvi.github.io/note/' || currentUrl.includes('/index.html') || currentUrl.includes('/page')) {
         console.log('应用主页主题');
         let style = document.createElement("style");
         style.innerHTML = `
