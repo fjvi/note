@@ -9,8 +9,6 @@ function loadResource(type, attributes) {
 function createTOC() {
     const tocElement = document.createElement('div');
     tocElement.className = 'toc';
-    tocElement.classList.add('show');
-        
     const contentContainer = document.querySelector('.markdown-body');
     contentContainer.appendChild(tocElement);
 
