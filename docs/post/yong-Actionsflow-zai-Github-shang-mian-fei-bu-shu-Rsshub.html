@@ -1,19 +1,28 @@
 <!DOCTYPE html>
-<html data-color-mode="light" data-dark-theme="dark-blue" data-light-theme="light" lang="zh-CN">
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
 <head>
     <meta content="text/html; charset=utf-8" http-equiv="content-type" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href='https://cdn.jsdelivr.net/npm/@primer/css@21.5.1/dist/primer.min.css' rel='stylesheet' />
-    <script src='https://fjvi.github.io/note/assets/RonanTheme.js'></script><script src='https://fjvi.github.io/note/assets/GmeekVercount.js'></script><script async src='https://cdn.seline.so/seline.js' data-token='5b15b5092d4879e'></script><script async src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9661896697976587' crossorigin='anonymous'></script>
-    <link rel="icon" href="../favicon.ico">
-<meta name="description" content="我平时可能经常需要**查一下当前网站的 IP 地址及归属地**，为了方便我自己写了个简短的脚本放在书签中。">
-<meta property="og:title" content="分享个一键查当前网站 IP 归属地的「书签」（附带查是不是 Cloudflare CDN）">
-<meta property="og:description" content="我平时可能经常需要**查一下当前网站的 IP 地址及归属地**，为了方便我自己写了个简短的脚本放在书签中。">
+    <script src='https://fjvi.github.io/note/assets/RonanTheme.js'></script>
+    <link rel="icon" href="favicon.ico"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="
+## 正文
+
+Rsshub是一个很棒的工具，把很多知名或不知名的网页数据通通统一为RSS 格式，堪称中文互联网的 W3C. 但是官方推荐的部署方式是Docker 部署，对于大多数轻量使用的用户来说有点重，所以这里介绍一种免费，轻量，按需使用的部署方式，利用Actionsflow部署在 GitHub 的 Actions 上。">
+<meta property="og:title" content="用Actionsflow在Github上免费部署Rsshub">
+<meta property="og:description" content="
+## 正文
+
+Rsshub是一个很棒的工具，把很多知名或不知名的网页数据通通统一为RSS 格式，堪称中文互联网的 W3C. 但是官方推荐的部署方式是Docker 部署，对于大多数轻量使用的用户来说有点重，所以这里介绍一种免费，轻量，按需使用的部署方式，利用Actionsflow部署在 GitHub 的 Actions 上。">
 <meta property="og:type" content="article">
-<meta property="og:url" content="/note/post/11.html">
+<meta property="og:url" content="/note/post/yong-Actionsflow-zai-Github-shang-mian-fei-bu-shu-Rsshub.html">
 <meta property="og:image" content="">
-<title>分享个一键查当前网站 IP 归属地的「书签」（附带查是不是 Cloudflare CDN）</title>
+<title>用Actionsflow在Github上免费部署Rsshub</title>
 <link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
 
@@ -56,7 +65,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 
 <body>
     <div id="header">
-<h1 class="postTitle">分享个一键查当前网站 IP 归属地的「书签」（附带查是不是 Cloudflare CDN）</h1>
+<h1 class="postTitle">用Actionsflow在Github上免费部署Rsshub</h1>
 <div class="title-right">
     <a href="/note" id="buttonHome" class="btn btn-invisible circle" title="首页">
         <svg class="octicon" width="16" height="16">
@@ -64,14 +73,14 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
         </svg>
     </a>
     
-    <a href="https://github.com/fjvi/note/issues/11" target="_blank" class="btn btn-invisible circle" title="Issue">
+    <a href="https://github.com/fjvi/note/issues/9" target="_blank" class="btn btn-invisible circle" title="Issue">
         <svg class="octicon" width="16" height="16">
             <path id="pathIssue" fill-rule="evenodd"></path>
         </svg>
     </a>
     
 
-    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题"style="display:none;">
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
         <svg class="octicon" width="16" height="16" >
             <path id="themeSwitch" fill-rule="evenodd"></path>
         </svg>
@@ -80,51 +89,95 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><p>我平时可能经常需要<strong>查一下当前网站的 IP 地址及归属地</strong>，为了方便我自己写了个简短的脚本放在书签中。</p>
+<div class="markdown-body" id="postBody"><h2>正文</h2>
+<p>Rsshub是一个很棒的工具，把很多知名或不知名的网页数据通通统一为RSS 格式，堪称中文互联网的 W3C. 但是官方推荐的部署方式是Docker 部署，对于大多数轻量使用的用户来说有点重，所以这里介绍一种免费，轻量，按需使用的部署方式，利用Actionsflow部署在 GitHub 的 Actions 上。</p>
+<p>Actionsflow是一个基于 Github Actions 上的 IFTTT/Zapier 的开源替代，使用 Github Actions 的配置格式来配置你需要的工作流, 更多关于 Actionsflow 的使用可以看我的另一篇文章介绍,或者官方文档</p>
+<p>比如我自己在用的一个工作流就是监控豆瓣车组的一些我需要的关键词，如果有提到关键词的帖子，那么发送一个 telegram 消息给我，配置如下：</p>
+<div class="highlight highlight-source-yaml"><pre class="notranslate"><span class="pl-ent">on</span>:
+  <span class="pl-ent">rsshub</span>:
+    <span class="pl-ent">path</span>:
+      - <span class="pl-ent">path</span>: <span class="pl-s">/douban/group/669481</span>
+        <span class="pl-ent">query</span>:
+          <span class="pl-ent">filter_case_sensitive</span>: <span class="pl-c1">false</span>
+          <span class="pl-ent">filter_title</span>: <span class="pl-s">罐头|狗粮|爱肯拿|渴望|姐妹们快|牛奶|牛肉|羊肉|来伊份岩烧|来伊份面包|烤箱|生鲜|螺蛳粉|米诺|果酸|杏仁酸|鸡蛋|大米|薅|cr海盐|洗头膏|崔娅蓬松|洗鼻|橙</span>
+          <span class="pl-ent">filterout_title</span>: <span class="pl-s">求|转|求购|交流|已购|专楼|蒙牛|伊利|讨论|华为|停车|代拍|完|分装|意向|拼单|删|一元</span>
+<span class="pl-ent">jobs</span>:
+  <span class="pl-ent">ifttt</span>:
+    <span class="pl-ent">name</span>: <span class="pl-s">Make a Request to telegram</span>
+    <span class="pl-ent">runs-on</span>: <span class="pl-s">ubuntu-latest</span>
+    <span class="pl-ent">steps</span>:
+      - <span class="pl-ent">name</span>: <span class="pl-s">Send a telegram message</span>
+        <span class="pl-ent">uses</span>: <span class="pl-s">appleboy/telegram-action@v0.1.0</span>
+        <span class="pl-ent">with</span>:
+          <span class="pl-ent">to</span>: <span class="pl-s">${{ secrets.TELEGRAM_TO }}</span>
+          <span class="pl-ent">token</span>: <span class="pl-s">${{ secrets.TELEGRAM_TOKEN }}</span>
+          <span class="pl-ent">message</span>: <span class="pl-s">|</span>
+<span class="pl-s">            &lt;b&gt;${{ on.rsshub.outputs.title}}&lt;/b&gt;</span>
+<span class="pl-s">            &lt;a href="${{on.rsshub.outputs.link}}"&gt;${{on.rsshub.outputs.description}}&lt;/a&gt;</span>
+<span class="pl-s"></span>          <span class="pl-ent">format</span>: <span class="pl-s">html</span>
+          <span class="pl-ent">disable_web_page_preview</span>: <span class="pl-c1">true</span></pre></div>
 <blockquote>
-<p>比如有时候发现某网站慢的要死，我就会看看是不是用的 Cloudflare CDN，是的话就加到 Hosts 文件中。</p>
+<p>配置来自<a href="https://github.com/theowenyoung/actionsflow-workflow/blob/main/workflows/rsshub.yml">这里</a></p>
 </blockquote>
-<p>平时大家如果要查当前网站的 IP 归属地还需要去专门的查询网站，二我今天闲的没事就分享下该书签，指不定有人会需要呢~</p>
-<hr>
-<h2># 查当前网站 IP 归属地「书签」</h2>
-<p><strong>新建书签</strong>，<strong>网址</strong>写下面这段脚本代码（书签名随意），<strong>保存即可</strong>。</p>
-<div class="highlight highlight-source-js"><pre class="notranslate">javascript:<span class="pl-kos">(</span><span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span><span class="pl-smi">window</span><span class="pl-kos">.</span><span class="pl-en">open</span><span class="pl-kos">(</span><span class="pl-s">"https://ip.mcr.moe/?ip="</span> <span class="pl-c1">+</span> <span class="pl-s1">location</span><span class="pl-kos">.</span><span class="pl-c1">hostname</span><span class="pl-kos">,</span><span class="pl-s">'target'</span><span class="pl-kos">,</span><span class="pl-s">''</span><span class="pl-kos">)</span><span class="pl-kos">;</span><span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">(</span><span class="pl-kos">)</span></pre></div>
-<p>这样你在任意网页下<strong>点击该书签</strong>，即可显示该网站 IP 归属地。</p>
-<p>例如在 Github 任意网页下点击大概显示如下：</p>
-<pre class="notranslate"><code class="notranslate">{
-    "status": 200,
-    "message": "OK",
-    "addr": "52.74.223.119",        # IP
-    "country": "新加坡",            # 国家
-    "area": " Singapore",           # 地区
-    "provider": "Amazon数据中心"   # 提供者，如果该网站用的是 Cloudflare CDN 则这里也会写 Cloudflare 的
-}
-</code></pre>
-<hr>
-<p>这其实就是一个查询 IP 归属地的 API，点击这个书签就是把当前网站的域名加到 API 地址末尾并访问罢了。</p>
-<hr>
-<h2># 查当前网站是不是 Cloudflare CDN「书签」</h2>
-<p><strong>新建书签</strong>，<strong>网址</strong>写下面这段脚本代码（书签名随意），<strong>保存即可</strong>。</p>
-<div class="highlight highlight-source-js"><pre class="notranslate">javascript:<span class="pl-kos">(</span><span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span><span class="pl-smi">window</span><span class="pl-kos">.</span><span class="pl-en">open</span><span class="pl-kos">(</span><span class="pl-s1">location</span><span class="pl-kos">.</span><span class="pl-c1">origin</span> <span class="pl-c1">+</span> <span class="pl-s">"/cdn-cgi/trace"</span><span class="pl-kos">,</span><span class="pl-s">'target'</span><span class="pl-kos">,</span><span class="pl-s">''</span><span class="pl-kos">)</span><span class="pl-kos">;</span><span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">(</span><span class="pl-kos">)</span></pre></div>
-<p>这样你在任意网页下<strong>点击该书签</strong>，就会打开 <code class="notranslate">域名/cdn-cgi/trace</code> 这个地址，如果能访问就代表用的是 Cloudflare CDN。</p>
-<p>例如在 Cloudflare 官网任意网页下点击大概显示如下：</p>
-<pre class="notranslate"><code class="notranslate">fl=100f16
-h=www.cloudflare.com
-ip=XXX.XXX.XXX.XXX           # 你的 IP
-ts=1613267817.838
-visit_scheme=https
-uag=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36
-colo=MUC                    # 当前 CDN 节点物理地址，这是当地机场缩写，可以去搜索 "MUC 机场" 关键词获得具体位置
-http=http/2
-loc=CN                      # 你所处位置
-tls=TLSv1.3
-sni=plaintext
-warp=off
-gateway=off
-</code></pre>
-<hr>
-<p>这其实就是利用任何使用 Cloudflare CDN 节点的网站（包括 CDN IP 本身）都能在后面加上 <code class="notranslate">/cdn-cgi/trace</code> 访问获取当前节点信息。<br>
-<a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/66">https://github.com/XIU2/CloudflareSpeedTest/discussions/66</a></p></div>
+<p>接下来介绍下如何部署：）</p>
+<blockquote>
+<p>因为 rsshub 这个 trigger 没有内置在 Actionsflow 里，所以按照官方的教程初始化之后，需要主动安装下@actionsflow/trigger-rsshub这个 trigger</p>
+</blockquote>
+<ol>
+<li>使用<a href="https://github.com/actionsflow/actionsflow-workflow-default/generate">这个</a>链接用 Actionsflow 的默认模板创建一个新的 GitHub 项目，一个典型的 Actionsflow 项目长这样：</li>
+</ol>
+<div class="highlight highlight-source-shell"><pre class="notranslate">    ├── .github
+    │   └── workflows
+    │       └── actionsflow.yml
+    ├── .gitignore
+    ├── README.md
+    └── workflows
+    │   └── rss.yml
+    │   └── webhook.yml
+    └── package.json</pre></div>
+<ol start="2">
+<li>clone 你刚创建的项目到本地</li>
+</ol>
+<div class="highlight highlight-source-shell"><pre class="notranslate">git clone git@github.com:<span class="pl-k">&lt;</span>your-github-username<span class="pl-k">&gt;</span>/<span class="pl-k">&lt;</span>repo-name<span class="pl-k">&gt;</span></pre></div>
+<ol start="3">
+<li>
+<p>在本地编辑<code class="notranslate">.github/workflows/actionsflow.yml</code>文件，取消<code class="notranslate">schedule</code>的注释</p>
+</li>
+<li>
+<p>安装<a href="https://github.com/theowenyoung/actionsflow-trigger-rsshub">@actionsflow/trigger-rsshub</a></p>
+</li>
+</ol>
+<div class="highlight highlight-source-shell"><pre class="notranslate">npm i @actionsflow/trigger-rsshub</pre></div>
+<ol start="5">
+<li>在<code class="notranslate">workflows/</code>文件夹创建你自己的 workflow 文件</li>
+</ol>
+<blockquote>
+<p>workflow 的写法和 rsshub trigger 的用法清参考官方文档<a href="https://actionsflow.github.io/docs/workflow/" rel="nofollow">Actionsflow Workflow Syntax</a>, <a href="https://github.com/theowenyoung/actionsflow-trigger-rsshub">Actionsflow rsshub trigger</a></p>
+</blockquote>
+<blockquote>
+<p>可以参考<a href="https://actionsflow.github.io/docs/actions/" rel="nofollow">这里</a>列出的 常用 Github Action，以及这个 <a href="https://github.com/actionsflow/awesome-actionsflow">Actionsflow 的 Awesome 项目</a></p>
+</blockquote>
+<p>示例(<code class="notranslate">/workflow/rsshub.yml</code>)：</p>
+<div class="highlight highlight-source-yaml"><pre class="notranslate">  <span class="pl-ent">on</span>:
+    <span class="pl-ent">rsshub</span>:
+      <span class="pl-ent">path</span>: <span class="pl-s">/smzdm/keyword/女装</span>
+  <span class="pl-ent">jobs</span>:
+    <span class="pl-ent">print</span>:
+      <span class="pl-ent">name</span>: <span class="pl-s">Print</span>
+      <span class="pl-ent">runs-on</span>: <span class="pl-s">ubuntu-latest</span>
+      <span class="pl-ent">steps</span>:
+        - <span class="pl-ent">name</span>: <span class="pl-s">Print Outputs</span>
+          <span class="pl-ent">env</span>:
+            <span class="pl-ent">title</span>: <span class="pl-s">${{on.rsshub.outputs.title}}</span>
+            <span class="pl-ent">description</span>: <span class="pl-s">${{on.rsshub.outputs.description}}</span>
+            <span class="pl-ent">link</span>: <span class="pl-s">${{on.rsshub.outputs.link}}</span>
+          <span class="pl-ent">run</span>: <span class="pl-s">|</span>
+<span class="pl-s">            echo title: $title</span>
+<span class="pl-s">            echo description: $description</span>
+<span class="pl-s">            echo link: $link</span></pre></div>
+<ol start="6">
+<li>保存并提交你的文件到 Github</li>
+</ol></div>
 <div style="font-size:small;margin-top:8px;float:right;">My good time-我的好时光！</div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
@@ -140,8 +193,8 @@ gateway=off
 var now=new Date();
 document.getElementById("copyrightYear").innerHTML=now.getFullYear();
 
-if("03/11/2025"!=""){
-    var startSite=new Date("03/11/2025");
+if("08/31/2024"!=""){
+    var startSite=new Date("08/31/2024");
     var diff=now.getTime()-startSite.getTime();
     var diffDay=Math.floor(diff/(1000*60*60*24));
     document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
@@ -152,6 +205,31 @@ if("03/11/2025"!=""){
 var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
 var utterancesLoad=0;
 
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
 console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
 </script>
 
@@ -174,7 +252,9 @@ function openComments(){
     script.setAttribute("repo","fjvi/note");
     script.setAttribute("issue-term","title");
     
-    script.setAttribute("theme","dark-blue");
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
     
     script.setAttribute("crossorigin","anonymous");
     script.setAttribute("async","");
