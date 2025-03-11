@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //主页主题------------------------------------------------------------------------------
     
-    if (currentUrl == '/' || currentUrl.includes('/index.html') || currentUrl.includes('/pages')) {
+    if (currentUrl.includes('/index.html')) {
         console.log('应用主页主题');
         let style = document.createElement("style");
         style.innerHTML = `
