@@ -41,5 +41,5 @@
     "ogImage":"",
     "primerCSS":"<link href='https://cdn.jsdelivr.net/npm/@primer/css@21.5.1/dist/primer.min.css' rel='stylesheet' />",
     "showPostSource":0,
-    "needComment":1
+    "needComment":0
 }
