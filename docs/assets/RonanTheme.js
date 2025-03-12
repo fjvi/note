@@ -8,10 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('应用主页主题');
         let style = document.createElement("style");
         style.innerHTML = `
-        html {    
-            background: url('https://fjvi.github.io/note/home-bg.jpg') no-repeat center center fixed;
-            background-size: cover;
-        }
 
         /* 主体布局 */
         body {
@@ -60,11 +56,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let style = document.createElement("style");
         style.innerHTML = `
-
-        html {    
-            background: url('https://fjvi.github.io/note/home-bg.jpg') no-repeat center center fixed;
-            background-size: cover;
-        }
 
         /* 主体布局 */
         body {
@@ -124,11 +115,6 @@ document.addEventListener('DOMContentLoaded', function() {
         let style = document.createElement("style");
         style.innerHTML = `
         
-        html {    
-            background: url('https://fjvi.github.io/note/home-bg.jpg') no-repeat center center fixed;
-            background-size: cover;
-        }
-
         /* 主体布局 */
         body {
             min-width: 200px;
