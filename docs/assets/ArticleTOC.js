@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
        .toc {
            position: fixed;
-           bottom: 200px;
+           bottom: 80px;
            right: 20px;
            width: 250px;
            max-height: 70vh;

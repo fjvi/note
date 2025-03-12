@@ -4,7 +4,7 @@
   style.textContent = `
     .back-to-top {
       position: fixed;
-      bottom:200px;
+      bottom: 80px;
       right: 15px;
       background-color: rgba(255, 255, 255, 0.8);
       color: #333;
