@@ -14,7 +14,7 @@
     "yearColorList":["#bc4c00", "#0969da", "#1f883d", "#A333D0"],    
     "style":"",
     "script":"<script src='https://fjvi.github.io/note/assets/ArticleTOC.js'></script><script src='https://fjvi.github.io/note/assets/lightbox.js'></script>",
-    "allHead":"",
+    "allHead":"<script src='https://fjvi.github.io/note/assets/RonanTheme.js'></script>",
     "head":"",
     "indexStyle":"<script src='https://fjvi.github.io/note/index.css'></script>",
     "indexScript":"",
