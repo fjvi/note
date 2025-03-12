@@ -16,7 +16,7 @@
     "script":"<script src='https://fjvi.github.io/note/assets/ArticleTOC.js'></script><script src='https://fjvi.github.io/note/assets/lightbox.js'></script>",
     "allHead":"",
     "head":"",
-    "indexStyle":"<script src='https://fjvi.github.io/note/assets/static/index.css'></script>",
+    "indexStyle":"<script src='https://fjvi.github.io/note/assets/index.css'></script>",
     "indexScript":"",
     "rssSplit":"sentence",
     "bottomText":"My good time-我的好时光！",
