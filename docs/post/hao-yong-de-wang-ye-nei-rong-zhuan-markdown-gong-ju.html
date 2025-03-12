@@ -4,7 +4,7 @@
     <meta content="text/html; charset=utf-8" http-equiv="content-type" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
     
     <link rel="icon" href="favicon.ico"><script>
         let theme = localStorage.getItem("meek_theme") || "light";
@@ -25,7 +25,7 @@
 用法一：十分简单，只需要在左边页面地址处填入网址，并按Enter，就可以在右边看见生成的markdown格式的内容，复制使用即可。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="/note/post/hao-yong-de-wang-ye-nei-rong-zhuan-markdown-gong-ju.html">
-<meta property="og:image" content="">
+<meta property="og:image" content="favicon.ico">
 <title>好用的网页内容转markdown工具</title>
 
 
@@ -118,7 +118,7 @@ Copy as Markdown 是一个 Chrome 扩展程序，可以帮助您将以下内容�
 参考：<br>
 1.<a href="https://www.v2ex.com/t/949166" rel="nofollow">有什么好办法，将网页内容保存为 markdown</a></li>
 </ul></div>
-<div style="font-size:small;margin-top:8px;float:right;">My good time-我的好时光！</div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
 <div class="comments" id="comments"></div>
@@ -133,8 +133,8 @@ Copy as Markdown 是一个 Chrome 扩展程序，可以帮助您将以下内容�
 var now=new Date();
 document.getElementById("copyrightYear").innerHTML=now.getFullYear();
 
-if("08/31/2024"!=""){
-    var startSite=new Date("08/31/2024");
+if(""!=""){
+    var startSite=new Date("");
     var diff=now.getTime()-startSite.getTime();
     var diffDay=Math.floor(diff/(1000*60*60*24));
     document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
@@ -219,6 +219,6 @@ function iFrameLoading(){
 
 
 </script>
-<script src='https://fjvi.github.io/note/assets/ArticleTOC.js'></script><script src='https://fjvi.github.io/note/assets/lightbox.js'></script>
+<script src='https://692.github.io/code/note/articletoc.js'></script><script src='https://692.github.io/code/note/backtop.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>
 
 </html>

@@ -4,7 +4,7 @@
     <meta content="text/html; charset=utf-8" http-equiv="content-type" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
     
     <link rel="icon" href="favicon.ico"><script>
         let theme = localStorage.getItem("meek_theme") || "light";
@@ -21,7 +21,7 @@ Rsshub是一个很棒的工具，把很多知名或不知名的网页数据通�
 Rsshub是一个很棒的工具，把很多知名或不知名的网页数据通通统一为RSS 格式，堪称中文互联网的 W3C. 但是官方推荐的部署方式是Docker 部署，对于大多数轻量使用的用户来说有点重，所以这里介绍一种免费，轻量，按需使用的部署方式，利用Actionsflow部署在 GitHub 的 Actions 上。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="/note/post/yong-Actionsflow-zai-Github-shang-mian-fei-bu-shu-Rsshub.html">
-<meta property="og:image" content="">
+<meta property="og:image" content="favicon.ico">
 <title>用Actionsflow在Github上免费部署Rsshub</title>
 <link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
@@ -178,7 +178,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 1080px;margin: 0 auto;pa
 <ol start="6">
 <li>保存并提交你的文件到 Github</li>
 </ol></div>
-<div style="font-size:small;margin-top:8px;float:right;">My good time-我的好时光！</div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
 <div class="comments" id="comments"></div>
@@ -193,8 +193,8 @@ body{box-sizing: border-box;min-width: 200px;max-width: 1080px;margin: 0 auto;pa
 var now=new Date();
 document.getElementById("copyrightYear").innerHTML=now.getFullYear();
 
-if("08/31/2024"!=""){
-    var startSite=new Date("08/31/2024");
+if(""!=""){
+    var startSite=new Date("");
     var diff=now.getTime()-startSite.getTime();
     var diffDay=Math.floor(diff/(1000*60*60*24));
     document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
@@ -342,6 +342,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 </script>
-<script src='https://fjvi.github.io/note/assets/ArticleTOC.js'></script><script src='https://fjvi.github.io/note/assets/lightbox.js'></script>
+<script src='https://692.github.io/code/note/articletoc.js'></script><script src='https://692.github.io/code/note/backtop.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>
 
 </html>

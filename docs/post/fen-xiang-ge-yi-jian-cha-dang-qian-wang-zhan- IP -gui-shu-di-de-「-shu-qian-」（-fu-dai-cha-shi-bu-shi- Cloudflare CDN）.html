@@ -4,7 +4,7 @@
     <meta content="text/html; charset=utf-8" http-equiv="content-type" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
     
     <link rel="icon" href="favicon.ico"><script>
         let theme = localStorage.getItem("meek_theme") || "light";
@@ -15,7 +15,7 @@
 <meta property="og:description" content="我平时可能经常需要**查一下当前网站的 IP 地址及归属地**，为了方便我自己写了个简短的脚本放在书签中。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="/note/post/fen-xiang-ge-yi-jian-cha-dang-qian-wang-zhan-%20IP%20-gui-shu-di-de-%E3%80%8C-shu-qian-%E3%80%8D%EF%BC%88-fu-dai-cha-shi-bu-shi-%20Cloudflare%20CDN%EF%BC%89.html">
-<meta property="og:image" content="">
+<meta property="og:image" content="favicon.ico">
 <title>分享个一键查当前网站 IP 归属地的「书签」（附带查是不是 Cloudflare CDN）</title>
 <link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
@@ -128,7 +128,7 @@ gateway=off
 <hr>
 <p>这其实就是利用任何使用 Cloudflare CDN 节点的网站（包括 CDN IP 本身）都能在后面加上 <code class="notranslate">/cdn-cgi/trace</code> 访问获取当前节点信息。<br>
 <a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/66">https://github.com/XIU2/CloudflareSpeedTest/discussions/66</a></p></div>
-<div style="font-size:small;margin-top:8px;float:right;">My good time-我的好时光！</div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
 <div class="comments" id="comments"></div>
@@ -143,8 +143,8 @@ gateway=off
 var now=new Date();
 document.getElementById("copyrightYear").innerHTML=now.getFullYear();
 
-if("08/31/2024"!=""){
-    var startSite=new Date("08/31/2024");
+if(""!=""){
+    var startSite=new Date("");
     var diff=now.getTime()-startSite.getTime();
     var diffDay=Math.floor(diff/(1000*60*60*24));
     document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
@@ -292,6 +292,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 </script>
-<script src='https://fjvi.github.io/note/assets/ArticleTOC.js'></script><script src='https://fjvi.github.io/note/assets/lightbox.js'></script>
+<script src='https://692.github.io/code/note/articletoc.js'></script><script src='https://692.github.io/code/note/backtop.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>
 
 </html>

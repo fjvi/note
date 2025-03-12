@@ -4,7 +4,7 @@
     <meta content="text/html; charset=utf-8" http-equiv="content-type" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
     
     <link rel="icon" href="favicon.ico"><script>
         let theme = localStorage.getItem("meek_theme") || "light";
@@ -63,7 +63,7 @@ docker run -p 8080:80 dorowu/ubuntu-desktop-lxde-vnc
 这火狐浏览器中，打开serv00的注册页面，多刷新几次，就可以注册成功了。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="/note/post/zhu-ce-serv00-de-xin-fang-fa-%EF%BC%8C-ce-shi-fei-chang-hao.html">
-<meta property="og:image" content="">
+<meta property="og:image" content="favicon.ico">
 <title>注册serv00的新方法，测试非常好</title>
 
 
@@ -137,7 +137,7 @@ docker run -p 8080:80 dorowu/ubuntu-desktop-lxde-vnc<br>
 5、等命令运行完打开终端右上的“网页预览”，会弹出如下界面，然后点击左下角，选择Ineernet-Firefox Web Brower</p>
 <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/fea652e7-0ff6-4d2d-9658-960a89c46448"><img src="https://github.com/user-attachments/assets/fea652e7-0ff6-4d2d-9658-960a89c46448" alt="Image" style="max-width: 100%;"></a></p>
 <p>这火狐浏览器中，打开serv00的注册页面，多刷新几次，就可以注册成功了</p></div>
-<div style="font-size:small;margin-top:8px;float:right;">My good time-我的好时光！</div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
 <div class="comments" id="comments"></div>
@@ -152,8 +152,8 @@ docker run -p 8080:80 dorowu/ubuntu-desktop-lxde-vnc<br>
 var now=new Date();
 document.getElementById("copyrightYear").innerHTML=now.getFullYear();
 
-if("08/31/2024"!=""){
-    var startSite=new Date("08/31/2024");
+if(""!=""){
+    var startSite=new Date("");
     var diff=now.getTime()-startSite.getTime();
     var diffDay=Math.floor(diff/(1000*60*60*24));
     document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
@@ -238,6 +238,6 @@ function iFrameLoading(){
 
 
 </script>
-<script src='https://fjvi.github.io/note/assets/ArticleTOC.js'></script><script src='https://fjvi.github.io/note/assets/lightbox.js'></script>
+<script src='https://692.github.io/code/note/articletoc.js'></script><script src='https://692.github.io/code/note/backtop.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>
 
 </html>

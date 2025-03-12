@@ -4,7 +4,7 @@
     <meta content="text/html; charset=utf-8" http-equiv="content-type" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
     
     <link rel="icon" href="favicon.ico"><script>
         let theme = localStorage.getItem("meek_theme") || "light";
@@ -25,7 +25,7 @@
 这是一个markdown格式的测试页面，也是个人经常会使用的格式记录。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="/note/post/Markdown-yu-fa-zong-lan.html">
-<meta property="og:image" content="">
+<meta property="og:image" content="favicon.ico">
 <title>Markdown语法总览</title>
 <link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
@@ -298,7 +298,7 @@ Dropdown content (supports \*\*markdown\*\* ~~yay!~~)
 <li><a href="https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax">https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax</a></li>
 </ol>
 <p>❤️ 转载文章请注明出处，谢谢！❤️</p></div>
-<div style="font-size:small;margin-top:8px;float:right;">My good time-我的好时光！</div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
 <div class="comments" id="comments"></div>
@@ -313,8 +313,8 @@ Dropdown content (supports \*\*markdown\*\* ~~yay!~~)
 var now=new Date();
 document.getElementById("copyrightYear").innerHTML=now.getFullYear();
 
-if("08/31/2024"!=""){
-    var startSite=new Date("08/31/2024");
+if(""!=""){
+    var startSite=new Date("");
     var diff=now.getTime()-startSite.getTime();
     var diffDay=Math.floor(diff/(1000*60*60*24));
     document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
@@ -462,6 +462,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 </script>
-<script src='https://fjvi.github.io/note/assets/ArticleTOC.js'></script><script src='https://fjvi.github.io/note/assets/lightbox.js'></script>
+<script src='https://692.github.io/code/note/articletoc.js'></script><script src='https://692.github.io/code/note/backtop.js'></script><script src='https://blog.meekdai.com/Gmeek/plugins/lightbox.js'></script>
 
 </html>
