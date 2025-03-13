@@ -11,35 +11,9 @@
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
 <meta name="description" content="# CloudPaste - 在线剪贴板 📋
-
-<div align='center'>
-    <img width='100' height='100' src='https://img.icons8.com/dusk/100/paste.png' alt='paste'/>
-</div>
-
-<div align='center'>
-  English | <a href='./README.zh.md'>中文</a>
-</div>
-
-![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-orange?style=flat-square&logo=cloudflare)
-![Vue.js](https://img.shields.io/badge/Vue.js-3.x-green?style=flat-square&logo=vue.js)
-![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
-
 一个基于 Cloudflare Workers 的在线剪贴板和文件分享服务。">
 <meta property="og:title" content="CloudPaste - 基于 Cloudflare Workers 的在线剪贴板和文件分享服务">
 <meta property="og:description" content="# CloudPaste - 在线剪贴板 📋
-
-<div align='center'>
-    <img width='100' height='100' src='https://img.icons8.com/dusk/100/paste.png' alt='paste'/>
-</div>
-
-<div align='center'>
-  English | <a href='./README.zh.md'>中文</a>
-</div>
-
-![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-orange?style=flat-square&logo=cloudflare)
-![Vue.js](https://img.shields.io/badge/Vue.js-3.x-green?style=flat-square&logo=vue.js)
-![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
-
 一个基于 Cloudflare Workers 的在线剪贴板和文件分享服务。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="/note/post/CloudPaste%20-%20-ji-yu-%20Cloudflare%20Workers%20-de-zai-xian-jian-tie-ban-he-wen-jian-fen-xiang-fu-wu.html">
@@ -111,30 +85,11 @@ body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto;
 </div>
     <div id="content">
 <div class="markdown-body" id="postBody"><h1>CloudPaste - 在线剪贴板 📋</h1>
-<div align="center">
-    <a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/2d1d19cbb8580225db6fe3c93d285be9c2c8871e3d6469fdfc5a7151b377a5ae/68747470733a2f2f696d672e69636f6e73382e636f6d2f6475736b2f3130302f70617374652e706e67"><img width="100" height="100" src="https://camo.githubusercontent.com/2d1d19cbb8580225db6fe3c93d285be9c2c8871e3d6469fdfc5a7151b377a5ae/68747470733a2f2f696d672e69636f6e73382e636f6d2f6475736b2f3130302f70617374652e706e67" alt="paste" data-canonical-src="https://img.icons8.com/dusk/100/paste.png" style="max-width: 100%;"></a>
-</div>
-<div align="center">
-  English | <a href="./README.zh.md">中文</a>
-</div>
-<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/ea53f0f16f42c7c567a0270202fddd08b94951d2e94bab128ca62c62b46d3223/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f436c6f7564666c6172652d576f726b6572732d6f72616e67653f7374796c653d666c61742d737175617265266c6f676f3d636c6f7564666c617265"><img src="https://camo.githubusercontent.com/ea53f0f16f42c7c567a0270202fddd08b94951d2e94bab128ca62c62b46d3223/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f436c6f7564666c6172652d576f726b6572732d6f72616e67653f7374796c653d666c61742d737175617265266c6f676f3d636c6f7564666c617265" alt="Cloudflare Workers" data-canonical-src="https://img.shields.io/badge/Cloudflare-Workers-orange?style=flat-square&amp;logo=cloudflare" style="max-width: 100%;"></a><br>
-<a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/42c1e6767936a9f10c6aa8a435e5641a0853107e3603c91810b255980cf44b8a/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f5675652e6a732d332e782d677265656e3f7374796c653d666c61742d737175617265266c6f676f3d7675652e6a73"><img src="https://camo.githubusercontent.com/42c1e6767936a9f10c6aa8a435e5641a0853107e3603c91810b255980cf44b8a/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f5675652e6a732d332e782d677265656e3f7374796c653d666c61742d737175617265266c6f676f3d7675652e6a73" alt="Vue.js" data-canonical-src="https://img.shields.io/badge/Vue.js-3.x-green?style=flat-square&amp;logo=vue.js" style="max-width: 100%;"></a><br>
-<a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/9d4dc30e2f4f1a2bb3a3ca529b93aa419a73209749db41f4f531ee4735cf16b3/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d4d49542d626c75653f7374796c653d666c61742d737175617265"><img src="https://camo.githubusercontent.com/9d4dc30e2f4f1a2bb3a3ca529b93aa419a73209749db41f4f531ee4735cf16b3/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d4d49542d626c75653f7374796c653d666c61742d737175617265" alt="License" data-canonical-src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" style="max-width: 100%;"></a></p>
 <p>一个基于 Cloudflare Workers 的在线剪贴板和文件分享服务。支持 Markdown、密码保护、文件上传等功能。</p>
-<markdown-accessiblity-table><table role="table">
-  <tbody><tr>
-    <td><a target="_blank" rel="noopener noreferrer" href="./image/image1.png"><img src="./image/image1.png" width="400" style="max-width: 100%;"></a></td>
-    <td><a target="_blank" rel="noopener noreferrer" href="./image/image2.png"><img src="./image/image2.png" width="400" style="max-width: 100%;"></a></td>
-  </tr>
-  <tr>
-    <td><a target="_blank" rel="noopener noreferrer" href="./image/image3.png"><img src="./image/image3.png" width="400" style="max-width: 100%;"></a></td>
-    <td><a target="_blank" rel="noopener noreferrer" href="./image/image4.png"><img src="./image/image4.png" width="400" style="max-width: 100%;"></a></td>
-  </tr>
-  <tr>
-    <td><a target="_blank" rel="noopener noreferrer" href="./image/image5.png"><img src="./image/image5.png" width="400" style="max-width: 100%;"></a></td>
-    <td><a target="_blank" rel="noopener noreferrer" href="./image/image6.png"><img src="./image/image6.png" width="400" style="max-width: 100%;"></a></td>
-  </tr>
-</tbody></table></markdown-accessiblity-table>
+  
+    <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/bff7cdf4-a8df-4c4c-89e0-c16bd211fc81"><img src="https://github.com/user-attachments/assets/bff7cdf4-a8df-4c4c-89e0-c16bd211fc81" width="416" style="max-width: 100%;"></a></p>
+    <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/ec199dc3-ef27-4358-86a9-485a518bad22"><img src="https://github.com/user-attachments/assets/ec199dc3-ef27-4358-86a9-485a518bad22" width="384" style="max-width: 100%;"></a></p>
+  
 <h2>✨ 功能特点</h2>
 <h3>📝 文本分享</h3>
 <ul>
@@ -511,9 +466,7 @@ curl -H <span class="pl-s"><span class="pl-pds">"</span>X-Password: your-passwor
 <li><a href="https://developers.cloudflare.com/workers/" rel="nofollow">Cloudflare Workers 文档</a></li>
 <li><a href="https://v3.vuejs.org/" rel="nofollow">Vue 3 文档</a></li>
 <li><a href="https://marked.js.org/" rel="nofollow">Marked 文档</a></li>
-</ul>
-<h2>Star History</h2>
-<p><a href="https://star-history.com/#ling-drag0n/CloudPaste&amp;Date" rel="nofollow"><img src="https://camo.githubusercontent.com/41a1444fefd616e4c70b3bc494d6ca7f2f4c23e55f3c8960cf24d09683fa88f9/68747470733a2f2f6170692e737461722d686973746f72792e636f6d2f7376673f7265706f733d6c696e672d64726167306e2f436c6f7564506173746526747970653d44617465" alt="Star History Chart" data-canonical-src="https://api.star-history.com/svg?repos=ling-drag0n/CloudPaste&amp;type=Date" style="max-width: 100%;"></a></p></div>
+</ul></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>

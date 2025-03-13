@@ -1,33 +1,11 @@
 # CloudPaste - 在线剪贴板 📋
-
-<div align="center">
-    <img width="100" height="100" src="https://img.icons8.com/dusk/100/paste.png" alt="paste"/>
-</div>
-
-<div align="center">
-  English | <a href="./README.zh.md">中文</a>
-</div>
-
-![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-orange?style=flat-square&logo=cloudflare)
-![Vue.js](https://img.shields.io/badge/Vue.js-3.x-green?style=flat-square&logo=vue.js)
-![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
-
 一个基于 Cloudflare Workers 的在线剪贴板和文件分享服务。支持 Markdown、密码保护、文件上传等功能。
 
-<table>
   <tr>
-    <td><img src="./image/image1.png" width="400"/></td>
-    <td><img src="./image/image2.png" width="400"/></td>
+    <td><img src="https://github.com/user-attachments/assets/bff7cdf4-a8df-4c4c-89e0-c16bd211fc81" width="416"/></td>
+    <td><img src="https://github.com/user-attachments/assets/ec199dc3-ef27-4358-86a9-485a518bad22" width="384"/></td>
   </tr>
-  <tr>
-    <td><img src="./image/image3.png" width="400"/></td>
-    <td><img src="./image/image4.png" width="400"/></td>
-  </tr>
-  <tr>
-    <td><img src="./image/image5.png" width="400"/></td>
-    <td><img src="./image/image6.png" width="400"/></td>
-  </tr>
-</table>
+
 
 ## ✨ 功能特点
 
@@ -356,7 +334,3 @@ MIT License
 - [Cloudflare Workers 文档](https://developers.cloudflare.com/workers/)
 - [Vue 3 文档](https://v3.vuejs.org/)
 - [Marked 文档](https://marked.js.org/)
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=ling-drag0n/CloudPaste&type=Date)](https://star-history.com/#ling-drag0n/CloudPaste&Date)
