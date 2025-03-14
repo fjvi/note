@@ -1,5 +1,62 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTnote</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTnote</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Fri, 14 Mar 2025 15:12:01 +0000</lastBuildDate><managingEditor>MGTnote</managingEditor><ttl>60</ttl><webMaster>MGTnote</webMaster><item><title>CloudPaste 在线剪贴板- 基于Cloudflare Workers</title><link>https://692.cloudns.be/post/CloudPaste%20-zai-xian-jian-tie-ban--%20-ji-yu-Cloudflare%20Workers.html</link><description># CloudPaste - 在线剪贴板 📋
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTnote</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTnote</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Fri, 14 Mar 2025 15:47:58 +0000</lastBuildDate><managingEditor>MGTnote</managingEditor><ttl>60</ttl><webMaster>MGTnote</webMaster><item><title>CF_Drop轻量级文件分享工具- 基于 Cloudflare Worker、D1 和 KV</title><link>https://692.cloudns.be/post/CF_Drop-qing-liang-ji-wen-jian-fen-xiang-gong-ju--%20-ji-yu-%20Cloudflare%20Worker%E3%80%81D1%20-he-%20KV.html</link><description># Cloudflare Drop
+
+基于 Cloudflare Worker、D1Database 和 KV 实现的轻量级文件分享工具。
+&lt;img src='https://github.com/user-attachments/assets/60573c40-5c91-489f-af5f-ee8653376412' width='500' /&gt;
+
+## 自动部署
+
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/oustn/cloudflare-drop)
+
+1. 点击按钮，跳转到自动部署页面
+2. 根据页面指引，关联 GitHub &amp; Cloudflare，配置 Cloudflare Account ID &amp; API Key
+3. Fork 仓库
+4. 开启 Action
+5. 部署
+
+&gt; 创建 Cloudflare API Key 时，如果使用 worker 模板创建，请记得添加 D1 的编辑权限。
+
+## 更新
+
+同步 Fork 的仓库即可自动更新 &amp; 构建。
+
+&lt;img src='assets/IMG_01.png' width='200'&gt;
+
+## 配置 GitHub Action Secret
+
+1. 在初次部署完成后，还需要创建 [D1Database](https://developers.cloudflare.com/d1/get-started/#2-create-a-database) &amp; [KV](https://developers.cloudflare.com/kv/get-started/#2-create-a-kv-namespace)，参考对应文档。
+2. 配置 Secret：在 forked 的仓库 -&gt; **Settings** -&gt; **Secrets and variables** -&gt; **Actions** -&gt; **New repository secret**
+3. 配置以下 Secret：
+   - CUSTOM_DOMAIN （可选，域名，如 drop.example.cn）
+   - D1_ID (D1Database ID)
+   - D1_NAME (D1Database Name)
+   - KV_ID (KV Namespace ID)
+4. 重新运行 Github Actions
+
+## 其他配置
+
+### 文件大小限制
+
+默认文件限制为 10M，可以通过添加 Action 变量来修改。
+
+新增 `SHARE_MAX_SIZE_IN_MB` Action 变量，值为最大允许的 MB 数字，例如 20，配置路径：在 forked 的仓库 -&gt; **Settings** -&gt; **Secrets and variables** -&gt; **Actions** -&gt; **New repository variable**
+
+### 分享过期时间配置
+
+分享默认有效期是一个小时，可以通过添加 Action 变量来修改。
+
+新增 `SHARE_DURATION` Action 变量，配置格式为 `数值+单位`，比如 (5minute)，支持的单位有 `minute`, `hour`, `day`, `week`, `month`, `year`
+
+### 新增 IP 上传频率限制
+
+默认无限制，可以通过添加 Action 变量来修改。
+
+新增 `RATE_LIMIT` Action 变量，值为每 10s 可请求数，比如 10
+
+## 过期清理
+
+Worker 添加了一个 10 分钟的定时任务，自动清理过期的 KV 存储和 D1 中的记录。
+$$$$$$$</description><guid isPermaLink="true">https://692.cloudns.be/post/CF_Drop-qing-liang-ji-wen-jian-fen-xiang-gong-ju--%20-ji-yu-%20Cloudflare%20Worker%E3%80%81D1%20-he-%20KV.html</guid><pubDate>Fri, 14 Mar 2025 15:47:27 +0000</pubDate></item><item><title>CloudPaste 在线剪贴板- 基于Cloudflare Workers</title><link>https://692.cloudns.be/post/CloudPaste%20-zai-xian-jian-tie-ban--%20-ji-yu-Cloudflare%20Workers.html</link><description># CloudPaste - 在线剪贴板 📋
 一个基于 Cloudflare Workers 的在线剪贴板和文件分享服务。支持 Markdown、密码保护、文件上传等功能。
 &gt;&lt;a href='https://github.com/ling-drag0n/CloudPaste' target='_blank'&gt;来源&lt;/a&gt;
 &gt;&lt;a href='https://note.692.cloudns.be/share/paste/CloudPaste' target='_blank'&gt;DEMO&lt;/a&gt;
