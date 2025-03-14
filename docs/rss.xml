@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTnote</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTnote</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Fri, 14 Mar 2025 14:25:55 +0000</lastBuildDate><managingEditor>MGTnote</managingEditor><ttl>60</ttl><webMaster>MGTnote</webMaster><item><title>CloudPaste - 基于 Cloudflare Workers 的在线剪贴板和文件分享服务</title><link>https://692.cloudns.be/post/CloudPaste%20-%20-ji-yu-%20Cloudflare%20Workers%20-de-zai-xian-jian-tie-ban-he-wen-jian-fen-xiang-fu-wu.html</link><description># CloudPaste - 在线剪贴板 📋
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTnote</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTnote</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Fri, 14 Mar 2025 15:06:17 +0000</lastBuildDate><managingEditor>MGTnote</managingEditor><ttl>60</ttl><webMaster>MGTnote</webMaster><item><title>CloudPaste 在线剪贴板- 基于 Cloudflare Workers 的</title><link>https://692.cloudns.be/post/CloudPaste%20-zai-xian-jian-tie-ban--%20-ji-yu-%20Cloudflare%20Workers%20-de.html</link><description># CloudPaste - 在线剪贴板 📋
 一个基于 Cloudflare Workers 的在线剪贴板和文件分享服务。支持 Markdown、密码保护、文件上传等功能。
-&lt;tr&gt;&lt;a href='https://note.692.cloudns.be/share/paste/CloudPaste'&gt;在线演示&lt;/a&gt;&lt;/tr&gt;
+&gt;&lt;a href='https://github.com/ling-drag0n/CloudPaste' target='_blank'&gt;来源&lt;/a&gt;&lt;tr&gt;
+&gt;&lt;a href='https://note.692.cloudns.be/share/paste/CloudPaste'&gt;DEMO&lt;/a&gt;&lt;/tr&gt;
 
 &lt;tr&gt;&lt;img src='https://github.com/user-attachments/assets/bff7cdf4-a8df-4c4c-89e0-c16bd211fc81' width='auto'&gt; &lt;/tr&gt;
 
@@ -333,7 +334,7 @@ MIT License
 - [Cloudflare Workers 文档](https://developers.cloudflare.com/workers/)
 - [Vue 3 文档](https://v3.vuejs.org/)
 - [Marked 文档](https://marked.js.org/)
-$$$$$$$</description><guid isPermaLink="true">https://692.cloudns.be/post/CloudPaste%20-%20-ji-yu-%20Cloudflare%20Workers%20-de-zai-xian-jian-tie-ban-he-wen-jian-fen-xiang-fu-wu.html</guid><pubDate>Thu, 13 Mar 2025 13:21:17 +0000</pubDate></item><item><title>web-clipboard在线剪贴板 - 基于 Cloudflare Workers</title><link>https://692.cloudns.be/post/web-clipboard-zai-xian-jian-tie-ban-%20-%20-ji-yu-%20Cloudflare%20Workers.html</link><description># 在线剪贴板 - 基于 Cloudflare Workers
+$$$$$$$</description><guid isPermaLink="true">https://692.cloudns.be/post/CloudPaste%20-zai-xian-jian-tie-ban--%20-ji-yu-%20Cloudflare%20Workers%20-de.html</guid><pubDate>Thu, 13 Mar 2025 13:21:17 +0000</pubDate></item><item><title>web-clipboard在线剪贴板 - 基于 Cloudflare Workers</title><link>https://692.cloudns.be/post/web-clipboard-zai-xian-jian-tie-ban-%20-%20-ji-yu-%20Cloudflare%20Workers.html</link><description># 在线剪贴板 - 基于 Cloudflare Workers
 
 这是一个简单而美观的在线剪贴板，使用 Cloudflare Workers 和 KV 存储构建。它允许您在不同设备之间轻松复制和粘贴文本，并提供了安全的分享功能。
 
