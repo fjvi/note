@@ -1,6 +1,8 @@
 # Cloudflare Drop
-
 基于 Cloudflare Worker、D1Database 和 KV 实现的轻量级文件分享工具。
+
+> [项目地址](https://github.com/oustn/cloudflare-drop)
+
 <img src="https://github.com/user-attachments/assets/60573c40-5c91-489f-af5f-ee8653376412" width="500" />
 
 ## 自动部署

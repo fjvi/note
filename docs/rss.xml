@@ -1,7 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTnote</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTnote</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Fri, 14 Mar 2025 15:53:47 +0000</lastBuildDate><managingEditor>MGTnote</managingEditor><ttl>60</ttl><webMaster>MGTnote</webMaster><item><title>CF_Drop轻量级文件分享工具- 基于 Cloudflare Worker、D1 和 KV</title><link>https://692.cloudns.be/post/CF_Drop-qing-liang-ji-wen-jian-fen-xiang-gong-ju--%20-ji-yu-%20Cloudflare%20Worker%E3%80%81D1%20-he-%20KV.html</link><description># Cloudflare Drop
-
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTnote</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTnote</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Fri, 14 Mar 2025 16:08:39 +0000</lastBuildDate><managingEditor>MGTnote</managingEditor><ttl>60</ttl><webMaster>MGTnote</webMaster><item><title>CF_Drop轻量级文件分享工具- 基于 Cloudflare Worker、D1 和 KV</title><link>https://692.cloudns.be/post/CF_Drop-qing-liang-ji-wen-jian-fen-xiang-gong-ju--%20-ji-yu-%20Cloudflare%20Worker%E3%80%81D1%20-he-%20KV.html</link><description># Cloudflare Drop
 基于 Cloudflare Worker、D1Database 和 KV 实现的轻量级文件分享工具。
+
+&gt; [项目地址](https://github.com/oustn/cloudflare-drop)
+
 &lt;img src='https://github.com/user-attachments/assets/60573c40-5c91-489f-af5f-ee8653376412' width='500' /&gt;
 
 ## 自动部署
