@@ -18,8 +18,7 @@
 ## 更新
 
 同步 Fork 的仓库即可自动更新 & 构建。
-
-<img src="assets/IMG_01.png" width="200">
+<img src="https://github.com/user-attachments/assets/6661f148-166f-416a-b0e4-327cdb182313" width="500" />
 
 ## 配置 GitHub Action Secret
 
