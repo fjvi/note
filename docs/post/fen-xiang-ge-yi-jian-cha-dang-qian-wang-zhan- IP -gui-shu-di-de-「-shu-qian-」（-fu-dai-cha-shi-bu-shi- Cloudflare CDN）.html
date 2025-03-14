@@ -6,13 +6,149 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
     
-    <link rel="icon" href="favicon.ico"><script>
+    <link rel="icon" href="avatar.svg"><script>
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="我平时可能经常需要**查一下当前网站的 IP 地址及归属地**，为了方便我自己写了个简短的脚本放在书签中。">
+<meta name="description" content="我平时可能经常需要**查一下当前网站的 IP 地址及归属地**，为了方便我自己写了个简短的脚本放在书签中。
+
+> 比如有时候发现某网站慢的要死，我就会看看是不是用的 Cloudflare CDN，是的话就加到 Hosts 文件中。
+
+平时大家如果要查当前网站的 IP 归属地还需要去专门的查询网站，二我今天闲的没事就分享下该书签，指不定有人会需要呢~
+
+* * *
+
+## \# 查当前网站 IP 归属地「书签」
+
+**新建书签**，**网址**写下面这段脚本代码（书签名随意），**保存即可**。
+
+```js
+javascript:(function(){window.open('https://ip.mcr.moe/?ip=' + location.hostname,'target','');})()
+```
+
+这样你在任意网页下**点击该书签**，即可显示该网站 IP 归属地。
+
+例如在 Github 任意网页下点击大概显示如下：
+
+```
+{
+    'status': 200,
+    'message': 'OK',
+    'addr': '52.74.223.119',        # IP
+    'country': '新加坡',            # 国家
+    'area': ' Singapore',           # 地区
+    'provider': 'Amazon数据中心'   # 提供者，如果该网站用的是 Cloudflare CDN 则这里也会写 Cloudflare 的
+}
+```
+
+* * *
+
+这其实就是一个查询 IP 归属地的 API，点击这个书签就是把当前网站的域名加到 API 地址末尾并访问罢了。
+
+* * *
+
+## \# 查当前网站是不是 Cloudflare CDN「书签」
+
+**新建书签**，**网址**写下面这段脚本代码（书签名随意），**保存即可**。
+
+```js
+javascript:(function(){window.open(location.origin + '/cdn-cgi/trace','target','');})()
+```
+
+这样你在任意网页下**点击该书签**，就会打开 `域名/cdn-cgi/trace` 这个地址，如果能访问就代表用的是 Cloudflare CDN。
+
+例如在 Cloudflare 官网任意网页下点击大概显示如下：
+
+```
+fl=100f16
+h=www.cloudflare.com
+ip=XXX.XXX.XXX.XXX           # 你的 IP
+ts=1613267817.838
+visit_scheme=https
+uag=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36
+colo=MUC                    # 当前 CDN 节点物理地址，这是当地机场缩写，可以去搜索 'MUC 机场' 关键词获得具体位置
+http=http/2
+loc=CN                      # 你所处位置
+tls=TLSv1.3
+sni=plaintext
+warp=off
+gateway=off
+```
+
+* * *
+
+这其实就是利用任何使用 Cloudflare CDN 节点的网站（包括 CDN IP 本身）都能在后面加上 `/cdn-cgi/trace` 访问获取当前节点信息。
+https://github.com/XIU2/CloudflareSpeedTest/discussions/66$$$$$$$">
 <meta property="og:title" content="分享个一键查当前网站 IP 归属地的「书签」（附带查是不是 Cloudflare CDN）">
-<meta property="og:description" content="我平时可能经常需要**查一下当前网站的 IP 地址及归属地**，为了方便我自己写了个简短的脚本放在书签中。">
+<meta property="og:description" content="我平时可能经常需要**查一下当前网站的 IP 地址及归属地**，为了方便我自己写了个简短的脚本放在书签中。
+
+> 比如有时候发现某网站慢的要死，我就会看看是不是用的 Cloudflare CDN，是的话就加到 Hosts 文件中。
+
+平时大家如果要查当前网站的 IP 归属地还需要去专门的查询网站，二我今天闲的没事就分享下该书签，指不定有人会需要呢~
+
+* * *
+
+## \# 查当前网站 IP 归属地「书签」
+
+**新建书签**，**网址**写下面这段脚本代码（书签名随意），**保存即可**。
+
+```js
+javascript:(function(){window.open('https://ip.mcr.moe/?ip=' + location.hostname,'target','');})()
+```
+
+这样你在任意网页下**点击该书签**，即可显示该网站 IP 归属地。
+
+例如在 Github 任意网页下点击大概显示如下：
+
+```
+{
+    'status': 200,
+    'message': 'OK',
+    'addr': '52.74.223.119',        # IP
+    'country': '新加坡',            # 国家
+    'area': ' Singapore',           # 地区
+    'provider': 'Amazon数据中心'   # 提供者，如果该网站用的是 Cloudflare CDN 则这里也会写 Cloudflare 的
+}
+```
+
+* * *
+
+这其实就是一个查询 IP 归属地的 API，点击这个书签就是把当前网站的域名加到 API 地址末尾并访问罢了。
+
+* * *
+
+## \# 查当前网站是不是 Cloudflare CDN「书签」
+
+**新建书签**，**网址**写下面这段脚本代码（书签名随意），**保存即可**。
+
+```js
+javascript:(function(){window.open(location.origin + '/cdn-cgi/trace','target','');})()
+```
+
+这样你在任意网页下**点击该书签**，就会打开 `域名/cdn-cgi/trace` 这个地址，如果能访问就代表用的是 Cloudflare CDN。
+
+例如在 Cloudflare 官网任意网页下点击大概显示如下：
+
+```
+fl=100f16
+h=www.cloudflare.com
+ip=XXX.XXX.XXX.XXX           # 你的 IP
+ts=1613267817.838
+visit_scheme=https
+uag=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36
+colo=MUC                    # 当前 CDN 节点物理地址，这是当地机场缩写，可以去搜索 'MUC 机场' 关键词获得具体位置
+http=http/2
+loc=CN                      # 你所处位置
+tls=TLSv1.3
+sni=plaintext
+warp=off
+gateway=off
+```
+
+* * *
+
+这其实就是利用任何使用 Cloudflare CDN 节点的网站（包括 CDN IP 本身）都能在后面加上 `/cdn-cgi/trace` 访问获取当前节点信息。
+https://github.com/XIU2/CloudflareSpeedTest/discussions/66$$$$$$$">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://692.cloudns.be/post/fen-xiang-ge-yi-jian-cha-dang-qian-wang-zhan-%20IP%20-gui-shu-di-de-%E3%80%8C-shu-qian-%E3%80%8D%EF%BC%88-fu-dai-cha-shi-bu-shi-%20Cloudflare%20CDN%EF%BC%89.html">
 <meta property="og:image" content="avatar.svg">
@@ -25,22 +161,25 @@
 html { background: #d2d4d6; }
 body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto; padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25; border-radius: 10px; background: rgba(10, 100, 130, 0.08); box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);  overflow: auto;}
 #header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
-#footer1 footer2 {margin-top: 30px; text-align: center; font-size: small;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
 </style>
 
 <style>
-.postTitle{margin: auto 0;font-size:30px;font-weight:bold;color: #1f85c9;}
+.postTitle{margin: auto 0;font-size:2em;font-weight:bold;color: #1f85c9;}
 .title-right{display:flex;margin:auto 0 0 auto;}
 .title-right .circle{padding: 14px 16px;margin-right:8px;}
 #postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
 #postBody hr{height:2px;}
+.markdown-body h1{font-size: 1.6em;}
+.markdown-body h2{font-size: 1.4em;}
+.markdown-body h3{font-size: 1.2em;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
 #cmButton{height:48px;margin-top:48px;}
 #comments{margin-top:64px;}
 .g-emoji{font-size:24px;}
 @media (max-width: 600px) {
     body {padding: 12px;}
-    #header {display: flex;flex-direction: column-reverse;}
-    .postTitle{font-size:20px; color: #1f85c9;}
+    .postTitle{font-size:1.6em; color: #1f85c9;}
 }
 .copy-feedback {
     display: none;
@@ -139,15 +278,12 @@ gateway=off
 <div id="footer2">
     <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
 </div>
-<script>    
-#footer1 footer2 {margin-top: 30px; text-align: center; font-size: small;}
-</script>
 <script>
 var now=new Date();
 document.getElementById("copyrightYear").innerHTML=now.getFullYear();
 
-if(""!=""){
-    var startSite=new Date("");
+if("01/01/2025"!=""){
+    var startSite=new Date("01/01/2025");
     var diff=now.getTime()-startSite.getTime();
     var diffDay=Math.floor(diff/(1000*60*60*24));
     document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";

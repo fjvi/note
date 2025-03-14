@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
     
-    <link rel="icon" href="favicon.ico"><script>
+    <link rel="icon" href="avatar.svg"><script>
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
@@ -15,14 +15,644 @@
 
 [](https://blog.meekdai.com/ '首页')[](https://github.com/Meekdai/meekdai.github.io/issues/4 'Issue')[](https://blog.meekdai.com/post/markdown-ce-shi-ye-mian.html '切换主题')
 
-这是一个markdown格式的测试页面，也是个人经常会使用的格式记录。">
+这是一个markdown格式的测试页面，也是个人经常会使用的格式记录。
+
+Static Badge
+------------
+
+```md
+![](https://img.shields.io/badge/参考页面-orange)
+```
+
+[![](https://camo.githubusercontent.com/d807703912e2569aebe8076458386a85b94e6d197e973b1326b2084f4d51c249/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2545352538462538322545382538302538332545392541312542352545392539442541322d6f72616e6765)](https://camo.githubusercontent.com/d807703912e2569aebe8076458386a85b94e6d197e973b1326b2084f4d51c249/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2545352538462538322545382538302538332545392541312542352545392539442541322d6f72616e6765)
+
+标题
+--
+
+```md
+# H1
+## H2
+### H3
+#### H4
+```
+
+强调
+--
+
+```md
+今天的天气真好啊，可以吃**冰激凌**吗？
+```
+
+今天的天气真好啊，可以吃**冰激凌**吗？
+
+删除横线
+----
+
+```md
+今天的天气真好啊，可以吃~~冰激凌~~吗？
+```
+
+今天的天气真好啊，可以吃~冰激凌~吗？
+
+列表
+--
+
+```md
+1. 看电视
+2. 吃饭
+3. 睡觉
+
+- 乒乓球
+- 篮球
+- 羽毛球
+```
+
+1.  看电视
+2.  吃饭
+3.  睡觉
+
+*   乒乓球
+*   篮球
+*   羽毛球
+
+代码高亮
+----
+
+\`\`\`python  
+import request  
+import time
+
+time.sleep\_ms(1000)  
+print('Hello World')  
+\`\`\`
+
+```python
+import request
+import time
+
+time.sleep_ms(1000)
+print('Hello World')
+```
+
+链接
+--
+
+```md
+[我的博客](https://meekdai.github.io)
+```
+
+[我的博客](https://meekdai.github.io/)
+
+图片
+--
+
+```md
+![这是我的头像PNG](https://fjvi.github.io/note/favicon.ico)
+![这是我的头像SVG](https://fjvi.github.io/note/favicon.ico)
+```
+
+![这是我的头像PNG](https://fjvi.github.io/note/favicon.ico)
+
+[![这是我的头像SVG](https://fjvi.github.io/note/favicon.ico)](https://fjvi.github.io/note/favicon.ico)
+
+表格
+--
+
+```md
+| Table Heading 1 | Table Heading 2 | Center align    | Right align     | Table Heading 5 |
+| :-------------- | :-------------- | :-------------: | --------------: | :-------------- |
+| Item 1          | Item 2          | Item 3          | Item 4          | Item 5          |
+| Item 1          | Item 2          | Item 3          | Item 4          | Item 5          |
+| Item 1          | Item 2          | Item 3          | Item 4          | Item 5          |
+```
+
+| Table Heading 1 | Table Heading 2 | Center align | Right align | Table Heading 5 |
+| :-- | :-- | :-: | --: | :-- |
+| Item 1 | Item 2 | Item 3 | Item 4 | Item 5 |
+| Item 1 | Item 2 | Item 3 | Item 4 | Item 5 |
+| Item 1 | Item 2 | Item 3 | Item 4 | Item 5 |
+
+水平线
+---
+
+```md
+---
+我在2个水平线中间
+***
+```
+
+* * *
+
+我在2个水平线中间
+
+* * *
+
+引用
+--
+
+```md
+> 落霞与孤鹜齐飞，秋水共长天一色。《滕王阁序》--王勃 
+```
+
+> 落霞与孤鹜齐飞，秋水共长天一色。《滕王阁序》--王勃
+
+对比
+--
+
+```diff
++ this text is highlighted in green
+- this text is highlighted in red
+```
+
+```
+\`\`\`diff
++ this text is highlighted in green
+- this text is highlighted in red
+\`\`\`
+
+```
+
+字体颜色
+----
+
+```css
+Some text in green! 123
+```
+
+```
+\`\`\`CSS
+Some text in green! 123
+\`\`\`
+
+```
+
+```p4
+Some text in blue! 123
+```
+
+```mint
+Some text in blue with additional keyword highlighting! 123
+```
+
+```
+\`\`\`P4
+Some text in blue! 123
+\`\`\`
+
+\`\`\`Mint
+Some text in blue with additional keyword highlighting! 123
+\`\`\`
+
+```
+
+```json
+Some text highlighted in red! 123
+```
+
+```
+\`\`\`JSON
+Some text highlighted in red! 123
+\`\`\`
+
+```
+
+HTML tricks
+-----------
+
+Monospaced text
+
+```html
+<samp>Monospaced text</samp>
+```
+
+* * *
+
+Underlined text
+
+```html
+<ins>Underlined text</ins>
+```
+
+* * *
+
+<table role='table'><tbody><tr><td>Boxed text</td></tr></tbody></table>
+
+```html
+<table><tr><td>Boxed text</td></tr></table>
+```
+
+* * *
+
+Item summary with dropdown
+
+Dropdown content (supports **markdown** ~yay!~)
+
+```json
+{
+  awesome: 'true'
+}
+```
+
+```
+<details>
+<summary>Item summary with dropdown</summary>
+
+Dropdown content (supports \*\*markdown\*\* ~~yay!~~)
+
+\`\`\`json
+{
+  awesome: 'true'
+}
+\`\`\`
+</details>
+
+```
+
+* * *
+
+**_Italic-bold_**
+
+```
+__*Italic-bold*__
+
+```
+
+* * *
+
+SuperscriptTM
+
+```
+Superscript<sup>TM</sup>
+
+```
+
+* * *
+
+Superscript-italic_tm_
+
+```
+Superscript-italic<sup>*tm*</sup>
+
+```
+
+* * *
+
+Subscriptx
+
+```
+Subscript<sub>x</sub>
+
+```
+
+* * *
+
+Subscript-bold**min**
+
+```
+Subscript-bold<sub>**min**</sub>
+
+```
+
+* * *
+
+~**_Italic-bold-strikethrough_**~
+
+```
+~~__*Italic-bold-strikethrough*__~~
+
+```
+
+参考
+--
+
+更多GitHub Markdown 语法参考：
+
+1.  [https://github.com/Olwiba/Kickass-markdown/](https://github.com/Olwiba/Kickass-markdown/)
+2.  [https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax](https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
+
+❤️ 转载文章请注明出处，谢谢！❤️$$$$$$$">
 <meta property="og:title" content="Markdown语法总览">
 <meta property="og:description" content="markdown测试页面
 ============
 
 [](https://blog.meekdai.com/ '首页')[](https://github.com/Meekdai/meekdai.github.io/issues/4 'Issue')[](https://blog.meekdai.com/post/markdown-ce-shi-ye-mian.html '切换主题')
 
-这是一个markdown格式的测试页面，也是个人经常会使用的格式记录。">
+这是一个markdown格式的测试页面，也是个人经常会使用的格式记录。
+
+Static Badge
+------------
+
+```md
+![](https://img.shields.io/badge/参考页面-orange)
+```
+
+[![](https://camo.githubusercontent.com/d807703912e2569aebe8076458386a85b94e6d197e973b1326b2084f4d51c249/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2545352538462538322545382538302538332545392541312542352545392539442541322d6f72616e6765)](https://camo.githubusercontent.com/d807703912e2569aebe8076458386a85b94e6d197e973b1326b2084f4d51c249/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2545352538462538322545382538302538332545392541312542352545392539442541322d6f72616e6765)
+
+标题
+--
+
+```md
+# H1
+## H2
+### H3
+#### H4
+```
+
+强调
+--
+
+```md
+今天的天气真好啊，可以吃**冰激凌**吗？
+```
+
+今天的天气真好啊，可以吃**冰激凌**吗？
+
+删除横线
+----
+
+```md
+今天的天气真好啊，可以吃~~冰激凌~~吗？
+```
+
+今天的天气真好啊，可以吃~冰激凌~吗？
+
+列表
+--
+
+```md
+1. 看电视
+2. 吃饭
+3. 睡觉
+
+- 乒乓球
+- 篮球
+- 羽毛球
+```
+
+1.  看电视
+2.  吃饭
+3.  睡觉
+
+*   乒乓球
+*   篮球
+*   羽毛球
+
+代码高亮
+----
+
+\`\`\`python  
+import request  
+import time
+
+time.sleep\_ms(1000)  
+print('Hello World')  
+\`\`\`
+
+```python
+import request
+import time
+
+time.sleep_ms(1000)
+print('Hello World')
+```
+
+链接
+--
+
+```md
+[我的博客](https://meekdai.github.io)
+```
+
+[我的博客](https://meekdai.github.io/)
+
+图片
+--
+
+```md
+![这是我的头像PNG](https://fjvi.github.io/note/favicon.ico)
+![这是我的头像SVG](https://fjvi.github.io/note/favicon.ico)
+```
+
+![这是我的头像PNG](https://fjvi.github.io/note/favicon.ico)
+
+[![这是我的头像SVG](https://fjvi.github.io/note/favicon.ico)](https://fjvi.github.io/note/favicon.ico)
+
+表格
+--
+
+```md
+| Table Heading 1 | Table Heading 2 | Center align    | Right align     | Table Heading 5 |
+| :-------------- | :-------------- | :-------------: | --------------: | :-------------- |
+| Item 1          | Item 2          | Item 3          | Item 4          | Item 5          |
+| Item 1          | Item 2          | Item 3          | Item 4          | Item 5          |
+| Item 1          | Item 2          | Item 3          | Item 4          | Item 5          |
+```
+
+| Table Heading 1 | Table Heading 2 | Center align | Right align | Table Heading 5 |
+| :-- | :-- | :-: | --: | :-- |
+| Item 1 | Item 2 | Item 3 | Item 4 | Item 5 |
+| Item 1 | Item 2 | Item 3 | Item 4 | Item 5 |
+| Item 1 | Item 2 | Item 3 | Item 4 | Item 5 |
+
+水平线
+---
+
+```md
+---
+我在2个水平线中间
+***
+```
+
+* * *
+
+我在2个水平线中间
+
+* * *
+
+引用
+--
+
+```md
+> 落霞与孤鹜齐飞，秋水共长天一色。《滕王阁序》--王勃 
+```
+
+> 落霞与孤鹜齐飞，秋水共长天一色。《滕王阁序》--王勃
+
+对比
+--
+
+```diff
++ this text is highlighted in green
+- this text is highlighted in red
+```
+
+```
+\`\`\`diff
++ this text is highlighted in green
+- this text is highlighted in red
+\`\`\`
+
+```
+
+字体颜色
+----
+
+```css
+Some text in green! 123
+```
+
+```
+\`\`\`CSS
+Some text in green! 123
+\`\`\`
+
+```
+
+```p4
+Some text in blue! 123
+```
+
+```mint
+Some text in blue with additional keyword highlighting! 123
+```
+
+```
+\`\`\`P4
+Some text in blue! 123
+\`\`\`
+
+\`\`\`Mint
+Some text in blue with additional keyword highlighting! 123
+\`\`\`
+
+```
+
+```json
+Some text highlighted in red! 123
+```
+
+```
+\`\`\`JSON
+Some text highlighted in red! 123
+\`\`\`
+
+```
+
+HTML tricks
+-----------
+
+Monospaced text
+
+```html
+<samp>Monospaced text</samp>
+```
+
+* * *
+
+Underlined text
+
+```html
+<ins>Underlined text</ins>
+```
+
+* * *
+
+<table role='table'><tbody><tr><td>Boxed text</td></tr></tbody></table>
+
+```html
+<table><tr><td>Boxed text</td></tr></table>
+```
+
+* * *
+
+Item summary with dropdown
+
+Dropdown content (supports **markdown** ~yay!~)
+
+```json
+{
+  awesome: 'true'
+}
+```
+
+```
+<details>
+<summary>Item summary with dropdown</summary>
+
+Dropdown content (supports \*\*markdown\*\* ~~yay!~~)
+
+\`\`\`json
+{
+  awesome: 'true'
+}
+\`\`\`
+</details>
+
+```
+
+* * *
+
+**_Italic-bold_**
+
+```
+__*Italic-bold*__
+
+```
+
+* * *
+
+SuperscriptTM
+
+```
+Superscript<sup>TM</sup>
+
+```
+
+* * *
+
+Superscript-italic_tm_
+
+```
+Superscript-italic<sup>*tm*</sup>
+
+```
+
+* * *
+
+Subscriptx
+
+```
+Subscript<sub>x</sub>
+
+```
+
+* * *
+
+Subscript-bold**min**
+
+```
+Subscript-bold<sub>**min**</sub>
+
+```
+
+* * *
+
+~**_Italic-bold-strikethrough_**~
+
+```
+~~__*Italic-bold-strikethrough*__~~
+
+```
+
+参考
+--
+
+更多GitHub Markdown 语法参考：
+
+1.  [https://github.com/Olwiba/Kickass-markdown/](https://github.com/Olwiba/Kickass-markdown/)
+2.  [https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax](https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
+
+❤️ 转载文章请注明出处，谢谢！❤️$$$$$$$">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://692.cloudns.be/post/Markdown-yu-fa-zong-lan.html">
 <meta property="og:image" content="avatar.svg">
@@ -35,22 +665,25 @@
 html { background: #d2d4d6; }
 body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto; padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25; border-radius: 10px; background: rgba(10, 100, 130, 0.08); box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);  overflow: auto;}
 #header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
-#footer1 footer2 {margin-top: 30px; text-align: center; font-size: small;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
 </style>
 
 <style>
-.postTitle{margin: auto 0;font-size:30px;font-weight:bold;color: #1f85c9;}
+.postTitle{margin: auto 0;font-size:2em;font-weight:bold;color: #1f85c9;}
 .title-right{display:flex;margin:auto 0 0 auto;}
 .title-right .circle{padding: 14px 16px;margin-right:8px;}
 #postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
 #postBody hr{height:2px;}
+.markdown-body h1{font-size: 1.6em;}
+.markdown-body h2{font-size: 1.4em;}
+.markdown-body h3{font-size: 1.2em;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
 #cmButton{height:48px;margin-top:48px;}
 #comments{margin-top:64px;}
 .g-emoji{font-size:24px;}
 @media (max-width: 600px) {
     body {padding: 12px;}
-    #header {display: flex;flex-direction: column-reverse;}
-    .postTitle{font-size:20px; color: #1f85c9;}
+    .postTitle{font-size:1.6em; color: #1f85c9;}
 }
 .copy-feedback {
     display: none;
@@ -309,15 +942,12 @@ Dropdown content (supports \*\*markdown\*\* ~~yay!~~)
 <div id="footer2">
     <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
 </div>
-<script>    
-#footer1 footer2 {margin-top: 30px; text-align: center; font-size: small;}
-</script>
 <script>
 var now=new Date();
 document.getElementById("copyrightYear").innerHTML=now.getFullYear();
 
-if(""!=""){
-    var startSite=new Date("");
+if("01/01/2025"!=""){
+    var startSite=new Date("01/01/2025");
     var diff=now.getTime()-startSite.getTime();
     var diffDay=Math.floor(diff/(1000*60*60*24));
     document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";

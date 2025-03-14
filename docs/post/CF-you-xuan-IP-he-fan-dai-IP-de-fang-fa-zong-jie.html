@@ -6,17 +6,125 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
     
-    <link rel="icon" href="favicon.ico"><script>
+    <link rel="icon" href="avatar.svg"><script>
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
 <meta name="description" content="blog.onetwoone.eu.org 
 
-Cloudflare的workers和pages搭建的免费vpn节点简单好用，但要保证速度我们必须优化CF的IP和反代CF的IP。">
+Cloudflare的workers和pages搭建的免费vpn节点简单好用，但要保证速度我们必须优化CF的IP和反代CF的IP。现把内容总结如下：
+
+1.寻找优选IP的方法：
+
+网站直接获取法：简单、方便，但使用的人太多，可能质量较一般。
+https://stock.hostmonit.com/CloudFlareYes
+
+https://monitor.gacjie.cn/page/cloudflare/ipv4.html
+
+http://ip.flares.cloud/
+
+https://github.com/ymyuuu/IPDB（这个可不但有CF的IP，还有反代CF的IP）
+
+从白嫖哥获得：https://zip.baipiao.eu.org
+
+电报群组获得： https://t.me/cf_push
+
+从某项目获得：https://github.com/ymyuuu/IPDB
+
+以上两种方法是从其它大佬直接获取得到，方法简单、直接，非常适合小白朋友。
+
+3.fofa寻找个性化的CF的IP或反代IP：
+https://fofa.info/
+
+这是一种非常好用的方法，利用它能够寻找自己想要的任何IP，方便准确。对小白也不算难。完全可以根据自己的要求，设置筛选条件，比如服务器、端口、国家、地区、城市、IP段等。
+
+3.1筛选CF的IP或CDN例子：
+~~~md
+server='cloudflare' && port='443' && country='SG' && (asn='13335' || asn='209242')
+~~~
+> server=='cloudflare' && # 查找使用 Cloudflare 作为服务器的 IP 地址 port=='443' && # 查找开放端口 443（HTTPS）的服务器 country=='SG' && # 查找位于新加坡（SG）的服务器 (asn=='13335' || # ASN 编号为 13335 或 asn=='209242') # ASN 编号为 209242
+
+3.2筛选反向代理CF的IP例子：
+~~~md
+server=='cloudflare' && port=='80' && header='Forbidden' && country=='SG' && asn!='13335' && asn!='209242' 
+~~~
+> 上方语法的详细说明： 
+> server=='cloudflare' && # 使用 Cloudflare 作为服务器 port=='80' && # 端口号为 80（HTTP）header='Forbidden' && # 返回 HTTP 头信息中包含 'Forbidden' country=='SG' && # 位于新加坡（SG） asn!='13335' && # 排除 ASN 编号为 13335 的 IP 地址（Cloudflare 官方 IP） asn!='209242' # 排除 ASN 编号为 209242 的 IP 地址（Cloudflare 官方 IP）关于经常使用的ASN号： Cloudflare常用到的ASN号：AS13335 AS209242 Cloudflare其它ASN号：AS394536 AS14789 AS139242 AS133877	AS132892 AS395747 AS203898 AS202623 阿里云常用的：ASN45102 甲骨文主要的：ASN31898 搬瓦工常用的：ASN25820
+
+> 注意：以上语法不是固定不变的，如country可换成city或region，相应的对象也要改变。如region=”California”，region=”Tokyo”，但不能region=”JP”。
+
+server=='cloudflare' && port=='80' && header='Forbidden' && country=='SG' && asn=='31898' 比如添加上asn='31898',可以筛选新加坡甲骨文反代CF的服务器。
+
+4.本地优选和测速工具
+
+Github：https://github.com/XIU2/CloudflareSpeedTest
+ 这个工具自带Cloudflare官方IP库，大约有5955个CF的ip,只要一运行就会自动扫出前10个优选IP。但它没有反代IP库哈，另外它还是一个好用的测速工具。
+
+其它可能用到的工具
+
+IP批量查询：https://reallyfreegeoip.org/bulk
+IP归属地查询：https://ipdata.co/
+临时邮箱：https://temp-mail.org/；https://tempmail.plus
+
+$$$$$$$">
 <meta property="og:title" content="CF优选IP和反代IP的方法总结">
 <meta property="og:description" content="blog.onetwoone.eu.org 
 
-Cloudflare的workers和pages搭建的免费vpn节点简单好用，但要保证速度我们必须优化CF的IP和反代CF的IP。">
+Cloudflare的workers和pages搭建的免费vpn节点简单好用，但要保证速度我们必须优化CF的IP和反代CF的IP。现把内容总结如下：
+
+1.寻找优选IP的方法：
+
+网站直接获取法：简单、方便，但使用的人太多，可能质量较一般。
+https://stock.hostmonit.com/CloudFlareYes
+
+https://monitor.gacjie.cn/page/cloudflare/ipv4.html
+
+http://ip.flares.cloud/
+
+https://github.com/ymyuuu/IPDB（这个可不但有CF的IP，还有反代CF的IP）
+
+从白嫖哥获得：https://zip.baipiao.eu.org
+
+电报群组获得： https://t.me/cf_push
+
+从某项目获得：https://github.com/ymyuuu/IPDB
+
+以上两种方法是从其它大佬直接获取得到，方法简单、直接，非常适合小白朋友。
+
+3.fofa寻找个性化的CF的IP或反代IP：
+https://fofa.info/
+
+这是一种非常好用的方法，利用它能够寻找自己想要的任何IP，方便准确。对小白也不算难。完全可以根据自己的要求，设置筛选条件，比如服务器、端口、国家、地区、城市、IP段等。
+
+3.1筛选CF的IP或CDN例子：
+~~~md
+server='cloudflare' && port='443' && country='SG' && (asn='13335' || asn='209242')
+~~~
+> server=='cloudflare' && # 查找使用 Cloudflare 作为服务器的 IP 地址 port=='443' && # 查找开放端口 443（HTTPS）的服务器 country=='SG' && # 查找位于新加坡（SG）的服务器 (asn=='13335' || # ASN 编号为 13335 或 asn=='209242') # ASN 编号为 209242
+
+3.2筛选反向代理CF的IP例子：
+~~~md
+server=='cloudflare' && port=='80' && header='Forbidden' && country=='SG' && asn!='13335' && asn!='209242' 
+~~~
+> 上方语法的详细说明： 
+> server=='cloudflare' && # 使用 Cloudflare 作为服务器 port=='80' && # 端口号为 80（HTTP）header='Forbidden' && # 返回 HTTP 头信息中包含 'Forbidden' country=='SG' && # 位于新加坡（SG） asn!='13335' && # 排除 ASN 编号为 13335 的 IP 地址（Cloudflare 官方 IP） asn!='209242' # 排除 ASN 编号为 209242 的 IP 地址（Cloudflare 官方 IP）关于经常使用的ASN号： Cloudflare常用到的ASN号：AS13335 AS209242 Cloudflare其它ASN号：AS394536 AS14789 AS139242 AS133877	AS132892 AS395747 AS203898 AS202623 阿里云常用的：ASN45102 甲骨文主要的：ASN31898 搬瓦工常用的：ASN25820
+
+> 注意：以上语法不是固定不变的，如country可换成city或region，相应的对象也要改变。如region=”California”，region=”Tokyo”，但不能region=”JP”。
+
+server=='cloudflare' && port=='80' && header='Forbidden' && country=='SG' && asn=='31898' 比如添加上asn='31898',可以筛选新加坡甲骨文反代CF的服务器。
+
+4.本地优选和测速工具
+
+Github：https://github.com/XIU2/CloudflareSpeedTest
+ 这个工具自带Cloudflare官方IP库，大约有5955个CF的ip,只要一运行就会自动扫出前10个优选IP。但它没有反代IP库哈，另外它还是一个好用的测速工具。
+
+其它可能用到的工具
+
+IP批量查询：https://reallyfreegeoip.org/bulk
+IP归属地查询：https://ipdata.co/
+临时邮箱：https://temp-mail.org/；https://tempmail.plus
+
+$$$$$$$">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://692.cloudns.be/post/CF-you-xuan-IP-he-fan-dai-IP-de-fang-fa-zong-jie.html">
 <meta property="og:image" content="avatar.svg">
@@ -29,22 +137,25 @@ Cloudflare的workers和pages搭建的免费vpn节点简单好用，但要保证�
 html { background: #d2d4d6; }
 body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto; padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25; border-radius: 10px; background: rgba(10, 100, 130, 0.08); box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);  overflow: auto;}
 #header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
-#footer1 footer2 {margin-top: 30px; text-align: center; font-size: small;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
 </style>
 
 <style>
-.postTitle{margin: auto 0;font-size:30px;font-weight:bold;color: #1f85c9;}
+.postTitle{margin: auto 0;font-size:2em;font-weight:bold;color: #1f85c9;}
 .title-right{display:flex;margin:auto 0 0 auto;}
 .title-right .circle{padding: 14px 16px;margin-right:8px;}
 #postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
 #postBody hr{height:2px;}
+.markdown-body h1{font-size: 1.6em;}
+.markdown-body h2{font-size: 1.4em;}
+.markdown-body h3{font-size: 1.2em;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
 #cmButton{height:48px;margin-top:48px;}
 #comments{margin-top:64px;}
 .g-emoji{font-size:24px;}
 @media (max-width: 600px) {
     body {padding: 12px;}
-    #header {display: flex;flex-direction: column-reverse;}
-    .postTitle{font-size:20px; color: #1f85c9;}
+    .postTitle{font-size:1.6em; color: #1f85c9;}
 }
 .copy-feedback {
     display: none;
@@ -135,15 +246,12 @@ IP归属地查询：<a href="https://ipdata.co/" rel="nofollow">https://ipdata.c
 <div id="footer2">
     <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
 </div>
-<script>    
-#footer1 footer2 {margin-top: 30px; text-align: center; font-size: small;}
-</script>
 <script>
 var now=new Date();
 document.getElementById("copyrightYear").innerHTML=now.getFullYear();
 
-if(""!=""){
-    var startSite=new Date("");
+if("01/01/2025"!=""){
+    var startSite=new Date("01/01/2025");
     var diff=now.getTime()-startSite.getTime();
     var diffDay=Math.floor(diff/(1000*60*60*24));
     document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";

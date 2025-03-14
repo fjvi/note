@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
     
-    <link rel="icon" href="favicon.ico"><script>
+    <link rel="icon" href="avatar.svg"><script>
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
@@ -34,7 +34,7 @@ docker run -p 8080:80 dorowu/ubuntu-desktop-lxde-vnc
 
 
 
-这火狐浏览器中，打开serv00的注册页面，多刷新几次，就可以注册成功了。">
+这火狐浏览器中，打开serv00的注册页面，多刷新几次，就可以注册成功了$$$$$$$">
 <meta property="og:title" content="注册serv00的新方法，测试非常好">
 <meta property="og:description" content=" 1、打开谷歌云：
 > [点击前往](https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Fconsole.cloud.google.com%2F&followup=https%3A%2F%2Fconsole.cloud.google.com%2F&ifkv=AeZLP9-0IQSq05xeTMuW_HTDcW960bBquuu4bZzNRa3Y1JiTKCW9rsteltb7DqePmwSSYv987u3_oA&osid=1&passive=1209600&service=cloudconsole&flowName=GlifWebSignIn&flowEntry=ServiceLogin&dsh=S-550021044%3A1734529949831903&ddm=1) {:target='_blank'}
@@ -60,7 +60,7 @@ docker run -p 8080:80 dorowu/ubuntu-desktop-lxde-vnc
 
 
 
-这火狐浏览器中，打开serv00的注册页面，多刷新几次，就可以注册成功了。">
+这火狐浏览器中，打开serv00的注册页面，多刷新几次，就可以注册成功了$$$$$$$">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://692.cloudns.be/post/zhu-ce-serv00-de-xin-fang-fa-%EF%BC%8C-ce-shi-fei-chang-hao.html">
 <meta property="og:image" content="avatar.svg">
@@ -73,22 +73,25 @@ docker run -p 8080:80 dorowu/ubuntu-desktop-lxde-vnc
 html { background: #d2d4d6; }
 body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto; padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25; border-radius: 10px; background: rgba(10, 100, 130, 0.08); box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);  overflow: auto;}
 #header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
-#footer1 footer2 {margin-top: 30px; text-align: center; font-size: small;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
 </style>
 
 <style>
-.postTitle{margin: auto 0;font-size:30px;font-weight:bold;color: #1f85c9;}
+.postTitle{margin: auto 0;font-size:2em;font-weight:bold;color: #1f85c9;}
 .title-right{display:flex;margin:auto 0 0 auto;}
 .title-right .circle{padding: 14px 16px;margin-right:8px;}
 #postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
 #postBody hr{height:2px;}
+.markdown-body h1{font-size: 1.6em;}
+.markdown-body h2{font-size: 1.4em;}
+.markdown-body h3{font-size: 1.2em;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
 #cmButton{height:48px;margin-top:48px;}
 #comments{margin-top:64px;}
 .g-emoji{font-size:24px;}
 @media (max-width: 600px) {
     body {padding: 12px;}
-    #header {display: flex;flex-direction: column-reverse;}
-    .postTitle{font-size:20px; color: #1f85c9;}
+    .postTitle{font-size:1.6em; color: #1f85c9;}
 }
 
 </style>
@@ -148,15 +151,12 @@ docker run -p 8080:80 dorowu/ubuntu-desktop-lxde-vnc<br>
 <div id="footer2">
     <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
 </div>
-<script>    
-#footer1 footer2 {margin-top: 30px; text-align: center; font-size: small;}
-</script>
 <script>
 var now=new Date();
 document.getElementById("copyrightYear").innerHTML=now.getFullYear();
 
-if(""!=""){
-    var startSite=new Date("");
+if("01/01/2025"!=""){
+    var startSite=new Date("01/01/2025");
     var diff=now.getTime()-startSite.getTime();
     var diffDay=Math.floor(diff/(1000*60*60*24));
     document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
