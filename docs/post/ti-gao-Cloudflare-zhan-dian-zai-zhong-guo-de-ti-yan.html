@@ -12,12 +12,6 @@
     </script>
 <meta name="description" content="
 
-+   [起因](#起因)
-+   [普通用户的解决方法](#普通用户的解决方法)
-+   [对于站长的解决方法](#对于站长的解决方法)
-+   [感想](#感想)
-
-从此，Cloudflare不再是减速CDN了
 
 ## 起因
 
@@ -52,12 +46,6 @@ cat cloudflare/*.txt > proxy.txt
 <meta property="og:title" content="提高Cloudflare站点在中国的体验">
 <meta property="og:description" content="
 
-+   [起因](#起因)
-+   [普通用户的解决方法](#普通用户的解决方法)
-+   [对于站长的解决方法](#对于站长的解决方法)
-+   [感想](#感想)
-
-从此，Cloudflare不再是减速CDN了
 
 ## 起因
 
@@ -163,14 +151,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><ul>
-<li><a href="#%E8%B5%B7%E5%9B%A0">起因</a></li>
-<li><a href="#%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95">普通用户的解决方法</a></li>
-<li><a href="#%E5%AF%B9%E4%BA%8E%E7%AB%99%E9%95%BF%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95">对于站长的解决方法</a></li>
-<li><a href="#%E6%84%9F%E6%83%B3">感想</a></li>
-</ul>
-<p>从此，Cloudflare不再是减速CDN了</p>
-<h2>起因</h2>
+<div class="markdown-body" id="postBody"><h2>起因</h2>
 <p>众所周知，因为很多人用Cloudflare当作梯子中转之类的原因，中国对Cloudflare网络的速度会有很大程度的劣化，所以在上面的网站访问速度也会非常烂。最近我发现了一个不错的办法可以在一定程度上避免这个问题，所以今天就来说一说。</p>
 <h2>普通用户的解决方法</h2>
 <p>对于网站的访问者来说，使用<a href="https://github.com/XIU2/CloudflareSpeedTest">CloudflareSpeedTest</a>这个工具就挺不错的，它能检测到当前网络连哪个IP是最好的。因为Cloudflare网络用的是Anycast，无论从哪个IP进入都可以，所以用这个检测出来的IP直接改Hosts访问就能解决访问网站慢的问题。<br>
