@@ -1,4 +1,7 @@
 # 在线剪贴板 - 基于 Cloudflare Workers
+[项目地址](https://github.com/yun8862779/web-clipboard)
+
+![Image](https://github.com/user-attachments/assets/a4ed6841-3665-4e91-87cb-ccec88c4a392)
 
 这是一个简单而美观的在线剪贴板，使用 Cloudflare Workers 和 KV 存储构建。它允许您在不同设备之间轻松复制和粘贴文本，并提供了安全的分享功能。
 
