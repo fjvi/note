@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="avatar.svg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="很少有开发人员深入研究浏览器的“ DevTools”。这里有一系列复杂的功能，甚至已经到了可以使用 Chrome 作为完整开发环境的地步。虽然你不太可能会为此放弃使用 VSCode 或 Sublime，但如果你在使用别人的电脑或仅需要编辑一两行代码时，DevTools至少可以作为一种选择。
+
+以下部分将介绍如何使用 Chrome 的编辑和调试工具（Chromium、 Edge、 Opera等浏览器也使用了相同的内核引擎和开发工具）。根据你的浏览器和操作系统，你可以从菜单中打开 DevTools: 按 F12，或者按 Ctrl | Cmd + Shift + i。 Safari 和 Firefox 会有些不同，它们可能不提供相同的编辑功能，但是它们也有自己的技巧来帮助开发。
+
+## 在任何网站上进行快速编辑
+
+当在本地开发或线上站点上查看页面时，**Elements**(元素) 面板允许你检查、禁用、启用、添加、编辑或删除任何 CSS 选择器和属性:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8cbda7e2a4204690a0662a2bcaab2a37~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp) **Source**(源代码) 面板允许你选中**Page**(网页) 窗口中的css或JavaScript文件，然后在右侧的源码面板中去编辑它们的内容。
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3664999f11964e9e95f17d7a393d5cc8~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+按 `Ctrl | Cmd + S` 保存文件修改，但要注意它只是保存到内存中，黄色警告图标表示更改不是永久性的。
+
+如果你的代码开启了**Source Map**(源码映射)，你可以打开“ files”(参见上面的 src 文件夹) ，但是更改不会应用到当前页面。你也可以通过单击{}图标来美化压缩后的代码。
+
+一旦关闭或刷新页面，你将丢失所有变更。不过**Changes**(变更) 面板可以记录当前的变更。你可以从抽屉面板左侧的“···”菜单或主菜单的更多工具中找到:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ae47766bce8c4fe097598d5edd901d36~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+从**Changes**(变更)面板中保存代码是不可以的，但它允许你定位所有修改过的文件。右键单击文件夹窗口中的任何文件，可以选择“另存为”下载本地副本并将其导入到项目中。
+
+## 覆盖任何网站上的文件
+
+你可以替换本地开发或线上站点上的任何文件。首先，在**Source**(源代码)面板中选择**Overrides**(替换)窗口，然后单击“ + 选择放置替换项的文件夹”:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1be975ee788f401e842f9276b4396b97~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+选择你系统里的一个目录，然后单击“允许”，这样 Chrome 就可以对其进行写入操作了。
+
+返回“**Page**”(网页)面板，然后右键单击任意一个文件并选择“保存并覆盖”:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7ce5d73210d3402daba8246553037e05~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+这会将文件保存到本地的文件夹中。紫色圆圈表示当前文件在本地磁盘上:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/795a8f9878c6428d8b19e738182b1cb5~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+你可以按{}来美化压缩后的代码并进行更改。更改会立即生效，而且因为文件是在本地保存的，所以每当 DevTools 打开时，该域名的所有页面都会重新应用这些更改(它不会影响除你之外的任何人的站点)。
+
+**Changes**(变更)面板仍然会显示修改前后的差异，你也可以将编辑后的文件复制到源代码中。请记住，你正在编辑的是最终打包之后的文件，可能需要对打包前的源文件也应用更改。
+
+## 编辑源代码
+
+你可以使用 Chrome 作为本地源文件的文本编辑器，不管你使用的是什么系统。它提供了大多数编辑器的基本功能，如行号、撤销/重做、颜色编码和自动补全。首先，选择**Sources**(源代码)面板中的“文件系统”窗口，然后单击“ + 向工作区添加文件夹”:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/46905e309f614a18a23046caed263bd3~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+选择当前项目对应的本地开发目录，然后单击“允许”，这样 Chrome 就有权对该文件夹进行读写操作。你现在可以像在编辑器中一样打开和编辑任何文件:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f21659163489446682c247d0892233a1~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+## 使用控制台面板进行调试
+
+| console方法 | 描述 |
+| --- | --- |
+| `.log(msg)` | 向控制台输出消息 |
+| `.dir(obj,opt)` | 美化打印对象和属性 |
+| `.table(obj)` | 以表格格式输出数组和对象 |
+| `.error(msg)` | 输出错误消息 |
+| `.count(label)` | 以参数为标识记录调用的次数，调用时在控制台打印标识以及调用次数。 |
+| `.countReset[label]` | 重置指定标签的计数器值。 |
+| `.group(label)` | 创建一个新的内联 group, 后续所有打印内容将会以子层级的形式展示。调用 `groupEnd()`来闭合组。 |
+| `.groupEnd(label)` | 结束缩进组 |
+| `.time(label)` | 启动计时器来计算操作的持续时间 |
+| `.timeLog(label)` | 报告自计时器启动以来的运行时间 |
+| `.timeEnd(label)` | 停止计时器并报告总持续时间 |
+| `.trace()` | 输出堆栈跟踪(所有调用函数的列表) |
+| `.clear()` | 清空控制台 |
+
+`console.log()`也接受用逗号分割来显示多个值，例如:
+
+```ini
+let x = 321;
+console.log('x:', x);
+// x: 321
+```
+
+es6解构提供了类似的输出方式：
+
+```arduino
+console.log({ x });
+// { x: 321 }
+```
+
+`console.dir()`可以将复杂对象输出到任意属性深度，无论是否使用颜色编码:
+
+```php
+console.dir(obj, { depth: null, color: true });
+```
+
+## 调试客户端应用
+
+你可以从 **Source**(源代码) 面板打开一个 JavaScript 文件，然后单击任意行号来设置断点(用蓝色标记表示)。注意，你还可以在**Source Map**(源码映射)中选择文件并添加断点，这样看起来会更直观。
+
+代码运行到断点处会暂停执行，以便你可以检查程序的状态。可以定义任意数量的断点，只需将它们设置为要开始调试的位置。
+
+运行代码(可通过刷新页面或激活事件触发器) ，代码将在断点位置停止:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1dcd4c50f8124ed4ab26cb65424008ce~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+右边的展板包括:
+
++   一个(**Watch**)监视窗口，可以通过单击 + 图标并输入特定变量的名称来监视这些变量
++   一个包含所有断点的(**Breakpoints**)断点窗口，并允许你启用或禁用任意断点
++   **Scope**(作用域)窗口显示所有局部和全局变量的状态，并且可以右键复制“属性路径”，在控制台进行输出
++   **Call Stack**(调用堆栈)窗口列出了断点位置代码执行的相关堆栈信息。
+
+当断点位置被触发时，会有一行图标出现在“已在断点暂停”消息的上方:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e9fc41889c3c4ada90bbc6e08fd1e6ea~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+从左到右，图标执行以下操作:
+
+0.  恢复执行：继续处理，直到下一个断点或代码终止
+1.  **step over** 单步执行，不进入函数：执行下一个命令，但保持在当前函数中，不要跳转到它调用的任何函数中
+2.  **step into** 单步执行，进入函数：执行下一个命令并跳转到它调用的函数
+3.  **step out** 单步执行，跳出函数：继续处理到函数结束并返回到调用语句
+4.  **step** 单步执行：类似于 **step into**，只是它不会跳转到异步函数
+5.  停用所有断点：如果你希望临时运行代码而不中断，但又不想丢失断点，这种方法非常有用
+6.  异常暂停: 引发错误时停止处理。
+
+DevTools 提供了多个调试选项。除了手动定义断点之外，还可以向代码中添加`debugger`语句。这将在 DevTools 打开时被激活，因此你应该将其从生产环境代码中删除。
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/adbc12e224324a399d5cf6b9f8429e3a~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+
+**条件断点**是在停止执行前，触发一个条件语句。假设你有一个从0到999的循环，并且需要在最后一次迭代中查看状态。与添加标准断点并单击恢复执行999次不同，你可以右键单击行号，选择“添加条件断点”，然后输入一个表达式，例如`loopValue == 999`。
+
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b02e5c1d39494d9bb9a99d1693fd7781~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+
+**日志点**实际上是没有代码的 `console.log ()`, 右键单击任何一行，选择 '添加日志点'，然后添加表达式:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d7e93a96a1bd4a869d3962ee0a3db4c2~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+**DOM断点**：在**Elements**(元素)面板中，右键单击任意dom节点，选择”发生中断条件“中的任意选项，就会在JavaScript触发其对应逻辑时，激活该DOM断点。
+
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/17550bf36eb34ec2a37551855eb919df~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+
+每当 JavaScript 调用 Fetch ()或 XMLHttpRequest 从 URL 中检索数据时，Ajax 断点就会被激活。在 **Source** (源代码)面板中，打开右侧的 **XHR/提取断点**面板，单击 **+** 并输入完整或部分URL以启用断点。
+
+![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/290b6847098b467497fef5b55bf9582f~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+
+最后，你有时想要忽略正在使用但无法更改的代码，例如 jQuery、 React 、用于统计的三方JavaScript等。按 F1或单击齿轮图标打开设置，选择”忽略列表“选项卡，并添加任意数量的完整或部分 URL/文件名。之后，断点调试器将跳过这些文件中的代码，并忽略它们引发的任何异常。
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b6c8b372a2fd449e8e4ae54346148f33~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+
+## 调试 Node.js 和 Deno 应用程序
+
+你还可以在 Chrome DevTools 中直接调试 Node.js 和 Deno 服务器端应用程序，因为他们使用的都是 V8 JavaScript 引擎。要启动 V8检查程序，请使用`--inspect`参数启动应用程序。例如，要从 index.js 文件启动 Node 应用程序:
+
+```css
+sh node --inspect index.js
+```
+
+Deno 和 n[oemon](https://nodemon.io/ 'https://nodemon.io/') 支持相同的`--inspect`参数。你还可以使用`--inspect-brk` 在第一行停止处理，这样你就可以在应用程序启动时逐步执行它。
+
+这个启动命令监听 localhost: 9229端口，任何本地调试客户端都可以附加到该调试器(包括 Chrome) :
+
+```csharp
+Debugger listening on ws://127.0.0.1:9229/301372bc-780a-2051-ceb2-c8d78227092e
+```
+
+如果你在其他设备或 Docker 容器中运行应用程序，请确保端口9229可访问，并指定0.0.0.0允许从本地网络的任何地方访问:
+
+```ini
+node --inspect=0.0.0.0:9229 index.js
+```
+
+应用程序运行后，打开 Chrome 并输入地址`chrome://inspect` 以查看所有可用的应用程序:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/97dce641b31a46508f8196b6d4270163~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+应用程序出现在“**Remote Target**”列表中可能需要几秒钟的时间。如果没有，请确保检查了 **Discover network targets**，然后单击 **Configure** 添加应用程序正在运行的设备的 IP 地址和端口。
+
+单击目标应用程序的**inspect**链接以启动另一个 DevTools 窗口。相比浏览器 DevTools 它的选项更少，并且你主要使用 Source 面板来添加断点。与前面一样，你可以选择“文件系统”窗口并单击“+ 向工作区添加文件夹”来编辑服务器端代码。
+
+## 结论
+
++   在过去的十年中，DevTools 已经有了很大的发展，并且已经到了可以成为你唯一需要的 web 开发工具的地步。我们已经讨论了代码编辑和bug调试的技巧，但是这里还有一些我喜欢的功能:
+    
+    +   在 **Network**(网络) 选项卡中，右键单击任何 Fetch/XHR 请求，然后选择 复制 选项。你可以为 JavaScript、 Node.js、 cURL 等生成有效的代码。
+    +   从**Source**(源代码)选项卡中打开任何图像，然后右键单击可以复制它的base64格式。
+    +   在“代码段”面板中创建代码段，以便可以在任何页面上运行相同的 JavaScript。
+    +   通过按暂停/恢复图标停止执行，然后按住相同的图标并选择停止，从而停止无限循环。
+    +   从 `chrome://inspect` 面板调试一个运行在 Android 手机上的站点，该手机通过 USB 连接到你的电脑。你还可以定义端口转发，这样任何本地或远程站点在设备上都显示为 localhost: < port > 。
+    +   **Rendering**(渲染)面板提供了评估核心网页指标、模拟CSS深色模式、模拟CSS打印模式、减少运动等功能。
+    +   问题面板：当正在使用的一个 API将在未来的 Chrome 版本中发生变更时，问题面板会提供修改建议。
+
+##### 原文链接 [blog.openreplay.com/how-to-use-…](https://blog.openreplay.com/how-to-use-chrome-as-a-code-editor-and-debugger 'https://blog.openreplay.com/how-to-use-chrome-as-a-code-editor-and-debugger')$$$$$$$">
+<meta property="og:title" content="如何使用 Chrome 作为代码编辑器和调试器 ">
+<meta property="og:description" content="很少有开发人员深入研究浏览器的“ DevTools”。这里有一系列复杂的功能，甚至已经到了可以使用 Chrome 作为完整开发环境的地步。虽然你不太可能会为此放弃使用 VSCode 或 Sublime，但如果你在使用别人的电脑或仅需要编辑一两行代码时，DevTools至少可以作为一种选择。
+
+以下部分将介绍如何使用 Chrome 的编辑和调试工具（Chromium、 Edge、 Opera等浏览器也使用了相同的内核引擎和开发工具）。根据你的浏览器和操作系统，你可以从菜单中打开 DevTools: 按 F12，或者按 Ctrl | Cmd + Shift + i。 Safari 和 Firefox 会有些不同，它们可能不提供相同的编辑功能，但是它们也有自己的技巧来帮助开发。
+
+## 在任何网站上进行快速编辑
+
+当在本地开发或线上站点上查看页面时，**Elements**(元素) 面板允许你检查、禁用、启用、添加、编辑或删除任何 CSS 选择器和属性:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8cbda7e2a4204690a0662a2bcaab2a37~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp) **Source**(源代码) 面板允许你选中**Page**(网页) 窗口中的css或JavaScript文件，然后在右侧的源码面板中去编辑它们的内容。
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3664999f11964e9e95f17d7a393d5cc8~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+按 `Ctrl | Cmd + S` 保存文件修改，但要注意它只是保存到内存中，黄色警告图标表示更改不是永久性的。
+
+如果你的代码开启了**Source Map**(源码映射)，你可以打开“ files”(参见上面的 src 文件夹) ，但是更改不会应用到当前页面。你也可以通过单击{}图标来美化压缩后的代码。
+
+一旦关闭或刷新页面，你将丢失所有变更。不过**Changes**(变更) 面板可以记录当前的变更。你可以从抽屉面板左侧的“···”菜单或主菜单的更多工具中找到:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ae47766bce8c4fe097598d5edd901d36~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+从**Changes**(变更)面板中保存代码是不可以的，但它允许你定位所有修改过的文件。右键单击文件夹窗口中的任何文件，可以选择“另存为”下载本地副本并将其导入到项目中。
+
+## 覆盖任何网站上的文件
+
+你可以替换本地开发或线上站点上的任何文件。首先，在**Source**(源代码)面板中选择**Overrides**(替换)窗口，然后单击“ + 选择放置替换项的文件夹”:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1be975ee788f401e842f9276b4396b97~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+选择你系统里的一个目录，然后单击“允许”，这样 Chrome 就可以对其进行写入操作了。
+
+返回“**Page**”(网页)面板，然后右键单击任意一个文件并选择“保存并覆盖”:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7ce5d73210d3402daba8246553037e05~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+这会将文件保存到本地的文件夹中。紫色圆圈表示当前文件在本地磁盘上:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/795a8f9878c6428d8b19e738182b1cb5~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+你可以按{}来美化压缩后的代码并进行更改。更改会立即生效，而且因为文件是在本地保存的，所以每当 DevTools 打开时，该域名的所有页面都会重新应用这些更改(它不会影响除你之外的任何人的站点)。
+
+**Changes**(变更)面板仍然会显示修改前后的差异，你也可以将编辑后的文件复制到源代码中。请记住，你正在编辑的是最终打包之后的文件，可能需要对打包前的源文件也应用更改。
+
+## 编辑源代码
+
+你可以使用 Chrome 作为本地源文件的文本编辑器，不管你使用的是什么系统。它提供了大多数编辑器的基本功能，如行号、撤销/重做、颜色编码和自动补全。首先，选择**Sources**(源代码)面板中的“文件系统”窗口，然后单击“ + 向工作区添加文件夹”:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/46905e309f614a18a23046caed263bd3~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+选择当前项目对应的本地开发目录，然后单击“允许”，这样 Chrome 就有权对该文件夹进行读写操作。你现在可以像在编辑器中一样打开和编辑任何文件:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f21659163489446682c247d0892233a1~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+## 使用控制台面板进行调试
+
+| console方法 | 描述 |
+| --- | --- |
+| `.log(msg)` | 向控制台输出消息 |
+| `.dir(obj,opt)` | 美化打印对象和属性 |
+| `.table(obj)` | 以表格格式输出数组和对象 |
+| `.error(msg)` | 输出错误消息 |
+| `.count(label)` | 以参数为标识记录调用的次数，调用时在控制台打印标识以及调用次数。 |
+| `.countReset[label]` | 重置指定标签的计数器值。 |
+| `.group(label)` | 创建一个新的内联 group, 后续所有打印内容将会以子层级的形式展示。调用 `groupEnd()`来闭合组。 |
+| `.groupEnd(label)` | 结束缩进组 |
+| `.time(label)` | 启动计时器来计算操作的持续时间 |
+| `.timeLog(label)` | 报告自计时器启动以来的运行时间 |
+| `.timeEnd(label)` | 停止计时器并报告总持续时间 |
+| `.trace()` | 输出堆栈跟踪(所有调用函数的列表) |
+| `.clear()` | 清空控制台 |
+
+`console.log()`也接受用逗号分割来显示多个值，例如:
+
+```ini
+let x = 321;
+console.log('x:', x);
+// x: 321
+```
+
+es6解构提供了类似的输出方式：
+
+```arduino
+console.log({ x });
+// { x: 321 }
+```
+
+`console.dir()`可以将复杂对象输出到任意属性深度，无论是否使用颜色编码:
+
+```php
+console.dir(obj, { depth: null, color: true });
+```
+
+## 调试客户端应用
+
+你可以从 **Source**(源代码) 面板打开一个 JavaScript 文件，然后单击任意行号来设置断点(用蓝色标记表示)。注意，你还可以在**Source Map**(源码映射)中选择文件并添加断点，这样看起来会更直观。
+
+代码运行到断点处会暂停执行，以便你可以检查程序的状态。可以定义任意数量的断点，只需将它们设置为要开始调试的位置。
+
+运行代码(可通过刷新页面或激活事件触发器) ，代码将在断点位置停止:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1dcd4c50f8124ed4ab26cb65424008ce~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+右边的展板包括:
+
++   一个(**Watch**)监视窗口，可以通过单击 + 图标并输入特定变量的名称来监视这些变量
++   一个包含所有断点的(**Breakpoints**)断点窗口，并允许你启用或禁用任意断点
++   **Scope**(作用域)窗口显示所有局部和全局变量的状态，并且可以右键复制“属性路径”，在控制台进行输出
++   **Call Stack**(调用堆栈)窗口列出了断点位置代码执行的相关堆栈信息。
+
+当断点位置被触发时，会有一行图标出现在“已在断点暂停”消息的上方:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e9fc41889c3c4ada90bbc6e08fd1e6ea~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+从左到右，图标执行以下操作:
+
+0.  恢复执行：继续处理，直到下一个断点或代码终止
+1.  **step over** 单步执行，不进入函数：执行下一个命令，但保持在当前函数中，不要跳转到它调用的任何函数中
+2.  **step into** 单步执行，进入函数：执行下一个命令并跳转到它调用的函数
+3.  **step out** 单步执行，跳出函数：继续处理到函数结束并返回到调用语句
+4.  **step** 单步执行：类似于 **step into**，只是它不会跳转到异步函数
+5.  停用所有断点：如果你希望临时运行代码而不中断，但又不想丢失断点，这种方法非常有用
+6.  异常暂停: 引发错误时停止处理。
+
+DevTools 提供了多个调试选项。除了手动定义断点之外，还可以向代码中添加`debugger`语句。这将在 DevTools 打开时被激活，因此你应该将其从生产环境代码中删除。
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/adbc12e224324a399d5cf6b9f8429e3a~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+
+**条件断点**是在停止执行前，触发一个条件语句。假设你有一个从0到999的循环，并且需要在最后一次迭代中查看状态。与添加标准断点并单击恢复执行999次不同，你可以右键单击行号，选择“添加条件断点”，然后输入一个表达式，例如`loopValue == 999`。
+
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b02e5c1d39494d9bb9a99d1693fd7781~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+
+**日志点**实际上是没有代码的 `console.log ()`, 右键单击任何一行，选择 '添加日志点'，然后添加表达式:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d7e93a96a1bd4a869d3962ee0a3db4c2~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+**DOM断点**：在**Elements**(元素)面板中，右键单击任意dom节点，选择”发生中断条件“中的任意选项，就会在JavaScript触发其对应逻辑时，激活该DOM断点。
+
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/17550bf36eb34ec2a37551855eb919df~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+
+每当 JavaScript 调用 Fetch ()或 XMLHttpRequest 从 URL 中检索数据时，Ajax 断点就会被激活。在 **Source** (源代码)面板中，打开右侧的 **XHR/提取断点**面板，单击 **+** 并输入完整或部分URL以启用断点。
+
+![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/290b6847098b467497fef5b55bf9582f~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+
+最后，你有时想要忽略正在使用但无法更改的代码，例如 jQuery、 React 、用于统计的三方JavaScript等。按 F1或单击齿轮图标打开设置，选择”忽略列表“选项卡，并添加任意数量的完整或部分 URL/文件名。之后，断点调试器将跳过这些文件中的代码，并忽略它们引发的任何异常。
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b6c8b372a2fd449e8e4ae54346148f33~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+
+## 调试 Node.js 和 Deno 应用程序
+
+你还可以在 Chrome DevTools 中直接调试 Node.js 和 Deno 服务器端应用程序，因为他们使用的都是 V8 JavaScript 引擎。要启动 V8检查程序，请使用`--inspect`参数启动应用程序。例如，要从 index.js 文件启动 Node 应用程序:
+
+```css
+sh node --inspect index.js
+```
+
+Deno 和 n[oemon](https://nodemon.io/ 'https://nodemon.io/') 支持相同的`--inspect`参数。你还可以使用`--inspect-brk` 在第一行停止处理，这样你就可以在应用程序启动时逐步执行它。
+
+这个启动命令监听 localhost: 9229端口，任何本地调试客户端都可以附加到该调试器(包括 Chrome) :
+
+```csharp
+Debugger listening on ws://127.0.0.1:9229/301372bc-780a-2051-ceb2-c8d78227092e
+```
+
+如果你在其他设备或 Docker 容器中运行应用程序，请确保端口9229可访问，并指定0.0.0.0允许从本地网络的任何地方访问:
+
+```ini
+node --inspect=0.0.0.0:9229 index.js
+```
+
+应用程序运行后，打开 Chrome 并输入地址`chrome://inspect` 以查看所有可用的应用程序:
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/97dce641b31a46508f8196b6d4270163~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
+应用程序出现在“**Remote Target**”列表中可能需要几秒钟的时间。如果没有，请确保检查了 **Discover network targets**，然后单击 **Configure** 添加应用程序正在运行的设备的 IP 地址和端口。
+
+单击目标应用程序的**inspect**链接以启动另一个 DevTools 窗口。相比浏览器 DevTools 它的选项更少，并且你主要使用 Source 面板来添加断点。与前面一样，你可以选择“文件系统”窗口并单击“+ 向工作区添加文件夹”来编辑服务器端代码。
+
+## 结论
+
++   在过去的十年中，DevTools 已经有了很大的发展，并且已经到了可以成为你唯一需要的 web 开发工具的地步。我们已经讨论了代码编辑和bug调试的技巧，但是这里还有一些我喜欢的功能:
+    
+    +   在 **Network**(网络) 选项卡中，右键单击任何 Fetch/XHR 请求，然后选择 复制 选项。你可以为 JavaScript、 Node.js、 cURL 等生成有效的代码。
+    +   从**Source**(源代码)选项卡中打开任何图像，然后右键单击可以复制它的base64格式。
+    +   在“代码段”面板中创建代码段，以便可以在任何页面上运行相同的 JavaScript。
+    +   通过按暂停/恢复图标停止执行，然后按住相同的图标并选择停止，从而停止无限循环。
+    +   从 `chrome://inspect` 面板调试一个运行在 Android 手机上的站点，该手机通过 USB 连接到你的电脑。你还可以定义端口转发，这样任何本地或远程站点在设备上都显示为 localhost: < port > 。
+    +   **Rendering**(渲染)面板提供了评估核心网页指标、模拟CSS深色模式、模拟CSS打印模式、减少运动等功能。
+    +   问题面板：当正在使用的一个 API将在未来的 Chrome 版本中发生变更时，问题面板会提供修改建议。
+
+##### 原文链接 [blog.openreplay.com/how-to-use-…](https://blog.openreplay.com/how-to-use-chrome-as-a-code-editor-and-debugger 'https://blog.openreplay.com/how-to-use-chrome-as-a-code-editor-and-debugger')$$$$$$$">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://692.cloudns.be/post/ru-he-shi-yong-%20Chrome%20-zuo-wei-dai-ma-bian-ji-qi-he-diao-shi-qi-%20.html">
+<meta property="og:image" content="avatar.svg">
+<title>如何使用 Chrome 作为代码编辑器和调试器 </title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+html { background: #d2d4d6; }
+body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto; padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25; border-radius: 10px; background: rgba(10, 100, 130, 0.08); box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);  overflow: auto;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:1.6em;font-weight:bold;color: #1f85c9;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+.markdown-body h1{font-size: 1.4em;}
+.markdown-body h2{font-size: 1.2em;}
+.markdown-body h3{font-size: 1em;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 12px;}
+    .postTitle{font-size:1.4em; color: #1f85c9;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">如何使用 Chrome 作为代码编辑器和调试器 </h1>
+<div class="title-right">
+    <a href="https://692.cloudns.be" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/fjvi/note/issues/24" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p>很少有开发人员深入研究浏览器的“ DevTools”。这里有一系列复杂的功能，甚至已经到了可以使用 Chrome 作为完整开发环境的地步。虽然你不太可能会为此放弃使用 VSCode 或 Sublime，但如果你在使用别人的电脑或仅需要编辑一两行代码时，DevTools至少可以作为一种选择。</p>
+<p>以下部分将介绍如何使用 Chrome 的编辑和调试工具（Chromium、 Edge、 Opera等浏览器也使用了相同的内核引擎和开发工具）。根据你的浏览器和操作系统，你可以从菜单中打开 DevTools: 按 F12，或者按 Ctrl | Cmd + Shift + i。 Safari 和 Firefox 会有些不同，它们可能不提供相同的编辑功能，但是它们也有自己的技巧来帮助开发。</p>
+<h2>在任何网站上进行快速编辑</h2>
+<p>当在本地开发或线上站点上查看页面时，<strong>Elements</strong>(元素) 面板允许你检查、禁用、启用、添加、编辑或删除任何 CSS 选择器和属性:</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/4b229a5732f3046b44ef2f5ec0a8ae8aa7fe06e0278146604a4c0e7f17285f28/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f38636264613765326134323034363930613036363261326263616162326133377e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270"><img src="https://camo.githubusercontent.com/4b229a5732f3046b44ef2f5ec0a8ae8aa7fe06e0278146604a4c0e7f17285f28/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f38636264613765326134323034363930613036363261326263616162326133377e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270" alt="image.png" data-canonical-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8cbda7e2a4204690a0662a2bcaab2a37~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" style="max-width: 100%;"></a> <strong>Source</strong>(源代码) 面板允许你选中<strong>Page</strong>(网页) 窗口中的css或JavaScript文件，然后在右侧的源码面板中去编辑它们的内容。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/3d8be41c03e072b3b8535f92d495cc3966243a8cdf2c46ed64797a3ccf7f9990/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f33363634393939663131393634653965393566313764376133393364356363387e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270"><img src="https://camo.githubusercontent.com/3d8be41c03e072b3b8535f92d495cc3966243a8cdf2c46ed64797a3ccf7f9990/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f33363634393939663131393634653965393566313764376133393364356363387e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270" alt="image.png" data-canonical-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3664999f11964e9e95f17d7a393d5cc8~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" style="max-width: 100%;"></a></p>
+<p>按 <code class="notranslate">Ctrl | Cmd + S</code> 保存文件修改，但要注意它只是保存到内存中，黄色警告图标表示更改不是永久性的。</p>
+<p>如果你的代码开启了<strong>Source Map</strong>(源码映射)，你可以打开“ files”(参见上面的 src 文件夹) ，但是更改不会应用到当前页面。你也可以通过单击{}图标来美化压缩后的代码。</p>
+<p>一旦关闭或刷新页面，你将丢失所有变更。不过<strong>Changes</strong>(变更) 面板可以记录当前的变更。你可以从抽屉面板左侧的“···”菜单或主菜单的更多工具中找到:</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/d1961041d8a5e49babba9cd2e660324375941fb31bd6222703de62e1a1f6cc5c/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f61653437373636626365386334666530393735393864356564643930316433367e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270"><img src="https://camo.githubusercontent.com/d1961041d8a5e49babba9cd2e660324375941fb31bd6222703de62e1a1f6cc5c/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f61653437373636626365386334666530393735393864356564643930316433367e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270" alt="image.png" data-canonical-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ae47766bce8c4fe097598d5edd901d36~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" style="max-width: 100%;"></a></p>
+<p>从<strong>Changes</strong>(变更)面板中保存代码是不可以的，但它允许你定位所有修改过的文件。右键单击文件夹窗口中的任何文件，可以选择“另存为”下载本地副本并将其导入到项目中。</p>
+<h2>覆盖任何网站上的文件</h2>
+<p>你可以替换本地开发或线上站点上的任何文件。首先，在<strong>Source</strong>(源代码)面板中选择<strong>Overrides</strong>(替换)窗口，然后单击“ + 选择放置替换项的文件夹”:</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/6e557713dfa383becf2e14bf50b9a011df98567778fdf4ec081139eb32da376b/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f31626539373565653738386634303165383432663932373662343339366239377e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270"><img src="https://camo.githubusercontent.com/6e557713dfa383becf2e14bf50b9a011df98567778fdf4ec081139eb32da376b/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f31626539373565653738386634303165383432663932373662343339366239377e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270" alt="image.png" data-canonical-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1be975ee788f401e842f9276b4396b97~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" style="max-width: 100%;"></a></p>
+<p>选择你系统里的一个目录，然后单击“允许”，这样 Chrome 就可以对其进行写入操作了。</p>
+<p>返回“<strong>Page</strong>”(网页)面板，然后右键单击任意一个文件并选择“保存并覆盖”:</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/0ab3b105166f825fe2b9e2f86fd612bf368fc7db60bef5fbd5b513b744329766/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f37636535643733323130643334303264616261383234363535333033376530357e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270"><img src="https://camo.githubusercontent.com/0ab3b105166f825fe2b9e2f86fd612bf368fc7db60bef5fbd5b513b744329766/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f37636535643733323130643334303264616261383234363535333033376530357e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270" alt="image.png" data-canonical-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7ce5d73210d3402daba8246553037e05~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" style="max-width: 100%;"></a></p>
+<p>这会将文件保存到本地的文件夹中。紫色圆圈表示当前文件在本地磁盘上:</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/4a809b6ad5ed656ae5417e85437573f3bf7d3a98f17c307772ad0a10c6bad196/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f37393561386639383738633634323864386231396537333831383262316362357e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270"><img src="https://camo.githubusercontent.com/4a809b6ad5ed656ae5417e85437573f3bf7d3a98f17c307772ad0a10c6bad196/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f37393561386639383738633634323864386231396537333831383262316362357e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270" alt="image.png" data-canonical-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/795a8f9878c6428d8b19e738182b1cb5~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" style="max-width: 100%;"></a></p>
+<p>你可以按{}来美化压缩后的代码并进行更改。更改会立即生效，而且因为文件是在本地保存的，所以每当 DevTools 打开时，该域名的所有页面都会重新应用这些更改(它不会影响除你之外的任何人的站点)。</p>
+<p><strong>Changes</strong>(变更)面板仍然会显示修改前后的差异，你也可以将编辑后的文件复制到源代码中。请记住，你正在编辑的是最终打包之后的文件，可能需要对打包前的源文件也应用更改。</p>
+<h2>编辑源代码</h2>
+<p>你可以使用 Chrome 作为本地源文件的文本编辑器，不管你使用的是什么系统。它提供了大多数编辑器的基本功能，如行号、撤销/重做、颜色编码和自动补全。首先，选择<strong>Sources</strong>(源代码)面板中的“文件系统”窗口，然后单击“ + 向工作区添加文件夹”:</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/18de104071ff91d6e43f053b28c3f65738af7f88b8ac8c13d706a6b90f3fe17f/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f34363930356533303966363134613138613233303436636165643236336264337e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270"><img src="https://camo.githubusercontent.com/18de104071ff91d6e43f053b28c3f65738af7f88b8ac8c13d706a6b90f3fe17f/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f34363930356533303966363134613138613233303436636165643236336264337e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270" alt="image.png" data-canonical-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/46905e309f614a18a23046caed263bd3~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" style="max-width: 100%;"></a></p>
+<p>选择当前项目对应的本地开发目录，然后单击“允许”，这样 Chrome 就有权对该文件夹进行读写操作。你现在可以像在编辑器中一样打开和编辑任何文件:</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/787b0f2ce9b6dfbd8a5bb3c2ad909b369e949192ed579f5f4e625c6235a3ab68/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f66323136353931363334383934343636383263323437643038393232333361317e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270"><img src="https://camo.githubusercontent.com/787b0f2ce9b6dfbd8a5bb3c2ad909b369e949192ed579f5f4e625c6235a3ab68/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f66323136353931363334383934343636383263323437643038393232333361317e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270" alt="image.png" data-canonical-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f21659163489446682c247d0892233a1~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" style="max-width: 100%;"></a></p>
+<h2>使用控制台面板进行调试</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>console方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="notranslate">.log(msg)</code></td>
+<td>向控制台输出消息</td>
+</tr>
+<tr>
+<td><code class="notranslate">.dir(obj,opt)</code></td>
+<td>美化打印对象和属性</td>
+</tr>
+<tr>
+<td><code class="notranslate">.table(obj)</code></td>
+<td>以表格格式输出数组和对象</td>
+</tr>
+<tr>
+<td><code class="notranslate">.error(msg)</code></td>
+<td>输出错误消息</td>
+</tr>
+<tr>
+<td><code class="notranslate">.count(label)</code></td>
+<td>以参数为标识记录调用的次数，调用时在控制台打印标识以及调用次数。</td>
+</tr>
+<tr>
+<td><code class="notranslate">.countReset[label]</code></td>
+<td>重置指定标签的计数器值。</td>
+</tr>
+<tr>
+<td><code class="notranslate">.group(label)</code></td>
+<td>创建一个新的内联 group, 后续所有打印内容将会以子层级的形式展示。调用 <code class="notranslate">groupEnd()</code>来闭合组。</td>
+</tr>
+<tr>
+<td><code class="notranslate">.groupEnd(label)</code></td>
+<td>结束缩进组</td>
+</tr>
+<tr>
+<td><code class="notranslate">.time(label)</code></td>
+<td>启动计时器来计算操作的持续时间</td>
+</tr>
+<tr>
+<td><code class="notranslate">.timeLog(label)</code></td>
+<td>报告自计时器启动以来的运行时间</td>
+</tr>
+<tr>
+<td><code class="notranslate">.timeEnd(label)</code></td>
+<td>停止计时器并报告总持续时间</td>
+</tr>
+<tr>
+<td><code class="notranslate">.trace()</code></td>
+<td>输出堆栈跟踪(所有调用函数的列表)</td>
+</tr>
+<tr>
+<td><code class="notranslate">.clear()</code></td>
+<td>清空控制台</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p><code class="notranslate">console.log()</code>也接受用逗号分割来显示多个值，例如:</p>
+<div class="highlight highlight-source-ini"><pre class="notranslate">let <span class="pl-k">x</span> = 321<span class="pl-c"><span class="pl-c">;</span></span>
+console.log(<span class="pl-s"><span class="pl-pds">'</span>x:<span class="pl-pds">'</span></span>, x)<span class="pl-c"><span class="pl-c">;</span></span>
+// x: 321</pre></div>
+<p>es6解构提供了类似的输出方式：</p>
+<pre lang="arduino" class="notranslate"><code class="notranslate">console.log({ x });
+// { x: 321 }
+</code></pre>
+<p><code class="notranslate">console.dir()</code>可以将复杂对象输出到任意属性深度，无论是否使用颜色编码:</p>
+<div class="highlight highlight-text-html-php"><pre class="notranslate">console.dir(obj, { depth: <span class="pl-c1">null</span>, color: <span class="pl-c1">true</span> });</pre></div>
+<h2>调试客户端应用</h2>
+<p>你可以从 <strong>Source</strong>(源代码) 面板打开一个 JavaScript 文件，然后单击任意行号来设置断点(用蓝色标记表示)。注意，你还可以在<strong>Source Map</strong>(源码映射)中选择文件并添加断点，这样看起来会更直观。</p>
+<p>代码运行到断点处会暂停执行，以便你可以检查程序的状态。可以定义任意数量的断点，只需将它们设置为要开始调试的位置。</p>
+<p>运行代码(可通过刷新页面或激活事件触发器) ，代码将在断点位置停止:</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/d4b96d7dc46a6c5e9f35996b579549d1c88af7a11b405835d20b3f280050495f/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f31646364346335306638313234656434616232366362363534323430303863657e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270"><img src="https://camo.githubusercontent.com/d4b96d7dc46a6c5e9f35996b579549d1c88af7a11b405835d20b3f280050495f/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f31646364346335306638313234656434616232366362363534323430303863657e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270" alt="image.png" data-canonical-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1dcd4c50f8124ed4ab26cb65424008ce~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" style="max-width: 100%;"></a></p>
+<p>右边的展板包括:</p>
+<ul>
+<li>一个(<strong>Watch</strong>)监视窗口，可以通过单击 + 图标并输入特定变量的名称来监视这些变量</li>
+<li>一个包含所有断点的(<strong>Breakpoints</strong>)断点窗口，并允许你启用或禁用任意断点</li>
+<li><strong>Scope</strong>(作用域)窗口显示所有局部和全局变量的状态，并且可以右键复制“属性路径”，在控制台进行输出</li>
+<li><strong>Call Stack</strong>(调用堆栈)窗口列出了断点位置代码执行的相关堆栈信息。</li>
+</ul>
+<p>当断点位置被触发时，会有一行图标出现在“已在断点暂停”消息的上方:</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/387682a76ecc30e49a59d804c8f765e005c6e885aa95a637a520f45ada967b09/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f65396663343138383963336334616461393062626336653038666431653665617e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270"><img src="https://camo.githubusercontent.com/387682a76ecc30e49a59d804c8f765e005c6e885aa95a637a520f45ada967b09/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f65396663343138383963336334616461393062626336653038666431653665617e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270" alt="image.png" data-canonical-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e9fc41889c3c4ada90bbc6e08fd1e6ea~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" style="max-width: 100%;"></a></p>
+<p>从左到右，图标执行以下操作:</p>
+<ol start="0">
+<li>恢复执行：继续处理，直到下一个断点或代码终止</li>
+<li><strong>step over</strong> 单步执行，不进入函数：执行下一个命令，但保持在当前函数中，不要跳转到它调用的任何函数中</li>
+<li><strong>step into</strong> 单步执行，进入函数：执行下一个命令并跳转到它调用的函数</li>
+<li><strong>step out</strong> 单步执行，跳出函数：继续处理到函数结束并返回到调用语句</li>
+<li><strong>step</strong> 单步执行：类似于 <strong>step into</strong>，只是它不会跳转到异步函数</li>
+<li>停用所有断点：如果你希望临时运行代码而不中断，但又不想丢失断点，这种方法非常有用</li>
+<li>异常暂停: 引发错误时停止处理。</li>
+</ol>
+<p>DevTools 提供了多个调试选项。除了手动定义断点之外，还可以向代码中添加<code class="notranslate">debugger</code>语句。这将在 DevTools 打开时被激活，因此你应该将其从生产环境代码中删除。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/7c09e3f03fb9b01ed6d7a840cd928a0fd1e5be0cbde4e02ef3cab05489397630/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f61646263313265323234333234613339396435636636623966383432396533617e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e61776562703f"><img src="https://camo.githubusercontent.com/7c09e3f03fb9b01ed6d7a840cd928a0fd1e5be0cbde4e02ef3cab05489397630/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f61646263313265323234333234613339396435636636623966383432396533617e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e61776562703f" alt="image.png" data-canonical-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/adbc12e224324a399d5cf6b9f8429e3a~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" style="max-width: 100%;"></a></p>
+<p><strong>条件断点</strong>是在停止执行前，触发一个条件语句。假设你有一个从0到999的循环，并且需要在最后一次迭代中查看状态。与添加标准断点并单击恢复执行999次不同，你可以右键单击行号，选择“添加条件断点”，然后输入一个表达式，例如<code class="notranslate">loopValue == 999</code>。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/9536203f62a2c029a0af9ebfe96832788c0415f0e4873c2339ebc4a8532b9e2b/68747470733a2f2f70362d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f62303265356331643339343934643962623961393964313639336664373738317e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e61776562703f"><img src="https://camo.githubusercontent.com/9536203f62a2c029a0af9ebfe96832788c0415f0e4873c2339ebc4a8532b9e2b/68747470733a2f2f70362d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f62303265356331643339343934643962623961393964313639336664373738317e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e61776562703f" alt="image.png" data-canonical-src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b02e5c1d39494d9bb9a99d1693fd7781~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" style="max-width: 100%;"></a></p>
+<p><strong>日志点</strong>实际上是没有代码的 <code class="notranslate">console.log ()</code>, 右键单击任何一行，选择 "添加日志点"，然后添加表达式:</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/49f81e63bc82af55c5486696f03cf045c16a8ca110f85febf0b5cc14cd13b67b/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f64376539336139366131626434613836396433393632656530613364623463327e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270"><img src="https://camo.githubusercontent.com/49f81e63bc82af55c5486696f03cf045c16a8ca110f85febf0b5cc14cd13b67b/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f64376539336139366131626434613836396433393632656530613364623463327e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270" alt="image.png" data-canonical-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d7e93a96a1bd4a869d3962ee0a3db4c2~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" style="max-width: 100%;"></a></p>
+<p><strong>DOM断点</strong>：在<strong>Elements</strong>(元素)面板中，右键单击任意dom节点，选择”发生中断条件“中的任意选项，就会在JavaScript触发其对应逻辑时，激活该DOM断点。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/be7da140225f4bc5b32f58acf41114766d473a7760fffda6369d7c1597d9f4d7/68747470733a2f2f70392d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f31373535306266333665623334656332613337353531383535656239313964667e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e61776562703f"><img src="https://camo.githubusercontent.com/be7da140225f4bc5b32f58acf41114766d473a7760fffda6369d7c1597d9f4d7/68747470733a2f2f70392d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f31373535306266333665623334656332613337353531383535656239313964667e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e61776562703f" alt="image.png" data-canonical-src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/17550bf36eb34ec2a37551855eb919df~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" style="max-width: 100%;"></a></p>
+<p>每当 JavaScript 调用 Fetch ()或 XMLHttpRequest 从 URL 中检索数据时，Ajax 断点就会被激活。在 <strong>Source</strong> (源代码)面板中，打开右侧的 <strong>XHR/提取断点</strong>面板，单击 <strong>+</strong> 并输入完整或部分URL以启用断点。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/ea1f54a5410a8c3abb2729a5a68adf62de380979af3b621350d67201f7d62bb0/68747470733a2f2f70312d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f32393062363834373039386234363734393766656635623535626639353832667e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e61776562703f"><img src="https://camo.githubusercontent.com/ea1f54a5410a8c3abb2729a5a68adf62de380979af3b621350d67201f7d62bb0/68747470733a2f2f70312d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f32393062363834373039386234363734393766656635623535626639353832667e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e61776562703f" alt="image.png" data-canonical-src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/290b6847098b467497fef5b55bf9582f~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" style="max-width: 100%;"></a></p>
+<p>最后，你有时想要忽略正在使用但无法更改的代码，例如 jQuery、 React 、用于统计的三方JavaScript等。按 F1或单击齿轮图标打开设置，选择”忽略列表“选项卡，并添加任意数量的完整或部分 URL/文件名。之后，断点调试器将跳过这些文件中的代码，并忽略它们引发的任何异常。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/f6847eaa1461bc9d89953ecbbf3d733b1593806f9a66c54881ce80b0e2ccd22d/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f62366338623337326132666434343965386534616535343334363134386633337e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e61776562703f"><img src="https://camo.githubusercontent.com/f6847eaa1461bc9d89953ecbbf3d733b1593806f9a66c54881ce80b0e2ccd22d/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f62366338623337326132666434343965386534616535343334363134386633337e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e61776562703f" alt="image.png" data-canonical-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b6c8b372a2fd449e8e4ae54346148f33~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?" style="max-width: 100%;"></a></p>
+<h2>调试 Node.js 和 Deno 应用程序</h2>
+<p>你还可以在 Chrome DevTools 中直接调试 Node.js 和 Deno 服务器端应用程序，因为他们使用的都是 V8 JavaScript 引擎。要启动 V8检查程序，请使用<code class="notranslate">--inspect</code>参数启动应用程序。例如，要从 index.js 文件启动 Node 应用程序:</p>
+<div class="highlight highlight-source-css"><pre class="notranslate"><span class="pl-ent">sh</span> <span class="pl-ent">node</span> <span class="pl-ent">--inspect</span> <span class="pl-ent">index</span>.<span class="pl-c1">js</span></pre></div>
+<p>Deno 和 n<a href="https://nodemon.io/" title="https://nodemon.io/" rel="nofollow">oemon</a> 支持相同的<code class="notranslate">--inspect</code>参数。你还可以使用<code class="notranslate">--inspect-brk</code> 在第一行停止处理，这样你就可以在应用程序启动时逐步执行它。</p>
+<p>这个启动命令监听 localhost: 9229端口，任何本地调试客户端都可以附加到该调试器(包括 Chrome) :</p>
+<div class="highlight highlight-source-cs"><pre class="notranslate"><span class="pl-smi">Debugger</span> <span class="pl-s1">listening</span> on ws<span class="pl-c1">:</span><span class="pl-c">//127.0.0.1:9229/301372bc-780a-2051-ceb2-c8d78227092e</span></pre></div>
+<p>如果你在其他设备或 Docker 容器中运行应用程序，请确保端口9229可访问，并指定0.0.0.0允许从本地网络的任何地方访问:</p>
+<div class="highlight highlight-source-ini"><pre class="notranslate">node --<span class="pl-k">inspect</span>=0.0.0.0:9229 index.js</pre></div>
+<p>应用程序运行后，打开 Chrome 并输入地址<code class="notranslate">chrome://inspect</code> 以查看所有可用的应用程序:</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/566ed8ca9a56f5c5696f911f1f789e0b08c48b3a0697db2ab043e63076d427f8/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f39376463653634316233316134363530386638313936623664343237303136337e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270"><img src="https://camo.githubusercontent.com/566ed8ca9a56f5c5696f911f1f789e0b08c48b3a0697db2ab043e63076d427f8/68747470733a2f2f70332d6a75656a696e2e62797465696d672e636f6d2f746f732d636e2d692d6b3375316662706663702f39376463653634316233316134363530386638313936623664343237303136337e74706c762d6b3375316662706663702d7a6f6f6d2d696e2d63726f702d6d61726b3a313531323a303a303a302e6177656270" alt="image.png" data-canonical-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/97dce641b31a46508f8196b6d4270163~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" style="max-width: 100%;"></a></p>
+<p>应用程序出现在“<strong>Remote Target</strong>”列表中可能需要几秒钟的时间。如果没有，请确保检查了 <strong>Discover network targets</strong>，然后单击 <strong>Configure</strong> 添加应用程序正在运行的设备的 IP 地址和端口。</p>
+<p>单击目标应用程序的<strong>inspect</strong>链接以启动另一个 DevTools 窗口。相比浏览器 DevTools 它的选项更少，并且你主要使用 Source 面板来添加断点。与前面一样，你可以选择“文件系统”窗口并单击“+ 向工作区添加文件夹”来编辑服务器端代码。</p>
+<h2>结论</h2>
+<ul>
+<li>
+<p>在过去的十年中，DevTools 已经有了很大的发展，并且已经到了可以成为你唯一需要的 web 开发工具的地步。我们已经讨论了代码编辑和bug调试的技巧，但是这里还有一些我喜欢的功能:</p>
+<ul>
+<li>在 <strong>Network</strong>(网络) 选项卡中，右键单击任何 Fetch/XHR 请求，然后选择 复制 选项。你可以为 JavaScript、 Node.js、 cURL 等生成有效的代码。</li>
+<li>从<strong>Source</strong>(源代码)选项卡中打开任何图像，然后右键单击可以复制它的base64格式。</li>
+<li>在“代码段”面板中创建代码段，以便可以在任何页面上运行相同的 JavaScript。</li>
+<li>通过按暂停/恢复图标停止执行，然后按住相同的图标并选择停止，从而停止无限循环。</li>
+<li>从 <code class="notranslate">chrome://inspect</code> 面板调试一个运行在 Android 手机上的站点，该手机通过 USB 连接到你的电脑。你还可以定义端口转发，这样任何本地或远程站点在设备上都显示为 localhost: &lt; port &gt; 。</li>
+<li><strong>Rendering</strong>(渲染)面板提供了评估核心网页指标、模拟CSS深色模式、模拟CSS打印模式、减少运动等功能。</li>
+<li>问题面板：当正在使用的一个 API将在未来的 Chrome 版本中发生变更时，问题面板会提供修改建议。</li>
+</ul>
+</li>
+</ul>
+<h5>原文链接 <a href="https://blog.openreplay.com/how-to-use-chrome-as-a-code-editor-and-debugger" title="https://blog.openreplay.com/how-to-use-chrome-as-a-code-editor-and-debugger" rel="nofollow">blog.openreplay.com/how-to-use-…</a></h5></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://692.cloudns.be">MGTnote</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if("01/01/2025"!=""){
+    var startSite=new Date("01/01/2025");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.disabled=true;
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","fjvi/note");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+<script src='../assets/ArticleTOC.js'></script><script src='../assets/backtop.js'></script><script src='../assets/lightbox.js'></script><script src='https://raw.githubusercontent.com/istvan-ujjmeszaros/bootstrap-autohidingnavbar/refs/heads/master/dist/jquery.bootstrap-autohidingnavbar.js'></script>
+
+</html>
