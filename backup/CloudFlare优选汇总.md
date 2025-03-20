@@ -4,10 +4,12 @@ ct.090227.xyz#电信官方优选
 cmcc.090227.xyz#移动官方优选
 
 ------
-
-常用的优选官方域名
-shopify.com
-time.is
+# 常用的优选官方域名
+www.visa.com.sg
+www.visa.com.hk
+www.visa.com.tw
+www.visa.co.jp
+www.visakorea.com
 icook.hk
 icook.tw
 ip.sb
@@ -16,23 +18,21 @@ malaysia.com
 russia.com
 singapore.com
 skk.moe
-www.visa.com.sg
-www.visa.com.hk
-www.visa.com.tw
-www.visa.co.jp
-www.visakorea.com
+shopify.com
+time.is
 www.gco.gov.qa
 www.gov.se
 www.gov.ua
 
+> [更多](https://raw.githubusercontent.com/6889692/wiki/refs/heads/gh-pages/domain.txt)
 ------
 
-第三方维护的优选官方域名（未备注出处的为未知）
-cfip.xxxxxxxx.tk#OTC提供维护官方优选
-bestcf.onecf.eu.org#Mingyu提供维护官方优选
-cf.zhetengsha.eu.org#小一提供维护官方优选
-acjp2.cloudflarest.link#KJKKK维护官方优选
-achk.cloudflarest.link#KJKKK维护官方优选
+## 第三方维护的优选官方域名（未备注出处的为未知）
+cfip.xxxxxxxx.tk  #OTC提供维护官方优选
+bestcf.onecf.eu.org  #Mingyu提供维护官方优选
+cf.zhetengsha.eu.org  #小一提供维护官方优选
+acjp2.cloudflarest.link  #KJKKK维护官方优选
+achk.cloudflarest.link  #KJKKK维护官方优选
 xn--b6gac.eu.org
 yx.887141.xyz
 8.889288.xyz
@@ -44,19 +44,20 @@ cf.877771.xyz
 cf.345673.xyz
 
 ------
-
-第三方维护的优选反代域名
+# 第三方维护的优选反代域名
 cdn-all.xn--b6gac.eu.org
 cdn.xn--b6gac.eu.org
 cdn-b100.xn--b6gac.eu.org 
-bestproxy.onecf.eu.org  #Mingyu提供维护反代优选
+bestproxy.onecf.eu.org    #Mingyu提供维护反代优选
 ts.hpc.tw
-proxy.xxxxxxxx.tk  #OTC提供维护反代优选
+proxy.xxxxxxxx.tk    #OTC提供维护反代优选
 edgetunnel.anycast.eu.org
-[扫描工具](https://www.nslookup.io/domains/cdn-all.xn--b6gac.eu.org/dns-records/)
+
+> [扫描工具](https://www.nslookup.io/domains/cdn-all.xn--b6gac.eu.org/dns-records/)
+
 ------
 
-第三方维护的优选官方IP的API
+## 第三方维护的优选官方IP的API
 https://ipdb.api.030101.xyz/?type=bestcf&country=true
 https://addressesapi.090227.xyz/CloudFlareYes
 https://addressesapi.090227.xyz/ip.164746.xyz
@@ -65,7 +66,7 @@ https://ipdb.api.030101.xyz/?type=bestproxy&country=true
 
 ------
 
-更多优选内容可自行查看
+## 更多优选内容可自行查看
 https://cf.090227.xyz
 https://ipdb.api.030101.xyz
 https://monitor.gacjie.cn/page/cloudflare/cname.html
@@ -74,11 +75,11 @@ https://stock.hostmonit.com/CloudFlareYes
 
 ------
 
-HTTP支持端口：80，8080，8880，2052，2082，2086，2095；
-HTTPS支持端口：443，2053，2083，2087，2096，8443。
+> HTTP支持端口：80，8080，8880，2052，2082，2086，2095；
+> HTTPS支持端口：443，2053，2083，2087，2096，8443。
 
 ------
-我精选的反代IP：
+## 我精选的反代IP：
 47.76.37.57 #HK
 38.55.97.137 #HK
 162.159.152.2 #US
