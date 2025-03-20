@@ -46,10 +46,14 @@ cf.345673.xyz
 ------
 
 第三方维护的优选反代域名
-bestproxy.onecf.eu.org#Mingyu提供维护反代优选
-proxy.xxxxxxxx.tk#OTC提供维护反代优选
-47.243.237.160   proxy.xxxxxxxx.tk   ts.hpc.tw   edgetunnel.anycast.eu.org   bestproxy.onecf.eu.org   cdn-all.xn--b6gac.eu.org   cdn.xn--b6gac.eu.org
-
+cdn-all.xn--b6gac.eu.org
+cdn.xn--b6gac.eu.org
+cdn-b100.xn--b6gac.eu.org 
+bestproxy.onecf.eu.org  #Mingyu提供维护反代优选
+ts.hpc.tw
+proxy.xxxxxxxx.tk  #OTC提供维护反代优选
+edgetunnel.anycast.eu.org
+[扫描工具](https://www.nslookup.io/domains/cdn-all.xn--b6gac.eu.org/dns-records/)
 ------
 
 第三方维护的优选官方IP的API
