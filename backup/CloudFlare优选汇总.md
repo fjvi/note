@@ -5,55 +5,56 @@ cmcc.090227.xyz#移动官方优选
 
 ------
 # 常用的优选官方域名
-www.visa.com.sg
 www.visa.com.hk
+www.gov.se
 www.visa.com.tw
-www.visa.co.jp
-www.visakorea.com
 icook.hk
+time.is
+skk.moe
 icook.tw
-ip.sb
 japan.com
+www.gov.ua
 malaysia.com
 russia.com
-singapore.com
-skk.moe
-shopify.com
-time.is
+ip.sb
 www.gco.gov.qa
-www.gov.se
-www.gov.ua
-
+singapore.com
+shopify.com
+www.visa.com.sg
+www.visakorea.com
+www.visa.co.jp
 > [更多](https://raw.githubusercontent.com/6889692/wiki/refs/heads/gh-pages/domain.txt)
+
+![Image](https://github.com/user-attachments/assets/97c78606-2885-4da7-adb0-e247b59f2cf5)
 ------
 
 ## 第三方维护的优选官方域名（未备注出处的为未知）
-cfip.xxxxxxxx.tk  #OTC提供维护官方优选
-bestcf.onecf.eu.org  #Mingyu提供维护官方优选
-cf.zhetengsha.eu.org  #小一提供维护官方优选
-acjp2.cloudflarest.link  #KJKKK维护官方优选
-achk.cloudflarest.link  #KJKKK维护官方优选
+cf.0sm.com
+bestcf.onecf.eu.org
+cf.877771.xyz
 xn--b6gac.eu.org
 yx.887141.xyz
-8.889288.xyz
 cfip.1323123.xyz
-cf.515188.xyz
-cf-st.annoy.eu.org
-cf.0sm.com
-cf.877771.xyz
-cf.345673.xyz
+cfip.xxxxxxxx.tk
+achk.cloudflarest.link
+acjp2.cloudflarest.link
+cf.zhetengsha.eu.org
+
+![Image](https://github.com/user-attachments/assets/ab690eee-13b9-411d-aac3-87e54d0ba98d)
 
 ------
 # 第三方维护的优选反代域名
 cdn-all.xn--b6gac.eu.org
 cdn.xn--b6gac.eu.org
 cdn-b100.xn--b6gac.eu.org 
-bestproxy.onecf.eu.org    #Mingyu提供维护反代优选
+bestproxy.onecf.eu.org
 ts.hpc.tw
-proxy.xxxxxxxx.tk    #OTC提供维护反代优选
-edgetunnel.anycast.eu.org
+proxy.xxxxxxxx.tk    #失效
+edgetunnel.anycast.eu.org #失效
 
 > [扫描工具](https://www.nslookup.io/domains/cdn-all.xn--b6gac.eu.org/dns-records/)
+
+![Image](https://github.com/user-attachments/assets/c762af76-3c68-4d30-a700-164310293c88)
 
 ------
 

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTnote</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTnote</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Thu, 20 Mar 2025 03:26:00 +0000</lastBuildDate><managingEditor>MGTnote</managingEditor><ttl>60</ttl><webMaster>MGTnote</webMaster><item><title>如何使用 Chrome 作为代码编辑器和调试器 </title><link>https://692.cloudns.be/post/ru-he-shi-yong-%20Chrome%20-zuo-wei-dai-ma-bian-ji-qi-he-diao-shi-qi-%20.html</link><description>很少有开发人员深入研究浏览器的“ DevTools”。这里有一系列复杂的功能，甚至已经到了可以使用 Chrome 作为完整开发环境的地步。虽然你不太可能会为此放弃使用 VSCode 或 Sublime，但如果你在使用别人的电脑或仅需要编辑一两行代码时，DevTools至少可以作为一种选择。
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTnote</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTnote</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Thu, 20 Mar 2025 03:36:48 +0000</lastBuildDate><managingEditor>MGTnote</managingEditor><ttl>60</ttl><webMaster>MGTnote</webMaster><item><title>如何使用 Chrome 作为代码编辑器和调试器 </title><link>https://692.cloudns.be/post/ru-he-shi-yong-%20Chrome%20-zuo-wei-dai-ma-bian-ji-qi-he-diao-shi-qi-%20.html</link><description>很少有开发人员深入研究浏览器的“ DevTools”。这里有一系列复杂的功能，甚至已经到了可以使用 Chrome 作为完整开发环境的地步。虽然你不太可能会为此放弃使用 VSCode 或 Sublime，但如果你在使用别人的电脑或仅需要编辑一两行代码时，DevTools至少可以作为一种选择。
 
 以下部分将介绍如何使用 Chrome 的编辑和调试工具（Chromium、 Edge、 Opera等浏览器也使用了相同的内核引擎和开发工具）。根据你的浏览器和操作系统，你可以从菜单中打开 DevTools: 按 F12，或者按 Ctrl | Cmd + Shift + i。 Safari 和 Firefox 会有些不同，它们可能不提供相同的编辑功能，但是它们也有自己的技巧来帮助开发。
 
@@ -2128,55 +2128,56 @@ cmcc.090227.xyz#移动官方优选
 
 ------
 # 常用的优选官方域名
-www.visa.com.sg
 www.visa.com.hk
+www.gov.se
 www.visa.com.tw
-www.visa.co.jp
-www.visakorea.com
 icook.hk
+time.is
+skk.moe
 icook.tw
-ip.sb
 japan.com
+www.gov.ua
 malaysia.com
 russia.com
-singapore.com
-skk.moe
-shopify.com
-time.is
+ip.sb
 www.gco.gov.qa
-www.gov.se
-www.gov.ua
-
+singapore.com
+shopify.com
+www.visa.com.sg
+www.visakorea.com
+www.visa.co.jp
 &gt; [更多](https://raw.githubusercontent.com/6889692/wiki/refs/heads/gh-pages/domain.txt)
+
+![Image](https://github.com/user-attachments/assets/97c78606-2885-4da7-adb0-e247b59f2cf5)
 ------
 
 ## 第三方维护的优选官方域名（未备注出处的为未知）
-cfip.xxxxxxxx.tk  #OTC提供维护官方优选
-bestcf.onecf.eu.org  #Mingyu提供维护官方优选
-cf.zhetengsha.eu.org  #小一提供维护官方优选
-acjp2.cloudflarest.link  #KJKKK维护官方优选
-achk.cloudflarest.link  #KJKKK维护官方优选
+cf.0sm.com
+bestcf.onecf.eu.org
+cf.877771.xyz
 xn--b6gac.eu.org
 yx.887141.xyz
-8.889288.xyz
 cfip.1323123.xyz
-cf.515188.xyz
-cf-st.annoy.eu.org
-cf.0sm.com
-cf.877771.xyz
-cf.345673.xyz
+cfip.xxxxxxxx.tk
+achk.cloudflarest.link
+acjp2.cloudflarest.link
+cf.zhetengsha.eu.org
+
+![Image](https://github.com/user-attachments/assets/ab690eee-13b9-411d-aac3-87e54d0ba98d)
 
 ------
 # 第三方维护的优选反代域名
 cdn-all.xn--b6gac.eu.org
 cdn.xn--b6gac.eu.org
 cdn-b100.xn--b6gac.eu.org 
-bestproxy.onecf.eu.org    #Mingyu提供维护反代优选
+bestproxy.onecf.eu.org
 ts.hpc.tw
-proxy.xxxxxxxx.tk    #OTC提供维护反代优选
-edgetunnel.anycast.eu.org
+proxy.xxxxxxxx.tk    #失效
+edgetunnel.anycast.eu.org #失效
 
 &gt; [扫描工具](https://www.nslookup.io/domains/cdn-all.xn--b6gac.eu.org/dns-records/)
+
+![Image](https://github.com/user-attachments/assets/c762af76-3c68-4d30-a700-164310293c88)
 
 ------
 
