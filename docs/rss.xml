@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTnote</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTnote</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Thu, 20 Mar 2025 03:36:48 +0000</lastBuildDate><managingEditor>MGTnote</managingEditor><ttl>60</ttl><webMaster>MGTnote</webMaster><item><title>如何使用 Chrome 作为代码编辑器和调试器 </title><link>https://692.cloudns.be/post/ru-he-shi-yong-%20Chrome%20-zuo-wei-dai-ma-bian-ji-qi-he-diao-shi-qi-%20.html</link><description>很少有开发人员深入研究浏览器的“ DevTools”。这里有一系列复杂的功能，甚至已经到了可以使用 Chrome 作为完整开发环境的地步。虽然你不太可能会为此放弃使用 VSCode 或 Sublime，但如果你在使用别人的电脑或仅需要编辑一两行代码时，DevTools至少可以作为一种选择。
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTnote</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTnote</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Mon, 24 Mar 2025 14:31:36 +0000</lastBuildDate><managingEditor>MGTnote</managingEditor><ttl>60</ttl><webMaster>MGTnote</webMaster><item><title>如何使用 Chrome 作为代码编辑器和调试器 </title><link>https://692.cloudns.be/post/ru-he-shi-yong-%20Chrome%20-zuo-wei-dai-ma-bian-ji-qi-he-diao-shi-qi-%20.html</link><description>很少有开发人员深入研究浏览器的“ DevTools”。这里有一系列复杂的功能，甚至已经到了可以使用 Chrome 作为完整开发环境的地步。虽然你不太可能会为此放弃使用 VSCode 或 Sublime，但如果你在使用别人的电脑或仅需要编辑一两行代码时，DevTools至少可以作为一种选择。
 
 以下部分将介绍如何使用 Chrome 的编辑和调试工具（Chromium、 Edge、 Opera等浏览器也使用了相同的内核引擎和开发工具）。根据你的浏览器和操作系统，你可以从菜单中打开 DevTools: 按 F12，或者按 Ctrl | Cmd + Shift + i。 Safari 和 Firefox 会有些不同，它们可能不提供相同的编辑功能，但是它们也有自己的技巧来帮助开发。
 
@@ -187,25 +187,7 @@ node --inspect=0.0.0.0:9229 index.js
     +   **Rendering**(渲染)面板提供了评估核心网页指标、模拟CSS深色模式、模拟CSS打印模式、减少运动等功能。
     +   问题面板：当正在使用的一个 API将在未来的 Chrome 版本中发生变更时，问题面板会提供修改建议。
 
-##### 原文链接 [blog.openreplay.com/how-to-use-…](https://blog.openreplay.com/how-to-use-chrome-as-a-code-editor-and-debugger 'https://blog.openreplay.com/how-to-use-chrome-as-a-code-editor-and-debugger')$$$$$$$</description><guid isPermaLink="true">https://692.cloudns.be/post/ru-he-shi-yong-%20Chrome%20-zuo-wei-dai-ma-bian-ji-qi-he-diao-shi-qi-%20.html</guid><pubDate>Mon, 17 Mar 2025 18:54:06 +0000</pubDate></item><item><title>校史馆设计</title><link>https://692.cloudns.be/post/xiao-shi-guan-she-ji.html</link><description>&lt;img src='https://692.cloudns.be/img/00.jpg' width='500' /&gt;
-
-![00](https://692.cloudns.be/img/00.jpg)
-![00](https://692.cloudns.be/img/01.jpg)
-![00](https://692.cloudns.be/img/02.jpg)
-![00](https://692.cloudns.be/img/02(2).jpg)
-![00](https://692.cloudns.be/img/02(3).jpg)
-![00](https://692.cloudns.be/img/03.jpg)
-![00](https://692.cloudns.be/img/04.jpg)
-![00](https://692.cloudns.be/img/04(2).jpg)
-![00](https://692.cloudns.be/img/04(3).jpg)
-![00](https://692.cloudns.be/img/05.jpg)
-![00](https://692.cloudns.be/img/05(2).jpg)
-![00](https://692.cloudns.be/img/06.jpg)
-![00](https://692.cloudns.be/img/06(2).jpg)
-![00](https://692.cloudns.be/img/06(3).jpg)
-![00](https://692.cloudns.be/img/07.jpg)
-![00](https://692.cloudns.be/img/07(2).jpg)
-![00](https://692.cloudns.be/img/08.jpg)$$$$$$$</description><guid isPermaLink="true">https://692.cloudns.be/post/xiao-shi-guan-she-ji.html</guid><pubDate>Sat, 15 Mar 2025 14:45:52 +0000</pubDate></item><item><title>提高Cloudflare站点在中国的体验</title><link>https://692.cloudns.be/post/ti-gao-Cloudflare-zhan-dian-zai-zhong-guo-de-ti-yan.html</link><description>
+##### 原文链接 [blog.openreplay.com/how-to-use-…](https://blog.openreplay.com/how-to-use-chrome-as-a-code-editor-and-debugger 'https://blog.openreplay.com/how-to-use-chrome-as-a-code-editor-and-debugger')$$$$$$$</description><guid isPermaLink="true">https://692.cloudns.be/post/ru-he-shi-yong-%20Chrome%20-zuo-wei-dai-ma-bian-ji-qi-he-diao-shi-qi-%20.html</guid><pubDate>Mon, 17 Mar 2025 18:54:06 +0000</pubDate></item><item><title>校史馆设计</title><link>https://692.cloudns.be/post/xiao-shi-guan-she-ji.html</link><description>q$$$$$$$</description><guid isPermaLink="true">https://692.cloudns.be/post/xiao-shi-guan-she-ji.html</guid><pubDate>Sat, 15 Mar 2025 14:45:52 +0000</pubDate></item><item><title>提高Cloudflare站点在中国的体验</title><link>https://692.cloudns.be/post/ti-gao-Cloudflare-zhan-dian-zai-zhong-guo-de-ti-yan.html</link><description>
 
 
 ## 起因
