@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="avatar.svg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="## 用到的工具
+CDN优选工具：[https://bulianglin.com/archives/cdn.html](https://bulianglin.com/archives/cdn.html)  
+节点测速工具：[https://github.com/bulianglin/demo](https://bulianglin.com/g/aHR0cHM6Ly9naXRodWIuY29tL2J1bGlhbmdsaW4vZGVtbw)  
+搜索引擎：[https://fofa.info](https://bulianglin.com/g/aHR0cHM6Ly9mb2ZhLmluZm8)  
+临时邮箱：[http://24mail.chacuo.net](https://bulianglin.com/g/aHR0cDovLzI0bWFpbC5jaGFjdW8ubmV0)
+
+## 节点搭建
+首先，你需要搭建一个vless+ws+tls的节点，并将域名托管到CF。节点搭建好后，我们来到CF的配置页面，找到DNS记录选项，启用DNS代理，小云朵变成橙色则表示我们正在使用CF的CDN服务，这时可以ping我们的域名，当IP地址从原始IP变更为CF 的IP时，则表示已经成功启动CF的CDN服务了。
+![](https://i0.hdslb.com/bfs/article/99ec5fb8182dca03edc2214d8105bdf9ff930637.png@1192w.webp)
+启用CF CDN服务
+接着，我们在SSL/TLS设置页面，将加密模式改成灵活或者完全。
+![](https://i0.hdslb.com/bfs/article/6be4a99dbd0b867359952a59c52c2ae06022e5d4.png@1192w.webp)
+修改加密模式
+最后我们在客户端试一下真连接，输入解析好的域名，端口改成443，如果配置没问题，此时是可以跑通的。
+![](https://i0.hdslb.com/bfs/article/a7706617498060bb32ec8d6509e81f03b00457a9.png@1192w_1192h.webp)
+
+测试
+此时我们已经拥有了一个vless+ws+tls+cdn节点，当然，此时的速度非常感人，因为使用的是CF默认分配的IP，没有经过优选。不过对于电信用户来讲再怎么优选都很差劲，并且这么多人都盯着CF家的IP进行优选，速度也是极其不稳定。
+
+**不存在的IP**
+
+##  获取CF反代IP
+用到的工具是fofa，网址：https://fofa.info，注册需要邮箱，免费用户有2000多个导出额度，可以使用临时邮箱多次注册来重复导出。fofa 的详细语法规则可以通过页面的查询语法获取，这里提供几条fofa的搜索语法供参考，可以按需自行修改。
+
+国内反代IP：
+```md 
+server==&#34;cloudflare&#34; &amp;&amp; port==&#34;80&#34; &amp;&amp; header=&#34;Forbidden&#34; &amp;&amp; country==&#34;CN&#34; asn!=&#34;13335&#34; &amp;&amp; asn!=&#34;209242&#34; 
+``` 国内CF-IP：
+```md 
+server==&#34;cloudflare&#34; &amp;&amp; port==&#34;80&#34; &amp;&amp; header=&#34;Forbidden&#34; &amp;&amp; country==&#34;CN&#34; asn!=&#34;13335&#34; &amp;&amp; asn!=&#34;209242&#34; 
+``` 
+香港反代IP：
+```md
+server=='cloudflare' && port=='443' && header='Forbidden' && region=='HK' && asn!='13335' && asn!='209242' && asn!='396982' && asn!='132892' && asn!='202623'
+```
+阿里云：
+```md
+server==&#34;cloudflare&#34; &amp;&amp; asn==&#34;45102&#34; 
+```
+甲骨文韩国：
+```md
+server==&#34;cloudflare&#34; &amp;&amp; asn==&#34;31898&#34; &amp;&amp; country==&#34;KR&#34;
+```
+ 搬瓦工：
+```md
+server==&#34;cloudflare&#34; &amp;&amp; asn==&#34;25820&#34;
+```
+
+以这条语法举例：
+
+server==&[#34;cloudflare&#](https://search.bilibili.com/all?keyword=34%3Bcloudflare%26)34; &amp;&amp; port==&[#34;80&#](https://search.bilibili.com/all?keyword=34%3B80%26)34; &amp;&amp; header=&[#34;Forbidden&#](https://search.bilibili.com/all?keyword=34%3BForbidden%26)34; &amp;&amp; country==&[#34;CN&#](https://search.bilibili.com/all?keyword=34%3BCN%26)34;
+
+这条规则的意思是搜索服务器为CF、端口为80、HTTP头部信息包含forbidden、地区为中国的IP，可以任意修改组合搜索语句来寻找需要的IP，不用整天盯着CF自家的IP区优选了。
+
+接着使用这条语法进行搜索，可以看到有2000多个独立ip。
+
+![](https://i0.hdslb.com/bfs/article/005bf9bb7a978d646372eba7b80dd8235664040b.png@1192w.webp)
+
+搜索结果
+
+随便复制一个ip在浏览器打开，若提示1003错误，则很有可能是反代了CF的ip。
+
+![](https://i0.hdslb.com/bfs/article/006005805266190547bb5e162a0952ade93300ec.png@1192w.webp)
+
+测试是否反代了CF
+
+下载搜索到的ip，用excel打开，这时先到客户端复制一下节点链接，如果是ip+域名的形式，可以直接复制，否则需要做一些调整，如图所示。
+
+![](https://i0.hdslb.com/bfs/article/b8b1256d5431a011c89aa76362cd6b5672079fe0.png@1192w_1192h.webp)
+
+复制节点链接
+
+![](https://i0.hdslb.com/bfs/article/d3513e72c210fefc80ef4b1937eddd72ca91dd53.png@1072w_430h.webp)
+
+复制节点链接
+
+接着来到excel，提取下载的fofa数据，只需要ip即可，将ip做一下去重并单独提取出来，把刚刚复制出来的节点信息粘贴到另一列，使用获取到的ip将右边我们复制的节点链接内的ip替换掉，注意只需要替换ip即可，其他任何数据都不要修改，否则节点链接会无法使用，这里可以使用excel的选择性粘贴进行批量修改，具体操作方法可自行搜索。
+
+![](https://i0.hdslb.com/bfs/article/67caf77a91da908671791e190b73187ca1e5e6ab.png@1192w.webp)
+
+将ip替换到节点链接内
+
+将ip全部替换完成后，需要用到一个测速工具，注意不要下错了。
+
+文件名：nodesCatch-V2.0.rar
+
+下载地址：https://github.com/bulianglin/demo
+
+下载完成后打开测速工具，将修改后的节点链接全部复制进去。
+
+![](https://i0.hdslb.com/bfs/article/6b55bf7deefaa87a8c1f8cec5986733a7245b41f.png@1192w.webp)
+
+测速工具
+
+把内核修改为xray，全选节点，先测一下连接速度，去除无效节点，接着再测下载速度，将速度合适的节点复制到客户端，此时就获得了一大批可用的反代CF IP，并且这些ip并不存在于CF官方的ip列表内。
+
+此方法可以一个节点用出1000个节点的效果，并且可以根据自己需求在全球范围内搜索到优质的节点，有些甚至是专线，至于他们为什么要反代CF，应该是有些业务必须这么操作，但却不知道这样会被别人利用，没有做好相应的限制，总之此方法的可玩性很高，只要你的脑洞够大，完全可以尽情探索。
+
+全文完。$$$$$$$">
+<meta property="og:title" content="如何免费获取无限量的反代CF IP并为你的VPS进行线路提速">
+<meta property="og:description" content="## 用到的工具
+CDN优选工具：[https://bulianglin.com/archives/cdn.html](https://bulianglin.com/archives/cdn.html)  
+节点测速工具：[https://github.com/bulianglin/demo](https://bulianglin.com/g/aHR0cHM6Ly9naXRodWIuY29tL2J1bGlhbmdsaW4vZGVtbw)  
+搜索引擎：[https://fofa.info](https://bulianglin.com/g/aHR0cHM6Ly9mb2ZhLmluZm8)  
+临时邮箱：[http://24mail.chacuo.net](https://bulianglin.com/g/aHR0cDovLzI0bWFpbC5jaGFjdW8ubmV0)
+
+## 节点搭建
+首先，你需要搭建一个vless+ws+tls的节点，并将域名托管到CF。节点搭建好后，我们来到CF的配置页面，找到DNS记录选项，启用DNS代理，小云朵变成橙色则表示我们正在使用CF的CDN服务，这时可以ping我们的域名，当IP地址从原始IP变更为CF 的IP时，则表示已经成功启动CF的CDN服务了。
+![](https://i0.hdslb.com/bfs/article/99ec5fb8182dca03edc2214d8105bdf9ff930637.png@1192w.webp)
+启用CF CDN服务
+接着，我们在SSL/TLS设置页面，将加密模式改成灵活或者完全。
+![](https://i0.hdslb.com/bfs/article/6be4a99dbd0b867359952a59c52c2ae06022e5d4.png@1192w.webp)
+修改加密模式
+最后我们在客户端试一下真连接，输入解析好的域名，端口改成443，如果配置没问题，此时是可以跑通的。
+![](https://i0.hdslb.com/bfs/article/a7706617498060bb32ec8d6509e81f03b00457a9.png@1192w_1192h.webp)
+
+测试
+此时我们已经拥有了一个vless+ws+tls+cdn节点，当然，此时的速度非常感人，因为使用的是CF默认分配的IP，没有经过优选。不过对于电信用户来讲再怎么优选都很差劲，并且这么多人都盯着CF家的IP进行优选，速度也是极其不稳定。
+
+**不存在的IP**
+
+##  获取CF反代IP
+用到的工具是fofa，网址：https://fofa.info，注册需要邮箱，免费用户有2000多个导出额度，可以使用临时邮箱多次注册来重复导出。fofa 的详细语法规则可以通过页面的查询语法获取，这里提供几条fofa的搜索语法供参考，可以按需自行修改。
+
+国内反代IP：
+```md 
+server==&#34;cloudflare&#34; &amp;&amp; port==&#34;80&#34; &amp;&amp; header=&#34;Forbidden&#34; &amp;&amp; country==&#34;CN&#34; asn!=&#34;13335&#34; &amp;&amp; asn!=&#34;209242&#34; 
+``` 国内CF-IP：
+```md 
+server==&#34;cloudflare&#34; &amp;&amp; port==&#34;80&#34; &amp;&amp; header=&#34;Forbidden&#34; &amp;&amp; country==&#34;CN&#34; asn!=&#34;13335&#34; &amp;&amp; asn!=&#34;209242&#34; 
+``` 
+香港反代IP：
+```md
+server=='cloudflare' && port=='443' && header='Forbidden' && region=='HK' && asn!='13335' && asn!='209242' && asn!='396982' && asn!='132892' && asn!='202623'
+```
+阿里云：
+```md
+server==&#34;cloudflare&#34; &amp;&amp; asn==&#34;45102&#34; 
+```
+甲骨文韩国：
+```md
+server==&#34;cloudflare&#34; &amp;&amp; asn==&#34;31898&#34; &amp;&amp; country==&#34;KR&#34;
+```
+ 搬瓦工：
+```md
+server==&#34;cloudflare&#34; &amp;&amp; asn==&#34;25820&#34;
+```
+
+以这条语法举例：
+
+server==&[#34;cloudflare&#](https://search.bilibili.com/all?keyword=34%3Bcloudflare%26)34; &amp;&amp; port==&[#34;80&#](https://search.bilibili.com/all?keyword=34%3B80%26)34; &amp;&amp; header=&[#34;Forbidden&#](https://search.bilibili.com/all?keyword=34%3BForbidden%26)34; &amp;&amp; country==&[#34;CN&#](https://search.bilibili.com/all?keyword=34%3BCN%26)34;
+
+这条规则的意思是搜索服务器为CF、端口为80、HTTP头部信息包含forbidden、地区为中国的IP，可以任意修改组合搜索语句来寻找需要的IP，不用整天盯着CF自家的IP区优选了。
+
+接着使用这条语法进行搜索，可以看到有2000多个独立ip。
+
+![](https://i0.hdslb.com/bfs/article/005bf9bb7a978d646372eba7b80dd8235664040b.png@1192w.webp)
+
+搜索结果
+
+随便复制一个ip在浏览器打开，若提示1003错误，则很有可能是反代了CF的ip。
+
+![](https://i0.hdslb.com/bfs/article/006005805266190547bb5e162a0952ade93300ec.png@1192w.webp)
+
+测试是否反代了CF
+
+下载搜索到的ip，用excel打开，这时先到客户端复制一下节点链接，如果是ip+域名的形式，可以直接复制，否则需要做一些调整，如图所示。
+
+![](https://i0.hdslb.com/bfs/article/b8b1256d5431a011c89aa76362cd6b5672079fe0.png@1192w_1192h.webp)
+
+复制节点链接
+
+![](https://i0.hdslb.com/bfs/article/d3513e72c210fefc80ef4b1937eddd72ca91dd53.png@1072w_430h.webp)
+
+复制节点链接
+
+接着来到excel，提取下载的fofa数据，只需要ip即可，将ip做一下去重并单独提取出来，把刚刚复制出来的节点信息粘贴到另一列，使用获取到的ip将右边我们复制的节点链接内的ip替换掉，注意只需要替换ip即可，其他任何数据都不要修改，否则节点链接会无法使用，这里可以使用excel的选择性粘贴进行批量修改，具体操作方法可自行搜索。
+
+![](https://i0.hdslb.com/bfs/article/67caf77a91da908671791e190b73187ca1e5e6ab.png@1192w.webp)
+
+将ip替换到节点链接内
+
+将ip全部替换完成后，需要用到一个测速工具，注意不要下错了。
+
+文件名：nodesCatch-V2.0.rar
+
+下载地址：https://github.com/bulianglin/demo
+
+下载完成后打开测速工具，将修改后的节点链接全部复制进去。
+
+![](https://i0.hdslb.com/bfs/article/6b55bf7deefaa87a8c1f8cec5986733a7245b41f.png@1192w.webp)
+
+测速工具
+
+把内核修改为xray，全选节点，先测一下连接速度，去除无效节点，接着再测下载速度，将速度合适的节点复制到客户端，此时就获得了一大批可用的反代CF IP，并且这些ip并不存在于CF官方的ip列表内。
+
+此方法可以一个节点用出1000个节点的效果，并且可以根据自己需求在全球范围内搜索到优质的节点，有些甚至是专线，至于他们为什么要反代CF，应该是有些业务必须这么操作，但却不知道这样会被别人利用，没有做好相应的限制，总之此方法的可玩性很高，只要你的脑洞够大，完全可以尽情探索。
+
+全文完。$$$$$$$">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://692.cloudns.be/post/ru-he-mian-fei-huo-qu-wu-xian-liang-de-fan-dai-CF%20IP-bing-wei-ni-de-VPS-jin-xing-xian-lu-ti-su.html">
+<meta property="og:image" content="avatar.svg">
+<title>如何免费获取无限量的反代CF IP并为你的VPS进行线路提速</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+html { background: #d2d4d6; }
+body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto; padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25; border-radius: 10px; background: rgba(10, 100, 130, 0.08); box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);  overflow: auto;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:1.6em;font-weight:bold;color: #1f85c9;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+.markdown-body h1{font-size: 1.4em;}
+.markdown-body h2{font-size: 1.2em;}
+.markdown-body h3{font-size: 1em;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 12px;}
+    .postTitle{font-size:1.4em; color: #1f85c9;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">如何免费获取无限量的反代CF IP并为你的VPS进行线路提速</h1>
+<div class="title-right">
+    <a href="https://692.cloudns.be" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/fjvi/note/issues/25" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h2>用到的工具</h2>
+<p>CDN优选工具：<a href="https://bulianglin.com/archives/cdn.html" rel="nofollow">https://bulianglin.com/archives/cdn.html</a><br>
+节点测速工具：<a href="https://bulianglin.com/g/aHR0cHM6Ly9naXRodWIuY29tL2J1bGlhbmdsaW4vZGVtbw" rel="nofollow">https://github.com/bulianglin/demo</a><br>
+搜索引擎：<a href="https://bulianglin.com/g/aHR0cHM6Ly9mb2ZhLmluZm8" rel="nofollow">https://fofa.info</a><br>
+临时邮箱：<a href="https://bulianglin.com/g/aHR0cDovLzI0bWFpbC5jaGFjdW8ubmV0" rel="nofollow">http://24mail.chacuo.net</a></p>
+<h2>节点搭建</h2>
+<p>首先，你需要搭建一个vless+ws+tls的节点，并将域名托管到CF。节点搭建好后，我们来到CF的配置页面，找到DNS记录选项，启用DNS代理，小云朵变成橙色则表示我们正在使用CF的CDN服务，这时可以ping我们的域名，当IP地址从原始IP变更为CF 的IP时，则表示已经成功启动CF的CDN服务了。<br>
+<a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/51b83b43211d78709475ae1037dfb770b2af4d18ace39c4d1d74d48cb3399074/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f393965633566623831383264636130336564633232313464383130356264663966663933303633372e706e674031313932772e77656270"><img src="https://camo.githubusercontent.com/51b83b43211d78709475ae1037dfb770b2af4d18ace39c4d1d74d48cb3399074/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f393965633566623831383264636130336564633232313464383130356264663966663933303633372e706e674031313932772e77656270" alt="" data-canonical-src="https://i0.hdslb.com/bfs/article/99ec5fb8182dca03edc2214d8105bdf9ff930637.png@1192w.webp" style="max-width: 100%;"></a><br>
+启用CF CDN服务<br>
+接着，我们在SSL/TLS设置页面，将加密模式改成灵活或者完全。<br>
+<a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/b8d58eab8666a4f36d6fc571fee97c1672980efc903e7a8e621335afbfd93d11/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f366265346139396462643062383637333539393532613539633532633261653036303232653564342e706e674031313932772e77656270"><img src="https://camo.githubusercontent.com/b8d58eab8666a4f36d6fc571fee97c1672980efc903e7a8e621335afbfd93d11/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f366265346139396462643062383637333539393532613539633532633261653036303232653564342e706e674031313932772e77656270" alt="" data-canonical-src="https://i0.hdslb.com/bfs/article/6be4a99dbd0b867359952a59c52c2ae06022e5d4.png@1192w.webp" style="max-width: 100%;"></a><br>
+修改加密模式<br>
+最后我们在客户端试一下真连接，输入解析好的域名，端口改成443，如果配置没问题，此时是可以跑通的。<br>
+<a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/ed438e1013c3c744ae9b25095eafdbe8109a5c969fd2743f3561d437db14c030/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f613737303636313734393830363062623332656338643635303965383166303362303034353761392e706e674031313932775f31313932682e77656270"><img src="https://camo.githubusercontent.com/ed438e1013c3c744ae9b25095eafdbe8109a5c969fd2743f3561d437db14c030/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f613737303636313734393830363062623332656338643635303965383166303362303034353761392e706e674031313932775f31313932682e77656270" alt="" data-canonical-src="https://i0.hdslb.com/bfs/article/a7706617498060bb32ec8d6509e81f03b00457a9.png@1192w_1192h.webp" style="max-width: 100%;"></a></p>
+<p>测试<br>
+此时我们已经拥有了一个vless+ws+tls+cdn节点，当然，此时的速度非常感人，因为使用的是CF默认分配的IP，没有经过优选。不过对于电信用户来讲再怎么优选都很差劲，并且这么多人都盯着CF家的IP进行优选，速度也是极其不稳定。</p>
+<p><strong>不存在的IP</strong></p>
+<h2>获取CF反代IP</h2>
+<p>用到的工具是fofa，网址：<a href="https://fofa.info%EF%BC%8C%E6%B3%A8%E5%86%8C%E9%9C%80%E8%A6%81%E9%82%AE%E7%AE%B1%EF%BC%8C%E5%85%8D%E8%B4%B9%E7%94%A8%E6%88%B7%E6%9C%892000%E5%A4%9A%E4%B8%AA%E5%AF%BC%E5%87%BA%E9%A2%9D%E5%BA%A6%EF%BC%8C%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8%E4%B8%B4%E6%97%B6%E9%82%AE%E7%AE%B1%E5%A4%9A%E6%AC%A1%E6%B3%A8%E5%86%8C%E6%9D%A5%E9%87%8D%E5%A4%8D%E5%AF%BC%E5%87%BA%E3%80%82fofa" rel="nofollow">https://fofa.info，注册需要邮箱，免费用户有2000多个导出额度，可以使用临时邮箱多次注册来重复导出。fofa</a> 的详细语法规则可以通过页面的查询语法获取，这里提供几条fofa的搜索语法供参考，可以按需自行修改。</p>
+<p>国内反代IP：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">server==<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span>cloudflare<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span> <span class="pl-c1">&amp;<span class="pl-k">amp</span>;&amp;<span class="pl-k">amp</span>;</span> port==<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span>80<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span> <span class="pl-c1">&amp;<span class="pl-k">amp</span>;&amp;<span class="pl-k">amp</span>;</span> header=<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span>Forbidden<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span> <span class="pl-c1">&amp;<span class="pl-k">amp</span>;&amp;<span class="pl-k">amp</span>;</span> country==<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span>CN<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span> asn!=<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span>13335<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span> <span class="pl-c1">&amp;<span class="pl-k">amp</span>;&amp;<span class="pl-k">amp</span>;</span> asn!=<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span>209242<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span> 
+<span class="pl-s">```</span> <span class="pl-en">国内CF-IP：</span><span class="pl-c1"></span>
+<span class="pl-c1">```md </span>
+<span class="pl-c1">server==&amp;#34;cloudflare&amp;#34; &amp;amp;&amp;amp; port==&amp;#34;80&amp;#34; &amp;amp;&amp;amp; header=&amp;#34;Forbidden&amp;#34; &amp;amp;&amp;amp; country==&amp;#34;CN&amp;#34; asn!=&amp;#34;13335&amp;#34; &amp;amp;&amp;amp; asn!=&amp;#34;209242&amp;#34; </span></pre></div>
+<p>香港反代IP：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">server=="cloudflare" &amp;&amp; port=="443" &amp;&amp; header="Forbidden" &amp;&amp; region=="HK" &amp;&amp; asn!="13335" &amp;&amp; asn!="209242" &amp;&amp; asn!="396982" &amp;&amp; asn!="132892" &amp;&amp; asn!="202623"</pre></div>
+<p>阿里云：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">server==<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span>cloudflare<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span> <span class="pl-c1">&amp;<span class="pl-k">amp</span>;&amp;<span class="pl-k">amp</span>;</span> asn==<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span>45102<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span> </pre></div>
+<p>甲骨文韩国：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">server==<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span>cloudflare<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span> <span class="pl-c1">&amp;<span class="pl-k">amp</span>;&amp;<span class="pl-k">amp</span>;</span> asn==<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span>31898<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span> <span class="pl-c1">&amp;<span class="pl-k">amp</span>;&amp;<span class="pl-k">amp</span>;</span> country==<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span>KR<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span></pre></div>
+<p>搬瓦工：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">server==<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span>cloudflare<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span> <span class="pl-c1">&amp;<span class="pl-k">amp</span>;&amp;<span class="pl-k">amp</span>;</span> asn==<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span>25820<span class="pl-c1">&amp;#<span class="pl-c1">34</span>;</span></pre></div>
+<p>以这条语法举例：</p>
+<p>server==&amp;<a href="https://search.bilibili.com/all?keyword=34%3Bcloudflare%26" rel="nofollow">#34;cloudflare&amp;#</a>34; &amp;&amp; port==&amp;<a href="https://search.bilibili.com/all?keyword=34%3B80%26" rel="nofollow">#34;80&amp;#</a>34; &amp;&amp; header=&amp;<a href="https://search.bilibili.com/all?keyword=34%3BForbidden%26" rel="nofollow">#34;Forbidden&amp;#</a>34; &amp;&amp; country==&amp;<a href="https://search.bilibili.com/all?keyword=34%3BCN%26" rel="nofollow">#34;CN&amp;#</a>34;</p>
+<p>这条规则的意思是搜索服务器为CF、端口为80、HTTP头部信息包含forbidden、地区为中国的IP，可以任意修改组合搜索语句来寻找需要的IP，不用整天盯着CF自家的IP区优选了。</p>
+<p>接着使用这条语法进行搜索，可以看到有2000多个独立ip。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/4146408d17645129f3dd67371a47ea98c2bd79f48a306dee242127d9f2a99088/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f303035626639626237613937386436343633373265626137623830646438323335363634303430622e706e674031313932772e77656270"><img src="https://camo.githubusercontent.com/4146408d17645129f3dd67371a47ea98c2bd79f48a306dee242127d9f2a99088/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f303035626639626237613937386436343633373265626137623830646438323335363634303430622e706e674031313932772e77656270" alt="" data-canonical-src="https://i0.hdslb.com/bfs/article/005bf9bb7a978d646372eba7b80dd8235664040b.png@1192w.webp" style="max-width: 100%;"></a></p>
+<p>搜索结果</p>
+<p>随便复制一个ip在浏览器打开，若提示1003错误，则很有可能是反代了CF的ip。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/61f4a8d7b5e477f732b12021ef92524fcd630e0603b351e3034c1ad2dc7e0bff/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f303036303035383035323636313930353437626235653136326130393532616465393333303065632e706e674031313932772e77656270"><img src="https://camo.githubusercontent.com/61f4a8d7b5e477f732b12021ef92524fcd630e0603b351e3034c1ad2dc7e0bff/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f303036303035383035323636313930353437626235653136326130393532616465393333303065632e706e674031313932772e77656270" alt="" data-canonical-src="https://i0.hdslb.com/bfs/article/006005805266190547bb5e162a0952ade93300ec.png@1192w.webp" style="max-width: 100%;"></a></p>
+<p>测试是否反代了CF</p>
+<p>下载搜索到的ip，用excel打开，这时先到客户端复制一下节点链接，如果是ip+域名的形式，可以直接复制，否则需要做一些调整，如图所示。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/630ec028a38e3561b1da3b5f058a1a20c956aee8f720dd83f2efe5c3a12b8e1e/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f623862313235366435343331613031316338396161373633363263643662353637323037396665302e706e674031313932775f31313932682e77656270"><img src="https://camo.githubusercontent.com/630ec028a38e3561b1da3b5f058a1a20c956aee8f720dd83f2efe5c3a12b8e1e/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f623862313235366435343331613031316338396161373633363263643662353637323037396665302e706e674031313932775f31313932682e77656270" alt="" data-canonical-src="https://i0.hdslb.com/bfs/article/b8b1256d5431a011c89aa76362cd6b5672079fe0.png@1192w_1192h.webp" style="max-width: 100%;"></a></p>
+<p>复制节点链接</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/7ce93bd197b0d7650ca218d0e99b301ce5ea8937c559bc47bef47a251a8aee39/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f643335313365373263323130666566633830656634623139333765646464373263613931646435332e706e674031303732775f343330682e77656270"><img src="https://camo.githubusercontent.com/7ce93bd197b0d7650ca218d0e99b301ce5ea8937c559bc47bef47a251a8aee39/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f643335313365373263323130666566633830656634623139333765646464373263613931646435332e706e674031303732775f343330682e77656270" alt="" data-canonical-src="https://i0.hdslb.com/bfs/article/d3513e72c210fefc80ef4b1937eddd72ca91dd53.png@1072w_430h.webp" style="max-width: 100%;"></a></p>
+<p>复制节点链接</p>
+<p>接着来到excel，提取下载的fofa数据，只需要ip即可，将ip做一下去重并单独提取出来，把刚刚复制出来的节点信息粘贴到另一列，使用获取到的ip将右边我们复制的节点链接内的ip替换掉，注意只需要替换ip即可，其他任何数据都不要修改，否则节点链接会无法使用，这里可以使用excel的选择性粘贴进行批量修改，具体操作方法可自行搜索。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/bdc59b0cd6cdc6188c7d77f156dc2ae11360373822ffa4b956c428b0041ef288/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f363763616637376139316461393038363731373931653139306237333138376361316535653661622e706e674031313932772e77656270"><img src="https://camo.githubusercontent.com/bdc59b0cd6cdc6188c7d77f156dc2ae11360373822ffa4b956c428b0041ef288/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f363763616637376139316461393038363731373931653139306237333138376361316535653661622e706e674031313932772e77656270" alt="" data-canonical-src="https://i0.hdslb.com/bfs/article/67caf77a91da908671791e190b73187ca1e5e6ab.png@1192w.webp" style="max-width: 100%;"></a></p>
+<p>将ip替换到节点链接内</p>
+<p>将ip全部替换完成后，需要用到一个测速工具，注意不要下错了。</p>
+<p>文件名：nodesCatch-V2.0.rar</p>
+<p>下载地址：<a href="https://github.com/bulianglin/demo">https://github.com/bulianglin/demo</a></p>
+<p>下载完成后打开测速工具，将修改后的节点链接全部复制进去。</p>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/510d41356b371326986705f0df15a0ff856e41a0eaa88e2e5fe571019d30e2c5/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f366235356266376465656661613837613863316638636563353938363733336137323435623431662e706e674031313932772e77656270"><img src="https://camo.githubusercontent.com/510d41356b371326986705f0df15a0ff856e41a0eaa88e2e5fe571019d30e2c5/68747470733a2f2f69302e6864736c622e636f6d2f6266732f61727469636c652f366235356266376465656661613837613863316638636563353938363733336137323435623431662e706e674031313932772e77656270" alt="" data-canonical-src="https://i0.hdslb.com/bfs/article/6b55bf7deefaa87a8c1f8cec5986733a7245b41f.png@1192w.webp" style="max-width: 100%;"></a></p>
+<p>测速工具</p>
+<p>把内核修改为xray，全选节点，先测一下连接速度，去除无效节点，接着再测下载速度，将速度合适的节点复制到客户端，此时就获得了一大批可用的反代CF IP，并且这些ip并不存在于CF官方的ip列表内。</p>
+<p>此方法可以一个节点用出1000个节点的效果，并且可以根据自己需求在全球范围内搜索到优质的节点，有些甚至是专线，至于他们为什么要反代CF，应该是有些业务必须这么操作，但却不知道这样会被别人利用，没有做好相应的限制，总之此方法的可玩性很高，只要你的脑洞够大，完全可以尽情探索。</p>
+<p>全文完。</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://692.cloudns.be">MGTnote</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if("01/01/2025"!=""){
+    var startSite=new Date("01/01/2025");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.disabled=true;
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","fjvi/note");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+<script src='../assets/ArticleTOC.js'></script><script src='../assets/backtop.js'></script><script src='../assets/lightbox.js'></script><script src='../assets/imgca.js'></script>
+
+</html>
