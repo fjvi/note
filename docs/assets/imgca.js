@@ -6,7 +6,7 @@
 (function() {
     // 配置项
     const config = {
-        proxyPrefix: 'https://cdn.cdnjson.com/?url=',
+                proxyPrefix: 'https://images.weserv.nl/?url=',
         processCssBackgrounds: true,   // 是否处理CSS背景图片
         processDynamicImages: true,    // 是否处理动态加载的图片
         processXHRFetch: true,         // 是否拦截XHR和Fetch请求
