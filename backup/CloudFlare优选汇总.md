@@ -23,7 +23,7 @@ shopify.com
 www.visa.com.sg
 www.visakorea.com
 www.visa.co.jp
-> [更多](https://raw.githubusercontent.com/6889692/wiki/refs/heads/gh-pages/domain.txt)
+> [更多](https://raw.githubusercontent.com/6889692/wiki/main/domain.txt)
 
 ![Image](https://github.com/user-attachments/assets/97c78606-2885-4da7-adb0-e247b59f2cf5)
 ------
