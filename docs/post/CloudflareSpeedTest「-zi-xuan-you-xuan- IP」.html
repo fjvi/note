@@ -20,6 +20,8 @@
 ### 结果示例
 
 测速完毕后，默认会显示**最快的 10 个 IP**，示例：
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
 
 ``` bash
 IP 地址           已发送  已接收  丢包率  平均延迟  下载速度 (MB/s)
@@ -61,13 +63,15 @@ IP 地址           已发送  已接收  丢包率  平均延迟  下载速度 
 IP 地址,已发送,已接收,丢包率,平均延迟,下载速度 (MB/s)
 104.27.200.69,4,4,0.00,146.23,28.64
 ```
-
 > _大家可以按自己需求，对完整结果**进一步筛选处理**，或者去看一看进阶使用**指定过滤条件**！_
+</details>
 
 ****
 # 二、进阶使用
 
 直接运行使用的是默认参数，如果想要测速结果更全面、更符合自己的要求，可以自定义参数。
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
 
 ```Dart
 C:\>CloudflareST.exe -h
@@ -127,15 +131,13 @@ https://github.com/XIU2/CloudflareSpeedTest
     -h
         打印帮助说明
 ```
-
+</details>
 ## 界面解释
 
 为了避免大家对测速过程中的**输出内容产生误解（可用、队列等数字，下载测速一半就'中断'？下载测速'卡住'不动？）**，我特意解释下。
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
-
-****
 
 > 该示例把常用参数都给加上了，即为：`-tll 40 -tl 150 -sl 1 -dn 5`，最后输出结果如下：
 
@@ -154,8 +156,6 @@ XXX.XXX.XXX.XXX   4       3      0.25    149.59   1.04
 完整测速结果已写入 result.csv 文件，可使用记事本/表格软件查看。
 按下 回车键 或 Ctrl+C 退出。
 ```
-
-****
 
 > 刚接触 CloudflareST 的人，可能会迷惑**明明延迟测速可用 IP 有 30 个，怎么最后只剩下 3 个了呢？**  
 > 下载测速里的队列又是什么意思？难道我下载测速还要排队？
@@ -220,8 +220,6 @@ Windows 要指定参数需要在 CMD 中运行，或者把参数添加到快捷�
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
 
-****
-
 很多人打开 CMD 以**绝对路径**运行 CloudflareST 会报错，这是因为默认的 `-f ip.txt` 参数是相对路径，需要指定绝对路径的 ip.txt 才行，但这样毕竟太麻烦了，因此还是建议进入 CloudflareST 程序目录下，以**相对路径**方式运行：
 
 **方式 一**：
@@ -250,7 +248,6 @@ Windows 要指定参数需要在 CMD 中运行，或者把参数添加到快捷�
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
 
-****
 
 右键 `CloudflareST.exe` 文件 - **\[创建快捷方式\]**，然后右键该快捷方式 - **\[属性\]**，修改其**目标**：
 
@@ -586,6 +583,8 @@ $$$$$$$">
 ### 结果示例
 
 测速完毕后，默认会显示**最快的 10 个 IP**，示例：
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
 
 ``` bash
 IP 地址           已发送  已接收  丢包率  平均延迟  下载速度 (MB/s)
@@ -627,13 +626,15 @@ IP 地址           已发送  已接收  丢包率  平均延迟  下载速度 
 IP 地址,已发送,已接收,丢包率,平均延迟,下载速度 (MB/s)
 104.27.200.69,4,4,0.00,146.23,28.64
 ```
-
 > _大家可以按自己需求，对完整结果**进一步筛选处理**，或者去看一看进阶使用**指定过滤条件**！_
+</details>
 
 ****
 # 二、进阶使用
 
 直接运行使用的是默认参数，如果想要测速结果更全面、更符合自己的要求，可以自定义参数。
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
 
 ```Dart
 C:\>CloudflareST.exe -h
@@ -693,15 +694,13 @@ https://github.com/XIU2/CloudflareSpeedTest
     -h
         打印帮助说明
 ```
-
+</details>
 ## 界面解释
 
 为了避免大家对测速过程中的**输出内容产生误解（可用、队列等数字，下载测速一半就'中断'？下载测速'卡住'不动？）**，我特意解释下。
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
-
-****
 
 > 该示例把常用参数都给加上了，即为：`-tll 40 -tl 150 -sl 1 -dn 5`，最后输出结果如下：
 
@@ -720,8 +719,6 @@ XXX.XXX.XXX.XXX   4       3      0.25    149.59   1.04
 完整测速结果已写入 result.csv 文件，可使用记事本/表格软件查看。
 按下 回车键 或 Ctrl+C 退出。
 ```
-
-****
 
 > 刚接触 CloudflareST 的人，可能会迷惑**明明延迟测速可用 IP 有 30 个，怎么最后只剩下 3 个了呢？**  
 > 下载测速里的队列又是什么意思？难道我下载测速还要排队？
@@ -786,8 +783,6 @@ Windows 要指定参数需要在 CMD 中运行，或者把参数添加到快捷�
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
 
-****
-
 很多人打开 CMD 以**绝对路径**运行 CloudflareST 会报错，这是因为默认的 `-f ip.txt` 参数是相对路径，需要指定绝对路径的 ip.txt 才行，但这样毕竟太麻烦了，因此还是建议进入 CloudflareST 程序目录下，以**相对路径**方式运行：
 
 **方式 一**：
@@ -816,7 +811,6 @@ Windows 要指定参数需要在 CMD 中运行，或者把参数添加到快捷�
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
 
-****
 
 右键 `CloudflareST.exe` 文件 - **\[创建快捷方式\]**，然后右键该快捷方式 - **\[属性\]**，修改其**目标**：
 
@@ -1223,6 +1217,8 @@ body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto;
 </ol>
 <h3>结果示例</h3>
 <p>测速完毕后，默认会显示<strong>最快的 10 个 IP</strong>，示例：</p>
+<details>
+<summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
 <div class="highlight highlight-source-shell"><pre class="notranslate">IP 地址           已发送  已接收  丢包率  平均延迟  下载速度 (MB/s)
 104.27.200.69     4       4       0.00    146.23    28.64
 172.67.60.78      4       4       0.00    139.82    15.02
@@ -1260,9 +1256,12 @@ body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto;
 <blockquote>
 <p><em>大家可以按自己需求，对完整结果<strong>进一步筛选处理</strong>，或者去看一看进阶使用<strong>指定过滤条件</strong>！</em></p>
 </blockquote>
+</details>
 <hr>
 <h1>二、进阶使用</h1>
 <p>直接运行使用的是默认参数，如果想要测速结果更全面、更符合自己的要求，可以自定义参数。</p>
+<details>
+<summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
 <div class="highlight highlight-source-dart"><pre class="notranslate"><span class="pl-c1">C</span><span class="pl-k">:</span>\<span class="pl-k">&gt;</span><span class="pl-c1">CloudflareST</span>.exe <span class="pl-k">-</span>h
 
 <span class="pl-c1">CloudflareSpeedTest</span> vX.<span class="pl-c1">X</span>.<span class="pl-c1">X</span>
@@ -1319,11 +1318,11 @@ https<span class="pl-k">:</span><span class="pl-c">//github.com/XIU2/CloudflareS
         打印程序版本 <span class="pl-k">+</span> 检查版本更新
     <span class="pl-k">-</span>h
         打印帮助说明</pre></div>
-<h2>界面解释</h2>
+</details>
+## 界面解释
 <p>为了避免大家对测速过程中的<strong>输出内容产生误解（可用、队列等数字，下载测速一半就"中断"？下载测速"卡住"不动？）</strong>，我特意解释下。</p>
 <details>
 <summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
-<hr>
 <blockquote>
 <p>该示例把常用参数都给加上了，即为：<code class="notranslate">-tll 40 -tl 150 -sl 1 -dn 5</code>，最后输出结果如下：</p>
 </blockquote>
@@ -1340,7 +1339,6 @@ https<span class="pl-k">:</span><span class="pl-c">//github.com/XIU2/CloudflareS
 
 <span class="pl-s1">完整测速结果已写入</span> <span class="pl-s1">result</span>.<span class="pl-c1">csv</span> <span class="pl-s1">文件</span>，<span class="pl-s1">可使用记事本</span><span class="pl-c1">/</span><span class="pl-s1">表格软件查看</span>。
 <span class="pl-s1">按下</span> <span class="pl-s1">回车键</span> <span class="pl-s1">或</span> <span class="pl-v">Ctrl</span><span class="pl-c1">+</span><span class="pl-c1">C</span> <span class="pl-s1">退出</span>。</pre></div>
-<hr>
 <blockquote>
 <p>刚接触 CloudflareST 的人，可能会迷惑<strong>明明延迟测速可用 IP 有 30 个，怎么最后只剩下 3 个了呢？</strong><br>
 下载测速里的队列又是什么意思？难道我下载测速还要排队？</p>
@@ -1386,7 +1384,6 @@ https<span class="pl-k">:</span><span class="pl-c">//github.com/XIU2/CloudflareS
 <p>对命令行程序不熟悉的人，可能不知道该如何带参数运行，我就简单说一下。</p>
 <details>
 <summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
-<hr>
 <p>很多人打开 CMD 以<strong>绝对路径</strong>运行 CloudflareST 会报错，这是因为默认的 <code class="notranslate">-f ip.txt</code> 参数是相对路径，需要指定绝对路径的 ip.txt 才行，但这样毕竟太麻烦了，因此还是建议进入 CloudflareST 程序目录下，以<strong>相对路径</strong>方式运行：</p>
 <p><strong>方式 一</strong>：</p>
 <ol>
@@ -1413,7 +1410,6 @@ https<span class="pl-k">:</span><span class="pl-c">//github.com/XIU2/CloudflareS
 <p>如果不经常修改运行参数（比如平时都是直接双击运行）的人，建议使用快捷方式，更方便点。</p>
 <details>
 <summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
-<hr>
 <p>右键 <code class="notranslate">CloudflareST.exe</code> 文件 - <strong>[创建快捷方式]</strong>，然后右键该快捷方式 - <strong>[属性]</strong>，修改其<strong>目标</strong>：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 如果要不输出结果文件，那么请加上 -o " "，引号里的是空格（没有空格会导致该参数被省略）。</span>
 D:<span class="pl-cce">\A</span>BC<span class="pl-cce">\C</span>loudflareST<span class="pl-cce">\C</span>loudflareST.exe -n 500 -t 4 -dn 20 -dt 5 -o <span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span>
