@@ -1,0 +1,2364 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="avatar.svg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="# XIU2/CloudflareSpeedTest
+
+[![Go Version](https://img.shields.io/github/go-mod/go-version/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=Go&color=00ADD8&logo=go)](https://github.com/XIU2/CloudflareSpeedTest/)
+[![Release Version](https://img.shields.io/github/v/release/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=Release&color=00ADD8&logo=github)](https://github.com/XIU2/CloudflareSpeedTest/releases/latest)
+[![GitHub license](https://img.shields.io/github/license/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=License&color=00ADD8&logo=github)](https://github.com/XIU2/CloudflareSpeedTest/)
+[![GitHub Star](https://img.shields.io/github/stars/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=Star&color=00ADD8&logo=github)](https://github.com/XIU2/CloudflareSpeedTest/)
+[![GitHub Fork](https://img.shields.io/github/forks/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=Fork&color=00ADD8&logo=github)](https://github.com/XIU2/CloudflareSpeedTest/)
+
+国外很多网站都在使用 Cloudflare CDN，但分配给中国内地访客的 IP 并不友好（延迟高、丢包多、速度慢）。  
+虽然 Cloudflare 公开了所有 [IP 段](https://www.cloudflare.com/zh-cn/ips/) ，但想要在这么多 IP 中找到适合自己的，怕是要累死，于是就有了这个软件。
+
+**「自选优选 IP」测试 Cloudflare CDN 延迟和速度，获取最快 IP (IPv4+IPv6)**！好用的话**点个`⭐`鼓励一下叭~**
+
+> _分享我其他开源项目：[**TrackersList.com** - 全网热门 BT Tracker 列表！有效提高 BT 下载速度~](https://github.com/XIU2/TrackersListCollection) <img src='https://img.shields.io/github/stars/XIU2/TrackersListCollection.svg?style=flat-square&label=Star&color=4285dd&logo=github' height='16px' />_  
+> _[**UserScript** - 🐵 Github 高速下载、知乎增强、自动无缝翻页、护眼模式 等十几个**油猴脚本**~](https://github.com/XIU2/UserScript) <img src='https://img.shields.io/github/stars/XIU2/UserScript.svg?style=flat-square&label=Star&color=4285dd&logo=github' height='16px' />_  
+> _[**SNIProxy** - 🧷 自用的简单 SNI Proxy（支持全平台、全系统、前置代理、配置简单等~](https://github.com/XIU2/SNIProxy) <img src='https://img.shields.io/github/stars/XIU2/SNIProxy.svg?style=flat-square&label=Star&color=4285dd&logo=github' height='16px' />_  
+
+> 本项目也支持对**其他 CDN / 网站 IP** 延迟测速（如：[CloudFront](https://github.com/XIU2/CloudflareSpeedTest/discussions/304)、[Gcore](https://github.com/XIU2/CloudflareSpeedTest/discussions/303) CDN），但下载测速需自行寻找地址
+
+> [!IMPORTANT]
+> Cloudflare CDN 已**明文禁止代理**方式使用，对于**代理套 CDN** 的自行承担风险，请勿过度依赖 [#382](https://github.com/XIU2/CloudflareSpeedTest/discussions/382) [#383](https://github.com/XIU2/CloudflareSpeedTest/discussions/383)
+
+****
+## \# 快速使用
+
+### 下载运行
+
+1. 下载编译好的可执行文件（ [Github Releases](https://github.com/XIU2/CloudflareSpeedTest/releases) / [蓝奏云](https://pan.lanpw.com/b0742hkxe) ）并解压。  
+2. 双击运行 `CloudflareST.exe` 文件（Windows 系统），等待测速完成...
+
+<details>
+<summary><code><strong>「 点击查看 Linux 系统下的使用示例 」</strong></code></summary>
+
+****
+
+以下命令仅为示例，版本号和文件名请前往 [**Releases**](https://github.com/XIU2/CloudflareSpeedTest/releases) 查看。
+
+``` yaml
+# 如果是第一次使用，则建议创建新文件夹（后续更新时，跳过该步骤）
+mkdir CloudflareST
+
+# 进入文件夹（后续更新，只需要从这里重复下面的下载、解压命令即可）
+cd CloudflareST
+
+# 下载 CloudflareST 压缩包（自行根据需求替换 URL 中 [版本号] 和 [文件名]）
+wget -N https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
+# 如果你是在国内网络环境中下载，那么请使用下面这几个镜像加速之一：
+# wget -N https://ghp.ci/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
+# wget -N https://ghproxy.cc/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
+# wget -N https://ghproxy.net/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
+# wget -N https://gh-proxy.com/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
+# 如果下载失败的话，尝试删除 -N 参数（如果是为了更新，则记得提前删除旧压缩包 rm CloudflareST_linux_amd64.tar.gz ）
+
+# 解压（不需要删除旧文件，会直接覆盖，自行根据需求替换 文件名）
+tar -zxf CloudflareST_linux_amd64.tar.gz
+
+# 赋予执行权限
+chmod +x CloudflareST
+
+# 运行（不带参数）
+./CloudflareST
+
+# 运行（带参数示例）
+./CloudflareST -dd -tll 90
+```
+
+> 如果平**均延迟非常低**（如 0.xx），则说明 CloudflareST **测速时走了代理**，请先关闭代理软件后再测速。  
+> 如果在**路由器**上运行，建议先关闭路由器内的代理（或将其排除），否则测速结果可能会**不准确/无法使用**。
+
+</details>
+
+****
+
+> _在**手机**上独立运行 CloudflareST 测速的简单教程：**[Android](https://github.com/XIU2/CloudflareSpeedTest/discussions/61)、[Android APP](https://github.com/xianshenglu/cloudflare-ip-tester-app)、[IOS](https://github.com/XIU2/CloudflareSpeedTest/discussions/321)**_
+
+> [!NOTE]
+> 注意！本软件仅适用于网站，**不支持给使用 UDP 协议的 Cloudflare WARP 优选 IP**，具体见：[#392](https://github.com/XIU2/CloudflareSpeedTest/discussions/392)
+
+### 结果示例
+
+测速完毕后，默认会显示**最快的 10 个 IP**，示例：
+
+``` bash
+IP 地址           已发送  已接收  丢包率  平均延迟  下载速度 (MB/s)
+104.27.200.69     4       4       0.00    146.23    28.64
+172.67.60.78      4       4       0.00    139.82    15.02
+104.25.140.153    4       4       0.00    146.49    14.90
+104.27.192.65     4       4       0.00    140.28    14.07
+172.67.62.214     4       4       0.00    139.29    12.71
+104.27.207.5      4       4       0.00    145.92    11.95
+172.67.54.193     4       4       0.00    146.71    11.55
+104.22.66.8       4       4       0.00    147.42    11.11
+104.27.197.63     4       4       0.00    131.29    10.26
+172.67.58.91      4       4       0.00    140.19    9.14
+...
+
+# 如果平均延迟非常低（如 0.xx），则说明 CloudflareST 测速时走了代理，请先关闭代理软件后再测速。
+# 如果在路由器上运行，请先关闭路由器内的代理（或将其排除），否则测速结果可能会不准确/无法使用。
+
+# 因为每次测速都是在每个 IP 段中随机 IP，所以每次的测速结果都不可能相同，这是正常的！
+
+# 注意！我发现电脑开机后第一次测速延迟会明显偏高（手动 TCPing 也一样），后续测速都正常
+# 因此建议大家开机后第一次正式测速前，先随便测几个 IP（无需等待延迟测速完成，只要进度条动了就可以直接关了）
+
+# 软件在 默认参数 下的整个流程大概步骤：
+# 1. 延迟测速（默认 TCPing 模式，HTTPing 模式需要手动加上参数）
+# 2. 延迟排序（延迟 从低到高 排序并按条件过滤，不同丢包率会分开排序，因此可能会有一些延迟低但丢包的 IP 排到后面）
+# 3. 下载测速（从延迟最低的 IP 开始依次下载测速，默认测够 10 个就会停止）
+# 4. 速度排序（速度从高到低排序）
+# 5. 输出结果（通过参数控制是否输出到命令行(-p 0)或输出到文件(-o '')）
+
+# 注意：输出的结果文件 result.csv 通过微软 Excel 表格打开会中文乱码，这是正常的，其他表格软件/记事本都显示正常
+```
+
+测速结果第一行就是**既下载速度最快、又平均延迟最低的最快 IP**！
+
+完整结果保存在当前目录下的 `result.csv` 文件中，用**记事本/表格软件**打开，格式如下：
+
+```
+IP 地址,已发送,已接收,丢包率,平均延迟,下载速度 (MB/s)
+104.27.200.69,4,4,0.00,146.23,28.64
+```
+
+> _大家可以按自己需求，对完整结果**进一步筛选处理**，或者去看一看进阶使用**指定过滤条件**！_
+
+****
+## \# 进阶使用
+
+直接运行使用的是默认参数，如果想要测速结果更全面、更符合自己的要求，可以自定义参数。
+
+```Dart
+C:\>CloudflareST.exe -h
+
+CloudflareSpeedTest vX.X.X
+测试 Cloudflare CDN 所有 IP 的延迟和速度，获取最快 IP (IPv4+IPv6)！
+https://github.com/XIU2/CloudflareSpeedTest
+
+参数：
+    -n 200
+        延迟测速线程；越多延迟测速越快，性能弱的设备 (如路由器) 请勿太高；(默认 200 最多 1000)
+    -t 4
+        延迟测速次数；单个 IP 延迟测速的次数；(默认 4 次)
+    -dn 10
+        下载测速数量；延迟测速并排序后，从最低延迟起下载测速的数量；(默认 10 个)
+    -dt 10
+        下载测速时间；单个 IP 下载测速最长时间，不能太短；(默认 10 秒)
+    -tp 443
+        指定测速端口；延迟测速/下载测速时使用的端口；(默认 443 端口)
+    -url https://cf.xiu2.xyz/url
+        指定测速地址；延迟测速(HTTPing)/下载测速时使用的地址，默认地址不保证可用性，建议自建；
+
+    -httping
+        切换测速模式；延迟测速模式改为 HTTP 协议，所用测试地址为 [-url] 参数；(默认 TCPing)
+        注意：HTTPing 本质上也算一种 网络扫描 行为，因此如果你在服务器上面运行，需要降低并发(-n)，否则可能会被一些严格的商家暂停服务。
+        如果你遇到 HTTPing 首次测速可用 IP 数量正常，后续测速越来越少甚至直接为 0，但停一段时间后又恢复了的情况，那么也可能是被 运营商、Cloudflare CDN 认为你在网络扫描而 触发临时限制机制，因此才会过一会儿就恢复了，建议降低并发(-n)减少这种情况的发生。
+    -httping-code 200
+        有效状态代码；HTTPing 延迟测速时网页返回的有效 HTTP 状态码，仅限一个；(默认 200 301 302)
+    -cfcolo HKG,KHH,NRT,LAX,SEA,SJC,FRA,MAD
+        匹配指定地区；地区名为当地机场三字码，英文逗号分隔，支持小写，支持 Cloudflare、AWS CloudFront，仅 HTTPing 模式可用；(默认 所有地区)
+
+    -tl 200
+        平均延迟上限；只输出低于指定平均延迟的 IP，各上下限条件可搭配使用；(默认 9999 ms)
+    -tll 40
+        平均延迟下限；只输出高于指定平均延迟的 IP；(默认 0 ms)
+    -tlr 0.2
+        丢包几率上限；只输出低于/等于指定丢包率的 IP，范围 0.00~1.00，0 过滤掉任何丢包的 IP；(默认 1.00)
+    -sl 5
+        下载速度下限；只输出高于指定下载速度的 IP，凑够指定数量 [-dn] 才会停止测速；(默认 0.00 MB/s)
+
+    -p 10
+        显示结果数量；测速后直接显示指定数量的结果，为 0 时不显示结果直接退出；(默认 10 个)
+    -f ip.txt
+        IP段数据文件；如路径含有空格请加上引号；支持其他 CDN IP段；(默认 ip.txt)
+    -ip 1.1.1.1,2.2.2.2/24,2606:4700::/32
+        指定IP段数据；直接通过参数指定要测速的 IP 段数据，英文逗号分隔；(默认 空)
+    -o result.csv
+        写入结果文件；如路径含有空格请加上引号；值为空时不写入文件 [-o '']；(默认 result.csv)
+
+    -dd
+        禁用下载测速；禁用后测速结果会按延迟排序 (默认按下载速度排序)；(默认 启用)
+    -allip
+        测速全部的IP；对 IP 段中的每个 IP (仅支持 IPv4) 进行测速；(默认 每个 /24 段随机测速一个 IP)
+
+    -v
+        打印程序版本 + 检查版本更新
+    -h
+        打印帮助说明
+```
+
+### 界面解释
+
+为了避免大家对测速过程中的**输出内容产生误解（可用、队列等数字，下载测速一半就'中断'？下载测速'卡住'不动？）**，我特意解释下。
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+> 该示例把常用参数都给加上了，即为：`-tll 40 -tl 150 -sl 1 -dn 5`，最后输出结果如下：
+
+```python
+# XIU2/CloudflareSpeedTest vX.X.X
+
+开始延迟测速（模式：TCP, 端口：443, 范围：40 ~ 150 ms, 丢包：1.00)
+321 / 321 [-----------------------------------------------------------] 可用: 30
+开始下载测速（下限：1.00 MB/s, 数量：5, 队列：10）
+3 / 5 [-----------------------------------------↗--------------------]
+IP 地址           已发送  已接收  丢包率  平均延迟  下载速度 (MB/s)
+XXX.XXX.XXX.XXX   4       4      0.00    83.32    3.66
+XXX.XXX.XXX.XXX   4       4      0.00    107.81   2.49
+XXX.XXX.XXX.XXX   4       3      0.25    149.59   1.04
+
+完整测速结果已写入 result.csv 文件，可使用记事本/表格软件查看。
+按下 回车键 或 Ctrl+C 退出。
+```
+
+****
+
+> 刚接触 CloudflareST 的人，可能会迷惑**明明延迟测速可用 IP 有 30 个，怎么最后只剩下 3 个了呢？**  
+> 下载测速里的队列又是什么意思？难道我下载测速还要排队？
+
+CloudflareST 会先延迟测速，在这过程中进度条右侧会实时显示可用 IP 数量（`可用: 30`），但注意该可用数量指的是**测试通过没有超时的 IP 数量**，和延迟上下限、丢包条件无关。当延迟测速完成后，因为还指定了**延迟上下限、丢包**的条件，所以按照条件过滤后只剩下 `10` 个了（也就是等待下载测速的 `队列：10`）。
+
+即以上示例中，`321` 个 IP 延迟测速完成后，只有 `30` 个 IP 测试通过没有超时，然后根据延迟上下限范围：`40 ~ 150 ms` 及丢包上限条件过滤后，只剩下 `10` 个满足要求的 IP 了。如果你 `-dd` 禁用了下载测速，那么就会直接输出这 `10` 个 IP 了。当然该示例并未禁用，因此接下来软件会继续对这 `10` 个 IP 进行下载测速（`队列：10`）。
+
+> 因为下载测速是单线程一个个 IP 挨着排队测速的，因此等待下载测速的 IP 数量才会叫做 `队列`。
+
+****
+
+> 你可能注意到了，**明明指定了要找到 5 个满足下载速度条件的 IP，怎么才 3 个就 “中断” 了呢？**
+
+下载测速进度条中的 `3 / 5`，前者指的是找到了 `3` 个满足下载速度下限条件的 IP（即下载速度高于 `1 MB/s` ），后者 `5` 指的是你要求找到 `5` 个满足下载速度下限条件的 IP（`-dn 5`）。
+
+> 另外，提醒一下，如果你指定的 `-dn` 大于下载测速队列，比如你延迟测速后只剩下 `4` 个 IP 了，那么下载测速进度条中后面的数字就会和下载测速队列一样都是 `4` 个，而非你 `-dn` 指定的 `5` 个了。
+
+软件在测速完这 `10` 个 IP 后，只找到了 `3` 个下载速度高于 `1 MB/s` 的 IP，剩下的 `7` 个 IP 都是 “不及格” 的。
+
+因此，这不是 `“每次测速都不到 5 就中断了”`，而是所有 IP 都下载测速完了，但却只找到了 `3` 个满足条件的。
+
+****
+
+还有一种情况，那就是当可用 IP 很多时（几百几千），你还设置了下载速度条件，那么可能就会遇到：**怎么下载测速进度条老是卡在 `X / 5` 了呢？**
+
+这其实并不是卡住了，而是只有当找到一个满足条件的 IP 时，进度条才会 +1，因此如果一直找不到，那么 CloudflareST 就会一直下载测速下去，因此在表现为进度条卡住不动，但这也是在提醒你：你设置的下载速度条件对你来说已经高于实际了，你需要适当调低预期。
+
+****
+
+如果不想遇到这种全部测速一遍都没几个满足条件的情况，那么就要**调低下载速度上限参数 `-sl`**，或者移除。
+
+因为只要指定了 `-sl` 参数，那么只要没有凑够 `-dn` 的数量（默认 10 个），就会一直测速下去，直到凑够或全部测速完。移除 `-sl` 并添加 `-dn 20` 参数，这样就是只测速延迟最低的前 20 个 IP，测速完就停止，节省时间。
+
+****
+
+另外，如果全部队列 IP 都测速完了，但一个满足下载速度条件的 IP 都没有，那么就会**直接输出全部队列 IP 的下载测速结果**，这样你就能看到这些 IP 的下载速度都有多少，心里也就有数了，然后**适当调低 `-sl` 再试试**。
+
+同样，延迟测速方面，`可用: 30`、`队列：10` 这两个数值也可以让你清楚，你设置的延迟条件对你来说是否过于苛刻。如果可用 IP 一大堆，但条件过滤后只剩下 2、3 个，那不用说就知道需要**调低预期的延迟/丢包条件**了。
+
+这两个机制，一个是告诉你**延迟丢包条件**是否合适的，一个是告诉你**下载速度条件**是否合适的。
+
+</details>
+
+****
+
+### 使用示例
+
+Windows 要指定参数需要在 CMD 中运行，或者把参数添加到快捷方式目标中。
+
+> [!TIP]
+> - 各参数均有**默认值**，使用默认值的参数是可以省略的（**按需选择**），参数**不分前后顺序**。  
+> - Windows **PowerShell** 只需把下面命令中的 `CloudflareST.exe` 改为 `.\CloudflareST.exe` 即可。  
+> - Linux 系统只需要把下面命令中的 `CloudflareST.exe` 改为 `./CloudflareST` 即可。
+
+****
+
+#### \# CMD 带参数运行 CloudflareST
+
+对命令行程序不熟悉的人，可能不知道该如何带参数运行，我就简单说一下。
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+很多人打开 CMD 以**绝对路径**运行 CloudflareST 会报错，这是因为默认的 `-f ip.txt` 参数是相对路径，需要指定绝对路径的 ip.txt 才行，但这样毕竟太麻烦了，因此还是建议进入 CloudflareST 程序目录下，以**相对路径**方式运行：
+
+**方式 一**：
+1. 打开 CloudflareST 程序所在目录  
+2. 空白处按下 <kbd>Shift + 鼠标右键</kbd> 显示右键菜单  
+3. 选择 **\[在此处打开命令窗口\]** 来打开 CMD 窗口，此时默认就位于当前目录下  
+4. 输入带参数的命令，如：`CloudflareST.exe -tll 50 -tl 200`即可运行
+
+**方式 二**：
+1. 打开 CloudflareST 程序所在目录  
+2. 直接在文件夹地址栏中全选并输入 `cmd` 回车来打开 CMD 窗口，此时默认就位于当前目录下  
+4. 输入带参数的命令，如：`CloudflareST.exe -tll 50 -tl 200`即可运行
+
+> 当然你也可以随便打开一个 CMD 窗口，然后输入如 `cd /d 'D:\Program Files\CloudflareST'` 来进入程序目录
+
+> **提示**：如果用的是 **PowerShell** 只需把命令中的 `CloudflareST.exe` 改为 `.\CloudflareST.exe` 即可。
+
+</details>
+
+****
+
+#### \# Windows 快捷方式带参数运行 CloudflareST
+
+如果不经常修改运行参数（比如平时都是直接双击运行）的人，建议使用快捷方式，更方便点。
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+右键 `CloudflareST.exe` 文件 - **\[创建快捷方式\]**，然后右键该快捷方式 - **\[属性\]**，修改其**目标**：
+
+``` bash
+# 如果要不输出结果文件，那么请加上 -o ' '，引号里的是空格（没有空格会导致该参数被省略）。
+D:\ABC\CloudflareST\CloudflareST.exe -n 500 -t 4 -dn 20 -dt 5 -o ' '
+
+# 如果文件路径包含引号，则需要把启动参数放在引号外面，记得引号和 - 之间有空格。
+'D:\Program Files\CloudflareST\CloudflareST.exe' -n 500 -t 4 -dn 20 -dt 5 -o ' '
+
+# 注意！快捷方式 - 起始位置 不能是空的，否则就会因为绝对路径而找不到 ip.txt 文件
+```
+
+</details>
+
+****
+
+#### \# IPv4/IPv6
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+``` bash
+# 指定自带的 IPv4 数据文件可测速这些 IPv4 地址（-f 默认值就是 ip.txt，所以该参数可省略）
+CloudflareST.exe -f ip.txt
+
+# 指定自带的 IPv6 数据文件可测速这些 IPv6 地址
+# 另外，v2.1.0 版本后支持 IPv4+IPv6 混合测速并移除了 -ipv6 参数，因此一个文件内可以同时包含 IPv4+IPv6 地址
+CloudflareST.exe -f ipv6.txt
+
+# 也可以直接通过参数指定要测速的 IP
+CloudflareST.exe -ip 1.1.1.1,2606:4700::/32
+```
+
+> 测速 IPv6 时，可能会注意到每次测速数量都不一样，了解原因： [#120](https://github.com/XIU2/CloudflareSpeedTest/issues/120)  
+> 因为 IPv6 太多（以亿为单位），且绝大部分 IP 段压根未启用，所以我只扫了一部分可用的 IPv6 段写到 `ipv6.txt` 文件中，有兴趣的可以自行扫描增删，ASN 数据源来自：[bgp.he.net](https://bgp.he.net/AS13335#_prefixes6)
+
+</details>
+
+****
+
+#### \# HTTPing
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+目前有两种延迟测速模式，分别为 **TCP 协议、HTTP 协议**。  
+TCP 协议耗时更短、消耗资源更少，超时时间为 1 秒，该协议为默认模式。  
+HTTP 协议适用于快速测试某域名指向某 IP 时是否可以访问，超时时间为 2 秒。  
+同一个 IP，各协议去 Ping 得到的延迟一般为：**ICMP < TCP < HTTP**，越靠右对丢包等网络波动越敏感。
+
+> 注意：HTTPing 本质上也算一种**网络扫描**行为，因此如果你在服务器上面运行，需要**降低并发**(`-n`)，否则可能会被一些严格的商家暂停服务。如果你遇到 HTTPing 首次测速可用 IP 数量正常，后续测速越来越少甚至直接为 0，但停一段时间后又恢复了的情况，那么也可能是被 运营商、Cloudflare CDN 认为你在网络扫描而**触发临时限制机制**，因此才会过一会儿就恢复了，建议**降低并发**(`-n`)减少这种情况的发生。
+
+> 另外，本软件 HTTPing 仅获取**响应头(response headers)**，并不获取正文内容（即 URL 文件大小不影响 HTTPing 测试，但如果你还要下载测速的话，那么还是需要一个大文件的），类似于 curl -i 功能。
+
+``` bash
+# 只需加上 -httping 参数即可切换到 HTTP 协议延迟测速模式
+CloudflareST.exe -httping
+
+# 软件会根据访问时网页返回的有效 HTTP 状态码来判断可用性（当然超时也算），默认对返回 200 301 302 这三个 HTTP 状态码的视为有效，可以手动指定认为有效的 HTTP 状态码，但只能指定一个（你需要提前确定测试地址正常情况下会返回哪个状态码）
+CloudflareST.exe -httping -httping-code 200
+
+# 通过 -url 参数来指定 HTTPing 测试地址（可以是任意网页 URL，不局限于具体文件地址）
+CloudflareST.exe -httping -url https://cf.xiu2.xyz/url
+# 如果你要 HTTPing 测试其他网站/CDN，那么指定一个该网站/使用该 CDN 的地址（因为软件默认地址是 Cloudflare 的，只能用于测试 Cloudflare 的 IP）
+
+# 注意：如果测速地址为 HTTP 协议，记得加上 -tp 80（这个参数会影响 延迟测速/下载测速 时使用的端口）
+# 同理，如果要测速 80 端口，那么也需要加上 -url 参数来指定一个 http:// 协议的地址才行（且该地址不会强制重定向至 HTTPS），如果是非 80 443 端口，那么需要确定该下载测速地址是否支持通过该端口访问。
+CloudflareST.exe -httping -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/5952/movie_max.webm
+```
+
+</details>
+
+****
+
+#### \# 匹配指定地区(colo 机场三字码)
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+Cloudflare CDN 的节点 IP 是 Anycast IP，即每个 IP 对应的服务器节点及地区不是固定的，而是动态变化的，**不同地区、不同运营商、不同时间段**访问**同一个 IP** 分配到的服务器节点地区和路线也都是不一样的（比如同一个 IP，美国人访问就是分配到就近的美国节点服务器，日本人访问则就又变成了就近的日本节点服务器了，国内内地就比较特殊了，只能给你分配到其他国家，当然不同的 IP 段路由变化/分配逻辑也是不同的，有的 IP 段会较为固定）。
+
+> **注意**！虽然 Cloudflare CDN 有很多亚洲节点，但**不代表你就能用上**，新加坡人测速可能随便一抓一大把的新加坡节点，但你全部扫一遍可能都遇不到一个，因为这是由 CDN 控制的。Anycast IP 的路由是经常变的，同一个 IP 今天可能是美国，明天你再访问可能就又分配到欧洲节点了（当然这只是个例子，一般没有那么频繁，这也和很多因素有关，比如线路拥塞程度，成本变动等），因此**不要对该功能有过高期待**~
+
+或者你随便找个 Cloudflare CDN 的 IP（比如官网域名的解析 IP `104.16.123.96`），然后去那些有全球节点的[在线 Ping 测试](https://ping.sx/ping?t=104.16.123.96)网站，你就会发现这个 IP 在全球大部分地区的延迟都是个位数（而且很多都是 0.X ms），就算一些地方延迟高一些但也基本都控制在 几十ms，只有在国内才会发现突然变成了 上百ms 了。
+
+这就是 Anycast 技术，也就只有国内大陆这种特殊的网络情况，才需要对 Anycast 的 CDN IP 进行优选。
+
+因此，对于这种 Anycast IP 的实际服务器位置，就不能靠那些在线 IP 地址位置查询网站来判断了。
+
+除了通过 **HTTP 响应头**获取机场三字码外（该功能的实现方式），还可以手动访问 `http://CloudflareIP/cdn-cgi/trace` 来获知 CDN 分配给你的实际节点地区机场三字码。
+
+> 该功能支持 Cloudflare CDN 和 AWS CloudFront CDN，且这两个 CDN 的机场三字码是通用的（算是惯例）。  
+> **注意**：如果你要用于筛选 AWS CloudFront CDN 地区，那么要通过 `-url` 参数指定一个使用 AWS CloudFront CDN 的下载测速地址（因为软件默认下载测速地址是 Cloudflare CDN 的）
+
+``` bash
+# 指定地区名后，延迟测速后得到的结果就都是指定地区的 IP 了（如果没有指定 -dd 的话则会继续进行下载测速）
+# 如果延迟测速后结果为 0，则说明没有找到任何一个（未超时可用的）指定地区的 IP。
+# 节点地区名为当地 机场三字码，指定多个时用英文逗号分隔，v2.2.3 版本后支持小写
+
+CloudflareST.exe -httping -cfcolo HKG,KHH,NRT,LAX,SEA,SJC,FRA,MAD
+
+# 注意，该参数只有在 HTTPing 延迟测速模式下才可用（因为软件是通过 HTTP 链接中的响应头来获得该 IP 的实际地区机场三字码）
+```
+
+> 两个 CDN 机场三字码通用，因此各地区名可见：https://www.cloudflarestatus.com/
+
+</details>
+
+****
+
+#### \# 文件相对/绝对路径
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+``` bash
+# 指定 IPv4 数据文件，不显示结果直接退出，输出结果到文件（-p 值为 0）
+CloudflareST.exe -f 1.txt -p 0 -dd
+
+# 指定 IPv4 数据文件，不输出结果到文件，直接显示结果（-p 值为 10 条，-o 值为空但引号不能少）
+CloudflareST.exe -f 2.txt -o '' -p 10 -dd
+
+# 指定 IPv4 数据文件 及 输出结果到文件（相对路径，即当前目录下，如含空格请加上引号）
+CloudflareST.exe -f 3.txt -o result.txt -dd
+
+
+# 指定 IPv4 数据文件 及 输出结果到文件（相对路径，即当前目录内的 abc 文件夹下，如含空格请加上引号）
+# Linux（CloudflareST 程序所在目录内的 abc 文件夹下）
+./CloudflareST -f abc/3.txt -o abc/result.txt -dd
+
+# Windows（注意是反斜杠）
+CloudflareST.exe -f abc\3.txt -o abc\result.txt -dd
+
+
+# 指定 IPv4 数据文件 及 输出结果到文件（绝对路径，即 C:\abc\ 目录下，如含空格请加上引号）
+# Linux（/abc/ 目录下）
+./CloudflareST -f /abc/4.txt -o /abc/result.csv -dd
+
+# Windows（注意是反斜杠）
+CloudflareST.exe -f C:\abc\4.txt -o C:\abc\result.csv -dd
+
+
+# 如果要以【绝对路径】运行 CloudflareST，那么 -f / -o 参数中的文件名也必须是【绝对路径】，否则会报错找不到文件！
+# Linux（/abc/ 目录下）
+/abc/CloudflareST -f /abc/4.txt -o /abc/result.csv -dd
+
+# Windows（注意是反斜杠）
+C:\abc\CloudflareST.exe -f C:\abc\4.txt -o C:\abc\result.csv -dd
+```
+</details>
+
+****
+
+#### \# 测速其他端口
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+``` bash
+# 如果你想要测速非默认 443 的其他端口，则需要通过 -tp 参数指定（该参数会影响 延迟测速/下载测速 时使用的端口）
+
+# 如果要延迟测速 80 端口+下载测速（如果 -dd 禁用了下载测速则不需要），那么还需要指定 http:// 协议的下载测速地址才行（且该地址不会强制重定向至 HTTPS，因为那样就变成 443 端口了）
+CloudflareST.exe -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/5952/movie_max.webm
+
+# 如果是非 80 443 的其他端口，那么需要确定你使用的下载测速地址是否支持通过该非标端口访问。
+```
+
+</details>
+
+****
+
+#### \# 自定义测速地址
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+``` bash
+# 该参数适用于下载测速 及 HTTP 协议的延迟测速，对于后者该地址可以是任意网页 URL（不局限于具体文件地址）
+
+# 地址要求：可以直接下载、文件大小超过 200MB、用的是 Cloudflare CDN
+CloudflareST.exe -url https://cf.xiu2.xyz/url
+
+# 注意：如果测速地址为 HTTP 协议（该地址不能强制重定向至 HTTPS），记得加上 -tp 80（这个参数会影响 延迟测速/下载测速 时使用的端口），如果是非 80 443 端口，那么需要确定下载测速地址是否支持通过该端口访问。
+CloudflareST.exe -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/5952/movie_max.webm
+```
+
+</details>
+
+****
+
+#### \# 自定义测速条件（指定 延迟/丢包/下载速度 的目标范围）
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+> 注意：延迟测速进度条右边的**可用数量**，仅指延迟测速过程中**未超时的 IP 数量**，和延迟上下限条件无关。
+
+- 仅指定 **[平均延迟上限]** 条件
+
+``` bash
+# 平均延迟上限：200 ms，下载速度下限：0 MB/s
+# 即找到平均延迟低于 200 ms 的 IP，然后再按延迟从低到高进行 10 次下载测速
+CloudflareST.exe -tl 200
+```
+
+> 如果**没有找到一个满足延迟**条件的 IP，那么不会输出任何内容。
+
+****
+
+- 仅指定 **[平均延迟上限]** 条件，且**只延迟测速，不下载测速**
+
+``` bash
+# 平均延迟上限：200 ms，下载速度下限：0 MB/s，数量：不知道多少 个
+# 即只输出低于 200ms 的 IP，且不再下载测速（因为不再下载测速，所以 -dn 参数就无效了）
+CloudflareST.exe -tl 200 -dd
+```
+
+- 仅指定 **[丢包几率上限]** 条件
+
+``` bash
+# 丢包几率上限：0.25
+# 即找到丢包率低于等于 0.25 的 IP，范围 0.00~1.00，如果 -tlr 0 则代表过滤掉任何丢包的 IP
+CloudflareST.exe -tlr 0.25
+```
+
+****
+
+- 仅指定 **[下载速度下限]** 条件
+
+``` bash
+# 平均延迟上限：9999 ms，下载速度下限：5 MB/s，数量：10 个（可选）
+# 即需要找到 10 个平均延迟低于 9999 ms 且下载速度高于 5 MB/s 的 IP 才会停止测速
+CloudflareST.exe -sl 5 -dn 10
+```
+
+> 如果**没有找到一个满足速度**条件的 IP，那么会**忽略条件输出所有 IP 测速结果**（方便你下次测速时调整条件）。
+
+> 没有指定平均延迟上限时，如果一直**凑不够**满足条件的 IP 数量，就会**一直测速**下去。  
+> 所以建议**同时指定 [下载速度下限] + [平均延迟上限]**，这样测速到指定延迟上限还没凑够数量，就会终止测速。
+
+****
+
+- 同时指定 **[平均延迟上限] + [下载速度下限]** 条件
+
+``` bash
+# 平均延迟上限、下载速度下限均支持小数（如 -sl 0.5）
+# 平均延迟上限：200 ms，下载速度下限：5.6 MB/s，数量：10 个（可选）
+# 即需要找到 10 个平均延迟低于 200 ms 且下载速度高于 5 .6MB/s 的 IP 才会停止测速
+CloudflareST.exe -tl 200 -sl 5.6 -dn 10
+```
+
+> 如果**没有找到一个满足延迟**条件的 IP，那么不会输出任何内容。  
+> 如果**没有找到一个满足速度**条件的 IP，那么会忽略条件输出所有 IP 测速结果（方便你下次测速时调整条件）。  
+> 所以建议先不指定条件测速一遍，看看平均延迟和下载速度大概在什么范围，避免指定条件**过低/过高**！
+
+> 因为 Cloudflare 公开的 IP 段是**回源 IP+任播 IP**，而**回源 IP**是无法使用的，所以下载测速是 0.00。  
+> 运行时可以加上 `-sl 0.01`（下载速度下限），过滤掉**回源 IP**（下载测速低于 0.01MB/s 的结果）。
+
+</details>
+
+****
+
+#### \# 单独对一个或多个 IP 测速
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+**方式 一**：
+直接通过参数指定要测速的 IP 段数据。
+``` bash
+# 先进入 CloudflareST 所在目录，然后运行：
+# Windows 系统（在 CMD 中运行）
+CloudflareST.exe -ip 1.1.1.1,2.2.2.2/24,2606:4700::/32
+
+# Linux 系统
+./CloudflareST -ip 1.1.1.1,2.2.2.2/24,2606:4700::/32
+```
+
+****
+
+**方式 二**：
+或者把这些 IP 按如下格式写入到任意文本文件中，例如：`1.txt`
+
+```
+1.1.1.1
+1.1.1.200
+1.0.0.1/24
+2606:4700::/32
+```
+
+> 单个 IP 的话可以省略 `/32` 子网掩码了（即 `1.1.1.1`等同于 `1.1.1.1/32`）。  
+> 子网掩码 `/24` 指的是这个 IP 最后一段，即 `1.0.0.1~1.0.0.255`。
+
+
+然后运行 CloudflareST 时加上启动参数 `-f 1.txt` 来指定 IP 段数据文件。
+
+``` bash
+# 先进入 CloudflareST 所在目录，然后运行：
+# Windows 系统（在 CMD 中运行）
+CloudflareST.exe -f 1.txt
+
+# Linux 系统
+./CloudflareST -f 1.txt
+
+# 对于 1.0.0.1/24 这样的 IP 段只会随机最后一段（1.0.0.1~255），如果要测速该 IP 段中的所有 IP，请加上 -allip 参数。
+```
+
+</details>
+
+****
+
+#### \# 一劳永逸加速所有使用 Cloudflare CDN 的网站（不需要再一个个添加域名到 Hosts 了）
+
+我以前说过，开发该软件项目的目的就是为了通过**改 Hosts 的方式来加速访问使用 Cloudflare CDN 的网站**。
+
+但就如 [**#8**](https://github.com/XIU2/CloudflareSpeedTest/issues/8) 所说，一个个添加域名到 Hosts 实在**太麻烦**了，于是我就找到了个**一劳永逸**的办法！可以看这个 [**还在一个个添加 Hosts？完美本地加速所有使用 Cloudflare CDN 的网站方法来了！**](https://github.com/XIU2/CloudflareSpeedTest/discussions/71) 和另一个[依靠本地 DNS 服务来修改域名解析 IP 为自选 IP](https://github.com/XIU2/CloudflareSpeedTest/discussions/317) 的教程。
+
+****
+
+#### \# 自动更新 Hosts
+
+考虑到很多人获得最快 Cloudflare CDN IP 后，需要替换 Hosts 文件中的 IP。
+
+可以看这个 [**Issues**](https://github.com/XIU2/CloudflareSpeedTest/discussions/312) 获取 **Windows/Linux 自动更新 Hosts 脚本**！
+
+****
+
+## 问题反馈
+
+如果你遇到什么问题，可以先去 [**Issues**](https://github.com/XIU2/CloudflareSpeedTest/issues)、[Discussions](https://github.com/XIU2/CloudflareSpeedTest/discussions) 里看看是否有别人问过了（记得去看下  [**Closed**](https://github.com/XIU2/CloudflareSpeedTest/issues?q=is%3Aissue+is%3Aclosed) 的）。  
+如果没找到类似问题，请新开个 [**Issues**](https://github.com/XIU2/CloudflareSpeedTest/issues/new) 来告诉我！
+
+> [!NOTE]
+> **注意**！_与 CloudflareST 本身 `反馈问题、功能建议` 无关的，请前往项目内部 论坛 讨论（顶部的 `💬 Discussions`_  
+
+****
+
+## 如果帮到你的话就 '打赏' 一下吧~🎉✨
+
+![微信赞赏](https://github.com/XIU2/XIU2/blob/master/img/zs-01.png)![支付宝赞赏](https://github.com/XIU2/XIU2/blob/master/img/zs-02.png)
+
+****
+
+## 衍生项目
+
+- _https://github.com/xianshenglu/cloudflare-ip-tester-app_  
+_**CloudflareST 安卓版 APP [#202](https://github.com/XIU2/CloudflareSpeedTest/discussions/320)**_
+
+- _https://github.com/mingxiaoyu/luci-app-cloudflarespeedtest_  
+_**CloudflareST OpenWrt 路由器插件版 [#174](https://github.com/XIU2/CloudflareSpeedTest/discussions/319)**_
+
+- _https://github.com/immortalwrt-collections/openwrt-cdnspeedtest_  
+_**CloudflareST OpenWrt 原生编译版本 [#64](https://github.com/XIU2/CloudflareSpeedTest/discussions/64)**_
+
+- _https://github.com/hoseinnikkhah/CloudflareSpeedTest-English_  
+_**English language version of CloudflareST (Text language differences only) [#64](https://github.com/XIU2/CloudflareSpeedTest/issues/68)**_
+
+> _此处仅收集了在本项目中宣传过的部分 CloudflareST 相关衍生项目，如果有遗漏可以告诉我~_
+
+****
+
+## 感谢项目
+
+- _https://github.com/Spedoske/CloudflareScanner_
+
+> _因为该项目已经很长时间没更新了，而我又产生了很多功能需求，所以我临时学了下 Go 语言就上手了（菜）..._  
+> _本软件基于该项目制作，但**已添加大量功能及修复 BUG**，并根据大家的使用反馈积极添加、优化功能（闲）..._
+
+****
+
+## 手动编译
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+为了方便，我是在编译的时候将版本号写入代码中的 version 变量，因此你手动编译时，需要像下面这样在 `go build` 命令后面加上 `-ldflags` 参数来指定版本号：
+
+```bash
+go build -ldflags '-s -w -X main.version=v2.3.3'
+# 在 CloudflareSpeedTest 目录中通过命令行（例如 CMD、Bat 脚本）运行该命令，即可编译一个可在和当前设备同样系统、位数、架构的环境下运行的二进制程序（Go 会自动检测你的系统位数、架构）且版本号为 v2.3.3
+```
+
+如果想要在 Windows 64位系统下编译**其他系统、架构、位数**，那么需要指定 **GOOS** 和 **GOARCH** 变量。
+
+例如在 Windows 系统下编译一个适用于 **Linux 系统 amd 架构 64 位**的二进制程序：
+
+```bat
+SET GOOS=linux
+SET GOARCH=amd64
+go build -ldflags '-s -w -X main.version=v2.3.3'
+```
+
+例如在 Linux 系统下编译一个适用于 **Windows 系统 amd 架构 32 位**的二进制程序：
+
+```bash
+GOOS=windows
+GOARCH=386
+go build -ldflags '-s -w -X main.version=v2.3.3'
+```
+
+> 可以运行 `go tool dist list` 来查看当前 Go 版本支持编译哪些组合。
+
+****
+
+当然，为了方便批量编译，我会专门指定一个变量为版本号，后续编译直接调用该版本号变量即可。  
+同时，批量编译的话，还需要分开放到不同文件夹才行（或者文件名不同），需要加上 `-o` 参数指定。
+
+```bat
+:: Windows 系统下是这样：
+SET version=v2.3.3
+SET GOOS=linux
+SET GOARCH=amd64
+go build -o Releases\CloudflareST_linux_amd64\CloudflareST -ldflags '-s -w -X main.version=%version%'
+```
+
+```bash
+# Linux 系统下是这样：
+version=v2.3.3
+GOOS=windows
+GOARCH=386
+go build -o Releases/CloudflareST_windows_386/CloudflareST.exe -ldflags '-s -w -X main.version=${version}'
+```
+
+</details>
+
+****
+
+## License
+
+The GPL-3.0 License.$$$$$$$">
+<meta property="og:title" content="CloudflareSpeedTest「自选优选 IP」">
+<meta property="og:description" content="# XIU2/CloudflareSpeedTest
+
+[![Go Version](https://img.shields.io/github/go-mod/go-version/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=Go&color=00ADD8&logo=go)](https://github.com/XIU2/CloudflareSpeedTest/)
+[![Release Version](https://img.shields.io/github/v/release/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=Release&color=00ADD8&logo=github)](https://github.com/XIU2/CloudflareSpeedTest/releases/latest)
+[![GitHub license](https://img.shields.io/github/license/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=License&color=00ADD8&logo=github)](https://github.com/XIU2/CloudflareSpeedTest/)
+[![GitHub Star](https://img.shields.io/github/stars/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=Star&color=00ADD8&logo=github)](https://github.com/XIU2/CloudflareSpeedTest/)
+[![GitHub Fork](https://img.shields.io/github/forks/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=Fork&color=00ADD8&logo=github)](https://github.com/XIU2/CloudflareSpeedTest/)
+
+国外很多网站都在使用 Cloudflare CDN，但分配给中国内地访客的 IP 并不友好（延迟高、丢包多、速度慢）。  
+虽然 Cloudflare 公开了所有 [IP 段](https://www.cloudflare.com/zh-cn/ips/) ，但想要在这么多 IP 中找到适合自己的，怕是要累死，于是就有了这个软件。
+
+**「自选优选 IP」测试 Cloudflare CDN 延迟和速度，获取最快 IP (IPv4+IPv6)**！好用的话**点个`⭐`鼓励一下叭~**
+
+> _分享我其他开源项目：[**TrackersList.com** - 全网热门 BT Tracker 列表！有效提高 BT 下载速度~](https://github.com/XIU2/TrackersListCollection) <img src='https://img.shields.io/github/stars/XIU2/TrackersListCollection.svg?style=flat-square&label=Star&color=4285dd&logo=github' height='16px' />_  
+> _[**UserScript** - 🐵 Github 高速下载、知乎增强、自动无缝翻页、护眼模式 等十几个**油猴脚本**~](https://github.com/XIU2/UserScript) <img src='https://img.shields.io/github/stars/XIU2/UserScript.svg?style=flat-square&label=Star&color=4285dd&logo=github' height='16px' />_  
+> _[**SNIProxy** - 🧷 自用的简单 SNI Proxy（支持全平台、全系统、前置代理、配置简单等~](https://github.com/XIU2/SNIProxy) <img src='https://img.shields.io/github/stars/XIU2/SNIProxy.svg?style=flat-square&label=Star&color=4285dd&logo=github' height='16px' />_  
+
+> 本项目也支持对**其他 CDN / 网站 IP** 延迟测速（如：[CloudFront](https://github.com/XIU2/CloudflareSpeedTest/discussions/304)、[Gcore](https://github.com/XIU2/CloudflareSpeedTest/discussions/303) CDN），但下载测速需自行寻找地址
+
+> [!IMPORTANT]
+> Cloudflare CDN 已**明文禁止代理**方式使用，对于**代理套 CDN** 的自行承担风险，请勿过度依赖 [#382](https://github.com/XIU2/CloudflareSpeedTest/discussions/382) [#383](https://github.com/XIU2/CloudflareSpeedTest/discussions/383)
+
+****
+## \# 快速使用
+
+### 下载运行
+
+1. 下载编译好的可执行文件（ [Github Releases](https://github.com/XIU2/CloudflareSpeedTest/releases) / [蓝奏云](https://pan.lanpw.com/b0742hkxe) ）并解压。  
+2. 双击运行 `CloudflareST.exe` 文件（Windows 系统），等待测速完成...
+
+<details>
+<summary><code><strong>「 点击查看 Linux 系统下的使用示例 」</strong></code></summary>
+
+****
+
+以下命令仅为示例，版本号和文件名请前往 [**Releases**](https://github.com/XIU2/CloudflareSpeedTest/releases) 查看。
+
+``` yaml
+# 如果是第一次使用，则建议创建新文件夹（后续更新时，跳过该步骤）
+mkdir CloudflareST
+
+# 进入文件夹（后续更新，只需要从这里重复下面的下载、解压命令即可）
+cd CloudflareST
+
+# 下载 CloudflareST 压缩包（自行根据需求替换 URL 中 [版本号] 和 [文件名]）
+wget -N https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
+# 如果你是在国内网络环境中下载，那么请使用下面这几个镜像加速之一：
+# wget -N https://ghp.ci/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
+# wget -N https://ghproxy.cc/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
+# wget -N https://ghproxy.net/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
+# wget -N https://gh-proxy.com/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
+# 如果下载失败的话，尝试删除 -N 参数（如果是为了更新，则记得提前删除旧压缩包 rm CloudflareST_linux_amd64.tar.gz ）
+
+# 解压（不需要删除旧文件，会直接覆盖，自行根据需求替换 文件名）
+tar -zxf CloudflareST_linux_amd64.tar.gz
+
+# 赋予执行权限
+chmod +x CloudflareST
+
+# 运行（不带参数）
+./CloudflareST
+
+# 运行（带参数示例）
+./CloudflareST -dd -tll 90
+```
+
+> 如果平**均延迟非常低**（如 0.xx），则说明 CloudflareST **测速时走了代理**，请先关闭代理软件后再测速。  
+> 如果在**路由器**上运行，建议先关闭路由器内的代理（或将其排除），否则测速结果可能会**不准确/无法使用**。
+
+</details>
+
+****
+
+> _在**手机**上独立运行 CloudflareST 测速的简单教程：**[Android](https://github.com/XIU2/CloudflareSpeedTest/discussions/61)、[Android APP](https://github.com/xianshenglu/cloudflare-ip-tester-app)、[IOS](https://github.com/XIU2/CloudflareSpeedTest/discussions/321)**_
+
+> [!NOTE]
+> 注意！本软件仅适用于网站，**不支持给使用 UDP 协议的 Cloudflare WARP 优选 IP**，具体见：[#392](https://github.com/XIU2/CloudflareSpeedTest/discussions/392)
+
+### 结果示例
+
+测速完毕后，默认会显示**最快的 10 个 IP**，示例：
+
+``` bash
+IP 地址           已发送  已接收  丢包率  平均延迟  下载速度 (MB/s)
+104.27.200.69     4       4       0.00    146.23    28.64
+172.67.60.78      4       4       0.00    139.82    15.02
+104.25.140.153    4       4       0.00    146.49    14.90
+104.27.192.65     4       4       0.00    140.28    14.07
+172.67.62.214     4       4       0.00    139.29    12.71
+104.27.207.5      4       4       0.00    145.92    11.95
+172.67.54.193     4       4       0.00    146.71    11.55
+104.22.66.8       4       4       0.00    147.42    11.11
+104.27.197.63     4       4       0.00    131.29    10.26
+172.67.58.91      4       4       0.00    140.19    9.14
+...
+
+# 如果平均延迟非常低（如 0.xx），则说明 CloudflareST 测速时走了代理，请先关闭代理软件后再测速。
+# 如果在路由器上运行，请先关闭路由器内的代理（或将其排除），否则测速结果可能会不准确/无法使用。
+
+# 因为每次测速都是在每个 IP 段中随机 IP，所以每次的测速结果都不可能相同，这是正常的！
+
+# 注意！我发现电脑开机后第一次测速延迟会明显偏高（手动 TCPing 也一样），后续测速都正常
+# 因此建议大家开机后第一次正式测速前，先随便测几个 IP（无需等待延迟测速完成，只要进度条动了就可以直接关了）
+
+# 软件在 默认参数 下的整个流程大概步骤：
+# 1. 延迟测速（默认 TCPing 模式，HTTPing 模式需要手动加上参数）
+# 2. 延迟排序（延迟 从低到高 排序并按条件过滤，不同丢包率会分开排序，因此可能会有一些延迟低但丢包的 IP 排到后面）
+# 3. 下载测速（从延迟最低的 IP 开始依次下载测速，默认测够 10 个就会停止）
+# 4. 速度排序（速度从高到低排序）
+# 5. 输出结果（通过参数控制是否输出到命令行(-p 0)或输出到文件(-o '')）
+
+# 注意：输出的结果文件 result.csv 通过微软 Excel 表格打开会中文乱码，这是正常的，其他表格软件/记事本都显示正常
+```
+
+测速结果第一行就是**既下载速度最快、又平均延迟最低的最快 IP**！
+
+完整结果保存在当前目录下的 `result.csv` 文件中，用**记事本/表格软件**打开，格式如下：
+
+```
+IP 地址,已发送,已接收,丢包率,平均延迟,下载速度 (MB/s)
+104.27.200.69,4,4,0.00,146.23,28.64
+```
+
+> _大家可以按自己需求，对完整结果**进一步筛选处理**，或者去看一看进阶使用**指定过滤条件**！_
+
+****
+## \# 进阶使用
+
+直接运行使用的是默认参数，如果想要测速结果更全面、更符合自己的要求，可以自定义参数。
+
+```Dart
+C:\>CloudflareST.exe -h
+
+CloudflareSpeedTest vX.X.X
+测试 Cloudflare CDN 所有 IP 的延迟和速度，获取最快 IP (IPv4+IPv6)！
+https://github.com/XIU2/CloudflareSpeedTest
+
+参数：
+    -n 200
+        延迟测速线程；越多延迟测速越快，性能弱的设备 (如路由器) 请勿太高；(默认 200 最多 1000)
+    -t 4
+        延迟测速次数；单个 IP 延迟测速的次数；(默认 4 次)
+    -dn 10
+        下载测速数量；延迟测速并排序后，从最低延迟起下载测速的数量；(默认 10 个)
+    -dt 10
+        下载测速时间；单个 IP 下载测速最长时间，不能太短；(默认 10 秒)
+    -tp 443
+        指定测速端口；延迟测速/下载测速时使用的端口；(默认 443 端口)
+    -url https://cf.xiu2.xyz/url
+        指定测速地址；延迟测速(HTTPing)/下载测速时使用的地址，默认地址不保证可用性，建议自建；
+
+    -httping
+        切换测速模式；延迟测速模式改为 HTTP 协议，所用测试地址为 [-url] 参数；(默认 TCPing)
+        注意：HTTPing 本质上也算一种 网络扫描 行为，因此如果你在服务器上面运行，需要降低并发(-n)，否则可能会被一些严格的商家暂停服务。
+        如果你遇到 HTTPing 首次测速可用 IP 数量正常，后续测速越来越少甚至直接为 0，但停一段时间后又恢复了的情况，那么也可能是被 运营商、Cloudflare CDN 认为你在网络扫描而 触发临时限制机制，因此才会过一会儿就恢复了，建议降低并发(-n)减少这种情况的发生。
+    -httping-code 200
+        有效状态代码；HTTPing 延迟测速时网页返回的有效 HTTP 状态码，仅限一个；(默认 200 301 302)
+    -cfcolo HKG,KHH,NRT,LAX,SEA,SJC,FRA,MAD
+        匹配指定地区；地区名为当地机场三字码，英文逗号分隔，支持小写，支持 Cloudflare、AWS CloudFront，仅 HTTPing 模式可用；(默认 所有地区)
+
+    -tl 200
+        平均延迟上限；只输出低于指定平均延迟的 IP，各上下限条件可搭配使用；(默认 9999 ms)
+    -tll 40
+        平均延迟下限；只输出高于指定平均延迟的 IP；(默认 0 ms)
+    -tlr 0.2
+        丢包几率上限；只输出低于/等于指定丢包率的 IP，范围 0.00~1.00，0 过滤掉任何丢包的 IP；(默认 1.00)
+    -sl 5
+        下载速度下限；只输出高于指定下载速度的 IP，凑够指定数量 [-dn] 才会停止测速；(默认 0.00 MB/s)
+
+    -p 10
+        显示结果数量；测速后直接显示指定数量的结果，为 0 时不显示结果直接退出；(默认 10 个)
+    -f ip.txt
+        IP段数据文件；如路径含有空格请加上引号；支持其他 CDN IP段；(默认 ip.txt)
+    -ip 1.1.1.1,2.2.2.2/24,2606:4700::/32
+        指定IP段数据；直接通过参数指定要测速的 IP 段数据，英文逗号分隔；(默认 空)
+    -o result.csv
+        写入结果文件；如路径含有空格请加上引号；值为空时不写入文件 [-o '']；(默认 result.csv)
+
+    -dd
+        禁用下载测速；禁用后测速结果会按延迟排序 (默认按下载速度排序)；(默认 启用)
+    -allip
+        测速全部的IP；对 IP 段中的每个 IP (仅支持 IPv4) 进行测速；(默认 每个 /24 段随机测速一个 IP)
+
+    -v
+        打印程序版本 + 检查版本更新
+    -h
+        打印帮助说明
+```
+
+### 界面解释
+
+为了避免大家对测速过程中的**输出内容产生误解（可用、队列等数字，下载测速一半就'中断'？下载测速'卡住'不动？）**，我特意解释下。
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+> 该示例把常用参数都给加上了，即为：`-tll 40 -tl 150 -sl 1 -dn 5`，最后输出结果如下：
+
+```python
+# XIU2/CloudflareSpeedTest vX.X.X
+
+开始延迟测速（模式：TCP, 端口：443, 范围：40 ~ 150 ms, 丢包：1.00)
+321 / 321 [-----------------------------------------------------------] 可用: 30
+开始下载测速（下限：1.00 MB/s, 数量：5, 队列：10）
+3 / 5 [-----------------------------------------↗--------------------]
+IP 地址           已发送  已接收  丢包率  平均延迟  下载速度 (MB/s)
+XXX.XXX.XXX.XXX   4       4      0.00    83.32    3.66
+XXX.XXX.XXX.XXX   4       4      0.00    107.81   2.49
+XXX.XXX.XXX.XXX   4       3      0.25    149.59   1.04
+
+完整测速结果已写入 result.csv 文件，可使用记事本/表格软件查看。
+按下 回车键 或 Ctrl+C 退出。
+```
+
+****
+
+> 刚接触 CloudflareST 的人，可能会迷惑**明明延迟测速可用 IP 有 30 个，怎么最后只剩下 3 个了呢？**  
+> 下载测速里的队列又是什么意思？难道我下载测速还要排队？
+
+CloudflareST 会先延迟测速，在这过程中进度条右侧会实时显示可用 IP 数量（`可用: 30`），但注意该可用数量指的是**测试通过没有超时的 IP 数量**，和延迟上下限、丢包条件无关。当延迟测速完成后，因为还指定了**延迟上下限、丢包**的条件，所以按照条件过滤后只剩下 `10` 个了（也就是等待下载测速的 `队列：10`）。
+
+即以上示例中，`321` 个 IP 延迟测速完成后，只有 `30` 个 IP 测试通过没有超时，然后根据延迟上下限范围：`40 ~ 150 ms` 及丢包上限条件过滤后，只剩下 `10` 个满足要求的 IP 了。如果你 `-dd` 禁用了下载测速，那么就会直接输出这 `10` 个 IP 了。当然该示例并未禁用，因此接下来软件会继续对这 `10` 个 IP 进行下载测速（`队列：10`）。
+
+> 因为下载测速是单线程一个个 IP 挨着排队测速的，因此等待下载测速的 IP 数量才会叫做 `队列`。
+
+****
+
+> 你可能注意到了，**明明指定了要找到 5 个满足下载速度条件的 IP，怎么才 3 个就 “中断” 了呢？**
+
+下载测速进度条中的 `3 / 5`，前者指的是找到了 `3` 个满足下载速度下限条件的 IP（即下载速度高于 `1 MB/s` ），后者 `5` 指的是你要求找到 `5` 个满足下载速度下限条件的 IP（`-dn 5`）。
+
+> 另外，提醒一下，如果你指定的 `-dn` 大于下载测速队列，比如你延迟测速后只剩下 `4` 个 IP 了，那么下载测速进度条中后面的数字就会和下载测速队列一样都是 `4` 个，而非你 `-dn` 指定的 `5` 个了。
+
+软件在测速完这 `10` 个 IP 后，只找到了 `3` 个下载速度高于 `1 MB/s` 的 IP，剩下的 `7` 个 IP 都是 “不及格” 的。
+
+因此，这不是 `“每次测速都不到 5 就中断了”`，而是所有 IP 都下载测速完了，但却只找到了 `3` 个满足条件的。
+
+****
+
+还有一种情况，那就是当可用 IP 很多时（几百几千），你还设置了下载速度条件，那么可能就会遇到：**怎么下载测速进度条老是卡在 `X / 5` 了呢？**
+
+这其实并不是卡住了，而是只有当找到一个满足条件的 IP 时，进度条才会 +1，因此如果一直找不到，那么 CloudflareST 就会一直下载测速下去，因此在表现为进度条卡住不动，但这也是在提醒你：你设置的下载速度条件对你来说已经高于实际了，你需要适当调低预期。
+
+****
+
+如果不想遇到这种全部测速一遍都没几个满足条件的情况，那么就要**调低下载速度上限参数 `-sl`**，或者移除。
+
+因为只要指定了 `-sl` 参数，那么只要没有凑够 `-dn` 的数量（默认 10 个），就会一直测速下去，直到凑够或全部测速完。移除 `-sl` 并添加 `-dn 20` 参数，这样就是只测速延迟最低的前 20 个 IP，测速完就停止，节省时间。
+
+****
+
+另外，如果全部队列 IP 都测速完了，但一个满足下载速度条件的 IP 都没有，那么就会**直接输出全部队列 IP 的下载测速结果**，这样你就能看到这些 IP 的下载速度都有多少，心里也就有数了，然后**适当调低 `-sl` 再试试**。
+
+同样，延迟测速方面，`可用: 30`、`队列：10` 这两个数值也可以让你清楚，你设置的延迟条件对你来说是否过于苛刻。如果可用 IP 一大堆，但条件过滤后只剩下 2、3 个，那不用说就知道需要**调低预期的延迟/丢包条件**了。
+
+这两个机制，一个是告诉你**延迟丢包条件**是否合适的，一个是告诉你**下载速度条件**是否合适的。
+
+</details>
+
+****
+
+### 使用示例
+
+Windows 要指定参数需要在 CMD 中运行，或者把参数添加到快捷方式目标中。
+
+> [!TIP]
+> - 各参数均有**默认值**，使用默认值的参数是可以省略的（**按需选择**），参数**不分前后顺序**。  
+> - Windows **PowerShell** 只需把下面命令中的 `CloudflareST.exe` 改为 `.\CloudflareST.exe` 即可。  
+> - Linux 系统只需要把下面命令中的 `CloudflareST.exe` 改为 `./CloudflareST` 即可。
+
+****
+
+#### \# CMD 带参数运行 CloudflareST
+
+对命令行程序不熟悉的人，可能不知道该如何带参数运行，我就简单说一下。
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+很多人打开 CMD 以**绝对路径**运行 CloudflareST 会报错，这是因为默认的 `-f ip.txt` 参数是相对路径，需要指定绝对路径的 ip.txt 才行，但这样毕竟太麻烦了，因此还是建议进入 CloudflareST 程序目录下，以**相对路径**方式运行：
+
+**方式 一**：
+1. 打开 CloudflareST 程序所在目录  
+2. 空白处按下 <kbd>Shift + 鼠标右键</kbd> 显示右键菜单  
+3. 选择 **\[在此处打开命令窗口\]** 来打开 CMD 窗口，此时默认就位于当前目录下  
+4. 输入带参数的命令，如：`CloudflareST.exe -tll 50 -tl 200`即可运行
+
+**方式 二**：
+1. 打开 CloudflareST 程序所在目录  
+2. 直接在文件夹地址栏中全选并输入 `cmd` 回车来打开 CMD 窗口，此时默认就位于当前目录下  
+4. 输入带参数的命令，如：`CloudflareST.exe -tll 50 -tl 200`即可运行
+
+> 当然你也可以随便打开一个 CMD 窗口，然后输入如 `cd /d 'D:\Program Files\CloudflareST'` 来进入程序目录
+
+> **提示**：如果用的是 **PowerShell** 只需把命令中的 `CloudflareST.exe` 改为 `.\CloudflareST.exe` 即可。
+
+</details>
+
+****
+
+#### \# Windows 快捷方式带参数运行 CloudflareST
+
+如果不经常修改运行参数（比如平时都是直接双击运行）的人，建议使用快捷方式，更方便点。
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+右键 `CloudflareST.exe` 文件 - **\[创建快捷方式\]**，然后右键该快捷方式 - **\[属性\]**，修改其**目标**：
+
+``` bash
+# 如果要不输出结果文件，那么请加上 -o ' '，引号里的是空格（没有空格会导致该参数被省略）。
+D:\ABC\CloudflareST\CloudflareST.exe -n 500 -t 4 -dn 20 -dt 5 -o ' '
+
+# 如果文件路径包含引号，则需要把启动参数放在引号外面，记得引号和 - 之间有空格。
+'D:\Program Files\CloudflareST\CloudflareST.exe' -n 500 -t 4 -dn 20 -dt 5 -o ' '
+
+# 注意！快捷方式 - 起始位置 不能是空的，否则就会因为绝对路径而找不到 ip.txt 文件
+```
+
+</details>
+
+****
+
+#### \# IPv4/IPv6
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+``` bash
+# 指定自带的 IPv4 数据文件可测速这些 IPv4 地址（-f 默认值就是 ip.txt，所以该参数可省略）
+CloudflareST.exe -f ip.txt
+
+# 指定自带的 IPv6 数据文件可测速这些 IPv6 地址
+# 另外，v2.1.0 版本后支持 IPv4+IPv6 混合测速并移除了 -ipv6 参数，因此一个文件内可以同时包含 IPv4+IPv6 地址
+CloudflareST.exe -f ipv6.txt
+
+# 也可以直接通过参数指定要测速的 IP
+CloudflareST.exe -ip 1.1.1.1,2606:4700::/32
+```
+
+> 测速 IPv6 时，可能会注意到每次测速数量都不一样，了解原因： [#120](https://github.com/XIU2/CloudflareSpeedTest/issues/120)  
+> 因为 IPv6 太多（以亿为单位），且绝大部分 IP 段压根未启用，所以我只扫了一部分可用的 IPv6 段写到 `ipv6.txt` 文件中，有兴趣的可以自行扫描增删，ASN 数据源来自：[bgp.he.net](https://bgp.he.net/AS13335#_prefixes6)
+
+</details>
+
+****
+
+#### \# HTTPing
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+目前有两种延迟测速模式，分别为 **TCP 协议、HTTP 协议**。  
+TCP 协议耗时更短、消耗资源更少，超时时间为 1 秒，该协议为默认模式。  
+HTTP 协议适用于快速测试某域名指向某 IP 时是否可以访问，超时时间为 2 秒。  
+同一个 IP，各协议去 Ping 得到的延迟一般为：**ICMP < TCP < HTTP**，越靠右对丢包等网络波动越敏感。
+
+> 注意：HTTPing 本质上也算一种**网络扫描**行为，因此如果你在服务器上面运行，需要**降低并发**(`-n`)，否则可能会被一些严格的商家暂停服务。如果你遇到 HTTPing 首次测速可用 IP 数量正常，后续测速越来越少甚至直接为 0，但停一段时间后又恢复了的情况，那么也可能是被 运营商、Cloudflare CDN 认为你在网络扫描而**触发临时限制机制**，因此才会过一会儿就恢复了，建议**降低并发**(`-n`)减少这种情况的发生。
+
+> 另外，本软件 HTTPing 仅获取**响应头(response headers)**，并不获取正文内容（即 URL 文件大小不影响 HTTPing 测试，但如果你还要下载测速的话，那么还是需要一个大文件的），类似于 curl -i 功能。
+
+``` bash
+# 只需加上 -httping 参数即可切换到 HTTP 协议延迟测速模式
+CloudflareST.exe -httping
+
+# 软件会根据访问时网页返回的有效 HTTP 状态码来判断可用性（当然超时也算），默认对返回 200 301 302 这三个 HTTP 状态码的视为有效，可以手动指定认为有效的 HTTP 状态码，但只能指定一个（你需要提前确定测试地址正常情况下会返回哪个状态码）
+CloudflareST.exe -httping -httping-code 200
+
+# 通过 -url 参数来指定 HTTPing 测试地址（可以是任意网页 URL，不局限于具体文件地址）
+CloudflareST.exe -httping -url https://cf.xiu2.xyz/url
+# 如果你要 HTTPing 测试其他网站/CDN，那么指定一个该网站/使用该 CDN 的地址（因为软件默认地址是 Cloudflare 的，只能用于测试 Cloudflare 的 IP）
+
+# 注意：如果测速地址为 HTTP 协议，记得加上 -tp 80（这个参数会影响 延迟测速/下载测速 时使用的端口）
+# 同理，如果要测速 80 端口，那么也需要加上 -url 参数来指定一个 http:// 协议的地址才行（且该地址不会强制重定向至 HTTPS），如果是非 80 443 端口，那么需要确定该下载测速地址是否支持通过该端口访问。
+CloudflareST.exe -httping -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/5952/movie_max.webm
+```
+
+</details>
+
+****
+
+#### \# 匹配指定地区(colo 机场三字码)
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+Cloudflare CDN 的节点 IP 是 Anycast IP，即每个 IP 对应的服务器节点及地区不是固定的，而是动态变化的，**不同地区、不同运营商、不同时间段**访问**同一个 IP** 分配到的服务器节点地区和路线也都是不一样的（比如同一个 IP，美国人访问就是分配到就近的美国节点服务器，日本人访问则就又变成了就近的日本节点服务器了，国内内地就比较特殊了，只能给你分配到其他国家，当然不同的 IP 段路由变化/分配逻辑也是不同的，有的 IP 段会较为固定）。
+
+> **注意**！虽然 Cloudflare CDN 有很多亚洲节点，但**不代表你就能用上**，新加坡人测速可能随便一抓一大把的新加坡节点，但你全部扫一遍可能都遇不到一个，因为这是由 CDN 控制的。Anycast IP 的路由是经常变的，同一个 IP 今天可能是美国，明天你再访问可能就又分配到欧洲节点了（当然这只是个例子，一般没有那么频繁，这也和很多因素有关，比如线路拥塞程度，成本变动等），因此**不要对该功能有过高期待**~
+
+或者你随便找个 Cloudflare CDN 的 IP（比如官网域名的解析 IP `104.16.123.96`），然后去那些有全球节点的[在线 Ping 测试](https://ping.sx/ping?t=104.16.123.96)网站，你就会发现这个 IP 在全球大部分地区的延迟都是个位数（而且很多都是 0.X ms），就算一些地方延迟高一些但也基本都控制在 几十ms，只有在国内才会发现突然变成了 上百ms 了。
+
+这就是 Anycast 技术，也就只有国内大陆这种特殊的网络情况，才需要对 Anycast 的 CDN IP 进行优选。
+
+因此，对于这种 Anycast IP 的实际服务器位置，就不能靠那些在线 IP 地址位置查询网站来判断了。
+
+除了通过 **HTTP 响应头**获取机场三字码外（该功能的实现方式），还可以手动访问 `http://CloudflareIP/cdn-cgi/trace` 来获知 CDN 分配给你的实际节点地区机场三字码。
+
+> 该功能支持 Cloudflare CDN 和 AWS CloudFront CDN，且这两个 CDN 的机场三字码是通用的（算是惯例）。  
+> **注意**：如果你要用于筛选 AWS CloudFront CDN 地区，那么要通过 `-url` 参数指定一个使用 AWS CloudFront CDN 的下载测速地址（因为软件默认下载测速地址是 Cloudflare CDN 的）
+
+``` bash
+# 指定地区名后，延迟测速后得到的结果就都是指定地区的 IP 了（如果没有指定 -dd 的话则会继续进行下载测速）
+# 如果延迟测速后结果为 0，则说明没有找到任何一个（未超时可用的）指定地区的 IP。
+# 节点地区名为当地 机场三字码，指定多个时用英文逗号分隔，v2.2.3 版本后支持小写
+
+CloudflareST.exe -httping -cfcolo HKG,KHH,NRT,LAX,SEA,SJC,FRA,MAD
+
+# 注意，该参数只有在 HTTPing 延迟测速模式下才可用（因为软件是通过 HTTP 链接中的响应头来获得该 IP 的实际地区机场三字码）
+```
+
+> 两个 CDN 机场三字码通用，因此各地区名可见：https://www.cloudflarestatus.com/
+
+</details>
+
+****
+
+#### \# 文件相对/绝对路径
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+``` bash
+# 指定 IPv4 数据文件，不显示结果直接退出，输出结果到文件（-p 值为 0）
+CloudflareST.exe -f 1.txt -p 0 -dd
+
+# 指定 IPv4 数据文件，不输出结果到文件，直接显示结果（-p 值为 10 条，-o 值为空但引号不能少）
+CloudflareST.exe -f 2.txt -o '' -p 10 -dd
+
+# 指定 IPv4 数据文件 及 输出结果到文件（相对路径，即当前目录下，如含空格请加上引号）
+CloudflareST.exe -f 3.txt -o result.txt -dd
+
+
+# 指定 IPv4 数据文件 及 输出结果到文件（相对路径，即当前目录内的 abc 文件夹下，如含空格请加上引号）
+# Linux（CloudflareST 程序所在目录内的 abc 文件夹下）
+./CloudflareST -f abc/3.txt -o abc/result.txt -dd
+
+# Windows（注意是反斜杠）
+CloudflareST.exe -f abc\3.txt -o abc\result.txt -dd
+
+
+# 指定 IPv4 数据文件 及 输出结果到文件（绝对路径，即 C:\abc\ 目录下，如含空格请加上引号）
+# Linux（/abc/ 目录下）
+./CloudflareST -f /abc/4.txt -o /abc/result.csv -dd
+
+# Windows（注意是反斜杠）
+CloudflareST.exe -f C:\abc\4.txt -o C:\abc\result.csv -dd
+
+
+# 如果要以【绝对路径】运行 CloudflareST，那么 -f / -o 参数中的文件名也必须是【绝对路径】，否则会报错找不到文件！
+# Linux（/abc/ 目录下）
+/abc/CloudflareST -f /abc/4.txt -o /abc/result.csv -dd
+
+# Windows（注意是反斜杠）
+C:\abc\CloudflareST.exe -f C:\abc\4.txt -o C:\abc\result.csv -dd
+```
+</details>
+
+****
+
+#### \# 测速其他端口
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+``` bash
+# 如果你想要测速非默认 443 的其他端口，则需要通过 -tp 参数指定（该参数会影响 延迟测速/下载测速 时使用的端口）
+
+# 如果要延迟测速 80 端口+下载测速（如果 -dd 禁用了下载测速则不需要），那么还需要指定 http:// 协议的下载测速地址才行（且该地址不会强制重定向至 HTTPS，因为那样就变成 443 端口了）
+CloudflareST.exe -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/5952/movie_max.webm
+
+# 如果是非 80 443 的其他端口，那么需要确定你使用的下载测速地址是否支持通过该非标端口访问。
+```
+
+</details>
+
+****
+
+#### \# 自定义测速地址
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+``` bash
+# 该参数适用于下载测速 及 HTTP 协议的延迟测速，对于后者该地址可以是任意网页 URL（不局限于具体文件地址）
+
+# 地址要求：可以直接下载、文件大小超过 200MB、用的是 Cloudflare CDN
+CloudflareST.exe -url https://cf.xiu2.xyz/url
+
+# 注意：如果测速地址为 HTTP 协议（该地址不能强制重定向至 HTTPS），记得加上 -tp 80（这个参数会影响 延迟测速/下载测速 时使用的端口），如果是非 80 443 端口，那么需要确定下载测速地址是否支持通过该端口访问。
+CloudflareST.exe -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/5952/movie_max.webm
+```
+
+</details>
+
+****
+
+#### \# 自定义测速条件（指定 延迟/丢包/下载速度 的目标范围）
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+> 注意：延迟测速进度条右边的**可用数量**，仅指延迟测速过程中**未超时的 IP 数量**，和延迟上下限条件无关。
+
+- 仅指定 **[平均延迟上限]** 条件
+
+``` bash
+# 平均延迟上限：200 ms，下载速度下限：0 MB/s
+# 即找到平均延迟低于 200 ms 的 IP，然后再按延迟从低到高进行 10 次下载测速
+CloudflareST.exe -tl 200
+```
+
+> 如果**没有找到一个满足延迟**条件的 IP，那么不会输出任何内容。
+
+****
+
+- 仅指定 **[平均延迟上限]** 条件，且**只延迟测速，不下载测速**
+
+``` bash
+# 平均延迟上限：200 ms，下载速度下限：0 MB/s，数量：不知道多少 个
+# 即只输出低于 200ms 的 IP，且不再下载测速（因为不再下载测速，所以 -dn 参数就无效了）
+CloudflareST.exe -tl 200 -dd
+```
+
+- 仅指定 **[丢包几率上限]** 条件
+
+``` bash
+# 丢包几率上限：0.25
+# 即找到丢包率低于等于 0.25 的 IP，范围 0.00~1.00，如果 -tlr 0 则代表过滤掉任何丢包的 IP
+CloudflareST.exe -tlr 0.25
+```
+
+****
+
+- 仅指定 **[下载速度下限]** 条件
+
+``` bash
+# 平均延迟上限：9999 ms，下载速度下限：5 MB/s，数量：10 个（可选）
+# 即需要找到 10 个平均延迟低于 9999 ms 且下载速度高于 5 MB/s 的 IP 才会停止测速
+CloudflareST.exe -sl 5 -dn 10
+```
+
+> 如果**没有找到一个满足速度**条件的 IP，那么会**忽略条件输出所有 IP 测速结果**（方便你下次测速时调整条件）。
+
+> 没有指定平均延迟上限时，如果一直**凑不够**满足条件的 IP 数量，就会**一直测速**下去。  
+> 所以建议**同时指定 [下载速度下限] + [平均延迟上限]**，这样测速到指定延迟上限还没凑够数量，就会终止测速。
+
+****
+
+- 同时指定 **[平均延迟上限] + [下载速度下限]** 条件
+
+``` bash
+# 平均延迟上限、下载速度下限均支持小数（如 -sl 0.5）
+# 平均延迟上限：200 ms，下载速度下限：5.6 MB/s，数量：10 个（可选）
+# 即需要找到 10 个平均延迟低于 200 ms 且下载速度高于 5 .6MB/s 的 IP 才会停止测速
+CloudflareST.exe -tl 200 -sl 5.6 -dn 10
+```
+
+> 如果**没有找到一个满足延迟**条件的 IP，那么不会输出任何内容。  
+> 如果**没有找到一个满足速度**条件的 IP，那么会忽略条件输出所有 IP 测速结果（方便你下次测速时调整条件）。  
+> 所以建议先不指定条件测速一遍，看看平均延迟和下载速度大概在什么范围，避免指定条件**过低/过高**！
+
+> 因为 Cloudflare 公开的 IP 段是**回源 IP+任播 IP**，而**回源 IP**是无法使用的，所以下载测速是 0.00。  
+> 运行时可以加上 `-sl 0.01`（下载速度下限），过滤掉**回源 IP**（下载测速低于 0.01MB/s 的结果）。
+
+</details>
+
+****
+
+#### \# 单独对一个或多个 IP 测速
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+**方式 一**：
+直接通过参数指定要测速的 IP 段数据。
+``` bash
+# 先进入 CloudflareST 所在目录，然后运行：
+# Windows 系统（在 CMD 中运行）
+CloudflareST.exe -ip 1.1.1.1,2.2.2.2/24,2606:4700::/32
+
+# Linux 系统
+./CloudflareST -ip 1.1.1.1,2.2.2.2/24,2606:4700::/32
+```
+
+****
+
+**方式 二**：
+或者把这些 IP 按如下格式写入到任意文本文件中，例如：`1.txt`
+
+```
+1.1.1.1
+1.1.1.200
+1.0.0.1/24
+2606:4700::/32
+```
+
+> 单个 IP 的话可以省略 `/32` 子网掩码了（即 `1.1.1.1`等同于 `1.1.1.1/32`）。  
+> 子网掩码 `/24` 指的是这个 IP 最后一段，即 `1.0.0.1~1.0.0.255`。
+
+
+然后运行 CloudflareST 时加上启动参数 `-f 1.txt` 来指定 IP 段数据文件。
+
+``` bash
+# 先进入 CloudflareST 所在目录，然后运行：
+# Windows 系统（在 CMD 中运行）
+CloudflareST.exe -f 1.txt
+
+# Linux 系统
+./CloudflareST -f 1.txt
+
+# 对于 1.0.0.1/24 这样的 IP 段只会随机最后一段（1.0.0.1~255），如果要测速该 IP 段中的所有 IP，请加上 -allip 参数。
+```
+
+</details>
+
+****
+
+#### \# 一劳永逸加速所有使用 Cloudflare CDN 的网站（不需要再一个个添加域名到 Hosts 了）
+
+我以前说过，开发该软件项目的目的就是为了通过**改 Hosts 的方式来加速访问使用 Cloudflare CDN 的网站**。
+
+但就如 [**#8**](https://github.com/XIU2/CloudflareSpeedTest/issues/8) 所说，一个个添加域名到 Hosts 实在**太麻烦**了，于是我就找到了个**一劳永逸**的办法！可以看这个 [**还在一个个添加 Hosts？完美本地加速所有使用 Cloudflare CDN 的网站方法来了！**](https://github.com/XIU2/CloudflareSpeedTest/discussions/71) 和另一个[依靠本地 DNS 服务来修改域名解析 IP 为自选 IP](https://github.com/XIU2/CloudflareSpeedTest/discussions/317) 的教程。
+
+****
+
+#### \# 自动更新 Hosts
+
+考虑到很多人获得最快 Cloudflare CDN IP 后，需要替换 Hosts 文件中的 IP。
+
+可以看这个 [**Issues**](https://github.com/XIU2/CloudflareSpeedTest/discussions/312) 获取 **Windows/Linux 自动更新 Hosts 脚本**！
+
+****
+
+## 问题反馈
+
+如果你遇到什么问题，可以先去 [**Issues**](https://github.com/XIU2/CloudflareSpeedTest/issues)、[Discussions](https://github.com/XIU2/CloudflareSpeedTest/discussions) 里看看是否有别人问过了（记得去看下  [**Closed**](https://github.com/XIU2/CloudflareSpeedTest/issues?q=is%3Aissue+is%3Aclosed) 的）。  
+如果没找到类似问题，请新开个 [**Issues**](https://github.com/XIU2/CloudflareSpeedTest/issues/new) 来告诉我！
+
+> [!NOTE]
+> **注意**！_与 CloudflareST 本身 `反馈问题、功能建议` 无关的，请前往项目内部 论坛 讨论（顶部的 `💬 Discussions`_  
+
+****
+
+## 如果帮到你的话就 '打赏' 一下吧~🎉✨
+
+![微信赞赏](https://github.com/XIU2/XIU2/blob/master/img/zs-01.png)![支付宝赞赏](https://github.com/XIU2/XIU2/blob/master/img/zs-02.png)
+
+****
+
+## 衍生项目
+
+- _https://github.com/xianshenglu/cloudflare-ip-tester-app_  
+_**CloudflareST 安卓版 APP [#202](https://github.com/XIU2/CloudflareSpeedTest/discussions/320)**_
+
+- _https://github.com/mingxiaoyu/luci-app-cloudflarespeedtest_  
+_**CloudflareST OpenWrt 路由器插件版 [#174](https://github.com/XIU2/CloudflareSpeedTest/discussions/319)**_
+
+- _https://github.com/immortalwrt-collections/openwrt-cdnspeedtest_  
+_**CloudflareST OpenWrt 原生编译版本 [#64](https://github.com/XIU2/CloudflareSpeedTest/discussions/64)**_
+
+- _https://github.com/hoseinnikkhah/CloudflareSpeedTest-English_  
+_**English language version of CloudflareST (Text language differences only) [#64](https://github.com/XIU2/CloudflareSpeedTest/issues/68)**_
+
+> _此处仅收集了在本项目中宣传过的部分 CloudflareST 相关衍生项目，如果有遗漏可以告诉我~_
+
+****
+
+## 感谢项目
+
+- _https://github.com/Spedoske/CloudflareScanner_
+
+> _因为该项目已经很长时间没更新了，而我又产生了很多功能需求，所以我临时学了下 Go 语言就上手了（菜）..._  
+> _本软件基于该项目制作，但**已添加大量功能及修复 BUG**，并根据大家的使用反馈积极添加、优化功能（闲）..._
+
+****
+
+## 手动编译
+
+<details>
+<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
+
+****
+
+为了方便，我是在编译的时候将版本号写入代码中的 version 变量，因此你手动编译时，需要像下面这样在 `go build` 命令后面加上 `-ldflags` 参数来指定版本号：
+
+```bash
+go build -ldflags '-s -w -X main.version=v2.3.3'
+# 在 CloudflareSpeedTest 目录中通过命令行（例如 CMD、Bat 脚本）运行该命令，即可编译一个可在和当前设备同样系统、位数、架构的环境下运行的二进制程序（Go 会自动检测你的系统位数、架构）且版本号为 v2.3.3
+```
+
+如果想要在 Windows 64位系统下编译**其他系统、架构、位数**，那么需要指定 **GOOS** 和 **GOARCH** 变量。
+
+例如在 Windows 系统下编译一个适用于 **Linux 系统 amd 架构 64 位**的二进制程序：
+
+```bat
+SET GOOS=linux
+SET GOARCH=amd64
+go build -ldflags '-s -w -X main.version=v2.3.3'
+```
+
+例如在 Linux 系统下编译一个适用于 **Windows 系统 amd 架构 32 位**的二进制程序：
+
+```bash
+GOOS=windows
+GOARCH=386
+go build -ldflags '-s -w -X main.version=v2.3.3'
+```
+
+> 可以运行 `go tool dist list` 来查看当前 Go 版本支持编译哪些组合。
+
+****
+
+当然，为了方便批量编译，我会专门指定一个变量为版本号，后续编译直接调用该版本号变量即可。  
+同时，批量编译的话，还需要分开放到不同文件夹才行（或者文件名不同），需要加上 `-o` 参数指定。
+
+```bat
+:: Windows 系统下是这样：
+SET version=v2.3.3
+SET GOOS=linux
+SET GOARCH=amd64
+go build -o Releases\CloudflareST_linux_amd64\CloudflareST -ldflags '-s -w -X main.version=%version%'
+```
+
+```bash
+# Linux 系统下是这样：
+version=v2.3.3
+GOOS=windows
+GOARCH=386
+go build -o Releases/CloudflareST_windows_386/CloudflareST.exe -ldflags '-s -w -X main.version=${version}'
+```
+
+</details>
+
+****
+
+## License
+
+The GPL-3.0 License.$$$$$$$">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://692.cloudns.be/post/CloudflareSpeedTest%E3%80%8C-zi-xuan-you-xuan-%20IP%E3%80%8D.html">
+<meta property="og:image" content="avatar.svg">
+<title>CloudflareSpeedTest「自选优选 IP」</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+html { background: #d2d4d6; }
+body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto; padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25; border-radius: 10px; background: rgba(10, 100, 130, 0.08); box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);  overflow: auto;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:1.6em;font-weight:bold;color: #1f85c9;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+.markdown-body h1{font-size: 1.4em;}
+.markdown-body h2{font-size: 1.2em;}
+.markdown-body h3{font-size: 1em;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 12px;}
+    .postTitle{font-size:1.4em; color: #1f85c9;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+<style>.markdown-alert{padding:0.5rem 1rem;margin-bottom:1rem;border-left:.25em solid var(--borderColor-default,var(--color-border-default));}.markdown-alert .markdown-alert-title {display:flex;font-weight:var(--base-text-weight-medium,500);align-items:center;line-height:1;}.markdown-alert>:first-child {margin-top:0;}.markdown-alert>:last-child {margin-bottom:0;}</style><style>.markdown-alert.markdown-alert-note {border-left-color:var(--borderColor-accent-emphasis, var(--color-accent-emphasis));background-color:var(--color-accent-subtle);}.markdown-alert.markdown-alert-note .markdown-alert-title {color: var(--fgColor-accent,var(--color-accent-fg));}</style><style>.markdown-alert.markdown-alert-tip {border-left-color:var(--borderColor-success-emphasis, var(--color-success-emphasis));background-color:var(--color-success-subtle);}.markdown-alert.markdown-alert-tip .markdown-alert-title {color: var(--fgColor-success,var(--color-success-fg));}</style><style>.markdown-alert.markdown-alert-important {border-left-color:var(--borderColor-done-emphasis, var(--color-done-emphasis));background-color:var(--color-done-subtle);}.markdown-alert.markdown-alert-important .markdown-alert-title {color: var(--fgColor-done,var(--color-done-fg));}</style>
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">CloudflareSpeedTest「自选优选 IP」</h1>
+<div class="title-right">
+    <a href="https://692.cloudns.be" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/fjvi/note/issues/27" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h1>XIU2/CloudflareSpeedTest</h1>
+<p><a href="https://github.com/XIU2/CloudflareSpeedTest/"><img src="https://camo.githubusercontent.com/e390ccf7879b480e69182cc91c212267f162a4007d3829a9a9d8bf1fc266b3a2/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f676f2d6d6f642f676f2d76657273696f6e2f584955322f436c6f7564666c6172655370656564546573742e7376673f7374796c653d666c61742d737175617265266c6162656c3d476f26636f6c6f723d303041444438266c6f676f3d676f" alt="Go Version" data-canonical-src="https://img.shields.io/github/go-mod/go-version/XIU2/CloudflareSpeedTest.svg?style=flat-square&amp;label=Go&amp;color=00ADD8&amp;logo=go" style="max-width: 100%;"></a><br>
+<a href="https://github.com/XIU2/CloudflareSpeedTest/releases/latest"><img src="https://camo.githubusercontent.com/5a02c6576c5de593678cff38abd4a9e371f88f822d52909c07ffe58b36876386/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f762f72656c656173652f584955322f436c6f7564666c6172655370656564546573742e7376673f7374796c653d666c61742d737175617265266c6162656c3d52656c6561736526636f6c6f723d303041444438266c6f676f3d676974687562" alt="Release Version" data-canonical-src="https://img.shields.io/github/v/release/XIU2/CloudflareSpeedTest.svg?style=flat-square&amp;label=Release&amp;color=00ADD8&amp;logo=github" style="max-width: 100%;"></a><br>
+<a href="https://github.com/XIU2/CloudflareSpeedTest/"><img src="https://camo.githubusercontent.com/f87e92c60b0a79b01abdc2646ed8b9f6ef273123ab78eee95eababa0254f476f/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f6c6963656e73652f584955322f436c6f7564666c6172655370656564546573742e7376673f7374796c653d666c61742d737175617265266c6162656c3d4c6963656e736526636f6c6f723d303041444438266c6f676f3d676974687562" alt="GitHub license" data-canonical-src="https://img.shields.io/github/license/XIU2/CloudflareSpeedTest.svg?style=flat-square&amp;label=License&amp;color=00ADD8&amp;logo=github" style="max-width: 100%;"></a><br>
+<a href="https://github.com/XIU2/CloudflareSpeedTest/"><img src="https://camo.githubusercontent.com/70b32465ffcc0d109593f8f7076a9dca67eb3654a415334a2197301c2bdafec0/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f584955322f436c6f7564666c6172655370656564546573742e7376673f7374796c653d666c61742d737175617265266c6162656c3d5374617226636f6c6f723d303041444438266c6f676f3d676974687562" alt="GitHub Star" data-canonical-src="https://img.shields.io/github/stars/XIU2/CloudflareSpeedTest.svg?style=flat-square&amp;label=Star&amp;color=00ADD8&amp;logo=github" style="max-width: 100%;"></a><br>
+<a href="https://github.com/XIU2/CloudflareSpeedTest/"><img src="https://camo.githubusercontent.com/917aea6205065d6b7aac8059ff0442bd674168126f5b89051b4dad52af605989/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f666f726b732f584955322f436c6f7564666c6172655370656564546573742e7376673f7374796c653d666c61742d737175617265266c6162656c3d466f726b26636f6c6f723d303041444438266c6f676f3d676974687562" alt="GitHub Fork" data-canonical-src="https://img.shields.io/github/forks/XIU2/CloudflareSpeedTest.svg?style=flat-square&amp;label=Fork&amp;color=00ADD8&amp;logo=github" style="max-width: 100%;"></a></p>
+<p>国外很多网站都在使用 Cloudflare CDN，但分配给中国内地访客的 IP 并不友好（延迟高、丢包多、速度慢）。<br>
+虽然 Cloudflare 公开了所有 <a href="https://www.cloudflare.com/zh-cn/ips/" rel="nofollow">IP 段</a> ，但想要在这么多 IP 中找到适合自己的，怕是要累死，于是就有了这个软件。</p>
+<p><strong>「自选优选 IP」测试 Cloudflare CDN 延迟和速度，获取最快 IP (IPv4+IPv6)</strong>！好用的话<strong>点个<code class="notranslate">⭐</code>鼓励一下叭~</strong></p>
+<blockquote>
+<p><em>分享我其他开源项目：<a href="https://github.com/XIU2/TrackersListCollection"><strong>TrackersList.com</strong> - 全网热门 BT Tracker 列表！有效提高 BT 下载速度~</a> <a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/b03c6089a42f9cb8d97ebeadc48d25b256e9849aebf40fb215ab1489304b674c/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f584955322f547261636b6572734c697374436f6c6c656374696f6e2e7376673f7374796c653d666c61742d737175617265266c6162656c3d5374617226636f6c6f723d343238356464266c6f676f3d676974687562"><img src="https://camo.githubusercontent.com/b03c6089a42f9cb8d97ebeadc48d25b256e9849aebf40fb215ab1489304b674c/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f584955322f547261636b6572734c697374436f6c6c656374696f6e2e7376673f7374796c653d666c61742d737175617265266c6162656c3d5374617226636f6c6f723d343238356464266c6f676f3d676974687562" height="16px" data-canonical-src="https://img.shields.io/github/stars/XIU2/TrackersListCollection.svg?style=flat-square&amp;label=Star&amp;color=4285dd&amp;logo=github" style="max-width: 100%;"></a></em><br>
+<em><a href="https://github.com/XIU2/UserScript"><strong>UserScript</strong> - 🐵 Github 高速下载、知乎增强、自动无缝翻页、护眼模式 等十几个<strong>油猴脚本</strong>~</a> <a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/cfc57c79555fe4478130cf03fffafb6eaf7a85d6dd49487381f40cc947848384/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f584955322f557365725363726970742e7376673f7374796c653d666c61742d737175617265266c6162656c3d5374617226636f6c6f723d343238356464266c6f676f3d676974687562"><img src="https://camo.githubusercontent.com/cfc57c79555fe4478130cf03fffafb6eaf7a85d6dd49487381f40cc947848384/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f584955322f557365725363726970742e7376673f7374796c653d666c61742d737175617265266c6162656c3d5374617226636f6c6f723d343238356464266c6f676f3d676974687562" height="16px" data-canonical-src="https://img.shields.io/github/stars/XIU2/UserScript.svg?style=flat-square&amp;label=Star&amp;color=4285dd&amp;logo=github" style="max-width: 100%;"></a></em><br>
+<em><a href="https://github.com/XIU2/SNIProxy"><strong>SNIProxy</strong> - 🧷 自用的简单 SNI Proxy（支持全平台、全系统、前置代理、配置简单等~</a> <a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/cda949f2bcc0014e90babfe0bb15085a342c1773f57e226006ee2dec89b8f1df/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f584955322f534e4950726f78792e7376673f7374796c653d666c61742d737175617265266c6162656c3d5374617226636f6c6f723d343238356464266c6f676f3d676974687562"><img src="https://camo.githubusercontent.com/cda949f2bcc0014e90babfe0bb15085a342c1773f57e226006ee2dec89b8f1df/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f584955322f534e4950726f78792e7376673f7374796c653d666c61742d737175617265266c6162656c3d5374617226636f6c6f723d343238356464266c6f676f3d676974687562" height="16px" data-canonical-src="https://img.shields.io/github/stars/XIU2/SNIProxy.svg?style=flat-square&amp;label=Star&amp;color=4285dd&amp;logo=github" style="max-width: 100%;"></a></em></p>
+</blockquote>
+<blockquote>
+<p>本项目也支持对<strong>其他 CDN / 网站 IP</strong> 延迟测速（如：<a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/304">CloudFront</a>、<a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/303">Gcore</a> CDN），但下载测速需自行寻找地址</p>
+</blockquote>
+<div class="markdown-alert markdown-alert-important"><p class="markdown-alert-title"><svg class="octicon octicon-report mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p><p>Cloudflare CDN 已<strong>明文禁止代理</strong>方式使用，对于<strong>代理套 CDN</strong> 的自行承担风险，请勿过度依赖 <a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/382">#382</a> <a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/383">#383</a></p>
+</div>
+<hr>
+<h2># 快速使用</h2>
+<h3>下载运行</h3>
+<ol>
+<li>下载编译好的可执行文件（ <a href="https://github.com/XIU2/CloudflareSpeedTest/releases">Github Releases</a> / <a href="https://pan.lanpw.com/b0742hkxe" rel="nofollow">蓝奏云</a> ）并解压。</li>
+<li>双击运行 <code class="notranslate">CloudflareST.exe</code> 文件（Windows 系统），等待测速完成...</li>
+</ol>
+<details>
+<summary><code class="notranslate"><strong>「 点击查看 Linux 系统下的使用示例 」</strong></code></summary>
+<hr>
+<p>以下命令仅为示例，版本号和文件名请前往 <a href="https://github.com/XIU2/CloudflareSpeedTest/releases"><strong>Releases</strong></a> 查看。</p>
+<div class="highlight highlight-source-yaml"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 如果是第一次使用，则建议创建新文件夹（后续更新时，跳过该步骤）</span>
+<span class="pl-s">mkdir CloudflareST</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 进入文件夹（后续更新，只需要从这里重复下面的下载、解压命令即可）</span>
+<span class="pl-s">cd CloudflareST</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 下载 CloudflareST 压缩包（自行根据需求替换 URL 中 [版本号] 和 [文件名]）</span>
+<span class="pl-s">wget -N https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz</span>
+<span class="pl-c"><span class="pl-c">#</span> 如果你是在国内网络环境中下载，那么请使用下面这几个镜像加速之一：</span>
+<span class="pl-c"><span class="pl-c">#</span> wget -N https://ghp.ci/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz</span>
+<span class="pl-c"><span class="pl-c">#</span> wget -N https://ghproxy.cc/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz</span>
+<span class="pl-c"><span class="pl-c">#</span> wget -N https://ghproxy.net/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz</span>
+<span class="pl-c"><span class="pl-c">#</span> wget -N https://gh-proxy.com/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz</span>
+<span class="pl-c"><span class="pl-c">#</span> 如果下载失败的话，尝试删除 -N 参数（如果是为了更新，则记得提前删除旧压缩包 rm CloudflareST_linux_amd64.tar.gz ）</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 解压（不需要删除旧文件，会直接覆盖，自行根据需求替换 文件名）</span>
+<span class="pl-s">tar -zxf CloudflareST_linux_amd64.tar.gz</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 赋予执行权限</span>
+<span class="pl-s">chmod +x CloudflareST</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 运行（不带参数）</span>
+<span class="pl-s">./CloudflareST</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 运行（带参数示例）</span>
+<span class="pl-s">./CloudflareST -dd -tll 90</span></pre></div>
+<blockquote>
+<p>如果平<strong>均延迟非常低</strong>（如 0.xx），则说明 CloudflareST <strong>测速时走了代理</strong>，请先关闭代理软件后再测速。<br>
+如果在<strong>路由器</strong>上运行，建议先关闭路由器内的代理（或将其排除），否则测速结果可能会<strong>不准确/无法使用</strong>。</p>
+</blockquote>
+</details>
+<hr>
+<blockquote>
+<p><em>在<strong>手机</strong>上独立运行 CloudflareST 测速的简单教程：<strong><a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/61">Android</a>、<a href="https://github.com/xianshenglu/cloudflare-ip-tester-app">Android APP</a>、<a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/321">IOS</a></strong></em></p>
+</blockquote>
+<div class="markdown-alert markdown-alert-note"><p class="markdown-alert-title"><svg class="octicon octicon-info mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p><p>注意！本软件仅适用于网站，<strong>不支持给使用 UDP 协议的 Cloudflare WARP 优选 IP</strong>，具体见：<a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/392">#392</a></p>
+</div>
+<h3>结果示例</h3>
+<p>测速完毕后，默认会显示<strong>最快的 10 个 IP</strong>，示例：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">IP 地址           已发送  已接收  丢包率  平均延迟  下载速度 (MB/s)
+104.27.200.69     4       4       0.00    146.23    28.64
+172.67.60.78      4       4       0.00    139.82    15.02
+104.25.140.153    4       4       0.00    146.49    14.90
+104.27.192.65     4       4       0.00    140.28    14.07
+172.67.62.214     4       4       0.00    139.29    12.71
+104.27.207.5      4       4       0.00    145.92    11.95
+172.67.54.193     4       4       0.00    146.71    11.55
+104.22.66.8       4       4       0.00    147.42    11.11
+104.27.197.63     4       4       0.00    131.29    10.26
+172.67.58.91      4       4       0.00    140.19    9.14
+...
+
+<span class="pl-c"><span class="pl-c">#</span> 如果平均延迟非常低（如 0.xx），则说明 CloudflareST 测速时走了代理，请先关闭代理软件后再测速。</span>
+<span class="pl-c"><span class="pl-c">#</span> 如果在路由器上运行，请先关闭路由器内的代理（或将其排除），否则测速结果可能会不准确/无法使用。</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 因为每次测速都是在每个 IP 段中随机 IP，所以每次的测速结果都不可能相同，这是正常的！</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 注意！我发现电脑开机后第一次测速延迟会明显偏高（手动 TCPing 也一样），后续测速都正常</span>
+<span class="pl-c"><span class="pl-c">#</span> 因此建议大家开机后第一次正式测速前，先随便测几个 IP（无需等待延迟测速完成，只要进度条动了就可以直接关了）</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 软件在 默认参数 下的整个流程大概步骤：</span>
+<span class="pl-c"><span class="pl-c">#</span> 1. 延迟测速（默认 TCPing 模式，HTTPing 模式需要手动加上参数）</span>
+<span class="pl-c"><span class="pl-c">#</span> 2. 延迟排序（延迟 从低到高 排序并按条件过滤，不同丢包率会分开排序，因此可能会有一些延迟低但丢包的 IP 排到后面）</span>
+<span class="pl-c"><span class="pl-c">#</span> 3. 下载测速（从延迟最低的 IP 开始依次下载测速，默认测够 10 个就会停止）</span>
+<span class="pl-c"><span class="pl-c">#</span> 4. 速度排序（速度从高到低排序）</span>
+<span class="pl-c"><span class="pl-c">#</span> 5. 输出结果（通过参数控制是否输出到命令行(-p 0)或输出到文件(-o "")）</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 注意：输出的结果文件 result.csv 通过微软 Excel 表格打开会中文乱码，这是正常的，其他表格软件/记事本都显示正常</span></pre></div>
+<p>测速结果第一行就是<strong>既下载速度最快、又平均延迟最低的最快 IP</strong>！</p>
+<p>完整结果保存在当前目录下的 <code class="notranslate">result.csv</code> 文件中，用<strong>记事本/表格软件</strong>打开，格式如下：</p>
+<pre class="notranslate"><code class="notranslate">IP 地址,已发送,已接收,丢包率,平均延迟,下载速度 (MB/s)
+104.27.200.69,4,4,0.00,146.23,28.64
+</code></pre>
+<blockquote>
+<p><em>大家可以按自己需求，对完整结果<strong>进一步筛选处理</strong>，或者去看一看进阶使用<strong>指定过滤条件</strong>！</em></p>
+</blockquote>
+<hr>
+<h2># 进阶使用</h2>
+<p>直接运行使用的是默认参数，如果想要测速结果更全面、更符合自己的要求，可以自定义参数。</p>
+<div class="highlight highlight-source-dart"><pre class="notranslate"><span class="pl-c1">C</span><span class="pl-k">:</span>\<span class="pl-k">&gt;</span><span class="pl-c1">CloudflareST</span>.exe <span class="pl-k">-</span>h
+
+<span class="pl-c1">CloudflareSpeedTest</span> vX.<span class="pl-c1">X</span>.<span class="pl-c1">X</span>
+测试 <span class="pl-c1">Cloudflare</span> <span class="pl-c1">CDN</span> 所有 <span class="pl-c1">IP</span> 的延迟和速度，获取最快 <span class="pl-c1">IP</span> (<span class="pl-c1">IPv4</span><span class="pl-k">+</span><span class="pl-c1">IPv6</span>)！
+https<span class="pl-k">:</span><span class="pl-c">//github.com/XIU2/CloudflareSpeedTest</span>
+
+参数：
+    <span class="pl-k">-</span>n <span class="pl-c1">200</span>
+        延迟测速线程；越多延迟测速越快，性能弱的设备 (如路由器) 请勿太高；(默认 <span class="pl-c1">200</span> 最多 <span class="pl-c1">1000</span>)
+    <span class="pl-k">-</span>t <span class="pl-c1">4</span>
+        延迟测速次数；单个 <span class="pl-c1">IP</span> 延迟测速的次数；(默认 <span class="pl-c1">4</span> 次)
+    <span class="pl-k">-</span>dn <span class="pl-c1">10</span>
+        下载测速数量；延迟测速并排序后，从最低延迟起下载测速的数量；(默认 <span class="pl-c1">10</span> 个)
+    <span class="pl-k">-</span>dt <span class="pl-c1">10</span>
+        下载测速时间；单个 <span class="pl-c1">IP</span> 下载测速最长时间，不能太短；(默认 <span class="pl-c1">10</span> 秒)
+    <span class="pl-k">-</span>tp <span class="pl-c1">443</span>
+        指定测速端口；延迟测速<span class="pl-k">/</span>下载测速时使用的端口；(默认 <span class="pl-c1">443</span> 端口)
+    <span class="pl-k">-</span>url https<span class="pl-k">:</span><span class="pl-c">//cf.xiu2.xyz/url</span>
+        指定测速地址；延迟测速(<span class="pl-c1">HTTPing</span>)<span class="pl-k">/</span>下载测速时使用的地址，默认地址不保证可用性，建议自建；
+
+    <span class="pl-k">-</span>httping
+        切换测速模式；延迟测速模式改为 <span class="pl-c1">HTTP</span> 协议，所用测试地址为 [<span class="pl-k">-</span>url] 参数；(默认 <span class="pl-c1">TCPing</span>)
+        注意：<span class="pl-c1">HTTPing</span> 本质上也算一种 网络扫描 行为，因此如果你在服务器上面运行，需要降低并发(<span class="pl-k">-</span>n)，否则可能会被一些严格的商家暂停服务。
+        如果你遇到 <span class="pl-c1">HTTPing</span> 首次测速可用 <span class="pl-c1">IP</span> 数量正常，后续测速越来越少甚至直接为 <span class="pl-c1">0</span>，但停一段时间后又恢复了的情况，那么也可能是被 运营商、<span class="pl-c1">Cloudflare</span> <span class="pl-c1">CDN</span> 认为你在网络扫描而 触发临时限制机制，因此才会过一会儿就恢复了，建议降低并发(<span class="pl-k">-</span>n)减少这种情况的发生。
+    <span class="pl-k">-</span>httping<span class="pl-k">-</span>code <span class="pl-c1">200</span>
+        有效状态代码；<span class="pl-c1">HTTPing</span> 延迟测速时网页返回的有效 <span class="pl-c1">HTTP</span> 状态码，仅限一个；(默认 <span class="pl-c1">200</span> <span class="pl-c1">301</span> <span class="pl-c1">302</span>)
+    <span class="pl-k">-</span>cfcolo <span class="pl-c1">HKG</span>,<span class="pl-c1">KHH</span>,<span class="pl-c1">NRT</span>,<span class="pl-c1">LAX</span>,<span class="pl-c1">SEA</span>,<span class="pl-c1">SJC</span>,<span class="pl-c1">FRA</span>,<span class="pl-c1">MAD</span>
+        匹配指定地区；地区名为当地机场三字码，英文逗号分隔，支持小写，支持 <span class="pl-c1">Cloudflare</span>、<span class="pl-c1">AWS</span> <span class="pl-c1">CloudFront</span>，仅 <span class="pl-c1">HTTPing</span> 模式可用；(默认 所有地区)
+
+    <span class="pl-k">-</span>tl <span class="pl-c1">200</span>
+        平均延迟上限；只输出低于指定平均延迟的 <span class="pl-c1">IP</span>，各上下限条件可搭配使用；(默认 <span class="pl-c1">9999</span> ms)
+    <span class="pl-k">-</span>tll <span class="pl-c1">40</span>
+        平均延迟下限；只输出高于指定平均延迟的 <span class="pl-c1">IP</span>；(默认 <span class="pl-c1">0</span> ms)
+    <span class="pl-k">-</span>tlr <span class="pl-c1">0.2</span>
+        丢包几率上限；只输出低于<span class="pl-k">/</span>等于指定丢包率的 <span class="pl-c1">IP</span>，范围 <span class="pl-c1">0.00</span><span class="pl-k">~</span><span class="pl-c1">1.00</span>，<span class="pl-c1">0</span> 过滤掉任何丢包的 <span class="pl-c1">IP</span>；(默认 <span class="pl-c1">1.00</span>)
+    <span class="pl-k">-</span>sl <span class="pl-c1">5</span>
+        下载速度下限；只输出高于指定下载速度的 <span class="pl-c1">IP</span>，凑够指定数量 [<span class="pl-k">-</span>dn] 才会停止测速；(默认 <span class="pl-c1">0.00</span> <span class="pl-c1">MB</span><span class="pl-k">/</span>s)
+
+    <span class="pl-k">-</span>p <span class="pl-c1">10</span>
+        显示结果数量；测速后直接显示指定数量的结果，为 <span class="pl-c1">0</span> 时不显示结果直接退出；(默认 <span class="pl-c1">10</span> 个)
+    <span class="pl-k">-</span>f ip.txt
+        <span class="pl-c1">IP</span>段数据文件；如路径含有空格请加上引号；支持其他 <span class="pl-c1">CDN</span> <span class="pl-c1">IP</span>段；(默认 ip.txt)
+    <span class="pl-k">-</span>ip <span class="pl-c1">1.1</span>.<span class="pl-c1">1.1</span>,<span class="pl-c1">2.2</span>.<span class="pl-c1">2.2</span><span class="pl-k">/</span><span class="pl-c1">24</span>,<span class="pl-c1">2606</span><span class="pl-k">:</span><span class="pl-c1">4700</span><span class="pl-k">::</span><span class="pl-k">/</span><span class="pl-c1">32</span>
+        指定<span class="pl-c1">IP</span>段数据；直接通过参数指定要测速的 <span class="pl-c1">IP</span> 段数据，英文逗号分隔；(默认 空)
+    <span class="pl-k">-</span>o result.csv
+        写入结果文件；如路径含有空格请加上引号；值为空时不写入文件 [<span class="pl-k">-</span>o <span class="pl-s">""</span>]；(默认 result.csv)
+
+    <span class="pl-k">-</span>dd
+        禁用下载测速；禁用后测速结果会按延迟排序 (默认按下载速度排序)；(默认 启用)
+    <span class="pl-k">-</span>allip
+        测速全部的<span class="pl-c1">IP</span>；对 <span class="pl-c1">IP</span> 段中的每个 <span class="pl-c1">IP</span> (仅支持 <span class="pl-c1">IPv4</span>) 进行测速；(默认 每个 <span class="pl-k">/</span><span class="pl-c1">24</span> 段随机测速一个 <span class="pl-c1">IP</span>)
+
+    <span class="pl-k">-</span>v
+        打印程序版本 <span class="pl-k">+</span> 检查版本更新
+    <span class="pl-k">-</span>h
+        打印帮助说明</pre></div>
+<h3>界面解释</h3>
+<p>为了避免大家对测速过程中的<strong>输出内容产生误解（可用、队列等数字，下载测速一半就"中断"？下载测速"卡住"不动？）</strong>，我特意解释下。</p>
+<details>
+<summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
+<hr>
+<blockquote>
+<p>该示例把常用参数都给加上了，即为：<code class="notranslate">-tll 40 -tl 150 -sl 1 -dn 5</code>，最后输出结果如下：</p>
+</blockquote>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-c"># XIU2/CloudflareSpeedTest vX.X.X</span>
+
+<span class="pl-s1">开始延迟测速</span>（<span class="pl-s1">模式</span>：<span class="pl-c1">TCP</span>, <span class="pl-s1">端口</span>：<span class="pl-c1">443</span>, <span class="pl-s1">范围</span>：<span class="pl-c1">40</span> <span class="pl-c1">~</span> <span class="pl-c1">150</span> <span class="pl-s1">ms</span>, <span class="pl-s1">丢包</span>：<span class="pl-c1">1.00</span>)
+<span class="pl-c1">321</span> <span class="pl-c1">/</span> <span class="pl-c1">321</span> [<span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span>] <span class="pl-s1">可用</span>: <span class="pl-c1">30</span>
+<span class="pl-s1">开始下载测速</span>（<span class="pl-s1">下限</span>：<span class="pl-c1">1.00</span> <span class="pl-c1">MB</span><span class="pl-c1">/</span><span class="pl-s1">s</span>, <span class="pl-s1">数量</span>：<span class="pl-c1">5</span>, <span class="pl-s1">队列</span>：<span class="pl-c1">10</span>）
+<span class="pl-c1">3</span> <span class="pl-c1">/</span> <span class="pl-c1">5</span> [<span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span>↗<span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span><span class="pl-c1">-</span>]
+<span class="pl-c1">IP</span> <span class="pl-s1">地址</span>           <span class="pl-s1">已发送</span>  <span class="pl-s1">已接收</span>  <span class="pl-s1">丢包率</span>  <span class="pl-s1">平均延迟</span>  <span class="pl-en">下载速度</span> (<span class="pl-c1">MB</span><span class="pl-c1">/</span><span class="pl-s1">s</span>)
+<span class="pl-c1">XXX</span>.<span class="pl-c1">XXX</span>.<span class="pl-c1">XXX</span>.<span class="pl-c1">XXX</span>   <span class="pl-c1">4</span>       <span class="pl-c1">4</span>      <span class="pl-c1">0.00</span>    <span class="pl-c1">83.32</span>    <span class="pl-c1">3.66</span>
+<span class="pl-c1">XXX</span>.<span class="pl-c1">XXX</span>.<span class="pl-c1">XXX</span>.<span class="pl-c1">XXX</span>   <span class="pl-c1">4</span>       <span class="pl-c1">4</span>      <span class="pl-c1">0.00</span>    <span class="pl-c1">107.81</span>   <span class="pl-c1">2.49</span>
+<span class="pl-c1">XXX</span>.<span class="pl-c1">XXX</span>.<span class="pl-c1">XXX</span>.<span class="pl-c1">XXX</span>   <span class="pl-c1">4</span>       <span class="pl-c1">3</span>      <span class="pl-c1">0.25</span>    <span class="pl-c1">149.59</span>   <span class="pl-c1">1.04</span>
+
+<span class="pl-s1">完整测速结果已写入</span> <span class="pl-s1">result</span>.<span class="pl-c1">csv</span> <span class="pl-s1">文件</span>，<span class="pl-s1">可使用记事本</span><span class="pl-c1">/</span><span class="pl-s1">表格软件查看</span>。
+<span class="pl-s1">按下</span> <span class="pl-s1">回车键</span> <span class="pl-s1">或</span> <span class="pl-v">Ctrl</span><span class="pl-c1">+</span><span class="pl-c1">C</span> <span class="pl-s1">退出</span>。</pre></div>
+<hr>
+<blockquote>
+<p>刚接触 CloudflareST 的人，可能会迷惑<strong>明明延迟测速可用 IP 有 30 个，怎么最后只剩下 3 个了呢？</strong><br>
+下载测速里的队列又是什么意思？难道我下载测速还要排队？</p>
+</blockquote>
+<p>CloudflareST 会先延迟测速，在这过程中进度条右侧会实时显示可用 IP 数量（<code class="notranslate">可用: 30</code>），但注意该可用数量指的是<strong>测试通过没有超时的 IP 数量</strong>，和延迟上下限、丢包条件无关。当延迟测速完成后，因为还指定了<strong>延迟上下限、丢包</strong>的条件，所以按照条件过滤后只剩下 <code class="notranslate">10</code> 个了（也就是等待下载测速的 <code class="notranslate">队列：10</code>）。</p>
+<p>即以上示例中，<code class="notranslate">321</code> 个 IP 延迟测速完成后，只有 <code class="notranslate">30</code> 个 IP 测试通过没有超时，然后根据延迟上下限范围：<code class="notranslate">40 ~ 150 ms</code> 及丢包上限条件过滤后，只剩下 <code class="notranslate">10</code> 个满足要求的 IP 了。如果你 <code class="notranslate">-dd</code> 禁用了下载测速，那么就会直接输出这 <code class="notranslate">10</code> 个 IP 了。当然该示例并未禁用，因此接下来软件会继续对这 <code class="notranslate">10</code> 个 IP 进行下载测速（<code class="notranslate">队列：10</code>）。</p>
+<blockquote>
+<p>因为下载测速是单线程一个个 IP 挨着排队测速的，因此等待下载测速的 IP 数量才会叫做 <code class="notranslate">队列</code>。</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>你可能注意到了，<strong>明明指定了要找到 5 个满足下载速度条件的 IP，怎么才 3 个就 “中断” 了呢？</strong></p>
+</blockquote>
+<p>下载测速进度条中的 <code class="notranslate">3 / 5</code>，前者指的是找到了 <code class="notranslate">3</code> 个满足下载速度下限条件的 IP（即下载速度高于 <code class="notranslate">1 MB/s</code> ），后者 <code class="notranslate">5</code> 指的是你要求找到 <code class="notranslate">5</code> 个满足下载速度下限条件的 IP（<code class="notranslate">-dn 5</code>）。</p>
+<blockquote>
+<p>另外，提醒一下，如果你指定的 <code class="notranslate">-dn</code> 大于下载测速队列，比如你延迟测速后只剩下 <code class="notranslate">4</code> 个 IP 了，那么下载测速进度条中后面的数字就会和下载测速队列一样都是 <code class="notranslate">4</code> 个，而非你 <code class="notranslate">-dn</code> 指定的 <code class="notranslate">5</code> 个了。</p>
+</blockquote>
+<p>软件在测速完这 <code class="notranslate">10</code> 个 IP 后，只找到了 <code class="notranslate">3</code> 个下载速度高于 <code class="notranslate">1 MB/s</code> 的 IP，剩下的 <code class="notranslate">7</code> 个 IP 都是 “不及格” 的。</p>
+<p>因此，这不是 <code class="notranslate">“每次测速都不到 5 就中断了”</code>，而是所有 IP 都下载测速完了，但却只找到了 <code class="notranslate">3</code> 个满足条件的。</p>
+<hr>
+<p>还有一种情况，那就是当可用 IP 很多时（几百几千），你还设置了下载速度条件，那么可能就会遇到：<strong>怎么下载测速进度条老是卡在 <code class="notranslate">X / 5</code> 了呢？</strong></p>
+<p>这其实并不是卡住了，而是只有当找到一个满足条件的 IP 时，进度条才会 +1，因此如果一直找不到，那么 CloudflareST 就会一直下载测速下去，因此在表现为进度条卡住不动，但这也是在提醒你：你设置的下载速度条件对你来说已经高于实际了，你需要适当调低预期。</p>
+<hr>
+<p>如果不想遇到这种全部测速一遍都没几个满足条件的情况，那么就要<strong>调低下载速度上限参数 <code class="notranslate">-sl</code></strong>，或者移除。</p>
+<p>因为只要指定了 <code class="notranslate">-sl</code> 参数，那么只要没有凑够 <code class="notranslate">-dn</code> 的数量（默认 10 个），就会一直测速下去，直到凑够或全部测速完。移除 <code class="notranslate">-sl</code> 并添加 <code class="notranslate">-dn 20</code> 参数，这样就是只测速延迟最低的前 20 个 IP，测速完就停止，节省时间。</p>
+<hr>
+<p>另外，如果全部队列 IP 都测速完了，但一个满足下载速度条件的 IP 都没有，那么就会<strong>直接输出全部队列 IP 的下载测速结果</strong>，这样你就能看到这些 IP 的下载速度都有多少，心里也就有数了，然后<strong>适当调低 <code class="notranslate">-sl</code> 再试试</strong>。</p>
+<p>同样，延迟测速方面，<code class="notranslate">可用: 30</code>、<code class="notranslate">队列：10</code> 这两个数值也可以让你清楚，你设置的延迟条件对你来说是否过于苛刻。如果可用 IP 一大堆，但条件过滤后只剩下 2、3 个，那不用说就知道需要<strong>调低预期的延迟/丢包条件</strong>了。</p>
+<p>这两个机制，一个是告诉你<strong>延迟丢包条件</strong>是否合适的，一个是告诉你<strong>下载速度条件</strong>是否合适的。</p>
+</details>
+<hr>
+<h3>使用示例</h3>
+<p>Windows 要指定参数需要在 CMD 中运行，或者把参数添加到快捷方式目标中。</p>
+<div class="markdown-alert markdown-alert-tip"><p class="markdown-alert-title"><svg class="octicon octicon-light-bulb mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</p>
+<ul>
+<li>各参数均有<strong>默认值</strong>，使用默认值的参数是可以省略的（<strong>按需选择</strong>），参数<strong>不分前后顺序</strong>。</li>
+<li>Windows <strong>PowerShell</strong> 只需把下面命令中的 <code class="notranslate">CloudflareST.exe</code> 改为 <code class="notranslate">.\CloudflareST.exe</code> 即可。</li>
+<li>Linux 系统只需要把下面命令中的 <code class="notranslate">CloudflareST.exe</code> 改为 <code class="notranslate">./CloudflareST</code> 即可。</li>
+</ul>
+</div>
+<hr>
+<h4># CMD 带参数运行 CloudflareST</h4>
+<p>对命令行程序不熟悉的人，可能不知道该如何带参数运行，我就简单说一下。</p>
+<details>
+<summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
+<hr>
+<p>很多人打开 CMD 以<strong>绝对路径</strong>运行 CloudflareST 会报错，这是因为默认的 <code class="notranslate">-f ip.txt</code> 参数是相对路径，需要指定绝对路径的 ip.txt 才行，但这样毕竟太麻烦了，因此还是建议进入 CloudflareST 程序目录下，以<strong>相对路径</strong>方式运行：</p>
+<p><strong>方式 一</strong>：</p>
+<ol>
+<li>打开 CloudflareST 程序所在目录</li>
+<li>空白处按下 <kbd>Shift + 鼠标右键</kbd> 显示右键菜单</li>
+<li>选择 <strong>[在此处打开命令窗口]</strong> 来打开 CMD 窗口，此时默认就位于当前目录下</li>
+<li>输入带参数的命令，如：<code class="notranslate">CloudflareST.exe -tll 50 -tl 200</code>即可运行</li>
+</ol>
+<p><strong>方式 二</strong>：</p>
+<ol>
+<li>打开 CloudflareST 程序所在目录</li>
+<li>直接在文件夹地址栏中全选并输入 <code class="notranslate">cmd</code> 回车来打开 CMD 窗口，此时默认就位于当前目录下</li>
+<li>输入带参数的命令，如：<code class="notranslate">CloudflareST.exe -tll 50 -tl 200</code>即可运行</li>
+</ol>
+<blockquote>
+<p>当然你也可以随便打开一个 CMD 窗口，然后输入如 <code class="notranslate">cd /d "D:\Program Files\CloudflareST"</code> 来进入程序目录</p>
+</blockquote>
+<blockquote>
+<p><strong>提示</strong>：如果用的是 <strong>PowerShell</strong> 只需把命令中的 <code class="notranslate">CloudflareST.exe</code> 改为 <code class="notranslate">.\CloudflareST.exe</code> 即可。</p>
+</blockquote>
+</details>
+<hr>
+<h4># Windows 快捷方式带参数运行 CloudflareST</h4>
+<p>如果不经常修改运行参数（比如平时都是直接双击运行）的人，建议使用快捷方式，更方便点。</p>
+<details>
+<summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
+<hr>
+<p>右键 <code class="notranslate">CloudflareST.exe</code> 文件 - <strong>[创建快捷方式]</strong>，然后右键该快捷方式 - <strong>[属性]</strong>，修改其<strong>目标</strong>：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 如果要不输出结果文件，那么请加上 -o " "，引号里的是空格（没有空格会导致该参数被省略）。</span>
+D:<span class="pl-cce">\A</span>BC<span class="pl-cce">\C</span>loudflareST<span class="pl-cce">\C</span>loudflareST.exe -n 500 -t 4 -dn 20 -dt 5 -o <span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> 如果文件路径包含引号，则需要把启动参数放在引号外面，记得引号和 - 之间有空格。</span>
+<span class="pl-s"><span class="pl-pds">"</span>D:\Program Files\CloudflareST\CloudflareST.exe<span class="pl-pds">"</span></span> -n 500 -t 4 -dn 20 -dt 5 -o <span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> 注意！快捷方式 - 起始位置 不能是空的，否则就会因为绝对路径而找不到 ip.txt 文件</span></pre></div>
+</details>
+<hr>
+<h4># IPv4/IPv6</h4>
+<details>
+<summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
+<hr>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 指定自带的 IPv4 数据文件可测速这些 IPv4 地址（-f 默认值就是 ip.txt，所以该参数可省略）</span>
+CloudflareST.exe -f ip.txt
+
+<span class="pl-c"><span class="pl-c">#</span> 指定自带的 IPv6 数据文件可测速这些 IPv6 地址</span>
+<span class="pl-c"><span class="pl-c">#</span> 另外，v2.1.0 版本后支持 IPv4+IPv6 混合测速并移除了 -ipv6 参数，因此一个文件内可以同时包含 IPv4+IPv6 地址</span>
+CloudflareST.exe -f ipv6.txt
+
+<span class="pl-c"><span class="pl-c">#</span> 也可以直接通过参数指定要测速的 IP</span>
+CloudflareST.exe -ip 1.1.1.1,2606:4700::/32</pre></div>
+<blockquote>
+<p>测速 IPv6 时，可能会注意到每次测速数量都不一样，了解原因： <a href="https://github.com/XIU2/CloudflareSpeedTest/issues/120" data-hovercard-type="issue" data-hovercard-url="/XIU2/CloudflareSpeedTest/issues/120/hovercard">#120</a><br>
+因为 IPv6 太多（以亿为单位），且绝大部分 IP 段压根未启用，所以我只扫了一部分可用的 IPv6 段写到 <code class="notranslate">ipv6.txt</code> 文件中，有兴趣的可以自行扫描增删，ASN 数据源来自：<a href="https://bgp.he.net/AS13335#_prefixes6" rel="nofollow">bgp.he.net</a></p>
+</blockquote>
+</details>
+<hr>
+<h4># HTTPing</h4>
+<details>
+<summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
+<hr>
+<p>目前有两种延迟测速模式，分别为 <strong>TCP 协议、HTTP 协议</strong>。<br>
+TCP 协议耗时更短、消耗资源更少，超时时间为 1 秒，该协议为默认模式。<br>
+HTTP 协议适用于快速测试某域名指向某 IP 时是否可以访问，超时时间为 2 秒。<br>
+同一个 IP，各协议去 Ping 得到的延迟一般为：<strong>ICMP &lt; TCP &lt; HTTP</strong>，越靠右对丢包等网络波动越敏感。</p>
+<blockquote>
+<p>注意：HTTPing 本质上也算一种<strong>网络扫描</strong>行为，因此如果你在服务器上面运行，需要<strong>降低并发</strong>(<code class="notranslate">-n</code>)，否则可能会被一些严格的商家暂停服务。如果你遇到 HTTPing 首次测速可用 IP 数量正常，后续测速越来越少甚至直接为 0，但停一段时间后又恢复了的情况，那么也可能是被 运营商、Cloudflare CDN 认为你在网络扫描而<strong>触发临时限制机制</strong>，因此才会过一会儿就恢复了，建议<strong>降低并发</strong>(<code class="notranslate">-n</code>)减少这种情况的发生。</p>
+</blockquote>
+<blockquote>
+<p>另外，本软件 HTTPing 仅获取<strong>响应头(response headers)</strong>，并不获取正文内容（即 URL 文件大小不影响 HTTPing 测试，但如果你还要下载测速的话，那么还是需要一个大文件的），类似于 curl -i 功能。</p>
+</blockquote>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 只需加上 -httping 参数即可切换到 HTTP 协议延迟测速模式</span>
+CloudflareST.exe -httping
+
+<span class="pl-c"><span class="pl-c">#</span> 软件会根据访问时网页返回的有效 HTTP 状态码来判断可用性（当然超时也算），默认对返回 200 301 302 这三个 HTTP 状态码的视为有效，可以手动指定认为有效的 HTTP 状态码，但只能指定一个（你需要提前确定测试地址正常情况下会返回哪个状态码）</span>
+CloudflareST.exe -httping -httping-code 200
+
+<span class="pl-c"><span class="pl-c">#</span> 通过 -url 参数来指定 HTTPing 测试地址（可以是任意网页 URL，不局限于具体文件地址）</span>
+CloudflareST.exe -httping -url https://cf.xiu2.xyz/url
+<span class="pl-c"><span class="pl-c">#</span> 如果你要 HTTPing 测试其他网站/CDN，那么指定一个该网站/使用该 CDN 的地址（因为软件默认地址是 Cloudflare 的，只能用于测试 Cloudflare 的 IP）</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 注意：如果测速地址为 HTTP 协议，记得加上 -tp 80（这个参数会影响 延迟测速/下载测速 时使用的端口）</span>
+<span class="pl-c"><span class="pl-c">#</span> 同理，如果要测速 80 端口，那么也需要加上 -url 参数来指定一个 http:// 协议的地址才行（且该地址不会强制重定向至 HTTPS），如果是非 80 443 端口，那么需要确定该下载测速地址是否支持通过该端口访问。</span>
+CloudflareST.exe -httping -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/5952/movie_max.webm</pre></div>
+</details>
+<hr>
+<h4># 匹配指定地区(colo 机场三字码)</h4>
+<details>
+<summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
+<hr>
+<p>Cloudflare CDN 的节点 IP 是 Anycast IP，即每个 IP 对应的服务器节点及地区不是固定的，而是动态变化的，<strong>不同地区、不同运营商、不同时间段</strong>访问<strong>同一个 IP</strong> 分配到的服务器节点地区和路线也都是不一样的（比如同一个 IP，美国人访问就是分配到就近的美国节点服务器，日本人访问则就又变成了就近的日本节点服务器了，国内内地就比较特殊了，只能给你分配到其他国家，当然不同的 IP 段路由变化/分配逻辑也是不同的，有的 IP 段会较为固定）。</p>
+<blockquote>
+<p><strong>注意</strong>！虽然 Cloudflare CDN 有很多亚洲节点，但<strong>不代表你就能用上</strong>，新加坡人测速可能随便一抓一大把的新加坡节点，但你全部扫一遍可能都遇不到一个，因为这是由 CDN 控制的。Anycast IP 的路由是经常变的，同一个 IP 今天可能是美国，明天你再访问可能就又分配到欧洲节点了（当然这只是个例子，一般没有那么频繁，这也和很多因素有关，比如线路拥塞程度，成本变动等），因此<strong>不要对该功能有过高期待</strong>~</p>
+</blockquote>
+<p>或者你随便找个 Cloudflare CDN 的 IP（比如官网域名的解析 IP <code class="notranslate">104.16.123.96</code>），然后去那些有全球节点的<a href="https://ping.sx/ping?t=104.16.123.96" rel="nofollow">在线 Ping 测试</a>网站，你就会发现这个 IP 在全球大部分地区的延迟都是个位数（而且很多都是 0.X ms），就算一些地方延迟高一些但也基本都控制在 几十ms，只有在国内才会发现突然变成了 上百ms 了。</p>
+<p>这就是 Anycast 技术，也就只有国内大陆这种特殊的网络情况，才需要对 Anycast 的 CDN IP 进行优选。</p>
+<p>因此，对于这种 Anycast IP 的实际服务器位置，就不能靠那些在线 IP 地址位置查询网站来判断了。</p>
+<p>除了通过 <strong>HTTP 响应头</strong>获取机场三字码外（该功能的实现方式），还可以手动访问 <code class="notranslate">http://CloudflareIP/cdn-cgi/trace</code> 来获知 CDN 分配给你的实际节点地区机场三字码。</p>
+<blockquote>
+<p>该功能支持 Cloudflare CDN 和 AWS CloudFront CDN，且这两个 CDN 的机场三字码是通用的（算是惯例）。<br>
+<strong>注意</strong>：如果你要用于筛选 AWS CloudFront CDN 地区，那么要通过 <code class="notranslate">-url</code> 参数指定一个使用 AWS CloudFront CDN 的下载测速地址（因为软件默认下载测速地址是 Cloudflare CDN 的）</p>
+</blockquote>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 指定地区名后，延迟测速后得到的结果就都是指定地区的 IP 了（如果没有指定 -dd 的话则会继续进行下载测速）</span>
+<span class="pl-c"><span class="pl-c">#</span> 如果延迟测速后结果为 0，则说明没有找到任何一个（未超时可用的）指定地区的 IP。</span>
+<span class="pl-c"><span class="pl-c">#</span> 节点地区名为当地 机场三字码，指定多个时用英文逗号分隔，v2.2.3 版本后支持小写</span>
+
+CloudflareST.exe -httping -cfcolo HKG,KHH,NRT,LAX,SEA,SJC,FRA,MAD
+
+<span class="pl-c"><span class="pl-c">#</span> 注意，该参数只有在 HTTPing 延迟测速模式下才可用（因为软件是通过 HTTP 链接中的响应头来获得该 IP 的实际地区机场三字码）</span></pre></div>
+<blockquote>
+<p>两个 CDN 机场三字码通用，因此各地区名可见：<a href="https://www.cloudflarestatus.com/" rel="nofollow">https://www.cloudflarestatus.com/</a></p>
+</blockquote>
+</details>
+<hr>
+<h4># 文件相对/绝对路径</h4>
+<details>
+<summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
+<hr>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 指定 IPv4 数据文件，不显示结果直接退出，输出结果到文件（-p 值为 0）</span>
+CloudflareST.exe -f 1.txt -p 0 -dd
+
+<span class="pl-c"><span class="pl-c">#</span> 指定 IPv4 数据文件，不输出结果到文件，直接显示结果（-p 值为 10 条，-o 值为空但引号不能少）</span>
+CloudflareST.exe -f 2.txt -o <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span> -p 10 -dd
+
+<span class="pl-c"><span class="pl-c">#</span> 指定 IPv4 数据文件 及 输出结果到文件（相对路径，即当前目录下，如含空格请加上引号）</span>
+CloudflareST.exe -f 3.txt -o result.txt -dd
+
+
+<span class="pl-c"><span class="pl-c">#</span> 指定 IPv4 数据文件 及 输出结果到文件（相对路径，即当前目录内的 abc 文件夹下，如含空格请加上引号）</span>
+<span class="pl-c"><span class="pl-c">#</span> Linux（CloudflareST 程序所在目录内的 abc 文件夹下）</span>
+./CloudflareST -f abc/3.txt -o abc/result.txt -dd
+
+<span class="pl-c"><span class="pl-c">#</span> Windows（注意是反斜杠）</span>
+CloudflareST.exe -f abc<span class="pl-cce">\3</span>.txt -o abc<span class="pl-cce">\r</span>esult.txt -dd
+
+
+<span class="pl-c"><span class="pl-c">#</span> 指定 IPv4 数据文件 及 输出结果到文件（绝对路径，即 C:\abc\ 目录下，如含空格请加上引号）</span>
+<span class="pl-c"><span class="pl-c">#</span> Linux（/abc/ 目录下）</span>
+./CloudflareST -f /abc/4.txt -o /abc/result.csv -dd
+
+<span class="pl-c"><span class="pl-c">#</span> Windows（注意是反斜杠）</span>
+CloudflareST.exe -f C:<span class="pl-cce">\a</span>bc<span class="pl-cce">\4</span>.txt -o C:<span class="pl-cce">\a</span>bc<span class="pl-cce">\r</span>esult.csv -dd
+
+
+<span class="pl-c"><span class="pl-c">#</span> 如果要以【绝对路径】运行 CloudflareST，那么 -f / -o 参数中的文件名也必须是【绝对路径】，否则会报错找不到文件！</span>
+<span class="pl-c"><span class="pl-c">#</span> Linux（/abc/ 目录下）</span>
+/abc/CloudflareST -f /abc/4.txt -o /abc/result.csv -dd
+
+<span class="pl-c"><span class="pl-c">#</span> Windows（注意是反斜杠）</span>
+C:<span class="pl-cce">\a</span>bc<span class="pl-cce">\C</span>loudflareST.exe -f C:<span class="pl-cce">\a</span>bc<span class="pl-cce">\4</span>.txt -o C:<span class="pl-cce">\a</span>bc<span class="pl-cce">\r</span>esult.csv -dd</pre></div>
+</details>
+<hr>
+<h4># 测速其他端口</h4>
+<details>
+<summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
+<hr>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 如果你想要测速非默认 443 的其他端口，则需要通过 -tp 参数指定（该参数会影响 延迟测速/下载测速 时使用的端口）</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 如果要延迟测速 80 端口+下载测速（如果 -dd 禁用了下载测速则不需要），那么还需要指定 http:// 协议的下载测速地址才行（且该地址不会强制重定向至 HTTPS，因为那样就变成 443 端口了）</span>
+CloudflareST.exe -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/5952/movie_max.webm
+
+<span class="pl-c"><span class="pl-c">#</span> 如果是非 80 443 的其他端口，那么需要确定你使用的下载测速地址是否支持通过该非标端口访问。</span></pre></div>
+</details>
+<hr>
+<h4># 自定义测速地址</h4>
+<details>
+<summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
+<hr>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 该参数适用于下载测速 及 HTTP 协议的延迟测速，对于后者该地址可以是任意网页 URL（不局限于具体文件地址）</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 地址要求：可以直接下载、文件大小超过 200MB、用的是 Cloudflare CDN</span>
+CloudflareST.exe -url https://cf.xiu2.xyz/url
+
+<span class="pl-c"><span class="pl-c">#</span> 注意：如果测速地址为 HTTP 协议（该地址不能强制重定向至 HTTPS），记得加上 -tp 80（这个参数会影响 延迟测速/下载测速 时使用的端口），如果是非 80 443 端口，那么需要确定下载测速地址是否支持通过该端口访问。</span>
+CloudflareST.exe -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/5952/movie_max.webm</pre></div>
+</details>
+<hr>
+<h4># 自定义测速条件（指定 延迟/丢包/下载速度 的目标范围）</h4>
+<details>
+<summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
+<hr>
+<blockquote>
+<p>注意：延迟测速进度条右边的<strong>可用数量</strong>，仅指延迟测速过程中<strong>未超时的 IP 数量</strong>，和延迟上下限条件无关。</p>
+</blockquote>
+<ul>
+<li>仅指定 <strong>[平均延迟上限]</strong> 条件</li>
+</ul>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 平均延迟上限：200 ms，下载速度下限：0 MB/s</span>
+<span class="pl-c"><span class="pl-c">#</span> 即找到平均延迟低于 200 ms 的 IP，然后再按延迟从低到高进行 10 次下载测速</span>
+CloudflareST.exe -tl 200</pre></div>
+<blockquote>
+<p>如果<strong>没有找到一个满足延迟</strong>条件的 IP，那么不会输出任何内容。</p>
+</blockquote>
+<hr>
+<ul>
+<li>仅指定 <strong>[平均延迟上限]</strong> 条件，且<strong>只延迟测速，不下载测速</strong></li>
+</ul>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 平均延迟上限：200 ms，下载速度下限：0 MB/s，数量：不知道多少 个</span>
+<span class="pl-c"><span class="pl-c">#</span> 即只输出低于 200ms 的 IP，且不再下载测速（因为不再下载测速，所以 -dn 参数就无效了）</span>
+CloudflareST.exe -tl 200 -dd</pre></div>
+<ul>
+<li>仅指定 <strong>[丢包几率上限]</strong> 条件</li>
+</ul>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 丢包几率上限：0.25</span>
+<span class="pl-c"><span class="pl-c">#</span> 即找到丢包率低于等于 0.25 的 IP，范围 0.00~1.00，如果 -tlr 0 则代表过滤掉任何丢包的 IP</span>
+CloudflareST.exe -tlr 0.25</pre></div>
+<hr>
+<ul>
+<li>仅指定 <strong>[下载速度下限]</strong> 条件</li>
+</ul>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 平均延迟上限：9999 ms，下载速度下限：5 MB/s，数量：10 个（可选）</span>
+<span class="pl-c"><span class="pl-c">#</span> 即需要找到 10 个平均延迟低于 9999 ms 且下载速度高于 5 MB/s 的 IP 才会停止测速</span>
+CloudflareST.exe -sl 5 -dn 10</pre></div>
+<blockquote>
+<p>如果<strong>没有找到一个满足速度</strong>条件的 IP，那么会<strong>忽略条件输出所有 IP 测速结果</strong>（方便你下次测速时调整条件）。</p>
+</blockquote>
+<blockquote>
+<p>没有指定平均延迟上限时，如果一直<strong>凑不够</strong>满足条件的 IP 数量，就会<strong>一直测速</strong>下去。<br>
+所以建议<strong>同时指定 [下载速度下限] + [平均延迟上限]</strong>，这样测速到指定延迟上限还没凑够数量，就会终止测速。</p>
+</blockquote>
+<hr>
+<ul>
+<li>同时指定 <strong>[平均延迟上限] + [下载速度下限]</strong> 条件</li>
+</ul>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 平均延迟上限、下载速度下限均支持小数（如 -sl 0.5）</span>
+<span class="pl-c"><span class="pl-c">#</span> 平均延迟上限：200 ms，下载速度下限：5.6 MB/s，数量：10 个（可选）</span>
+<span class="pl-c"><span class="pl-c">#</span> 即需要找到 10 个平均延迟低于 200 ms 且下载速度高于 5 .6MB/s 的 IP 才会停止测速</span>
+CloudflareST.exe -tl 200 -sl 5.6 -dn 10</pre></div>
+<blockquote>
+<p>如果<strong>没有找到一个满足延迟</strong>条件的 IP，那么不会输出任何内容。<br>
+如果<strong>没有找到一个满足速度</strong>条件的 IP，那么会忽略条件输出所有 IP 测速结果（方便你下次测速时调整条件）。<br>
+所以建议先不指定条件测速一遍，看看平均延迟和下载速度大概在什么范围，避免指定条件<strong>过低/过高</strong>！</p>
+</blockquote>
+<blockquote>
+<p>因为 Cloudflare 公开的 IP 段是<strong>回源 IP+任播 IP</strong>，而<strong>回源 IP</strong>是无法使用的，所以下载测速是 0.00。<br>
+运行时可以加上 <code class="notranslate">-sl 0.01</code>（下载速度下限），过滤掉<strong>回源 IP</strong>（下载测速低于 0.01MB/s 的结果）。</p>
+</blockquote>
+</details>
+<hr>
+<h4># 单独对一个或多个 IP 测速</h4>
+<details>
+<summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
+<hr>
+<p><strong>方式 一</strong>：<br>
+直接通过参数指定要测速的 IP 段数据。</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 先进入 CloudflareST 所在目录，然后运行：</span>
+<span class="pl-c"><span class="pl-c">#</span> Windows 系统（在 CMD 中运行）</span>
+CloudflareST.exe -ip 1.1.1.1,2.2.2.2/24,2606:4700::/32
+
+<span class="pl-c"><span class="pl-c">#</span> Linux 系统</span>
+./CloudflareST -ip 1.1.1.1,2.2.2.2/24,2606:4700::/32</pre></div>
+<hr>
+<p><strong>方式 二</strong>：<br>
+或者把这些 IP 按如下格式写入到任意文本文件中，例如：<code class="notranslate">1.txt</code></p>
+<pre class="notranslate"><code class="notranslate">1.1.1.1
+1.1.1.200
+1.0.0.1/24
+2606:4700::/32
+</code></pre>
+<blockquote>
+<p>单个 IP 的话可以省略 <code class="notranslate">/32</code> 子网掩码了（即 <code class="notranslate">1.1.1.1</code>等同于 <code class="notranslate">1.1.1.1/32</code>）。<br>
+子网掩码 <code class="notranslate">/24</code> 指的是这个 IP 最后一段，即 <code class="notranslate">1.0.0.1~1.0.0.255</code>。</p>
+</blockquote>
+<p>然后运行 CloudflareST 时加上启动参数 <code class="notranslate">-f 1.txt</code> 来指定 IP 段数据文件。</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 先进入 CloudflareST 所在目录，然后运行：</span>
+<span class="pl-c"><span class="pl-c">#</span> Windows 系统（在 CMD 中运行）</span>
+CloudflareST.exe -f 1.txt
+
+<span class="pl-c"><span class="pl-c">#</span> Linux 系统</span>
+./CloudflareST -f 1.txt
+
+<span class="pl-c"><span class="pl-c">#</span> 对于 1.0.0.1/24 这样的 IP 段只会随机最后一段（1.0.0.1~255），如果要测速该 IP 段中的所有 IP，请加上 -allip 参数。</span></pre></div>
+</details>
+<hr>
+<h4># 一劳永逸加速所有使用 Cloudflare CDN 的网站（不需要再一个个添加域名到 Hosts 了）</h4>
+<p>我以前说过，开发该软件项目的目的就是为了通过<strong>改 Hosts 的方式来加速访问使用 Cloudflare CDN 的网站</strong>。</p>
+<p>但就如 <a href="https://github.com/XIU2/CloudflareSpeedTest/issues/8" data-hovercard-type="issue" data-hovercard-url="/XIU2/CloudflareSpeedTest/issues/8/hovercard"><strong>#8</strong></a> 所说，一个个添加域名到 Hosts 实在<strong>太麻烦</strong>了，于是我就找到了个<strong>一劳永逸</strong>的办法！可以看这个 <a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/71"><strong>还在一个个添加 Hosts？完美本地加速所有使用 Cloudflare CDN 的网站方法来了！</strong></a> 和另一个<a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/317">依靠本地 DNS 服务来修改域名解析 IP 为自选 IP</a> 的教程。</p>
+<hr>
+<h4># 自动更新 Hosts</h4>
+<p>考虑到很多人获得最快 Cloudflare CDN IP 后，需要替换 Hosts 文件中的 IP。</p>
+<p>可以看这个 <a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/312"><strong>Issues</strong></a> 获取 <strong>Windows/Linux 自动更新 Hosts 脚本</strong>！</p>
+<hr>
+<h2>问题反馈</h2>
+<p>如果你遇到什么问题，可以先去 <a href="https://github.com/XIU2/CloudflareSpeedTest/issues"><strong>Issues</strong></a>、<a href="https://github.com/XIU2/CloudflareSpeedTest/discussions">Discussions</a> 里看看是否有别人问过了（记得去看下  <a href="https://github.com/XIU2/CloudflareSpeedTest/issues?q=is%3Aissue+is%3Aclosed"><strong>Closed</strong></a> 的）。<br>
+如果没找到类似问题，请新开个 <a href="https://github.com/XIU2/CloudflareSpeedTest/issues/new"><strong>Issues</strong></a> 来告诉我！</p>
+<div class="markdown-alert markdown-alert-note"><p class="markdown-alert-title"><svg class="octicon octicon-info mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p><p><strong>注意</strong>！<em>与 CloudflareST 本身 <code class="notranslate">反馈问题、功能建议</code> 无关的，请前往项目内部 论坛 讨论（顶部的 <code class="notranslate">💬 Discussions</code></em></p>
+</div>
+<hr>
+<h2>如果帮到你的话就 "打赏" 一下吧~🎉✨</h2>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/XIU2/XIU2/blob/master/img/zs-01.png"><img src="https://github.com/XIU2/XIU2/blob/master/img/zs-01.png" alt="微信赞赏" style="max-width: 100%;"></a><a target="_blank" rel="noopener noreferrer" href="https://github.com/XIU2/XIU2/blob/master/img/zs-02.png"><img src="https://github.com/XIU2/XIU2/blob/master/img/zs-02.png" alt="支付宝赞赏" style="max-width: 100%;"></a></p>
+<hr>
+<h2>衍生项目</h2>
+<ul>
+<li>
+<p><em><a href="https://github.com/xianshenglu/cloudflare-ip-tester-app">https://github.com/xianshenglu/cloudflare-ip-tester-app</a></em><br>
+<em><strong>CloudflareST 安卓版 APP <a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/320">#202</a></strong></em></p>
+</li>
+<li>
+<p><em><a href="https://github.com/mingxiaoyu/luci-app-cloudflarespeedtest">https://github.com/mingxiaoyu/luci-app-cloudflarespeedtest</a></em><br>
+<em><strong>CloudflareST OpenWrt 路由器插件版 <a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/319">#174</a></strong></em></p>
+</li>
+<li>
+<p><em><a href="https://github.com/immortalwrt-collections/openwrt-cdnspeedtest">https://github.com/immortalwrt-collections/openwrt-cdnspeedtest</a></em><br>
+<em><strong>CloudflareST OpenWrt 原生编译版本 <a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/64">#64</a></strong></em></p>
+</li>
+<li>
+<p><em><a href="https://github.com/hoseinnikkhah/CloudflareSpeedTest-English">https://github.com/hoseinnikkhah/CloudflareSpeedTest-English</a></em><br>
+<em><strong>English language version of CloudflareST (Text language differences only) <a href="https://github.com/XIU2/CloudflareSpeedTest/issues/68" data-hovercard-type="issue" data-hovercard-url="/XIU2/CloudflareSpeedTest/issues/68/hovercard">#64</a></strong></em></p>
+</li>
+</ul>
+<blockquote>
+<p><em>此处仅收集了在本项目中宣传过的部分 CloudflareST 相关衍生项目，如果有遗漏可以告诉我~</em></p>
+</blockquote>
+<hr>
+<h2>感谢项目</h2>
+<ul>
+<li><em><a href="https://github.com/Spedoske/CloudflareScanner">https://github.com/Spedoske/CloudflareScanner</a></em></li>
+</ul>
+<blockquote>
+<p><em>因为该项目已经很长时间没更新了，而我又产生了很多功能需求，所以我临时学了下 Go 语言就上手了（菜）...</em><br>
+<em>本软件基于该项目制作，但<strong>已添加大量功能及修复 BUG</strong>，并根据大家的使用反馈积极添加、优化功能（闲）...</em></p>
+</blockquote>
+<hr>
+<h2>手动编译</h2>
+<details>
+<summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
+<hr>
+<p>为了方便，我是在编译的时候将版本号写入代码中的 version 变量，因此你手动编译时，需要像下面这样在 <code class="notranslate">go build</code> 命令后面加上 <code class="notranslate">-ldflags</code> 参数来指定版本号：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">go build -ldflags <span class="pl-s"><span class="pl-pds">"</span>-s -w -X main.version=v2.3.3<span class="pl-pds">"</span></span>
+<span class="pl-c"><span class="pl-c">#</span> 在 CloudflareSpeedTest 目录中通过命令行（例如 CMD、Bat 脚本）运行该命令，即可编译一个可在和当前设备同样系统、位数、架构的环境下运行的二进制程序（Go 会自动检测你的系统位数、架构）且版本号为 v2.3.3</span></pre></div>
+<p>如果想要在 Windows 64位系统下编译<strong>其他系统、架构、位数</strong>，那么需要指定 <strong>GOOS</strong> 和 <strong>GOARCH</strong> 变量。</p>
+<p>例如在 Windows 系统下编译一个适用于 <strong>Linux 系统 amd 架构 64 位</strong>的二进制程序：</p>
+<div class="highlight highlight-source-batchfile"><pre class="notranslate"><span class="pl-k">SET</span> <span class="pl-smi">GOOS</span><span class="pl-k">=</span>linux
+<span class="pl-k">SET</span> <span class="pl-smi">GOARCH</span><span class="pl-k">=</span>amd64
+go build -ldflags <span class="pl-s"><span class="pl-pds">"</span>-s -w -X main.version=v2.3.3<span class="pl-pds">"</span></span></pre></div>
+<p>例如在 Linux 系统下编译一个适用于 <strong>Windows 系统 amd 架构 32 位</strong>的二进制程序：</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">GOOS=windows
+GOARCH=386
+go build -ldflags <span class="pl-s"><span class="pl-pds">"</span>-s -w -X main.version=v2.3.3<span class="pl-pds">"</span></span></pre></div>
+<blockquote>
+<p>可以运行 <code class="notranslate">go tool dist list</code> 来查看当前 Go 版本支持编译哪些组合。</p>
+</blockquote>
+<hr>
+<p>当然，为了方便批量编译，我会专门指定一个变量为版本号，后续编译直接调用该版本号变量即可。<br>
+同时，批量编译的话，还需要分开放到不同文件夹才行（或者文件名不同），需要加上 <code class="notranslate">-o</code> 参数指定。</p>
+<div class="highlight highlight-source-batchfile"><pre class="notranslate"><span class="pl-c"><span class="pl-c">::</span> Windows 系统下是这样：</span>
+<span class="pl-k">SET</span> <span class="pl-smi">version</span><span class="pl-k">=</span>v2.3.3
+<span class="pl-k">SET</span> <span class="pl-smi">GOOS</span><span class="pl-k">=</span>linux
+<span class="pl-k">SET</span> <span class="pl-smi">GOARCH</span><span class="pl-k">=</span>amd64
+go build -o Releases\CloudflareST_linux_amd64\CloudflareST -ldflags <span class="pl-s"><span class="pl-pds">"</span>-s -w -X main.version=<span class="pl-smi">%version%</span><span class="pl-pds">"</span></span></pre></div>
+<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> Linux 系统下是这样：</span>
+version=v2.3.3
+GOOS=windows
+GOARCH=386
+go build -o Releases/CloudflareST_windows_386/CloudflareST.exe -ldflags <span class="pl-s"><span class="pl-pds">"</span>-s -w -X main.version=<span class="pl-smi">${version}</span><span class="pl-pds">"</span></span></pre></div>
+</details>
+<hr>
+<h2>License</h2>
+<p>The GPL-3.0 License.</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://692.cloudns.be">MGTnote</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if("01/01/2025"!=""){
+    var startSite=new Date("01/01/2025");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.disabled=true;
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","fjvi/note");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+<script src='../assets/ArticleTOC.js'></script><script src='../assets/backtop.js'></script><script src='../assets/lightbox.js'></script><script src='../assets/imgca.js'></script>
+
+</html>
