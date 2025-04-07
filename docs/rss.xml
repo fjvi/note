@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTnote</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTnote</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Mon, 07 Apr 2025 06:56:35 +0000</lastBuildDate><managingEditor>MGTnote</managingEditor><ttl>60</ttl><webMaster>MGTnote</webMaster><item><title>CloudflareSpeedTest「自选优选 IP」</title><link>https://692.cloudns.be/post/CloudflareSpeedTest%E3%80%8C-zi-xuan-you-xuan-%20IP%E3%80%8D.html</link><description>#  一、快速使用
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTnote</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTnote</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Mon, 07 Apr 2025 07:41:35 +0000</lastBuildDate><managingEditor>MGTnote</managingEditor><ttl>60</ttl><webMaster>MGTnote</webMaster><item><title>CloudflareSpeedTest「自选优选 IP」</title><link>https://692.cloudns.be/post/CloudflareSpeedTest%E3%80%8C-zi-xuan-you-xuan-%20IP%E3%80%8D.html</link><description>#  一、快速使用
 
 ### 下载运行
 
@@ -49,8 +49,8 @@ IP 地址           已发送  已接收  丢包率  平均延迟  下载速度 
 完整结果保存在当前目录下的 `result.csv` 文件中，用**记事本/表格软件**打开，格式如下：
 
 ```
-IP 地址,已发送,已接收,丢包率,平均延迟,下载速度 (MB/s)
-104.27.200.69,4,4,0.00,146.23,28.64
+IP 地址           已发送  已接收  丢包率  平均延迟  下载速度 (MB/s)
+104.27.200.69     4       4       0.00    146.23    28.64
 ```
 &gt; _大家可以按自己需求，对完整结果**进一步筛选处理**，或者去看一看进阶使用**指定过滤条件**！_
 &lt;/details&gt;
