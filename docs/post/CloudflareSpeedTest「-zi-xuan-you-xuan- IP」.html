@@ -10,78 +10,12 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="# [XIU2/CloudflareSpeedTest](https://github.com/XIU2/CloudflareSpeedTest)
-[![Go Version](https://img.shields.io/github/go-mod/go-version/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=Go&color=00ADD8&logo=go)](https://github.com/XIU2/CloudflareSpeedTest/)[![Release Version](https://img.shields.io/github/v/release/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=Release&color=00ADD8&logo=github)](https://github.com/XIU2/CloudflareSpeedTest/releases/latest)[![GitHub license](https://img.shields.io/github/license/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=License&color=00ADD8&logo=github)](https://github.com/XIU2/CloudflareSpeedTest/)[![GitHub Star](https://img.shields.io/github/stars/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=Star&color=00ADD8&logo=github)](https://github.com/XIU2/CloudflareSpeedTest/)[![GitHub Fork](https://img.shields.io/github/forks/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=Fork&color=00ADD8&logo=github)](https://github.com/XIU2/CloudflareSpeedTest/)
-
-国外很多网站都在使用 Cloudflare CDN，但分配给中国内地访客的 IP 并不友好（延迟高、丢包多、速度慢）。  
-虽然 Cloudflare 公开了所有 [IP 段](https://www.cloudflare.com/zh-cn/ips/) ，但想要在这么多 IP 中找到适合自己的，怕是要累死，于是就有了这个软件。
-
-**「自选优选 IP」测试 Cloudflare CDN 延迟和速度，获取最快 IP (IPv4+IPv6)**！好用的话**点个`⭐`鼓励一下叭~**
-
-> _分享我其他开源项目：[**TrackersList.com** - 全网热门 BT Tracker 列表！有效提高 BT 下载速度~](https://github.com/XIU2/TrackersListCollection) <img src='https://img.shields.io/github/stars/XIU2/TrackersListCollection.svg?style=flat-square&label=Star&color=4285dd&logo=github' height='16px' />_  
-> _[**UserScript** - 🐵 Github 高速下载、知乎增强、自动无缝翻页、护眼模式 等十几个**油猴脚本**~](https://github.com/XIU2/UserScript) <img src='https://img.shields.io/github/stars/XIU2/UserScript.svg?style=flat-square&label=Star&color=4285dd&logo=github' height='16px' />_  
-> _[**SNIProxy** - 🧷 自用的简单 SNI Proxy（支持全平台、全系统、前置代理、配置简单等~](https://github.com/XIU2/SNIProxy) <img src='https://img.shields.io/github/stars/XIU2/SNIProxy.svg?style=flat-square&label=Star&color=4285dd&logo=github' height='16px' />_  
-
-> 本项目也支持对**其他 CDN / 网站 IP** 延迟测速（如：[CloudFront](https://github.com/XIU2/CloudflareSpeedTest/discussions/304)、[Gcore](https://github.com/XIU2/CloudflareSpeedTest/discussions/303) CDN），但下载测速需自行寻找地址
-
-> [!IMPORTANT]
-> Cloudflare CDN 已**明文禁止代理**方式使用，对于**代理套 CDN** 的自行承担风险，请勿过度依赖 [#382](https://github.com/XIU2/CloudflareSpeedTest/discussions/382) [#383](https://github.com/XIU2/CloudflareSpeedTest/discussions/383)
-
-****
-## \# 快速使用
+<meta name="description" content="#  一、快速使用
 
 ### 下载运行
 
 1. 下载编译好的可执行文件（ [Github Releases](https://github.com/XIU2/CloudflareSpeedTest/releases) / [蓝奏云](https://pan.lanpw.com/b0742hkxe) ）并解压。  
 2. 双击运行 `CloudflareST.exe` 文件（Windows 系统），等待测速完成...
-
-<details>
-<summary><code><strong>「 点击查看 Linux 系统下的使用示例 」</strong></code></summary>
-
-****
-
-以下命令仅为示例，版本号和文件名请前往 [**Releases**](https://github.com/XIU2/CloudflareSpeedTest/releases) 查看。
-
-``` yaml
-# 如果是第一次使用，则建议创建新文件夹（后续更新时，跳过该步骤）
-mkdir CloudflareST
-
-# 进入文件夹（后续更新，只需要从这里重复下面的下载、解压命令即可）
-cd CloudflareST
-
-# 下载 CloudflareST 压缩包（自行根据需求替换 URL 中 [版本号] 和 [文件名]）
-wget -N https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
-# 如果你是在国内网络环境中下载，那么请使用下面这几个镜像加速之一：
-# wget -N https://ghp.ci/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
-# wget -N https://ghproxy.cc/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
-# wget -N https://ghproxy.net/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
-# wget -N https://gh-proxy.com/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
-# 如果下载失败的话，尝试删除 -N 参数（如果是为了更新，则记得提前删除旧压缩包 rm CloudflareST_linux_amd64.tar.gz ）
-
-# 解压（不需要删除旧文件，会直接覆盖，自行根据需求替换 文件名）
-tar -zxf CloudflareST_linux_amd64.tar.gz
-
-# 赋予执行权限
-chmod +x CloudflareST
-
-# 运行（不带参数）
-./CloudflareST
-
-# 运行（带参数示例）
-./CloudflareST -dd -tll 90
-```
-
-> 如果平**均延迟非常低**（如 0.xx），则说明 CloudflareST **测速时走了代理**，请先关闭代理软件后再测速。  
-> 如果在**路由器**上运行，建议先关闭路由器内的代理（或将其排除），否则测速结果可能会**不准确/无法使用**。
-
-</details>
-
-****
-
-> _在**手机**上独立运行 CloudflareST 测速的简单教程：**[Android](https://github.com/XIU2/CloudflareSpeedTest/discussions/61)、[Android APP](https://github.com/xianshenglu/cloudflare-ip-tester-app)、[IOS](https://github.com/XIU2/CloudflareSpeedTest/discussions/321)**_
-
-> [!NOTE]
-> 注意！本软件仅适用于网站，**不支持给使用 UDP 协议的 Cloudflare WARP 优选 IP**，具体见：[#392](https://github.com/XIU2/CloudflareSpeedTest/discussions/392)
 
 ### 结果示例
 
@@ -101,22 +35,22 @@ IP 地址           已发送  已接收  丢包率  平均延迟  下载速度 
 172.67.58.91      4       4       0.00    140.19    9.14
 ...
 
-# 如果平均延迟非常低（如 0.xx），则说明 CloudflareST 测速时走了代理，请先关闭代理软件后再测速。
-# 如果在路由器上运行，请先关闭路由器内的代理（或将其排除），否则测速结果可能会不准确/无法使用。
+* 如果平均延迟非常低（如 0.xx），则说明 CloudflareST 测速时走了代理，请先关闭代理软件后再测速。
+* 如果在路由器上运行，请先关闭路由器内的代理（或将其排除），否则测速结果可能会不准确/无法使用。
 
-# 因为每次测速都是在每个 IP 段中随机 IP，所以每次的测速结果都不可能相同，这是正常的！
+* 因为每次测速都是在每个 IP 段中随机 IP，所以每次的测速结果都不可能相同，这是正常的！
 
-# 注意！我发现电脑开机后第一次测速延迟会明显偏高（手动 TCPing 也一样），后续测速都正常
-# 因此建议大家开机后第一次正式测速前，先随便测几个 IP（无需等待延迟测速完成，只要进度条动了就可以直接关了）
+* 注意！我发现电脑开机后第一次测速延迟会明显偏高（手动 TCPing 也一样），后续测速都正常
+* 因此建议大家开机后第一次正式测速前，先随便测几个 IP（无需等待延迟测速完成，只要进度条动了就可以直接关了）
 
-# 软件在 默认参数 下的整个流程大概步骤：
-# 1. 延迟测速（默认 TCPing 模式，HTTPing 模式需要手动加上参数）
-# 2. 延迟排序（延迟 从低到高 排序并按条件过滤，不同丢包率会分开排序，因此可能会有一些延迟低但丢包的 IP 排到后面）
-# 3. 下载测速（从延迟最低的 IP 开始依次下载测速，默认测够 10 个就会停止）
-# 4. 速度排序（速度从高到低排序）
-# 5. 输出结果（通过参数控制是否输出到命令行(-p 0)或输出到文件(-o '')）
+* 软件在 默认参数 下的整个流程大概步骤：
+* 1. 延迟测速（默认 TCPing 模式，HTTPing 模式需要手动加上参数）
+* 2. 延迟排序（延迟 从低到高 排序并按条件过滤，不同丢包率会分开排序，因此可能会有一些延迟低但丢包的 IP 排到后面）
+* 3. 下载测速（从延迟最低的 IP 开始依次下载测速，默认测够 10 个就会停止）
+* 4. 速度排序（速度从高到低排序）
+* 5. 输出结果（通过参数控制是否输出到命令行(-p 0)或输出到文件(-o '')）
 
-# 注意：输出的结果文件 result.csv 通过微软 Excel 表格打开会中文乱码，这是正常的，其他表格软件/记事本都显示正常
+* 注意：输出的结果文件 result.csv 通过微软 Excel 表格打开会中文乱码，这是正常的，其他表格软件/记事本都显示正常
 ```
 
 测速结果第一行就是**既下载速度最快、又平均延迟最低的最快 IP**！
@@ -131,7 +65,7 @@ IP 地址,已发送,已接收,丢包率,平均延迟,下载速度 (MB/s)
 > _大家可以按自己需求，对完整结果**进一步筛选处理**，或者去看一看进阶使用**指定过滤条件**！_
 
 ****
-## \# 进阶使用
+# 二、进阶使用
 
 直接运行使用的是默认参数，如果想要测速结果更全面、更符合自己的要求，可以自定义参数。
 
@@ -194,7 +128,7 @@ https://github.com/XIU2/CloudflareSpeedTest
         打印帮助说明
 ```
 
-### 界面解释
+## 界面解释
 
 为了避免大家对测速过程中的**输出内容产生误解（可用、队列等数字，下载测速一半就'中断'？下载测速'卡住'不动？）**，我特意解释下。
 
@@ -279,7 +213,7 @@ Windows 要指定参数需要在 CMD 中运行，或者把参数添加到快捷�
 
 ****
 
-#### \# CMD 带参数运行 CloudflareST
+## CMD 带参数运行 CloudflareST
 
 对命令行程序不熟悉的人，可能不知道该如何带参数运行，我就简单说一下。
 
@@ -309,7 +243,7 @@ Windows 要指定参数需要在 CMD 中运行，或者把参数添加到快捷�
 
 ****
 
-#### \# Windows 快捷方式带参数运行 CloudflareST
+## Windows 快捷方式带参数运行 CloudflareST
 
 如果不经常修改运行参数（比如平时都是直接双击运行）的人，建议使用快捷方式，更方便点。
 
@@ -334,7 +268,7 @@ D:\ABC\CloudflareST\CloudflareST.exe -n 500 -t 4 -dn 20 -dt 5 -o ' '
 
 ****
 
-#### \# IPv4/IPv6
+## IPv4/IPv6
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -359,7 +293,7 @@ CloudflareST.exe -ip 1.1.1.1,2606:4700::/32
 
 ****
 
-#### \# HTTPing
+## HTTPing
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -395,7 +329,7 @@ CloudflareST.exe -httping -tp 80 -url http://cdn.cloudflare.steamstatic.com/stea
 
 ****
 
-#### \# 匹配指定地区(colo 机场三字码)
+## 匹配指定地区(colo 机场三字码)
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -433,7 +367,7 @@ CloudflareST.exe -httping -cfcolo HKG,KHH,NRT,LAX,SEA,SJC,FRA,MAD
 
 ****
 
-#### \# 文件相对/绝对路径
+## 文件相对/绝对路径
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -478,7 +412,7 @@ C:\abc\CloudflareST.exe -f C:\abc\4.txt -o C:\abc\result.csv -dd
 
 ****
 
-#### \# 测速其他端口
+## 测速其他端口
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -498,7 +432,7 @@ CloudflareST.exe -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/59
 
 ****
 
-#### \# 自定义测速地址
+## 自定义测速地址
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -519,7 +453,7 @@ CloudflareST.exe -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/59
 
 ****
 
-#### \# 自定义测速条件（指定 延迟/丢包/下载速度 的目标范围）
+## 自定义测速条件（指定 延迟/丢包/下载速度 的目标范围）
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -593,7 +527,7 @@ CloudflareST.exe -tl 200 -sl 5.6 -dn 10
 
 ****
 
-#### \# 单独对一个或多个 IP 测速
+## 单独对一个或多个 IP 测速
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -640,204 +574,14 @@ CloudflareST.exe -f 1.txt
 # 对于 1.0.0.1/24 这样的 IP 段只会随机最后一段（1.0.0.1~255），如果要测速该 IP 段中的所有 IP，请加上 -allip 参数。
 ```
 
-</details>
-
-****
-
-#### \# 一劳永逸加速所有使用 Cloudflare CDN 的网站（不需要再一个个添加域名到 Hosts 了）
-
-我以前说过，开发该软件项目的目的就是为了通过**改 Hosts 的方式来加速访问使用 Cloudflare CDN 的网站**。
-
-但就如 [**#8**](https://github.com/XIU2/CloudflareSpeedTest/issues/8) 所说，一个个添加域名到 Hosts 实在**太麻烦**了，于是我就找到了个**一劳永逸**的办法！可以看这个 [**还在一个个添加 Hosts？完美本地加速所有使用 Cloudflare CDN 的网站方法来了！**](https://github.com/XIU2/CloudflareSpeedTest/discussions/71) 和另一个[依靠本地 DNS 服务来修改域名解析 IP 为自选 IP](https://github.com/XIU2/CloudflareSpeedTest/discussions/317) 的教程。
-
-****
-
-#### \# 自动更新 Hosts
-
-考虑到很多人获得最快 Cloudflare CDN IP 后，需要替换 Hosts 文件中的 IP。
-
-可以看这个 [**Issues**](https://github.com/XIU2/CloudflareSpeedTest/discussions/312) 获取 **Windows/Linux 自动更新 Hosts 脚本**！
-
-****
-
-## 问题反馈
-
-如果你遇到什么问题，可以先去 [**Issues**](https://github.com/XIU2/CloudflareSpeedTest/issues)、[Discussions](https://github.com/XIU2/CloudflareSpeedTest/discussions) 里看看是否有别人问过了（记得去看下  [**Closed**](https://github.com/XIU2/CloudflareSpeedTest/issues?q=is%3Aissue+is%3Aclosed) 的）。  
-如果没找到类似问题，请新开个 [**Issues**](https://github.com/XIU2/CloudflareSpeedTest/issues/new) 来告诉我！
-
-> [!NOTE]
-> **注意**！_与 CloudflareST 本身 `反馈问题、功能建议` 无关的，请前往项目内部 论坛 讨论（顶部的 `💬 Discussions`_  
-
-****
-
-## 如果帮到你的话就 '打赏' 一下吧~🎉✨
-
-![微信赞赏](https://github.com/XIU2/XIU2/blob/master/img/zs-01.png)![支付宝赞赏](https://github.com/XIU2/XIU2/blob/master/img/zs-02.png)
-
-****
-
-## 衍生项目
-
-- _https://github.com/xianshenglu/cloudflare-ip-tester-app_  
-_**CloudflareST 安卓版 APP [#202](https://github.com/XIU2/CloudflareSpeedTest/discussions/320)**_
-
-- _https://github.com/mingxiaoyu/luci-app-cloudflarespeedtest_  
-_**CloudflareST OpenWrt 路由器插件版 [#174](https://github.com/XIU2/CloudflareSpeedTest/discussions/319)**_
-
-- _https://github.com/immortalwrt-collections/openwrt-cdnspeedtest_  
-_**CloudflareST OpenWrt 原生编译版本 [#64](https://github.com/XIU2/CloudflareSpeedTest/discussions/64)**_
-
-- _https://github.com/hoseinnikkhah/CloudflareSpeedTest-English_  
-_**English language version of CloudflareST (Text language differences only) [#64](https://github.com/XIU2/CloudflareSpeedTest/issues/68)**_
-
-> _此处仅收集了在本项目中宣传过的部分 CloudflareST 相关衍生项目，如果有遗漏可以告诉我~_
-
-****
-
-## 感谢项目
-
-- _https://github.com/Spedoske/CloudflareScanner_
-
-> _因为该项目已经很长时间没更新了，而我又产生了很多功能需求，所以我临时学了下 Go 语言就上手了（菜）..._  
-> _本软件基于该项目制作，但**已添加大量功能及修复 BUG**，并根据大家的使用反馈积极添加、优化功能（闲）..._
-
-****
-
-## 手动编译
-
-<details>
-<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
-
-****
-
-为了方便，我是在编译的时候将版本号写入代码中的 version 变量，因此你手动编译时，需要像下面这样在 `go build` 命令后面加上 `-ldflags` 参数来指定版本号：
-
-```bash
-go build -ldflags '-s -w -X main.version=v2.3.3'
-# 在 CloudflareSpeedTest 目录中通过命令行（例如 CMD、Bat 脚本）运行该命令，即可编译一个可在和当前设备同样系统、位数、架构的环境下运行的二进制程序（Go 会自动检测你的系统位数、架构）且版本号为 v2.3.3
-```
-
-如果想要在 Windows 64位系统下编译**其他系统、架构、位数**，那么需要指定 **GOOS** 和 **GOARCH** 变量。
-
-例如在 Windows 系统下编译一个适用于 **Linux 系统 amd 架构 64 位**的二进制程序：
-
-```bat
-SET GOOS=linux
-SET GOARCH=amd64
-go build -ldflags '-s -w -X main.version=v2.3.3'
-```
-
-例如在 Linux 系统下编译一个适用于 **Windows 系统 amd 架构 32 位**的二进制程序：
-
-```bash
-GOOS=windows
-GOARCH=386
-go build -ldflags '-s -w -X main.version=v2.3.3'
-```
-
-> 可以运行 `go tool dist list` 来查看当前 Go 版本支持编译哪些组合。
-
-****
-
-当然，为了方便批量编译，我会专门指定一个变量为版本号，后续编译直接调用该版本号变量即可。  
-同时，批量编译的话，还需要分开放到不同文件夹才行（或者文件名不同），需要加上 `-o` 参数指定。
-
-```bat
-:: Windows 系统下是这样：
-SET version=v2.3.3
-SET GOOS=linux
-SET GOARCH=amd64
-go build -o Releases\CloudflareST_linux_amd64\CloudflareST -ldflags '-s -w -X main.version=%version%'
-```
-
-```bash
-# Linux 系统下是这样：
-version=v2.3.3
-GOOS=windows
-GOARCH=386
-go build -o Releases/CloudflareST_windows_386/CloudflareST.exe -ldflags '-s -w -X main.version=${version}'
-```
-
-</details>
-
-****
-
-## License
-
-The GPL-3.0 License.$$$$$$$">
+$$$$$$$">
 <meta property="og:title" content="CloudflareSpeedTest「自选优选 IP」">
-<meta property="og:description" content="# [XIU2/CloudflareSpeedTest](https://github.com/XIU2/CloudflareSpeedTest)
-[![Go Version](https://img.shields.io/github/go-mod/go-version/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=Go&color=00ADD8&logo=go)](https://github.com/XIU2/CloudflareSpeedTest/)[![Release Version](https://img.shields.io/github/v/release/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=Release&color=00ADD8&logo=github)](https://github.com/XIU2/CloudflareSpeedTest/releases/latest)[![GitHub license](https://img.shields.io/github/license/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=License&color=00ADD8&logo=github)](https://github.com/XIU2/CloudflareSpeedTest/)[![GitHub Star](https://img.shields.io/github/stars/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=Star&color=00ADD8&logo=github)](https://github.com/XIU2/CloudflareSpeedTest/)[![GitHub Fork](https://img.shields.io/github/forks/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=Fork&color=00ADD8&logo=github)](https://github.com/XIU2/CloudflareSpeedTest/)
-
-国外很多网站都在使用 Cloudflare CDN，但分配给中国内地访客的 IP 并不友好（延迟高、丢包多、速度慢）。  
-虽然 Cloudflare 公开了所有 [IP 段](https://www.cloudflare.com/zh-cn/ips/) ，但想要在这么多 IP 中找到适合自己的，怕是要累死，于是就有了这个软件。
-
-**「自选优选 IP」测试 Cloudflare CDN 延迟和速度，获取最快 IP (IPv4+IPv6)**！好用的话**点个`⭐`鼓励一下叭~**
-
-> _分享我其他开源项目：[**TrackersList.com** - 全网热门 BT Tracker 列表！有效提高 BT 下载速度~](https://github.com/XIU2/TrackersListCollection) <img src='https://img.shields.io/github/stars/XIU2/TrackersListCollection.svg?style=flat-square&label=Star&color=4285dd&logo=github' height='16px' />_  
-> _[**UserScript** - 🐵 Github 高速下载、知乎增强、自动无缝翻页、护眼模式 等十几个**油猴脚本**~](https://github.com/XIU2/UserScript) <img src='https://img.shields.io/github/stars/XIU2/UserScript.svg?style=flat-square&label=Star&color=4285dd&logo=github' height='16px' />_  
-> _[**SNIProxy** - 🧷 自用的简单 SNI Proxy（支持全平台、全系统、前置代理、配置简单等~](https://github.com/XIU2/SNIProxy) <img src='https://img.shields.io/github/stars/XIU2/SNIProxy.svg?style=flat-square&label=Star&color=4285dd&logo=github' height='16px' />_  
-
-> 本项目也支持对**其他 CDN / 网站 IP** 延迟测速（如：[CloudFront](https://github.com/XIU2/CloudflareSpeedTest/discussions/304)、[Gcore](https://github.com/XIU2/CloudflareSpeedTest/discussions/303) CDN），但下载测速需自行寻找地址
-
-> [!IMPORTANT]
-> Cloudflare CDN 已**明文禁止代理**方式使用，对于**代理套 CDN** 的自行承担风险，请勿过度依赖 [#382](https://github.com/XIU2/CloudflareSpeedTest/discussions/382) [#383](https://github.com/XIU2/CloudflareSpeedTest/discussions/383)
-
-****
-## \# 快速使用
+<meta property="og:description" content="#  一、快速使用
 
 ### 下载运行
 
 1. 下载编译好的可执行文件（ [Github Releases](https://github.com/XIU2/CloudflareSpeedTest/releases) / [蓝奏云](https://pan.lanpw.com/b0742hkxe) ）并解压。  
 2. 双击运行 `CloudflareST.exe` 文件（Windows 系统），等待测速完成...
-
-<details>
-<summary><code><strong>「 点击查看 Linux 系统下的使用示例 」</strong></code></summary>
-
-****
-
-以下命令仅为示例，版本号和文件名请前往 [**Releases**](https://github.com/XIU2/CloudflareSpeedTest/releases) 查看。
-
-``` yaml
-# 如果是第一次使用，则建议创建新文件夹（后续更新时，跳过该步骤）
-mkdir CloudflareST
-
-# 进入文件夹（后续更新，只需要从这里重复下面的下载、解压命令即可）
-cd CloudflareST
-
-# 下载 CloudflareST 压缩包（自行根据需求替换 URL 中 [版本号] 和 [文件名]）
-wget -N https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
-# 如果你是在国内网络环境中下载，那么请使用下面这几个镜像加速之一：
-# wget -N https://ghp.ci/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
-# wget -N https://ghproxy.cc/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
-# wget -N https://ghproxy.net/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
-# wget -N https://gh-proxy.com/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz
-# 如果下载失败的话，尝试删除 -N 参数（如果是为了更新，则记得提前删除旧压缩包 rm CloudflareST_linux_amd64.tar.gz ）
-
-# 解压（不需要删除旧文件，会直接覆盖，自行根据需求替换 文件名）
-tar -zxf CloudflareST_linux_amd64.tar.gz
-
-# 赋予执行权限
-chmod +x CloudflareST
-
-# 运行（不带参数）
-./CloudflareST
-
-# 运行（带参数示例）
-./CloudflareST -dd -tll 90
-```
-
-> 如果平**均延迟非常低**（如 0.xx），则说明 CloudflareST **测速时走了代理**，请先关闭代理软件后再测速。  
-> 如果在**路由器**上运行，建议先关闭路由器内的代理（或将其排除），否则测速结果可能会**不准确/无法使用**。
-
-</details>
-
-****
-
-> _在**手机**上独立运行 CloudflareST 测速的简单教程：**[Android](https://github.com/XIU2/CloudflareSpeedTest/discussions/61)、[Android APP](https://github.com/xianshenglu/cloudflare-ip-tester-app)、[IOS](https://github.com/XIU2/CloudflareSpeedTest/discussions/321)**_
-
-> [!NOTE]
-> 注意！本软件仅适用于网站，**不支持给使用 UDP 协议的 Cloudflare WARP 优选 IP**，具体见：[#392](https://github.com/XIU2/CloudflareSpeedTest/discussions/392)
 
 ### 结果示例
 
@@ -857,22 +601,22 @@ IP 地址           已发送  已接收  丢包率  平均延迟  下载速度 
 172.67.58.91      4       4       0.00    140.19    9.14
 ...
 
-# 如果平均延迟非常低（如 0.xx），则说明 CloudflareST 测速时走了代理，请先关闭代理软件后再测速。
-# 如果在路由器上运行，请先关闭路由器内的代理（或将其排除），否则测速结果可能会不准确/无法使用。
+* 如果平均延迟非常低（如 0.xx），则说明 CloudflareST 测速时走了代理，请先关闭代理软件后再测速。
+* 如果在路由器上运行，请先关闭路由器内的代理（或将其排除），否则测速结果可能会不准确/无法使用。
 
-# 因为每次测速都是在每个 IP 段中随机 IP，所以每次的测速结果都不可能相同，这是正常的！
+* 因为每次测速都是在每个 IP 段中随机 IP，所以每次的测速结果都不可能相同，这是正常的！
 
-# 注意！我发现电脑开机后第一次测速延迟会明显偏高（手动 TCPing 也一样），后续测速都正常
-# 因此建议大家开机后第一次正式测速前，先随便测几个 IP（无需等待延迟测速完成，只要进度条动了就可以直接关了）
+* 注意！我发现电脑开机后第一次测速延迟会明显偏高（手动 TCPing 也一样），后续测速都正常
+* 因此建议大家开机后第一次正式测速前，先随便测几个 IP（无需等待延迟测速完成，只要进度条动了就可以直接关了）
 
-# 软件在 默认参数 下的整个流程大概步骤：
-# 1. 延迟测速（默认 TCPing 模式，HTTPing 模式需要手动加上参数）
-# 2. 延迟排序（延迟 从低到高 排序并按条件过滤，不同丢包率会分开排序，因此可能会有一些延迟低但丢包的 IP 排到后面）
-# 3. 下载测速（从延迟最低的 IP 开始依次下载测速，默认测够 10 个就会停止）
-# 4. 速度排序（速度从高到低排序）
-# 5. 输出结果（通过参数控制是否输出到命令行(-p 0)或输出到文件(-o '')）
+* 软件在 默认参数 下的整个流程大概步骤：
+* 1. 延迟测速（默认 TCPing 模式，HTTPing 模式需要手动加上参数）
+* 2. 延迟排序（延迟 从低到高 排序并按条件过滤，不同丢包率会分开排序，因此可能会有一些延迟低但丢包的 IP 排到后面）
+* 3. 下载测速（从延迟最低的 IP 开始依次下载测速，默认测够 10 个就会停止）
+* 4. 速度排序（速度从高到低排序）
+* 5. 输出结果（通过参数控制是否输出到命令行(-p 0)或输出到文件(-o '')）
 
-# 注意：输出的结果文件 result.csv 通过微软 Excel 表格打开会中文乱码，这是正常的，其他表格软件/记事本都显示正常
+* 注意：输出的结果文件 result.csv 通过微软 Excel 表格打开会中文乱码，这是正常的，其他表格软件/记事本都显示正常
 ```
 
 测速结果第一行就是**既下载速度最快、又平均延迟最低的最快 IP**！
@@ -887,7 +631,7 @@ IP 地址,已发送,已接收,丢包率,平均延迟,下载速度 (MB/s)
 > _大家可以按自己需求，对完整结果**进一步筛选处理**，或者去看一看进阶使用**指定过滤条件**！_
 
 ****
-## \# 进阶使用
+# 二、进阶使用
 
 直接运行使用的是默认参数，如果想要测速结果更全面、更符合自己的要求，可以自定义参数。
 
@@ -950,7 +694,7 @@ https://github.com/XIU2/CloudflareSpeedTest
         打印帮助说明
 ```
 
-### 界面解释
+## 界面解释
 
 为了避免大家对测速过程中的**输出内容产生误解（可用、队列等数字，下载测速一半就'中断'？下载测速'卡住'不动？）**，我特意解释下。
 
@@ -1035,7 +779,7 @@ Windows 要指定参数需要在 CMD 中运行，或者把参数添加到快捷�
 
 ****
 
-#### \# CMD 带参数运行 CloudflareST
+## CMD 带参数运行 CloudflareST
 
 对命令行程序不熟悉的人，可能不知道该如何带参数运行，我就简单说一下。
 
@@ -1065,7 +809,7 @@ Windows 要指定参数需要在 CMD 中运行，或者把参数添加到快捷�
 
 ****
 
-#### \# Windows 快捷方式带参数运行 CloudflareST
+## Windows 快捷方式带参数运行 CloudflareST
 
 如果不经常修改运行参数（比如平时都是直接双击运行）的人，建议使用快捷方式，更方便点。
 
@@ -1090,7 +834,7 @@ D:\ABC\CloudflareST\CloudflareST.exe -n 500 -t 4 -dn 20 -dt 5 -o ' '
 
 ****
 
-#### \# IPv4/IPv6
+## IPv4/IPv6
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -1115,7 +859,7 @@ CloudflareST.exe -ip 1.1.1.1,2606:4700::/32
 
 ****
 
-#### \# HTTPing
+## HTTPing
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -1151,7 +895,7 @@ CloudflareST.exe -httping -tp 80 -url http://cdn.cloudflare.steamstatic.com/stea
 
 ****
 
-#### \# 匹配指定地区(colo 机场三字码)
+## 匹配指定地区(colo 机场三字码)
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -1189,7 +933,7 @@ CloudflareST.exe -httping -cfcolo HKG,KHH,NRT,LAX,SEA,SJC,FRA,MAD
 
 ****
 
-#### \# 文件相对/绝对路径
+## 文件相对/绝对路径
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -1234,7 +978,7 @@ C:\abc\CloudflareST.exe -f C:\abc\4.txt -o C:\abc\result.csv -dd
 
 ****
 
-#### \# 测速其他端口
+## 测速其他端口
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -1254,7 +998,7 @@ CloudflareST.exe -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/59
 
 ****
 
-#### \# 自定义测速地址
+## 自定义测速地址
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -1275,7 +1019,7 @@ CloudflareST.exe -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/59
 
 ****
 
-#### \# 自定义测速条件（指定 延迟/丢包/下载速度 的目标范围）
+## 自定义测速条件（指定 延迟/丢包/下载速度 的目标范围）
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -1349,7 +1093,7 @@ CloudflareST.exe -tl 200 -sl 5.6 -dn 10
 
 ****
 
-#### \# 单独对一个或多个 IP 测速
+## 单独对一个或多个 IP 测速
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -1396,131 +1140,7 @@ CloudflareST.exe -f 1.txt
 # 对于 1.0.0.1/24 这样的 IP 段只会随机最后一段（1.0.0.1~255），如果要测速该 IP 段中的所有 IP，请加上 -allip 参数。
 ```
 
-</details>
-
-****
-
-#### \# 一劳永逸加速所有使用 Cloudflare CDN 的网站（不需要再一个个添加域名到 Hosts 了）
-
-我以前说过，开发该软件项目的目的就是为了通过**改 Hosts 的方式来加速访问使用 Cloudflare CDN 的网站**。
-
-但就如 [**#8**](https://github.com/XIU2/CloudflareSpeedTest/issues/8) 所说，一个个添加域名到 Hosts 实在**太麻烦**了，于是我就找到了个**一劳永逸**的办法！可以看这个 [**还在一个个添加 Hosts？完美本地加速所有使用 Cloudflare CDN 的网站方法来了！**](https://github.com/XIU2/CloudflareSpeedTest/discussions/71) 和另一个[依靠本地 DNS 服务来修改域名解析 IP 为自选 IP](https://github.com/XIU2/CloudflareSpeedTest/discussions/317) 的教程。
-
-****
-
-#### \# 自动更新 Hosts
-
-考虑到很多人获得最快 Cloudflare CDN IP 后，需要替换 Hosts 文件中的 IP。
-
-可以看这个 [**Issues**](https://github.com/XIU2/CloudflareSpeedTest/discussions/312) 获取 **Windows/Linux 自动更新 Hosts 脚本**！
-
-****
-
-## 问题反馈
-
-如果你遇到什么问题，可以先去 [**Issues**](https://github.com/XIU2/CloudflareSpeedTest/issues)、[Discussions](https://github.com/XIU2/CloudflareSpeedTest/discussions) 里看看是否有别人问过了（记得去看下  [**Closed**](https://github.com/XIU2/CloudflareSpeedTest/issues?q=is%3Aissue+is%3Aclosed) 的）。  
-如果没找到类似问题，请新开个 [**Issues**](https://github.com/XIU2/CloudflareSpeedTest/issues/new) 来告诉我！
-
-> [!NOTE]
-> **注意**！_与 CloudflareST 本身 `反馈问题、功能建议` 无关的，请前往项目内部 论坛 讨论（顶部的 `💬 Discussions`_  
-
-****
-
-## 如果帮到你的话就 '打赏' 一下吧~🎉✨
-
-![微信赞赏](https://github.com/XIU2/XIU2/blob/master/img/zs-01.png)![支付宝赞赏](https://github.com/XIU2/XIU2/blob/master/img/zs-02.png)
-
-****
-
-## 衍生项目
-
-- _https://github.com/xianshenglu/cloudflare-ip-tester-app_  
-_**CloudflareST 安卓版 APP [#202](https://github.com/XIU2/CloudflareSpeedTest/discussions/320)**_
-
-- _https://github.com/mingxiaoyu/luci-app-cloudflarespeedtest_  
-_**CloudflareST OpenWrt 路由器插件版 [#174](https://github.com/XIU2/CloudflareSpeedTest/discussions/319)**_
-
-- _https://github.com/immortalwrt-collections/openwrt-cdnspeedtest_  
-_**CloudflareST OpenWrt 原生编译版本 [#64](https://github.com/XIU2/CloudflareSpeedTest/discussions/64)**_
-
-- _https://github.com/hoseinnikkhah/CloudflareSpeedTest-English_  
-_**English language version of CloudflareST (Text language differences only) [#64](https://github.com/XIU2/CloudflareSpeedTest/issues/68)**_
-
-> _此处仅收集了在本项目中宣传过的部分 CloudflareST 相关衍生项目，如果有遗漏可以告诉我~_
-
-****
-
-## 感谢项目
-
-- _https://github.com/Spedoske/CloudflareScanner_
-
-> _因为该项目已经很长时间没更新了，而我又产生了很多功能需求，所以我临时学了下 Go 语言就上手了（菜）..._  
-> _本软件基于该项目制作，但**已添加大量功能及修复 BUG**，并根据大家的使用反馈积极添加、优化功能（闲）..._
-
-****
-
-## 手动编译
-
-<details>
-<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
-
-****
-
-为了方便，我是在编译的时候将版本号写入代码中的 version 变量，因此你手动编译时，需要像下面这样在 `go build` 命令后面加上 `-ldflags` 参数来指定版本号：
-
-```bash
-go build -ldflags '-s -w -X main.version=v2.3.3'
-# 在 CloudflareSpeedTest 目录中通过命令行（例如 CMD、Bat 脚本）运行该命令，即可编译一个可在和当前设备同样系统、位数、架构的环境下运行的二进制程序（Go 会自动检测你的系统位数、架构）且版本号为 v2.3.3
-```
-
-如果想要在 Windows 64位系统下编译**其他系统、架构、位数**，那么需要指定 **GOOS** 和 **GOARCH** 变量。
-
-例如在 Windows 系统下编译一个适用于 **Linux 系统 amd 架构 64 位**的二进制程序：
-
-```bat
-SET GOOS=linux
-SET GOARCH=amd64
-go build -ldflags '-s -w -X main.version=v2.3.3'
-```
-
-例如在 Linux 系统下编译一个适用于 **Windows 系统 amd 架构 32 位**的二进制程序：
-
-```bash
-GOOS=windows
-GOARCH=386
-go build -ldflags '-s -w -X main.version=v2.3.3'
-```
-
-> 可以运行 `go tool dist list` 来查看当前 Go 版本支持编译哪些组合。
-
-****
-
-当然，为了方便批量编译，我会专门指定一个变量为版本号，后续编译直接调用该版本号变量即可。  
-同时，批量编译的话，还需要分开放到不同文件夹才行（或者文件名不同），需要加上 `-o` 参数指定。
-
-```bat
-:: Windows 系统下是这样：
-SET version=v2.3.3
-SET GOOS=linux
-SET GOARCH=amd64
-go build -o Releases\CloudflareST_linux_amd64\CloudflareST -ldflags '-s -w -X main.version=%version%'
-```
-
-```bash
-# Linux 系统下是这样：
-version=v2.3.3
-GOOS=windows
-GOARCH=386
-go build -o Releases/CloudflareST_windows_386/CloudflareST.exe -ldflags '-s -w -X main.version=${version}'
-```
-
-</details>
-
-****
-
-## License
-
-The GPL-3.0 License.$$$$$$$">
+$$$$$$$">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://692.cloudns.be/post/CloudflareSpeedTest%E3%80%8C-zi-xuan-you-xuan-%20IP%E3%80%8D.html">
 <meta property="og:image" content="avatar.svg">
@@ -1565,7 +1185,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto;
     font-size: 12px;
 }
 </style>
-<style>.markdown-alert{padding:0.5rem 1rem;margin-bottom:1rem;border-left:.25em solid var(--borderColor-default,var(--color-border-default));}.markdown-alert .markdown-alert-title {display:flex;font-weight:var(--base-text-weight-medium,500);align-items:center;line-height:1;}.markdown-alert>:first-child {margin-top:0;}.markdown-alert>:last-child {margin-bottom:0;}</style><style>.markdown-alert.markdown-alert-note {border-left-color:var(--borderColor-accent-emphasis, var(--color-accent-emphasis));background-color:var(--color-accent-subtle);}.markdown-alert.markdown-alert-note .markdown-alert-title {color: var(--fgColor-accent,var(--color-accent-fg));}</style><style>.markdown-alert.markdown-alert-tip {border-left-color:var(--borderColor-success-emphasis, var(--color-success-emphasis));background-color:var(--color-success-subtle);}.markdown-alert.markdown-alert-tip .markdown-alert-title {color: var(--fgColor-success,var(--color-success-fg));}</style><style>.markdown-alert.markdown-alert-important {border-left-color:var(--borderColor-done-emphasis, var(--color-done-emphasis));background-color:var(--color-done-subtle);}.markdown-alert.markdown-alert-important .markdown-alert-title {color: var(--fgColor-done,var(--color-done-fg));}</style>
+<style>.markdown-alert{padding:0.5rem 1rem;margin-bottom:1rem;border-left:.25em solid var(--borderColor-default,var(--color-border-default));}.markdown-alert .markdown-alert-title {display:flex;font-weight:var(--base-text-weight-medium,500);align-items:center;line-height:1;}.markdown-alert>:first-child {margin-top:0;}.markdown-alert>:last-child {margin-bottom:0;}</style><style>.markdown-alert.markdown-alert-tip {border-left-color:var(--borderColor-success-emphasis, var(--color-success-emphasis));background-color:var(--color-success-subtle);}.markdown-alert.markdown-alert-tip .markdown-alert-title {color: var(--fgColor-success,var(--color-success-fg));}</style>
 
 
 
@@ -1595,69 +1215,12 @@ body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><h1><a href="https://github.com/XIU2/CloudflareSpeedTest">XIU2/CloudflareSpeedTest</a></h1>
-<p><a href="https://github.com/XIU2/CloudflareSpeedTest/"><img src="https://camo.githubusercontent.com/e390ccf7879b480e69182cc91c212267f162a4007d3829a9a9d8bf1fc266b3a2/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f676f2d6d6f642f676f2d76657273696f6e2f584955322f436c6f7564666c6172655370656564546573742e7376673f7374796c653d666c61742d737175617265266c6162656c3d476f26636f6c6f723d303041444438266c6f676f3d676f" alt="Go Version" data-canonical-src="https://img.shields.io/github/go-mod/go-version/XIU2/CloudflareSpeedTest.svg?style=flat-square&amp;label=Go&amp;color=00ADD8&amp;logo=go" style="max-width: 100%;"></a><a href="https://github.com/XIU2/CloudflareSpeedTest/releases/latest"><img src="https://camo.githubusercontent.com/5a02c6576c5de593678cff38abd4a9e371f88f822d52909c07ffe58b36876386/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f762f72656c656173652f584955322f436c6f7564666c6172655370656564546573742e7376673f7374796c653d666c61742d737175617265266c6162656c3d52656c6561736526636f6c6f723d303041444438266c6f676f3d676974687562" alt="Release Version" data-canonical-src="https://img.shields.io/github/v/release/XIU2/CloudflareSpeedTest.svg?style=flat-square&amp;label=Release&amp;color=00ADD8&amp;logo=github" style="max-width: 100%;"></a><a href="https://github.com/XIU2/CloudflareSpeedTest/"><img src="https://camo.githubusercontent.com/f87e92c60b0a79b01abdc2646ed8b9f6ef273123ab78eee95eababa0254f476f/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f6c6963656e73652f584955322f436c6f7564666c6172655370656564546573742e7376673f7374796c653d666c61742d737175617265266c6162656c3d4c6963656e736526636f6c6f723d303041444438266c6f676f3d676974687562" alt="GitHub license" data-canonical-src="https://img.shields.io/github/license/XIU2/CloudflareSpeedTest.svg?style=flat-square&amp;label=License&amp;color=00ADD8&amp;logo=github" style="max-width: 100%;"></a><a href="https://github.com/XIU2/CloudflareSpeedTest/"><img src="https://camo.githubusercontent.com/70b32465ffcc0d109593f8f7076a9dca67eb3654a415334a2197301c2bdafec0/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f584955322f436c6f7564666c6172655370656564546573742e7376673f7374796c653d666c61742d737175617265266c6162656c3d5374617226636f6c6f723d303041444438266c6f676f3d676974687562" alt="GitHub Star" data-canonical-src="https://img.shields.io/github/stars/XIU2/CloudflareSpeedTest.svg?style=flat-square&amp;label=Star&amp;color=00ADD8&amp;logo=github" style="max-width: 100%;"></a><a href="https://github.com/XIU2/CloudflareSpeedTest/"><img src="https://camo.githubusercontent.com/917aea6205065d6b7aac8059ff0442bd674168126f5b89051b4dad52af605989/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f666f726b732f584955322f436c6f7564666c6172655370656564546573742e7376673f7374796c653d666c61742d737175617265266c6162656c3d466f726b26636f6c6f723d303041444438266c6f676f3d676974687562" alt="GitHub Fork" data-canonical-src="https://img.shields.io/github/forks/XIU2/CloudflareSpeedTest.svg?style=flat-square&amp;label=Fork&amp;color=00ADD8&amp;logo=github" style="max-width: 100%;"></a></p>
-<p>国外很多网站都在使用 Cloudflare CDN，但分配给中国内地访客的 IP 并不友好（延迟高、丢包多、速度慢）。<br>
-虽然 Cloudflare 公开了所有 <a href="https://www.cloudflare.com/zh-cn/ips/" rel="nofollow">IP 段</a> ，但想要在这么多 IP 中找到适合自己的，怕是要累死，于是就有了这个软件。</p>
-<p><strong>「自选优选 IP」测试 Cloudflare CDN 延迟和速度，获取最快 IP (IPv4+IPv6)</strong>！好用的话<strong>点个<code class="notranslate">⭐</code>鼓励一下叭~</strong></p>
-<blockquote>
-<p><em>分享我其他开源项目：<a href="https://github.com/XIU2/TrackersListCollection"><strong>TrackersList.com</strong> - 全网热门 BT Tracker 列表！有效提高 BT 下载速度~</a> <a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/b03c6089a42f9cb8d97ebeadc48d25b256e9849aebf40fb215ab1489304b674c/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f584955322f547261636b6572734c697374436f6c6c656374696f6e2e7376673f7374796c653d666c61742d737175617265266c6162656c3d5374617226636f6c6f723d343238356464266c6f676f3d676974687562"><img src="https://camo.githubusercontent.com/b03c6089a42f9cb8d97ebeadc48d25b256e9849aebf40fb215ab1489304b674c/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f584955322f547261636b6572734c697374436f6c6c656374696f6e2e7376673f7374796c653d666c61742d737175617265266c6162656c3d5374617226636f6c6f723d343238356464266c6f676f3d676974687562" height="16px" data-canonical-src="https://img.shields.io/github/stars/XIU2/TrackersListCollection.svg?style=flat-square&amp;label=Star&amp;color=4285dd&amp;logo=github" style="max-width: 100%;"></a></em><br>
-<em><a href="https://github.com/XIU2/UserScript"><strong>UserScript</strong> - 🐵 Github 高速下载、知乎增强、自动无缝翻页、护眼模式 等十几个<strong>油猴脚本</strong>~</a> <a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/cfc57c79555fe4478130cf03fffafb6eaf7a85d6dd49487381f40cc947848384/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f584955322f557365725363726970742e7376673f7374796c653d666c61742d737175617265266c6162656c3d5374617226636f6c6f723d343238356464266c6f676f3d676974687562"><img src="https://camo.githubusercontent.com/cfc57c79555fe4478130cf03fffafb6eaf7a85d6dd49487381f40cc947848384/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f584955322f557365725363726970742e7376673f7374796c653d666c61742d737175617265266c6162656c3d5374617226636f6c6f723d343238356464266c6f676f3d676974687562" height="16px" data-canonical-src="https://img.shields.io/github/stars/XIU2/UserScript.svg?style=flat-square&amp;label=Star&amp;color=4285dd&amp;logo=github" style="max-width: 100%;"></a></em><br>
-<em><a href="https://github.com/XIU2/SNIProxy"><strong>SNIProxy</strong> - 🧷 自用的简单 SNI Proxy（支持全平台、全系统、前置代理、配置简单等~</a> <a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/cda949f2bcc0014e90babfe0bb15085a342c1773f57e226006ee2dec89b8f1df/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f584955322f534e4950726f78792e7376673f7374796c653d666c61742d737175617265266c6162656c3d5374617226636f6c6f723d343238356464266c6f676f3d676974687562"><img src="https://camo.githubusercontent.com/cda949f2bcc0014e90babfe0bb15085a342c1773f57e226006ee2dec89b8f1df/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f584955322f534e4950726f78792e7376673f7374796c653d666c61742d737175617265266c6162656c3d5374617226636f6c6f723d343238356464266c6f676f3d676974687562" height="16px" data-canonical-src="https://img.shields.io/github/stars/XIU2/SNIProxy.svg?style=flat-square&amp;label=Star&amp;color=4285dd&amp;logo=github" style="max-width: 100%;"></a></em></p>
-</blockquote>
-<blockquote>
-<p>本项目也支持对<strong>其他 CDN / 网站 IP</strong> 延迟测速（如：<a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/304">CloudFront</a>、<a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/303">Gcore</a> CDN），但下载测速需自行寻找地址</p>
-</blockquote>
-<div class="markdown-alert markdown-alert-important"><p class="markdown-alert-title"><svg class="octicon octicon-report mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p><p>Cloudflare CDN 已<strong>明文禁止代理</strong>方式使用，对于<strong>代理套 CDN</strong> 的自行承担风险，请勿过度依赖 <a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/382">#382</a> <a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/383">#383</a></p>
-</div>
-<hr>
-<h2># 快速使用</h2>
+<div class="markdown-body" id="postBody"><h1>一、快速使用</h1>
 <h3>下载运行</h3>
 <ol>
 <li>下载编译好的可执行文件（ <a href="https://github.com/XIU2/CloudflareSpeedTest/releases">Github Releases</a> / <a href="https://pan.lanpw.com/b0742hkxe" rel="nofollow">蓝奏云</a> ）并解压。</li>
 <li>双击运行 <code class="notranslate">CloudflareST.exe</code> 文件（Windows 系统），等待测速完成...</li>
 </ol>
-<details>
-<summary><code class="notranslate"><strong>「 点击查看 Linux 系统下的使用示例 」</strong></code></summary>
-<hr>
-<p>以下命令仅为示例，版本号和文件名请前往 <a href="https://github.com/XIU2/CloudflareSpeedTest/releases"><strong>Releases</strong></a> 查看。</p>
-<div class="highlight highlight-source-yaml"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> 如果是第一次使用，则建议创建新文件夹（后续更新时，跳过该步骤）</span>
-<span class="pl-s">mkdir CloudflareST</span>
-
-<span class="pl-c"><span class="pl-c">#</span> 进入文件夹（后续更新，只需要从这里重复下面的下载、解压命令即可）</span>
-<span class="pl-s">cd CloudflareST</span>
-
-<span class="pl-c"><span class="pl-c">#</span> 下载 CloudflareST 压缩包（自行根据需求替换 URL 中 [版本号] 和 [文件名]）</span>
-<span class="pl-s">wget -N https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz</span>
-<span class="pl-c"><span class="pl-c">#</span> 如果你是在国内网络环境中下载，那么请使用下面这几个镜像加速之一：</span>
-<span class="pl-c"><span class="pl-c">#</span> wget -N https://ghp.ci/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz</span>
-<span class="pl-c"><span class="pl-c">#</span> wget -N https://ghproxy.cc/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz</span>
-<span class="pl-c"><span class="pl-c">#</span> wget -N https://ghproxy.net/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz</span>
-<span class="pl-c"><span class="pl-c">#</span> wget -N https://gh-proxy.com/https://github.com/XIU2/CloudflareSpeedTest/releases/download/v2.2.5/CloudflareST_linux_amd64.tar.gz</span>
-<span class="pl-c"><span class="pl-c">#</span> 如果下载失败的话，尝试删除 -N 参数（如果是为了更新，则记得提前删除旧压缩包 rm CloudflareST_linux_amd64.tar.gz ）</span>
-
-<span class="pl-c"><span class="pl-c">#</span> 解压（不需要删除旧文件，会直接覆盖，自行根据需求替换 文件名）</span>
-<span class="pl-s">tar -zxf CloudflareST_linux_amd64.tar.gz</span>
-
-<span class="pl-c"><span class="pl-c">#</span> 赋予执行权限</span>
-<span class="pl-s">chmod +x CloudflareST</span>
-
-<span class="pl-c"><span class="pl-c">#</span> 运行（不带参数）</span>
-<span class="pl-s">./CloudflareST</span>
-
-<span class="pl-c"><span class="pl-c">#</span> 运行（带参数示例）</span>
-<span class="pl-s">./CloudflareST -dd -tll 90</span></pre></div>
-<blockquote>
-<p>如果平<strong>均延迟非常低</strong>（如 0.xx），则说明 CloudflareST <strong>测速时走了代理</strong>，请先关闭代理软件后再测速。<br>
-如果在<strong>路由器</strong>上运行，建议先关闭路由器内的代理（或将其排除），否则测速结果可能会<strong>不准确/无法使用</strong>。</p>
-</blockquote>
-</details>
-<hr>
-<blockquote>
-<p><em>在<strong>手机</strong>上独立运行 CloudflareST 测速的简单教程：<strong><a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/61">Android</a>、<a href="https://github.com/xianshenglu/cloudflare-ip-tester-app">Android APP</a>、<a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/321">IOS</a></strong></em></p>
-</blockquote>
-<div class="markdown-alert markdown-alert-note"><p class="markdown-alert-title"><svg class="octicon octicon-info mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p><p>注意！本软件仅适用于网站，<strong>不支持给使用 UDP 协议的 Cloudflare WARP 优选 IP</strong>，具体见：<a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/392">#392</a></p>
-</div>
 <h3>结果示例</h3>
 <p>测速完毕后，默认会显示<strong>最快的 10 个 IP</strong>，示例：</p>
 <div class="highlight highlight-source-shell"><pre class="notranslate">IP 地址           已发送  已接收  丢包率  平均延迟  下载速度 (MB/s)
@@ -1673,22 +1236,22 @@ body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto;
 172.67.58.91      4       4       0.00    140.19    9.14
 ...
 
-<span class="pl-c"><span class="pl-c">#</span> 如果平均延迟非常低（如 0.xx），则说明 CloudflareST 测速时走了代理，请先关闭代理软件后再测速。</span>
-<span class="pl-c"><span class="pl-c">#</span> 如果在路由器上运行，请先关闭路由器内的代理（或将其排除），否则测速结果可能会不准确/无法使用。</span>
+<span class="pl-k">*</span> 如果平均延迟非常低（如 0.xx），则说明 CloudflareST 测速时走了代理，请先关闭代理软件后再测速。
+<span class="pl-k">*</span> 如果在路由器上运行，请先关闭路由器内的代理（或将其排除），否则测速结果可能会不准确/无法使用。
 
-<span class="pl-c"><span class="pl-c">#</span> 因为每次测速都是在每个 IP 段中随机 IP，所以每次的测速结果都不可能相同，这是正常的！</span>
+<span class="pl-k">*</span> 因为每次测速都是在每个 IP 段中随机 IP，所以每次的测速结果都不可能相同，这是正常的！
 
-<span class="pl-c"><span class="pl-c">#</span> 注意！我发现电脑开机后第一次测速延迟会明显偏高（手动 TCPing 也一样），后续测速都正常</span>
-<span class="pl-c"><span class="pl-c">#</span> 因此建议大家开机后第一次正式测速前，先随便测几个 IP（无需等待延迟测速完成，只要进度条动了就可以直接关了）</span>
+<span class="pl-k">*</span> 注意！我发现电脑开机后第一次测速延迟会明显偏高（手动 TCPing 也一样），后续测速都正常
+<span class="pl-k">*</span> 因此建议大家开机后第一次正式测速前，先随便测几个 IP（无需等待延迟测速完成，只要进度条动了就可以直接关了）
 
-<span class="pl-c"><span class="pl-c">#</span> 软件在 默认参数 下的整个流程大概步骤：</span>
-<span class="pl-c"><span class="pl-c">#</span> 1. 延迟测速（默认 TCPing 模式，HTTPing 模式需要手动加上参数）</span>
-<span class="pl-c"><span class="pl-c">#</span> 2. 延迟排序（延迟 从低到高 排序并按条件过滤，不同丢包率会分开排序，因此可能会有一些延迟低但丢包的 IP 排到后面）</span>
-<span class="pl-c"><span class="pl-c">#</span> 3. 下载测速（从延迟最低的 IP 开始依次下载测速，默认测够 10 个就会停止）</span>
-<span class="pl-c"><span class="pl-c">#</span> 4. 速度排序（速度从高到低排序）</span>
-<span class="pl-c"><span class="pl-c">#</span> 5. 输出结果（通过参数控制是否输出到命令行(-p 0)或输出到文件(-o "")）</span>
+<span class="pl-k">*</span> 软件在 默认参数 下的整个流程大概步骤：
+<span class="pl-k">*</span> 1. 延迟测速（默认 TCPing 模式，HTTPing 模式需要手动加上参数）
+<span class="pl-k">*</span> 2. 延迟排序（延迟 从低到高 排序并按条件过滤，不同丢包率会分开排序，因此可能会有一些延迟低但丢包的 IP 排到后面）
+<span class="pl-k">*</span> 3. 下载测速（从延迟最低的 IP 开始依次下载测速，默认测够 10 个就会停止）
+<span class="pl-k">*</span> 4. 速度排序（速度从高到低排序）
+<span class="pl-k">*</span> 5. 输出结果（通过参数控制是否输出到命令行(-p 0)或输出到文件(-o <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>)）
 
-<span class="pl-c"><span class="pl-c">#</span> 注意：输出的结果文件 result.csv 通过微软 Excel 表格打开会中文乱码，这是正常的，其他表格软件/记事本都显示正常</span></pre></div>
+<span class="pl-k">*</span> 注意：输出的结果文件 result.csv 通过微软 Excel 表格打开会中文乱码，这是正常的，其他表格软件/记事本都显示正常</pre></div>
 <p>测速结果第一行就是<strong>既下载速度最快、又平均延迟最低的最快 IP</strong>！</p>
 <p>完整结果保存在当前目录下的 <code class="notranslate">result.csv</code> 文件中，用<strong>记事本/表格软件</strong>打开，格式如下：</p>
 <pre class="notranslate"><code class="notranslate">IP 地址,已发送,已接收,丢包率,平均延迟,下载速度 (MB/s)
@@ -1698,7 +1261,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto;
 <p><em>大家可以按自己需求，对完整结果<strong>进一步筛选处理</strong>，或者去看一看进阶使用<strong>指定过滤条件</strong>！</em></p>
 </blockquote>
 <hr>
-<h2># 进阶使用</h2>
+<h1>二、进阶使用</h1>
 <p>直接运行使用的是默认参数，如果想要测速结果更全面、更符合自己的要求，可以自定义参数。</p>
 <div class="highlight highlight-source-dart"><pre class="notranslate"><span class="pl-c1">C</span><span class="pl-k">:</span>\<span class="pl-k">&gt;</span><span class="pl-c1">CloudflareST</span>.exe <span class="pl-k">-</span>h
 
@@ -1756,7 +1319,7 @@ https<span class="pl-k">:</span><span class="pl-c">//github.com/XIU2/CloudflareS
         打印程序版本 <span class="pl-k">+</span> 检查版本更新
     <span class="pl-k">-</span>h
         打印帮助说明</pre></div>
-<h3>界面解释</h3>
+<h2>界面解释</h2>
 <p>为了避免大家对测速过程中的<strong>输出内容产生误解（可用、队列等数字，下载测速一半就"中断"？下载测速"卡住"不动？）</strong>，我特意解释下。</p>
 <details>
 <summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -1819,7 +1382,7 @@ https<span class="pl-k">:</span><span class="pl-c">//github.com/XIU2/CloudflareS
 </ul>
 </div>
 <hr>
-<h4># CMD 带参数运行 CloudflareST</h4>
+<h2>CMD 带参数运行 CloudflareST</h2>
 <p>对命令行程序不熟悉的人，可能不知道该如何带参数运行，我就简单说一下。</p>
 <details>
 <summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -1846,7 +1409,7 @@ https<span class="pl-k">:</span><span class="pl-c">//github.com/XIU2/CloudflareS
 </blockquote>
 </details>
 <hr>
-<h4># Windows 快捷方式带参数运行 CloudflareST</h4>
+<h2>Windows 快捷方式带参数运行 CloudflareST</h2>
 <p>如果不经常修改运行参数（比如平时都是直接双击运行）的人，建议使用快捷方式，更方便点。</p>
 <details>
 <summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -1861,7 +1424,7 @@ D:<span class="pl-cce">\A</span>BC<span class="pl-cce">\C</span>loudflareST<span
 <span class="pl-c"><span class="pl-c">#</span> 注意！快捷方式 - 起始位置 不能是空的，否则就会因为绝对路径而找不到 ip.txt 文件</span></pre></div>
 </details>
 <hr>
-<h4># IPv4/IPv6</h4>
+<h2>IPv4/IPv6</h2>
 <details>
 <summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
 <hr>
@@ -1880,7 +1443,7 @@ CloudflareST.exe -ip 1.1.1.1,2606:4700::/32</pre></div>
 </blockquote>
 </details>
 <hr>
-<h4># HTTPing</h4>
+<h2>HTTPing</h2>
 <details>
 <summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
 <hr>
@@ -1909,7 +1472,7 @@ CloudflareST.exe -httping -url https://cf.xiu2.xyz/url
 CloudflareST.exe -httping -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/5952/movie_max.webm</pre></div>
 </details>
 <hr>
-<h4># 匹配指定地区(colo 机场三字码)</h4>
+<h2>匹配指定地区(colo 机场三字码)</h2>
 <details>
 <summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
 <hr>
@@ -1937,7 +1500,7 @@ CloudflareST.exe -httping -cfcolo HKG,KHH,NRT,LAX,SEA,SJC,FRA,MAD
 </blockquote>
 </details>
 <hr>
-<h4># 文件相对/绝对路径</h4>
+<h2>文件相对/绝对路径</h2>
 <details>
 <summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
 <hr>
@@ -1975,7 +1538,7 @@ CloudflareST.exe -f C:<span class="pl-cce">\a</span>bc<span class="pl-cce">\4</s
 C:<span class="pl-cce">\a</span>bc<span class="pl-cce">\C</span>loudflareST.exe -f C:<span class="pl-cce">\a</span>bc<span class="pl-cce">\4</span>.txt -o C:<span class="pl-cce">\a</span>bc<span class="pl-cce">\r</span>esult.csv -dd</pre></div>
 </details>
 <hr>
-<h4># 测速其他端口</h4>
+<h2>测速其他端口</h2>
 <details>
 <summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
 <hr>
@@ -1987,7 +1550,7 @@ CloudflareST.exe -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/59
 <span class="pl-c"><span class="pl-c">#</span> 如果是非 80 443 的其他端口，那么需要确定你使用的下载测速地址是否支持通过该非标端口访问。</span></pre></div>
 </details>
 <hr>
-<h4># 自定义测速地址</h4>
+<h2>自定义测速地址</h2>
 <details>
 <summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
 <hr>
@@ -2000,7 +1563,7 @@ CloudflareST.exe -url https://cf.xiu2.xyz/url
 CloudflareST.exe -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/5952/movie_max.webm</pre></div>
 </details>
 <hr>
-<h4># 自定义测速条件（指定 延迟/丢包/下载速度 的目标范围）</h4>
+<h2>自定义测速条件（指定 延迟/丢包/下载速度 的目标范围）</h2>
 <details>
 <summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
 <hr>
@@ -2062,7 +1625,7 @@ CloudflareST.exe -tl 200 -sl 5.6 -dn 10</pre></div>
 </blockquote>
 </details>
 <hr>
-<h4># 单独对一个或多个 IP 测速</h4>
+<h2>单独对一个或多个 IP 测速</h2>
 <details>
 <summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
 <hr>
@@ -2094,94 +1657,7 @@ CloudflareST.exe -f 1.txt
 <span class="pl-c"><span class="pl-c">#</span> Linux 系统</span>
 ./CloudflareST -f 1.txt
 
-<span class="pl-c"><span class="pl-c">#</span> 对于 1.0.0.1/24 这样的 IP 段只会随机最后一段（1.0.0.1~255），如果要测速该 IP 段中的所有 IP，请加上 -allip 参数。</span></pre></div>
-</details>
-<hr>
-<h4># 一劳永逸加速所有使用 Cloudflare CDN 的网站（不需要再一个个添加域名到 Hosts 了）</h4>
-<p>我以前说过，开发该软件项目的目的就是为了通过<strong>改 Hosts 的方式来加速访问使用 Cloudflare CDN 的网站</strong>。</p>
-<p>但就如 <a href="https://github.com/XIU2/CloudflareSpeedTest/issues/8" data-hovercard-type="issue" data-hovercard-url="/XIU2/CloudflareSpeedTest/issues/8/hovercard"><strong>#8</strong></a> 所说，一个个添加域名到 Hosts 实在<strong>太麻烦</strong>了，于是我就找到了个<strong>一劳永逸</strong>的办法！可以看这个 <a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/71"><strong>还在一个个添加 Hosts？完美本地加速所有使用 Cloudflare CDN 的网站方法来了！</strong></a> 和另一个<a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/317">依靠本地 DNS 服务来修改域名解析 IP 为自选 IP</a> 的教程。</p>
-<hr>
-<h4># 自动更新 Hosts</h4>
-<p>考虑到很多人获得最快 Cloudflare CDN IP 后，需要替换 Hosts 文件中的 IP。</p>
-<p>可以看这个 <a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/312"><strong>Issues</strong></a> 获取 <strong>Windows/Linux 自动更新 Hosts 脚本</strong>！</p>
-<hr>
-<h2>问题反馈</h2>
-<p>如果你遇到什么问题，可以先去 <a href="https://github.com/XIU2/CloudflareSpeedTest/issues"><strong>Issues</strong></a>、<a href="https://github.com/XIU2/CloudflareSpeedTest/discussions">Discussions</a> 里看看是否有别人问过了（记得去看下  <a href="https://github.com/XIU2/CloudflareSpeedTest/issues?q=is%3Aissue+is%3Aclosed"><strong>Closed</strong></a> 的）。<br>
-如果没找到类似问题，请新开个 <a href="https://github.com/XIU2/CloudflareSpeedTest/issues/new"><strong>Issues</strong></a> 来告诉我！</p>
-<div class="markdown-alert markdown-alert-note"><p class="markdown-alert-title"><svg class="octicon octicon-info mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p><p><strong>注意</strong>！<em>与 CloudflareST 本身 <code class="notranslate">反馈问题、功能建议</code> 无关的，请前往项目内部 论坛 讨论（顶部的 <code class="notranslate">💬 Discussions</code></em></p>
-</div>
-<hr>
-<h2>如果帮到你的话就 "打赏" 一下吧~🎉✨</h2>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/XIU2/XIU2/blob/master/img/zs-01.png"><img src="https://github.com/XIU2/XIU2/blob/master/img/zs-01.png" alt="微信赞赏" style="max-width: 100%;"></a><a target="_blank" rel="noopener noreferrer" href="https://github.com/XIU2/XIU2/blob/master/img/zs-02.png"><img src="https://github.com/XIU2/XIU2/blob/master/img/zs-02.png" alt="支付宝赞赏" style="max-width: 100%;"></a></p>
-<hr>
-<h2>衍生项目</h2>
-<ul>
-<li>
-<p><em><a href="https://github.com/xianshenglu/cloudflare-ip-tester-app">https://github.com/xianshenglu/cloudflare-ip-tester-app</a></em><br>
-<em><strong>CloudflareST 安卓版 APP <a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/320">#202</a></strong></em></p>
-</li>
-<li>
-<p><em><a href="https://github.com/mingxiaoyu/luci-app-cloudflarespeedtest">https://github.com/mingxiaoyu/luci-app-cloudflarespeedtest</a></em><br>
-<em><strong>CloudflareST OpenWrt 路由器插件版 <a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/319">#174</a></strong></em></p>
-</li>
-<li>
-<p><em><a href="https://github.com/immortalwrt-collections/openwrt-cdnspeedtest">https://github.com/immortalwrt-collections/openwrt-cdnspeedtest</a></em><br>
-<em><strong>CloudflareST OpenWrt 原生编译版本 <a href="https://github.com/XIU2/CloudflareSpeedTest/discussions/64">#64</a></strong></em></p>
-</li>
-<li>
-<p><em><a href="https://github.com/hoseinnikkhah/CloudflareSpeedTest-English">https://github.com/hoseinnikkhah/CloudflareSpeedTest-English</a></em><br>
-<em><strong>English language version of CloudflareST (Text language differences only) <a href="https://github.com/XIU2/CloudflareSpeedTest/issues/68" data-hovercard-type="issue" data-hovercard-url="/XIU2/CloudflareSpeedTest/issues/68/hovercard">#64</a></strong></em></p>
-</li>
-</ul>
-<blockquote>
-<p><em>此处仅收集了在本项目中宣传过的部分 CloudflareST 相关衍生项目，如果有遗漏可以告诉我~</em></p>
-</blockquote>
-<hr>
-<h2>感谢项目</h2>
-<ul>
-<li><em><a href="https://github.com/Spedoske/CloudflareScanner">https://github.com/Spedoske/CloudflareScanner</a></em></li>
-</ul>
-<blockquote>
-<p><em>因为该项目已经很长时间没更新了，而我又产生了很多功能需求，所以我临时学了下 Go 语言就上手了（菜）...</em><br>
-<em>本软件基于该项目制作，但<strong>已添加大量功能及修复 BUG</strong>，并根据大家的使用反馈积极添加、优化功能（闲）...</em></p>
-</blockquote>
-<hr>
-<h2>手动编译</h2>
-<details>
-<summary><code class="notranslate"><strong>「 点击展开 查看内容 」</strong></code></summary>
-<hr>
-<p>为了方便，我是在编译的时候将版本号写入代码中的 version 变量，因此你手动编译时，需要像下面这样在 <code class="notranslate">go build</code> 命令后面加上 <code class="notranslate">-ldflags</code> 参数来指定版本号：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">go build -ldflags <span class="pl-s"><span class="pl-pds">"</span>-s -w -X main.version=v2.3.3<span class="pl-pds">"</span></span>
-<span class="pl-c"><span class="pl-c">#</span> 在 CloudflareSpeedTest 目录中通过命令行（例如 CMD、Bat 脚本）运行该命令，即可编译一个可在和当前设备同样系统、位数、架构的环境下运行的二进制程序（Go 会自动检测你的系统位数、架构）且版本号为 v2.3.3</span></pre></div>
-<p>如果想要在 Windows 64位系统下编译<strong>其他系统、架构、位数</strong>，那么需要指定 <strong>GOOS</strong> 和 <strong>GOARCH</strong> 变量。</p>
-<p>例如在 Windows 系统下编译一个适用于 <strong>Linux 系统 amd 架构 64 位</strong>的二进制程序：</p>
-<div class="highlight highlight-source-batchfile"><pre class="notranslate"><span class="pl-k">SET</span> <span class="pl-smi">GOOS</span><span class="pl-k">=</span>linux
-<span class="pl-k">SET</span> <span class="pl-smi">GOARCH</span><span class="pl-k">=</span>amd64
-go build -ldflags <span class="pl-s"><span class="pl-pds">"</span>-s -w -X main.version=v2.3.3<span class="pl-pds">"</span></span></pre></div>
-<p>例如在 Linux 系统下编译一个适用于 <strong>Windows 系统 amd 架构 32 位</strong>的二进制程序：</p>
-<div class="highlight highlight-source-shell"><pre class="notranslate">GOOS=windows
-GOARCH=386
-go build -ldflags <span class="pl-s"><span class="pl-pds">"</span>-s -w -X main.version=v2.3.3<span class="pl-pds">"</span></span></pre></div>
-<blockquote>
-<p>可以运行 <code class="notranslate">go tool dist list</code> 来查看当前 Go 版本支持编译哪些组合。</p>
-</blockquote>
-<hr>
-<p>当然，为了方便批量编译，我会专门指定一个变量为版本号，后续编译直接调用该版本号变量即可。<br>
-同时，批量编译的话，还需要分开放到不同文件夹才行（或者文件名不同），需要加上 <code class="notranslate">-o</code> 参数指定。</p>
-<div class="highlight highlight-source-batchfile"><pre class="notranslate"><span class="pl-c"><span class="pl-c">::</span> Windows 系统下是这样：</span>
-<span class="pl-k">SET</span> <span class="pl-smi">version</span><span class="pl-k">=</span>v2.3.3
-<span class="pl-k">SET</span> <span class="pl-smi">GOOS</span><span class="pl-k">=</span>linux
-<span class="pl-k">SET</span> <span class="pl-smi">GOARCH</span><span class="pl-k">=</span>amd64
-go build -o Releases\CloudflareST_linux_amd64\CloudflareST -ldflags <span class="pl-s"><span class="pl-pds">"</span>-s -w -X main.version=<span class="pl-smi">%version%</span><span class="pl-pds">"</span></span></pre></div>
-<div class="highlight highlight-source-shell"><pre class="notranslate"><span class="pl-c"><span class="pl-c">#</span> Linux 系统下是这样：</span>
-version=v2.3.3
-GOOS=windows
-GOARCH=386
-go build -o Releases/CloudflareST_windows_386/CloudflareST.exe -ldflags <span class="pl-s"><span class="pl-pds">"</span>-s -w -X main.version=<span class="pl-smi">${version}</span><span class="pl-pds">"</span></span></pre></div>
-</details>
-<hr>
-<h2>License</h2>
-<p>The GPL-3.0 License.</p></div>
+<span class="pl-c"><span class="pl-c">#</span> 对于 1.0.0.1/24 这样的 IP 段只会随机最后一段（1.0.0.1~255），如果要测速该 IP 段中的所有 IP，请加上 -allip 参数。</span></pre></div></details></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
