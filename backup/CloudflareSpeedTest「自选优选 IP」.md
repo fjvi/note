@@ -58,9 +58,8 @@ IP 地址,已发送,已接收,丢包率,平均延迟,下载速度 (MB/s)
 # 二、进阶使用
 
 直接运行使用的是默认参数，如果想要测速结果更全面、更符合自己的要求，可以自定义参数。
-<details>
-<summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
 
+## 参数说明
 ```Dart
 C:\>CloudflareST.exe -h
 
@@ -119,8 +118,8 @@ https://github.com/XIU2/CloudflareSpeedTest
     -h
         打印帮助说明
 ```
-</details>
-## 界面解释
+
+##  界面解释
 
 为了避免大家对测速过程中的**输出内容产生误解（可用、队列等数字，下载测速一半就"中断"？下载测速"卡住"不动？）**，我特意解释下。
 
@@ -190,7 +189,7 @@ CloudflareST 会先延迟测速，在这过程中进度条右侧会实时显示�
 
 ****
 
-### 使用示例
+## 使用示例
 
 Windows 要指定参数需要在 CMD 中运行，或者把参数添加到快捷方式目标中。
 
@@ -201,7 +200,7 @@ Windows 要指定参数需要在 CMD 中运行，或者把参数添加到快捷�
 
 ****
 
-## CMD 带参数运行 CloudflareST
+### CMD 带参数运行 CloudflareST
 
 对命令行程序不熟悉的人，可能不知道该如何带参数运行，我就简单说一下。
 
@@ -229,7 +228,7 @@ Windows 要指定参数需要在 CMD 中运行，或者把参数添加到快捷�
 
 ****
 
-## Windows 快捷方式带参数运行 CloudflareST
+### Windows 快捷方式带参数运行 CloudflareST
 
 如果不经常修改运行参数（比如平时都是直接双击运行）的人，建议使用快捷方式，更方便点。
 
@@ -253,7 +252,7 @@ D:\ABC\CloudflareST\CloudflareST.exe -n 500 -t 4 -dn 20 -dt 5 -o " "
 
 ****
 
-## IPv4/IPv6
+### IPv4/IPv6
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -278,7 +277,7 @@ CloudflareST.exe -ip 1.1.1.1,2606:4700::/32
 
 ****
 
-## HTTPing
+### HTTPing
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -314,7 +313,7 @@ CloudflareST.exe -httping -tp 80 -url http://cdn.cloudflare.steamstatic.com/stea
 
 ****
 
-## 匹配指定地区(colo 机场三字码)
+### 匹配指定地区(colo 机场三字码)
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -352,7 +351,7 @@ CloudflareST.exe -httping -cfcolo HKG,KHH,NRT,LAX,SEA,SJC,FRA,MAD
 
 ****
 
-## 文件相对/绝对路径
+### 文件相对/绝对路径
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -397,7 +396,7 @@ C:\abc\CloudflareST.exe -f C:\abc\4.txt -o C:\abc\result.csv -dd
 
 ****
 
-## 测速其他端口
+### 测速其他端口
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -417,7 +416,7 @@ CloudflareST.exe -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/59
 
 ****
 
-## 自定义测速地址
+### 自定义测速地址
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -438,7 +437,7 @@ CloudflareST.exe -tp 80 -url http://cdn.cloudflare.steamstatic.com/steam/apps/59
 
 ****
 
-## 自定义测速条件（指定 延迟/丢包/下载速度 的目标范围）
+### 自定义测速条件（指定 延迟/丢包/下载速度 的目标范围）
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
@@ -512,7 +511,7 @@ CloudflareST.exe -tl 200 -sl 5.6 -dn 10
 
 ****
 
-## 单独对一个或多个 IP 测速
+### 单独对一个或多个 IP 测速
 
 <details>
 <summary><code><strong>「 点击展开 查看内容 」</strong></code></summary>
