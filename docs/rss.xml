@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTnote</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTnote</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Mon, 28 Apr 2025 05:31:08 +0000</lastBuildDate><managingEditor>MGTnote</managingEditor><ttl>60</ttl><webMaster>MGTnote</webMaster><item><title>CloudflareSpeedTest「自选优选 IP」</title><link>https://692.cloudns.be/post/CloudflareSpeedTest%E3%80%8C-zi-xuan-you-xuan-%20IP%E3%80%8D.html</link><description>#  一、快速使用
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTnote</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTnote</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Mon, 28 Apr 2025 08:50:18 +0000</lastBuildDate><managingEditor>MGTnote</managingEditor><ttl>60</ttl><webMaster>MGTnote</webMaster><item><title>CloudflareSpeedTest「自选优选 IP」</title><link>https://692.cloudns.be/post/CloudflareSpeedTest%E3%80%8C-zi-xuan-you-xuan-%20IP%E3%80%8D.html</link><description>#  一、快速使用
 
 ### 下载运行
 
@@ -3190,7 +3190,7 @@ Important
 
 安装及其简单，但是也要认真看下面的步骤，一步一步来。
 
-1.  【创建仓库】点击[通过模板创建仓库](https://github.com/new?template_name=Gmeek-template&amp;template_owner=Meekdai)，建议仓库名称为`XXX.github.io`，其中`XXX`为你的github用户名。
+1.  【创建仓库】点击[通过模板创建仓库](https://github.com/new?template_name=Gmeek-template&amp;template_owner=fjvi)，建议仓库名称为`XXX.github.io`，其中`XXX`为你的github用户名。
     
 2.  【启用Pages】在仓库的设置`Settings`中`Pages-&gt;Build and deployment-&gt;Source`下面选择`Github Actions`。
     
