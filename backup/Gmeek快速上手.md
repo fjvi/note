@@ -1,46 +1,31 @@
-Gmeek快速上手
-==========
+[Gmeek](https://github.com/Meekdai/Gmeek) 一个博客框架，超轻量级个人博客模板，完全基于`Github Pages `、 `Github Issues` 和 `Github Actions`，可以称作`All in Github`。不需要本地部署，从搭建到写作，只需要18秒，2步搭建好博客，第3步就是写作。
 
-[](https://blog.meekdai.com/ "首页")[](https://github.com/Meekdai/meekdai.github.io/issues/39 "Issue")[](https://blog.meekdai.com/post/Gmeek-kuai-su-shang-shou.html "切换主题")
+## 一、安装
+> [!IMPORTANT]
+> 安装及其简单，但是也要认真看下面的步骤，一步一步来。
 
-[Gmeek](https://github.com/Meekdai/Gmeek) 一个博客框架，超轻量级个人博客模板，完全基于`Github Pages` 、 `Github Issues` 和 `Github Actions`，可以称作`All in Github`。不需要本地部署，从搭建到写作，只需要18秒，2步搭建好博客，第3步就是写作。
+1. 【创建仓库】点击[通过模板创建仓库](https://github.com/new?template_name=Gmeek-template&template_owner=fjvi)，建议仓库名称为`XXX.github.io`，其中`XXX`为你的github用户名。
 
-一、安装
-----
+2. 【启用Pages】在仓库的设置`Settings`中`Pages->Build and deployment->Source`下面选择`Github Actions`。
 
-Important
+3. 【开始写作】打开一篇issue，开始写作，并且**必须**添加一个`标签Label`（至少添加一个），再保存issue后会自动创建博客内容，片刻后可通过https://XXX.github.io 访问（可进入Actions页面查看构建进度）。
 
-安装及其简单，但是也要认真看下面的步骤，一步一步来。
-
-1.  【创建仓库】点击[通过模板创建仓库](https://github.com/new?template_name=Gmeek-template&template_owner=fjvi)，建议仓库名称为`XXX.github.io`，其中`XXX`为你的github用户名。
-    
-2.  【启用Pages】在仓库的设置`Settings`中`Pages->Build and deployment->Source`下面选择`Github Actions`。
-    
-3.  【开始写作】打开一篇issue，开始写作，并且**必须**添加一个`标签Label`（至少添加一个），再保存issue后会自动创建博客内容，片刻后可通过[https://XXX.github.io](https://xxx.github.io/) 访问（可进入Actions页面查看构建进度）。
-    
-4.  【手动全局生成】这个步骤只有在修改`config.json` 文件或者出现奇怪问题的时候，需要执行。
-    
-
-```p4
+5. 【手动全局生成】这个步骤只有在修改`config.json` 文件或者出现奇怪问题的时候，需要执行。
+```P4
 通过Actions->build Gmeek->Run workflow->里面的按钮全局重新生成一次
 ```
 
-Note
+> [!NOTE]
+> 网友制作的视频教程：https://www.bilibili.com/video/BV1GM4m1m7ZD/
 
-网友制作的视频教程：[https://www.bilibili.com/video/BV1GM4m1m7ZD/](https://www.bilibili.com/video/BV1GM4m1m7ZD/)
-
-二、配置文件
-------
-
-Tip
-
-按照安装步骤成功搭建好后，就可以阅读下面的内容修改配置文件啦。  
-注意修改配置文件后一定要手动全局生成一次，不然会报错。  
-如果对`json`格式不熟悉，建议先简单学习一下。
+## 二、配置文件
+> [!TIP]
+> 按照安装步骤成功搭建好后，就可以阅读下面的内容修改配置文件啦。
+> 注意修改配置文件后一定要手动全局生成一次，不然会报错。
+> 如果对`json`格式不熟悉，建议先简单学习一下。
 
 `config.json` 文件就是配置文件，在创建的仓库内可以找到，对应修改为自己的即可。
-
-```js
+```javascript
 {
     "title":"Meekdai",
     "subTitle":"童话是一种生活态度，仅此而已。",
@@ -48,10 +33,9 @@ Tip
     "GMEEK_VERSION":"last"
 }
 ```
-
 以上是必须的字段，下面是可以自定义字段的描述，可以选择加入到`config.json`中。
 
-```js
+```javascript
 "displayTitle":"Meekdai",
 "homeUrl":"http://blog.meekdai.com",
 "faviconUrl":"https://github.githubassets.com/favicons/favicon.svg",
@@ -84,16 +68,15 @@ Tip
 "needComment":0,
 ```
 
-Caution
+> [!CAUTION]
+> 最后一行配置末尾不需要逗号，其他行末尾都需要逗号（英文逗号）
 
-最后一行配置末尾不需要逗号，其他行末尾都需要逗号（英文逗号）
-
-| **配置参数** | **说明** |
-| --- | --- |
+| **配置参数**       | **说明** | 
+|----------------|----------------|
 | title | 【必填】博客标题 |
 | subTitle | 【必填】博客描述&自述 |
 | avatarUrl | 【必填】博客头像 |
-| GMEEK\_VERSION | 【必填】Gmeek版本，一般写`last`也可以用具体tag版本 |
+| GMEEK_VERSION | 【必填】Gmeek版本，一般写`last`也可以用具体tag版本 |
 | displayTitle | 用于头像后面的标题展示，如果和`title`一致则不用添加 |
 | homeUrl | 博客的主页地址，自定义域名时需要配置 |
 | faviconUrl | 页面的favicon地址，如果和avatarUrl一致则不用添加 |
@@ -108,7 +91,7 @@ Caution
 | yearColorList | 用于自定义显示不同年份标签的颜色 |
 | i18n | 用于定义博客语言，目前支持`EN`/`CN`/`RU` |
 | UTC | 用于定义[时区](https://en.wikipedia.org/wiki/List_of_UTC_offsets) |
-| themeMode | 用于定义主题模式，默认为`manual`，也可选择`fix`[详细说明](https://blog.meekdai.com/post/%E3%80%90Gmeek-jin-jie-%E3%80%91-liang-an-zhu-ti-pei-zhi-fang-shi.html) |
+| themeMode| 用于定义主题模式，默认为`manual`，也可选择`fix`[详细说明](https://blog.meekdai.com/post/%E3%80%90Gmeek-jin-jie-%E3%80%91-liang-an-zhu-ti-pei-zhi-fang-shi.html) |
 | dayTheme | 用于定义[亮主题](https://github.com/settings/appearance) |
 | nightTheme | 用于定义[暗主题](https://github.com/settings/appearance) |
 | urlMode | 用于定义文章链接生成模式，目前支持`pinyin`/`issue`/`ru_translit` |
@@ -125,84 +108,62 @@ Caution
 | primerCSS | 用于设置primer.css的CDN地址，默认使用[南科大](https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css) |
 | needComment | 用于设置是否需要评论功能，1开启评论，0关闭 |
 
-三、常见问题
-------
-
-### 1\. 搭建不成功
-
+## 三、常见问题
+### 1. 搭建不成功
 多半是没有按照安装步骤来，其实搭建就这2步，不要自己乱点乱设置，就不会有问题。
+- 案例一：https://github.com/Meekdai/Gmeek/issues/14 
+- 案例二：https://github.com/Meekdai/Gmeek/issues/18
+- 案例二：https://github.com/Meekdai/Gmeek/issues/20
 
-*   案例一：[Meekdai/Gmeek#14](https://github.com/Meekdai/Gmeek/issues/14)
-*   案例二：[Meekdai/Gmeek#18](https://github.com/Meekdai/Gmeek/issues/18)
-*   案例二：[Meekdai/Gmeek#20](https://github.com/Meekdai/Gmeek/issues/20)
-
-### 2\. Actions执行失败
-
-修改了`config.json`配置文件后，需要全局生成。另外`label`标签没有打会出现这个问题。  
+### 2. Actions执行失败
+修改了`config.json`配置文件后，需要全局生成。另外`label`标签没有打会出现这个问题。
 建议通过Actions->build Gmeek->Run workflow->里面的按钮全局重新生成一次
+- 案例一：https://github.com/Meekdai/Gmeek/issues/1
+- 案例二：https://github.com/Meekdai/Gmeek/issues/10
 
-*   案例一：[Meekdai/Gmeek#1](https://github.com/Meekdai/Gmeek/issues/1)
-*   案例二：[Meekdai/Gmeek#10](https://github.com/Meekdai/Gmeek/issues/10)
-
-### 3\. 导入以前的文章
-
-如需修改发布时间，可以在文章最后一行添加如下代码。里面的时间是采用时间戳的形式，可以用如下[网站](https://tool.lu/timestamp)转换。
-
+### 3. 导入以前的文章 
+如需修改发布时间，可以在文章最后一行添加如下代码。里面的时间是采用时间戳的形式，可以用如下[网站](https://tool.lu/timestamp)转换。  
 ```html
 <!-- ##{"timestamp":1490764800}## -->
 ```
 
-### 4\. 自定义单篇文章参数
-
+### 4. 自定义单篇文章参数
 自定义单篇文章页面的`style`和`script`
-
 ```html
 <!-- ##{"style":"<style>#postBody{font-size:20px}</style>"}## -->
 ```
-
 ```html
 <!-- ##{"script":"<script async src='//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js'></script>"}## -->
 ```
 
-### 5\. 多种自定义参数
-
-可同时一起添加多种自定义参数：
-
+### 5. 多种自定义参数
+可同时一起添加多种自定义参数：  
 ```html
 <!-- ##{"script":"<script async src='//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js'></script>","style":"<style>#postBody{font-size:20px}</style>","timestamp":1490764800}## -->
 ```
 
-### 6\. 自定义全局文章参数
-
+### 6. 自定义全局文章参数
 添加全局文章页面的`style`和`script`，在`config.json`文件中添加
-
-```js
+```javascript
 "style":"<style>#postBody{font-size:20px}</style>",
 "script":"<script async src='//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js'></script>",
 ```
 
-### 7\. 置顶博客文章
-
+### 7. 置顶博客文章
 只需要`Pin issue`后，手动全局生成一次即可。
 
-### 8\. utteranc报错
-
+### 8. utteranc报错
 如果在评论里面登录后评论报错，可直接按照提示安装`utteranc app`即可
-
 ```
 Error: utterances is not installed on xxx/xxx.github.io. If you own this repo, install the app. Read more about this change in the PR.
-
 ```
 
-### 9\. 删除文章
-
+### 9. 删除文章
 只需要`Close issue`或者`Delete issue`后，再手动全局生成一次即可。
 
-四、进阶教程
-------
+## 四、进阶教程
 
-Gmeek的可定制化功能非常高，下面的链接是一些更加高级的设置教程，还有插件的使用等。  
-[https://meekdai.github.io/tag.html#Gmeek](https://meekdai.github.io/tag.html#Gmeek)
+Gmeek的可定制化功能非常高，下面的链接是一些更加高级的设置教程，还有插件的使用等。
+https://meekdai.github.io/tag.html#Gmeek
 
-❤️ 转载文章请注明出处
-
+<!-- ##{"script":"<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script>"}## -->
