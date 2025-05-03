@@ -5,6 +5,7 @@
     "displayTitle":"MGTnote",
     "homeUrl":"https://692.cloudns.be",
     "avatarUrl":"avatar.svg",
+    "faviconUrl":"avatar.svg",
     "startSite":"01/01/2025",
     "rssSplit":"$$$$$$$",
     "singlePage":["about"],
