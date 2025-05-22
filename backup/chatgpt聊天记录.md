@@ -1,4 +1,3 @@
-跳至内容
 您说：
 我已经部署好了workers作为中间代理并设置了GitHub令牌密钥变量，同时设置了访问token，我要如何更改chrome书签扩展本地同步到GitHub的令牌为token
 ChatGPT 说：
