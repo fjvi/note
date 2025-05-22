@@ -1,5 +1,108 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTime</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTime</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Thu, 22 May 2025 00:09:20 +0000</lastBuildDate><managingEditor>MGTime</managingEditor><ttl>60</ttl><webMaster>MGTime</webMaster><item><title>chatgpt聊天记录</title><link>https://692.cloudns.be/post/chatgpt-liao-tian-ji-lu.html</link><description>您说：
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTime</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTime</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Thu, 22 May 2025 08:23:50 +0000</lastBuildDate><managingEditor>MGTime</managingEditor><ttl>60</ttl><webMaster>MGTime</webMaster><item><title>PigMarks 项目开发计划文档</title><link>https://692.cloudns.be/post/PigMarks%20-xiang-mu-kai-fa-ji-hua-wen-dang.html</link><description># PigMarks 项目开发计划文档
+
+&gt; 项目定位：构建一个可跨平台同步、模块化、支持私有仓库托管的书签 + 备忘录管理系统，包含浏览器扩展 + Web 页面 + Workers 后端支持。
+
+---
+
+## 🧩 项目组成
+
+### 1. 浏览器扩展（Chrome / Edge / 未来兼容 Firefox）
+- 实时读取 Chrome 书签 API
+- 支持编辑、折叠、导出书签数据
+- 读取配置文件决定加载路径（`defaultDataUrl`）
+- 支持访问 Cloudflare Worker 代理接口上传数据到 GitHub
+
+### 2. Web 页面（GitHub Pages 同步 UI）
+- 使用与扩展一致的界面和功能
+- 可直接从配置中读取数据 URL
+- 支持书签 / 备忘录模块切换
+
+### 3. Cloudflare Worker 中间层（API）
+- 接收配置或备忘录内容并上传至 GitHub 私有仓库
+- 变量中保存 GitHub Token、安全校验
+- 可支持 favicon 代理 / 缓存服务（可选）
+
+---
+
+## 🧠 功能模块划分
+
+| 模块           | 描述                                             |
+|----------------|--------------------------------------------------|
+| Bookmark Viewer | 浏览器书签树展示、导出、折叠、搜索              |
+| Memo Manager    | 可编辑、可分享的备忘录模块，支持 Markdown 渲染 |
+| Config Page     | 配置加载数据路径、Token、界面偏好等              |
+| Worker Proxy    | GitHub 同步中间代理层，支持上传、校验、缓存     |
+
+---
+
+## 🚀 当前开发计划阶段
+
+### ✅ 阶段 1：已完成 / 在进行中
+- [x] 初步搭建插件架构与 UI
+- [x] 设置 GitHub 私有仓库作为数据源
+- [x] 部署 Cloudflare Worker 并设置 token
+- [x] 计划支持 favicon 本地托管（方案 B）
+
+### 🔄 阶段 2：规划 / 实施中
+- [ ] 页面配置支持将默认链接写入变量，避免初始化多次请求
+- [ ] 配置页面保存配置并同步上传 GitHub
+- [ ] 浏览器扩展与 Web UI 使用统一数据加载逻辑（默认变量 fetch）
+
+### 📌 阶段 3：后续目标
+- [ ] 添加备忘录模块（可编辑 + 可分享）
+- [ ] 本地缓存 + 定时同步 GitHub 私有仓库
+- [ ] 浏览器扩展实现自动识别并保存最新文件，支持多平台协同
+- [ ] 配置页支持导出 / 导入预设
+- [ ] RSS 订阅支持（针对备忘录）
+
+---
+
+## 🗃 协同开发工作流
+
+- 使用 ChatGPT 虚拟协同代码库方式记录所有模块版本
+- 每次修改记录变更说明及版本号
+- 可生成完整项目文件结构 + 可复制压缩包
+- 用户提交更新后，我协助生成统一版本代码并维护清晰结构
+
+---
+
+## 🛠 技术选型
+
+| 技术                 | 说明                                       |
+|----------------------|--------------------------------------------|
+| JavaScript + HTML/CSS| 插件与前端页面核心                         |
+| Cloudflare Workers   | GitHub 数据同步代理接口                    |
+| GitHub 私有仓库      | 所有书签、备忘录、配置数据托管             |
+| localStorage         | 页面端本地变量缓存                         |
+| Markdown 渲染器      | 用于备忘录内容编辑和展示                   |
+
+---
+
+## 🧭 项目约定和关键点
+
+- 所有数据文件（书签、备忘录、配置）托管于私有仓库，支持手动和自动同步
+- 所有页面初始化可跳过配置文件请求，直接读取变量加快加载速度
+- 后续支持的“跨平台同步功能”基于识别版本并定期推送最新内容
+
+---
+
+## 📎 待办 &amp; 讨论中事项
+
+- [ ] favicon 代理 via Worker：实现并缓存图标
+- [ ] UI 风格统一化 + 响应式设计（桌面端 + 移动端）
+- [ ] 配置页功能扩展，如主题设置、快捷路径管理
+- [ ] Gist / GitHub Pages 自动构建备忘录分享页
+- [ ] 文件结构与主模块初始化同步文档（首次部署指导）
+
+---
+
+## ✍️ 最后备注
+
+&gt; 项目由小猪主导开发，GPT 协助规划、代码生成与版本控制。
+&gt; 当前仍处于灵活设计阶段，一切功能与结构可动态演进。
+
+$$$$$$$</description><guid isPermaLink="true">https://692.cloudns.be/post/PigMarks%20-xiang-mu-kai-fa-ji-hua-wen-dang.html</guid><pubDate>Thu, 22 May 2025 08:23:16 +0000</pubDate></item><item><title>chatgpt聊天记录</title><link>https://692.cloudns.be/post/chatgpt-liao-tian-ji-lu.html</link><description>您说：
 
 可以通过workers代理转发Google favicon图库吗？
 
