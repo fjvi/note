@@ -1,16 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTime</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTime</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Thu, 22 May 2025 10:27:11 +0000</lastBuildDate><managingEditor>MGTime</managingEditor><ttl>60</ttl><webMaster>MGTime</webMaster><item><title>零技术负担、高效率协作”的沟通与开发机制</title><link>https://692.cloudns.be/post/ling-ji-shu-fu-dan-%E3%80%81-gao-xiao-lv-xie-zuo-%E2%80%9D-de-gou-tong-yu-kai-fa-ji-zhi.html</link><description> ✅ 总体目标：
-用最少的指令和理解成本，推动项目像搭积木一样逐步完成。
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTime</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTime</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Thu, 22 May 2025 10:36:27 +0000</lastBuildDate><managingEditor>MGTime</managingEditor><ttl>60</ttl><webMaster>MGTime</webMaster><item><title>零技术负担、高效率协作”的沟通与开发机制</title><link>https://692.cloudns.be/post/ling-ji-shu-fu-dan-%E3%80%81-gao-xiao-lv-xie-zuo-%E2%80%9D-de-gou-tong-yu-kai-fa-ji-zhi.html</link><description> # ✅ 总体目标：
+&gt; 用最少的指令和理解成本，推动项目像搭积木一样逐步完成。
 
-#🧠 一套为你量身打造的沟通与执行方案：
+# 🧠 一套为你量身打造的沟通与执行方案：
 ## 1. 角色定位清晰化：你指挥，我执行
 
-你负责：
+- 你负责：
+
 提出功能、想法、目标（比如“我想加一个分类”、“我不希望看到长地址栏”）
 
 审核功能效果（比如“这个 UI 太复杂了，能简洁点吗？”）
 
-我负责：
+- 我负责：
 
 拆解成技术任务（如“新增配置文件页面”、“用 token 代理 GitHub 请求”）
 
@@ -19,42 +20,43 @@
 告诉你每一步是干什么的，有什么影响，并保持所有改动都有可追踪记录
 
 ## 2. 建立“模块化聊天规范”（建议遵守）
-类别	你的输入模板	示例
-📌 功能需求	我希望添加一个 ___ 功能，它可以做到 ___。	我希望添加一个“便签分享”功能，可以生成带密码的链接
-🎨 外观调整	页面上哪个地方我希望变成 ___ 风格	页面的配色我希望变成纯黑 + 卡片灰底
-⚙️ 设置改动	能不能把某个功能默认设为 ___	默认用我设置的 GitHub 仓库加载数据
-🪛 技术不了解	我不懂这个怎么操作，你可以替我处理吗？	.bat 文件怎么用，我可以双击就一键上传吗？
-📝 想法记录	这个可以写进总览备忘录中，但暂时不实现	等未来加上 WebDav 同步
+类别 | 你的输入模板 | 示例
+-- | -- | --
+📌 功能需求 | 我希望添加一个 ___ 功能，它可以做到 ___。 | 我希望添加一个“便签分享”功能，可以生成带密码的链接
+🎨 外观调整 | 页面上哪个地方我希望变成 ___ 风格 | 页面的配色我希望变成纯黑 + 卡片灰底
+⚙️ 设置改动 | 能不能把某个功能默认设为 ___ | 默认用我设置的 GitHub 仓库加载数据
+🪛 技术不了解 | 我不懂这个怎么操作，你可以替我处理吗？ | .bat 文件怎么用，我可以双击就一键上传吗？
+📝 想法记录 | 这个可以写进总览备忘录中，但暂时不实现 | 等未来加上 WebDav 同步
 
 ✅ 每次对话我都为你：
 
-自动整理归类（“这条归为：配置逻辑修改”）
+- 自动整理归类（“这条归为：配置逻辑修改”）
 
-判断是否要更新代码、文档、计划或生成脚本
+- 判断是否要更新代码、文档、计划或生成脚本
 
-默认将你的请求拆成可落地的代码任务
+- 默认将你的请求拆成可落地的代码任务
 
 ## 3. 建立长期协同开发库
 使用一个共享的 GitHub 仓库（你已启用：fjvi/pigmarks）
 
 每次变更我都会：
 
-把最新代码打包给你（供扩展/Web 使用）
-
-写一份简洁变更记录（变动了什么、对你有何影响）
-
-如需上传，你只需运行我写好的 .bat 或 .sh 脚本
+- 把最新代码打包给你（供扩展/Web 使用）
+- 
+- 写一份简洁变更记录（变动了什么、对你有何影响）
+- 
+- 如需上传，你只需运行我写好的 .bat 或 .sh 脚本
 
 ## 4. 建立项目总览文件夹（可选）
 你可以在本地建立一个文件夹：PigMarks 项目协同文档
 
 我会为你维护这些内容：
-
-文件名	内容
-功能总览.md	所有已实现与计划中的功能
-技术说明.md	用最通俗的语言解释技术逻辑
-指令合集.md	常用的指令操作列表（例如：如何双击上传）
-项目进度.md	哪些模块已完成，哪些待定
+文件名 | 内容
+-- | --
+功能总览.md | 所有已实现与计划中的功能
+技术说明.md | 用最通俗的语言解释技术逻辑
+指令合集.md | 常用的指令操作列表（例如：如何双击上传）
+项目进度.md | 哪些模块已完成，哪些待定
 
 ## 5. 配置一键操作工具（降低使用门槛）
 .bat 脚本：Windows 用户专用，一键上传书签 / 配置 / 备忘录等
@@ -63,16 +65,16 @@
 
 可视化预览页：以后可以做一个界面让你点按钮完成操作
 
-❤️ 最后总结
+# ❤️ 最后总结
 你不需要会代码，我的目标是让你像使用 Notion 或 Excel 一样，轻松构建出复杂的应用系统。
 
 我会确保每次你：
 
-提一个想法 → 我给一个方案
+- 提一个想法 → 我给一个方案
 
-发一段需求 → 我生成代码
+- 发一段需求 → 我生成代码
 
-想记录一下 → 我写进项目文档$$$$$$$</description><guid isPermaLink="true">https://692.cloudns.be/post/ling-ji-shu-fu-dan-%E3%80%81-gao-xiao-lv-xie-zuo-%E2%80%9D-de-gou-tong-yu-kai-fa-ji-zhi.html</guid><pubDate>Thu, 22 May 2025 10:26:44 +0000</pubDate></item><item><title>PigMarks 项目开发计划文档</title><link>https://692.cloudns.be/post/PigMarks%20-xiang-mu-kai-fa-ji-hua-wen-dang.html</link><description># PigMarks 项目开发计划文档
+- 想记录一下 → 我写进项目文档$$$$$$$</description><guid isPermaLink="true">https://692.cloudns.be/post/ling-ji-shu-fu-dan-%E3%80%81-gao-xiao-lv-xie-zuo-%E2%80%9D-de-gou-tong-yu-kai-fa-ji-zhi.html</guid><pubDate>Thu, 22 May 2025 10:26:44 +0000</pubDate></item><item><title>PigMarks 项目开发计划文档</title><link>https://692.cloudns.be/post/PigMarks%20-xiang-mu-kai-fa-ji-hua-wen-dang.html</link><description># PigMarks 项目开发计划文档
 
 &gt; 项目定位：构建一个可跨平台同步、模块化、支持私有仓库托管的书签 + 备忘录管理系统，包含浏览器扩展 + Web 页面 + Workers 后端支持。
 
