@@ -1,5 +1,50 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTime</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTime</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Thu, 22 May 2025 10:36:27 +0000</lastBuildDate><managingEditor>MGTime</managingEditor><ttl>60</ttl><webMaster>MGTime</webMaster><item><title>零技术负担、高效率协作”的沟通与开发机制</title><link>https://692.cloudns.be/post/ling-ji-shu-fu-dan-%E3%80%81-gao-xiao-lv-xie-zuo-%E2%80%9D-de-gou-tong-yu-kai-fa-ji-zhi.html</link><description> # ✅ 总体目标：
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTime</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTime</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Thu, 22 May 2025 13:13:28 +0000</lastBuildDate><managingEditor>MGTime</managingEditor><ttl>60</ttl><webMaster>MGTime</webMaster><item><title>🧱 配置页面设计建议</title><link>https://692.cloudns.be/post/%F0%9F%A7%B1%20-pei-zhi-ye-mian-she-ji-jian-yi.html</link><description># 🧱 配置页面设计建议
+建议将配置页设计成以下结构：
+
+## 1. 基本信息（通用）
+
+- GitHub 用户名
+- 仓库名
+- Token
+- 代理地址（可选）
+- 启用功能模块：✅书签 / ✅备忘录
+
+## 2. 书签设置
+
+- 默认展开层级
+- 是否显示 favicon
+- 显示样式：卡片 / 列表
+- 默认分组
+
+## 3. 便签设置
+
+- 默认保存位置（本地 / GitHub）
+- Markdown 渲染：开启/关闭
+- 自动保存间隔（如：10s）
+- 加密（密码设置入口）
+
+## 4. 外观与行为
+
+- 主题色：深色 / 浅色 / 跟随系统
+- 字体大小：小 / 中 / 大
+- 快捷键（可选）
+
+# 🧩 技术结构建议
+
+##  将配置保存在：
+- 本地 localStorage（快速加载）
+- GitHub 仓库（同步 &amp; 备份）
+- 建议用 .pigmarks/config.json 存储配
+
+## 📋 配置页面入口
+你可以把配置入口放在：
+
+- 📁 书签页面右上角（齿轮按钮
+- 📁 便签页面左侧或底部
+- 📁 单独的页面 /config.html
+
+点击后展示统一配置界面，使用 Tab 或折叠区域分类。$$$$$$$</description><guid isPermaLink="true">https://692.cloudns.be/post/%F0%9F%A7%B1%20-pei-zhi-ye-mian-she-ji-jian-yi.html</guid><pubDate>Thu, 22 May 2025 13:12:57 +0000</pubDate></item><item><title>零技术负担、高效率协作”的沟通与开发机制</title><link>https://692.cloudns.be/post/ling-ji-shu-fu-dan-%E3%80%81-gao-xiao-lv-xie-zuo-%E2%80%9D-de-gou-tong-yu-kai-fa-ji-zhi.html</link><description> # ✅ 总体目标：
 &gt; 用最少的指令和理解成本，推动项目像搭积木一样逐步完成。
 
 # 🧠 一套为你量身打造的沟通与执行方案：
