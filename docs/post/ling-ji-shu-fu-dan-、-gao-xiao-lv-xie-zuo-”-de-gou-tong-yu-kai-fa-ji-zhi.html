@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="../favicon.ico"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content=" ✅ 总体目标：
+用最少的指令和理解成本，推动项目像搭积木一样逐步完成。
+
+#🧠 一套为你量身打造的沟通与执行方案：
+## 1. 角色定位清晰化：你指挥，我执行
+
+你负责：
+提出功能、想法、目标（比如“我想加一个分类”、“我不希望看到长地址栏”）
+
+审核功能效果（比如“这个 UI 太复杂了，能简洁点吗？”）
+
+我负责：
+
+拆解成技术任务（如“新增配置文件页面”、“用 token 代理 GitHub 请求”）
+
+编写代码 / 提供文件 / 整理说明文档 / 打包脚本
+
+告诉你每一步是干什么的，有什么影响，并保持所有改动都有可追踪记录
+
+## 2. 建立“模块化聊天规范”（建议遵守）
+类别	你的输入模板	示例
+📌 功能需求	我希望添加一个 ___ 功能，它可以做到 ___。	我希望添加一个“便签分享”功能，可以生成带密码的链接
+🎨 外观调整	页面上哪个地方我希望变成 ___ 风格	页面的配色我希望变成纯黑 + 卡片灰底
+⚙️ 设置改动	能不能把某个功能默认设为 ___	默认用我设置的 GitHub 仓库加载数据
+🪛 技术不了解	我不懂这个怎么操作，你可以替我处理吗？	.bat 文件怎么用，我可以双击就一键上传吗？
+📝 想法记录	这个可以写进总览备忘录中，但暂时不实现	等未来加上 WebDav 同步
+
+✅ 每次对话我都为你：
+
+自动整理归类（“这条归为：配置逻辑修改”）
+
+判断是否要更新代码、文档、计划或生成脚本
+
+默认将你的请求拆成可落地的代码任务
+
+## 3. 建立长期协同开发库
+使用一个共享的 GitHub 仓库（你已启用：fjvi/pigmarks）
+
+每次变更我都会：
+
+把最新代码打包给你（供扩展/Web 使用）
+
+写一份简洁变更记录（变动了什么、对你有何影响）
+
+如需上传，你只需运行我写好的 .bat 或 .sh 脚本
+
+## 4. 建立项目总览文件夹（可选）
+你可以在本地建立一个文件夹：PigMarks 项目协同文档
+
+我会为你维护这些内容：
+
+文件名	内容
+功能总览.md	所有已实现与计划中的功能
+技术说明.md	用最通俗的语言解释技术逻辑
+指令合集.md	常用的指令操作列表（例如：如何双击上传）
+项目进度.md	哪些模块已完成，哪些待定
+
+## 5. 配置一键操作工具（降低使用门槛）
+.bat 脚本：Windows 用户专用，一键上传书签 / 配置 / 备忘录等
+
+.md 模板：填写配置时自动生成结构化配置文件
+
+可视化预览页：以后可以做一个界面让你点按钮完成操作
+
+❤️ 最后总结
+你不需要会代码，我的目标是让你像使用 Notion 或 Excel 一样，轻松构建出复杂的应用系统。
+
+我会确保每次你：
+
+提一个想法 → 我给一个方案
+
+发一段需求 → 我生成代码
+
+想记录一下 → 我写进项目文档$$$$$$$">
+<meta property="og:title" content="零技术负担、高效率协作”的沟通与开发机制">
+<meta property="og:description" content=" ✅ 总体目标：
+用最少的指令和理解成本，推动项目像搭积木一样逐步完成。
+
+#🧠 一套为你量身打造的沟通与执行方案：
+## 1. 角色定位清晰化：你指挥，我执行
+
+你负责：
+提出功能、想法、目标（比如“我想加一个分类”、“我不希望看到长地址栏”）
+
+审核功能效果（比如“这个 UI 太复杂了，能简洁点吗？”）
+
+我负责：
+
+拆解成技术任务（如“新增配置文件页面”、“用 token 代理 GitHub 请求”）
+
+编写代码 / 提供文件 / 整理说明文档 / 打包脚本
+
+告诉你每一步是干什么的，有什么影响，并保持所有改动都有可追踪记录
+
+## 2. 建立“模块化聊天规范”（建议遵守）
+类别	你的输入模板	示例
+📌 功能需求	我希望添加一个 ___ 功能，它可以做到 ___。	我希望添加一个“便签分享”功能，可以生成带密码的链接
+🎨 外观调整	页面上哪个地方我希望变成 ___ 风格	页面的配色我希望变成纯黑 + 卡片灰底
+⚙️ 设置改动	能不能把某个功能默认设为 ___	默认用我设置的 GitHub 仓库加载数据
+🪛 技术不了解	我不懂这个怎么操作，你可以替我处理吗？	.bat 文件怎么用，我可以双击就一键上传吗？
+📝 想法记录	这个可以写进总览备忘录中，但暂时不实现	等未来加上 WebDav 同步
+
+✅ 每次对话我都为你：
+
+自动整理归类（“这条归为：配置逻辑修改”）
+
+判断是否要更新代码、文档、计划或生成脚本
+
+默认将你的请求拆成可落地的代码任务
+
+## 3. 建立长期协同开发库
+使用一个共享的 GitHub 仓库（你已启用：fjvi/pigmarks）
+
+每次变更我都会：
+
+把最新代码打包给你（供扩展/Web 使用）
+
+写一份简洁变更记录（变动了什么、对你有何影响）
+
+如需上传，你只需运行我写好的 .bat 或 .sh 脚本
+
+## 4. 建立项目总览文件夹（可选）
+你可以在本地建立一个文件夹：PigMarks 项目协同文档
+
+我会为你维护这些内容：
+
+文件名	内容
+功能总览.md	所有已实现与计划中的功能
+技术说明.md	用最通俗的语言解释技术逻辑
+指令合集.md	常用的指令操作列表（例如：如何双击上传）
+项目进度.md	哪些模块已完成，哪些待定
+
+## 5. 配置一键操作工具（降低使用门槛）
+.bat 脚本：Windows 用户专用，一键上传书签 / 配置 / 备忘录等
+
+.md 模板：填写配置时自动生成结构化配置文件
+
+可视化预览页：以后可以做一个界面让你点按钮完成操作
+
+❤️ 最后总结
+你不需要会代码，我的目标是让你像使用 Notion 或 Excel 一样，轻松构建出复杂的应用系统。
+
+我会确保每次你：
+
+提一个想法 → 我给一个方案
+
+发一段需求 → 我生成代码
+
+想记录一下 → 我写进项目文档$$$$$$$">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://692.cloudns.be/post/ling-ji-shu-fu-dan-%E3%80%81-gao-xiao-lv-xie-zuo-%E2%80%9D-de-gou-tong-yu-kai-fa-ji-zhi.html">
+<meta property="og:image" content="avatar.svg">
+<title>零技术负担、高效率协作”的沟通与开发机制</title>
+
+
+
+</head>
+<style>
+html { background: #d2d4d6; }
+body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto; padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25; border-radius: 10px; background: rgba(10, 100, 130, 0.08); box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);  overflow: auto;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:1.6em;font-weight:bold;color: #1f85c9;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+.markdown-body h1{font-size: 1.4em;}
+.markdown-body h2{font-size: 1.2em;}
+.markdown-body h3{font-size: 1em;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 580px) {
+     body {margin:0;padding: 12px;box-shadow: none;}
+    .postTitle{font-size:1.4em; color: #1f85c9;}
+}
+
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">零技术负担、高效率协作”的沟通与开发机制</h1>
+<div class="title-right">
+    <a href="https://692.cloudns.be" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/fjvi/note/issues/32" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p>✅ 总体目标：<br>
+用最少的指令和理解成本，推动项目像搭积木一样逐步完成。</p>
+<p>#🧠 一套为你量身打造的沟通与执行方案：</p>
+<h2>1. 角色定位清晰化：你指挥，我执行</h2>
+<p>你负责：<br>
+提出功能、想法、目标（比如“我想加一个分类”、“我不希望看到长地址栏”）</p>
+<p>审核功能效果（比如“这个 UI 太复杂了，能简洁点吗？”）</p>
+<p>我负责：</p>
+<p>拆解成技术任务（如“新增配置文件页面”、“用 token 代理 GitHub 请求”）</p>
+<p>编写代码 / 提供文件 / 整理说明文档 / 打包脚本</p>
+<p>告诉你每一步是干什么的，有什么影响，并保持所有改动都有可追踪记录</p>
+<h2>2. 建立“模块化聊天规范”（建议遵守）</h2>
+<p>类别	你的输入模板	示例<br>
+📌 功能需求	我希望添加一个 ___ 功能，它可以做到 ___。	我希望添加一个“便签分享”功能，可以生成带密码的链接<br>
+🎨 外观调整	页面上哪个地方我希望变成 ___ 风格	页面的配色我希望变成纯黑 + 卡片灰底<br>
+⚙️ 设置改动	能不能把某个功能默认设为 ___	默认用我设置的 GitHub 仓库加载数据<br>
+🪛 技术不了解	我不懂这个怎么操作，你可以替我处理吗？	.bat 文件怎么用，我可以双击就一键上传吗？<br>
+📝 想法记录	这个可以写进总览备忘录中，但暂时不实现	等未来加上 WebDav 同步</p>
+<p>✅ 每次对话我都为你：</p>
+<p>自动整理归类（“这条归为：配置逻辑修改”）</p>
+<p>判断是否要更新代码、文档、计划或生成脚本</p>
+<p>默认将你的请求拆成可落地的代码任务</p>
+<h2>3. 建立长期协同开发库</h2>
+<p>使用一个共享的 GitHub 仓库（你已启用：fjvi/pigmarks）</p>
+<p>每次变更我都会：</p>
+<p>把最新代码打包给你（供扩展/Web 使用）</p>
+<p>写一份简洁变更记录（变动了什么、对你有何影响）</p>
+<p>如需上传，你只需运行我写好的 .bat 或 .sh 脚本</p>
+<h2>4. 建立项目总览文件夹（可选）</h2>
+<p>你可以在本地建立一个文件夹：PigMarks 项目协同文档</p>
+<p>我会为你维护这些内容：</p>
+<p>文件名	内容<br>
+功能总览.md	所有已实现与计划中的功能<br>
+技术说明.md	用最通俗的语言解释技术逻辑<br>
+指令合集.md	常用的指令操作列表（例如：如何双击上传）<br>
+项目进度.md	哪些模块已完成，哪些待定</p>
+<h2>5. 配置一键操作工具（降低使用门槛）</h2>
+<p>.bat 脚本：Windows 用户专用，一键上传书签 / 配置 / 备忘录等</p>
+<p>.md 模板：填写配置时自动生成结构化配置文件</p>
+<p>可视化预览页：以后可以做一个界面让你点按钮完成操作</p>
+<p>❤️ 最后总结<br>
+你不需要会代码，我的目标是让你像使用 Notion 或 Excel 一样，轻松构建出复杂的应用系统。</p>
+<p>我会确保每次你：</p>
+<p>提一个想法 → 我给一个方案</p>
+<p>发一段需求 → 我生成代码</p>
+<p>想记录一下 → 我写进项目文档</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://692.cloudns.be">MGTime</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if("01/01/2025"!=""){
+    var startSite=new Date("01/01/2025");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.disabled=true;
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","fjvi/note");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+
+
+</script>
+<script src='../assets/ArticleTOC.js'></script><script src='../assets/backtop.js'></script><script src='../assets/lightbox.js'></script><script src='../assets/imgca.js'></script>
+
+</html>
