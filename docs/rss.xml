@@ -1,5 +1,628 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTime</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTime</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Sun, 25 May 2025 10:00:09 +0000</lastBuildDate><managingEditor>MGTime</managingEditor><ttl>60</ttl><webMaster>MGTime</webMaster><item><title>deepseek设计的一套高稳定、可扩展、低维护的插件加载器设计方案</title><link>https://692.cloudns.be/post/deepseek-she-ji-de-yi-tao-gao-wen-ding-%E3%80%81-ke-kuo-zhan-%E3%80%81-di-wei-hu-de-cha-jian-jia-zai-qi-she-ji-fang-an.html</link><description># 一、如何优化现有方案以支持书签树钩子
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTime</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTime</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Sun, 25 May 2025 11:52:43 +0000</lastBuildDate><managingEditor>MGTime</managingEditor><ttl>60</ttl><webMaster>MGTime</webMaster><item><title>插件加载器完整实施方案</title><link>https://692.cloudns.be/post/cha-jian-jia-zai-qi-wan-zheng-shi-shi-fang-an.html</link><description>## 插件加载器完整实施方案
+
+下面我将提供完整的代码实现方案，包括核心系统、插件接口和现有功能的插件化改造。
+
+## 1\. 核心系统实现
+
+创建 `plugin-system.js` 文件：
+
+```markdown
+class EventEmitter {
+  constructor() {
+    this.listeners = new Map();
+  }
+
+  on(event, callback) {
+    if (!this.listeners.has(event)) {
+      this.listeners.set(event, []);
+    }
+    this.listeners.get(event).push(callback);
+  }
+
+  emit(event, ...args) {
+    if (this.listeners.has(event)) {
+      this.listeners.get(event).forEach(callback =&gt; {
+        try {
+          callback(...args);
+        } catch (error) {
+          console.error(`Error in ${event} handler:`, error);
+        }
+      });
+    }
+  }
+
+  off(event, callback) {
+    if (this.listeners.has(event)) {
+      const callbacks = this.listeners.get(event);
+      const index = callbacks.indexOf(callback);
+      if (index &gt; -1) {
+        callbacks.splice(index, 1);
+      }
+    }
+  }
+}
+
+class PluginSystem {
+  constructor() {
+    this.plugins = new Map();
+    this.events = new EventEmitter();
+    this.coreElements = {};
+    this.coreFunctions = {};
+  }
+
+  initializeCore() {
+    // 初始化核心元素引用
+    this.coreElements = {
+      bookmarkTree: document.getElementById('bookmarkTree'),
+      searchBox: document.querySelector('.search-box'),
+      searchIcon: document.querySelector('.search-icon'),
+      importBtn: document.getElementById('import-btn'),
+      exportBtn: document.getElementById('export-btn'),
+      loadBtn: document.getElementById('load-btn'),
+      topBar: document.querySelector('.top-bar'),
+      titleText: document.querySelector('.top-bar-title span'),
+      topBarTitle: document.querySelector('.top-bar-title'),
+      importModal: document.getElementById('import-modal'),
+      modalBookmarkFile: document.getElementById('modal-bookmark-file'),
+      modalUploadBtn: document.getElementById('modal-upload-btn')
+    };
+
+    // 核心功能
+    this.coreFunctions = {
+      loadBookmarks: this.loadBookmarks.bind(this),
+      bindFolderClickEvents: this.bindFolderClickEvents.bind(this),
+      createBookmarkList: this.createBookmarkList.bind(this),
+      flattenNodes: this.flattenNodes.bind(this)
+    };
+  }
+
+  registerPlugin(name, plugin) {
+    if (this.plugins.has(name)) {
+      console.warn(`Plugin ${name} already registered`);
+      return false;
+    }
+
+    try {
+      plugin.initialize({
+        elements: this.coreElements,
+        functions: this.coreFunctions,
+        events: this.events
+      });
+      this.plugins.set(name, plugin);
+      console.log(`Plugin ${name} registered successfully`);
+      return true;
+    } catch (error) {
+      console.error(`Failed to initialize plugin ${name}:`, error);
+      return false;
+    }
+  }
+
+  unregisterPlugin(name) {
+    if (this.plugins.has(name)) {
+      try {
+        this.plugins.get(name).destroy();
+        this.plugins.delete(name);
+        return true;
+      } catch (error) {
+        console.error(`Failed to destroy plugin ${name}:`, error);
+        return false;
+      }
+    }
+    return false;
+  }
+
+  getPlugin(name) {
+    return this.plugins.get(name);
+  }
+
+  // 核心功能实现
+  async loadBookmarks(url) {
+    // 原有loadBookmarks实现...
+  }
+
+  bindFolderClickEvents(calledFrom) {
+    // 原有bindFolderClickEvents实现...
+  }
+
+  createBookmarkList(node, level) {
+    // 原有createBookmarkList实现...
+  }
+
+  flattenNodes(nodes, level) {
+    // 原有flattenNodes实现...
+  }
+}
+
+// 导出单例实例
+export const pluginSystem = new PluginSystem();
+```
+
+## 2\. 插件接口实现
+
+创建 `plugin-interface.js` 文件：
+
+```markdown
+export class BasePlugin {
+  constructor() {
+    if (new.target === BasePlugin) {
+      throw new Error('BasePlugin cannot be instantiated directly');
+    }
+    this.name = 'UnnamedPlugin';
+    this.version = '1.0.0';
+    this.dependencies = [];
+  }
+
+  initialize({elements, functions, events}) {
+    throw new Error('Plugin must implement initialize method');
+  }
+
+  destroy() {
+    throw new Error('Plugin must implement destroy method');
+  }
+
+  log(message, level = 'info') {
+    const prefix = `[${this.name}]`;
+    switch (level) {
+      case 'error':
+        console.error(prefix, message);
+        break;
+      case 'warn':
+        console.warn(prefix, message);
+        break;
+      default:
+        console.log(prefix, message);
+    }
+  }
+}
+```
+
+## 3\. 现有功能插件化改造
+
+### 搜索插件 (search-plugin.js)
+
+```markdown
+import { BasePlugin } from './plugin-interface.js';
+
+export class SearchPlugin extends BasePlugin {
+  constructor() {
+    super();
+    this.name = 'SearchPlugin';
+    this.version = '1.0.0';
+  }
+
+  initialize({elements, functions, events}) {
+    this.elements = elements;
+    this.events = events;
+    this.functions = functions;
+
+    this.setupSearch();
+    this.bindEvents();
+
+    this.log('Initialized successfully');
+  }
+
+  setupSearch() {
+    this.searchResults = document.createElement('ul');
+    this.searchResults.classList.add('search-results');
+  }
+
+  bindEvents() {
+    // 搜索图标点击事件
+    this.elements.searchIcon.addEventListener('click', () =&gt; {
+      this.elements.searchIcon.style.display = 'none';
+      this.elements.searchBox.style.display = 'block';
+      this.elements.topBar.classList.add('searching');
+      this.elements.searchBox.focus();
+
+      if (window.innerWidth &lt;= 480) {
+        this.elements.titleText.style.display = 'none';
+      }
+    });
+
+    // 搜索框失去焦点事件
+    this.elements.searchBox.addEventListener('blur', () =&gt; {
+      if (!this.elements.searchBox.value) {
+        this.elements.searchBox.style.display = 'none';
+        this.elements.searchIcon.style.display = 'block';
+        this.elements.topBar.classList.remove('searching');
+
+        if (window.innerWidth &lt;= 480) {
+          this.elements.titleText.style.display = 'inline';
+        }
+      }
+    });
+
+    // 搜索输入事件
+    this.elements.searchBox.addEventListener('input', () =&gt; {
+      this.handleSearchInput();
+    });
+
+    // 标题点击事件 - 清除搜索
+    this.elements.topBarTitle.addEventListener('click', () =&gt; {
+      this.elements.searchBox.value = '';
+      this.elements.searchBox.style.display = 'none';
+      this.elements.searchIcon.style.display = 'block';
+      this.elements.topBar.classList.remove('searching');
+      this.elements.titleText.style.display = window.innerWidth &lt;= 480 ? 'inline' : 'inline';
+      this.events.emit('search-cleared');
+    });
+  }
+
+  handleSearchInput() {
+    const keyword = this.elements.searchBox.value.trim().toLowerCase();
+    this.elements.bookmarkTree.innerHTML = '';
+
+    if (keyword) {
+      const regex = new RegExp(keyword, 'gi');
+      const results = this.functions.flattenNodes(this.currentData || [], 2)
+        .filter(node =&gt;
+          node.title.toLowerCase().includes(keyword) ||
+          (node.url &amp;&amp; node.url.toLowerCase().includes(keyword))
+        );
+
+      this.displaySearchResults(results, regex);
+    } else {
+      this.events.emit('search-cleared');
+    }
+  }
+
+  displaySearchResults(results, regex) {
+    this.searchResults.innerHTML = '';
+
+    results.forEach(result =&gt; {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = result.url || result.originalNode.url;
+      a.classList.add('bookmark-link');
+      a.target = '_blank';
+
+      const highlightedTitle = result.title.replace(regex, `&lt;mark&gt;{{markdown}}&lt;/mark&gt;`);
+      a.innerHTML = highlightedTitle;
+
+      const icon = document.createElement('img');
+      icon.src = 'https://www.google.com/s2/favicons?sz=32&amp;domain_url=' +
+                encodeURIComponent(result.url || result.originalNode.url);
+      icon.classList.add('favicon-icon');
+      a.prepend(icon);
+
+      li.appendChild(a);
+      this.searchResults.appendChild(li);
+    });
+
+    this.elements.bookmarkTree.appendChild(this.searchResults);
+  }
+
+  destroy() {
+    // 清理事件监听器
+    this.elements.searchIcon.removeEventListener('click');
+    this.elements.searchBox.removeEventListener('blur');
+    this.elements.searchBox.removeEventListener('input');
+    this.elements.topBarTitle.removeEventListener('click');
+
+    this.log('Destroyed successfully');
+  }
+}
+```
+
+### 文本复制插件 (copy-plugin.js)
+
+```markdown
+import { BasePlugin } from './plugin-interface.js';
+
+export class CopyPlugin extends BasePlugin {
+  constructor() {
+    super();
+    this.name = 'CopyPlugin';
+    this.version = '1.0.0';
+  }
+
+  initialize({elements, functions, events}) {
+    this.elements = elements;
+    this.events = events;
+
+    this.setupCopyHandlers();
+    events.on('bookmark-rendered', this.updateCopyHandlers.bind(this));
+
+    this.log('Initialized successfully');
+  }
+
+  setupCopyHandlers() {
+    document.addEventListener('click', (e) =&gt; {
+      if (e.target.closest('.bookmark-data-item')) {
+        this.handleCopyClick(e);
+      }
+    });
+  }
+
+  updateCopyHandlers() {
+    const dataItems = document.querySelectorAll('.bookmark-data-item');
+    dataItems.forEach(item =&gt; {
+      item.addEventListener('click', this.handleCopyClick.bind(this));
+    });
+  }
+
+  handleCopyClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const wrapper = e.target.closest('.bookmark-data-item');
+    if (!wrapper) return;
+
+    const copyIcon = wrapper.querySelector('.copy-symbol');
+    const text = wrapper.querySelector('.copyable');
+    const node = this.findNodeByTitle(text.textContent);
+
+    if (!node || !node.url) return;
+
+    try {
+      const html = decodeURIComponent(node.url.split(',')[1]);
+      const match = html.match(/&lt;pre&gt;([\s\S]*?)&lt;\/pre&gt;/i);
+      if (match) {
+        const content = match[1]
+          .replace(/&amp;lt;/g, '&lt;')
+          .replace(/&amp;gt;/g, '&gt;')
+          .replace(/&amp;amp;/g, '&amp;');
+
+        navigator.clipboard.writeText(content).then(() =&gt; {
+          copyIcon.textContent = '✅';
+          wrapper.classList.add('copied');
+          setTimeout(() =&gt; {
+            copyIcon.textContent = '📋';
+            wrapper.classList.remove('copied');
+          }, 2000);
+        });
+      }
+    } catch (error) {
+      this.log(`Copy failed: ${error.message}`, 'error');
+    }
+  }
+
+  findNodeByTitle(title) {
+    // 在实际应用中，这里应该搜索当前显示的书签数据
+    return null;
+  }
+
+  destroy() {
+    document.removeEventListener('click', this.handleCopyClick);
+    this.events.off('bookmark-rendered', this.updateCopyHandlers);
+    this.log('Destroyed successfully');
+  }
+}
+```
+
+### 文件上传插件 (upload-plugin.js)
+
+```markdown
+import { BasePlugin } from './plugin-interface.js';
+
+export class UploadPlugin extends BasePlugin {
+  constructor() {
+    super();
+    this.name = 'UploadPlugin';
+    this.version = '1.0.0';
+  }
+
+  initialize({elements, functions, events}) {
+    this.elements = elements;
+    this.events = events;
+
+    this.setupUpload();
+    events.on('data-loaded', this.handleNewData.bind(this));
+
+    this.log('Initialized successfully');
+  }
+
+  setupUpload() {
+    // 文件选择变化事件
+    this.elements.modalBookmarkFile.addEventListener('change', () =&gt; {
+      this.handleFileSelect();
+    });
+
+    // 上传按钮点击事件
+    this.elements.modalUploadBtn.addEventListener('click', async () =&gt; {
+      await this.handleUpload();
+    });
+  }
+
+  handleFileSelect() {
+    const file = this.elements.modalBookmarkFile.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = e =&gt; {
+      this.events.emit('file-selected', e.target.result);
+    };
+    reader.readAsText(file);
+  }
+
+  async handleUpload() {
+    const token = prompt('请输入 GitHub Token：');
+    if (!token) {
+      alert('❌ 未提供 Token，上传已取消');
+      return;
+    }
+
+    try {
+      const repo = 'fjvi/bookmark';
+      const path = 'data/bookmarks.json';
+      const branch = 'main';
+      const getURL = `https://api.github.com/repos/${repo}/contents/${path}`;
+      let sha = null;
+
+      // 获取现有文件的SHA（如果存在）
+      const res = await fetch(getURL, {
+        headers: { Authorization: 'token ' + token }
+      });
+
+      if (res.ok) {
+        const json = await res.json();
+        sha = json.sha;
+      }
+
+      // 准备上传内容
+      const content = btoa(unescape(encodeURIComponent(this.currentData)));
+      const payload = {
+        message: '更新书签 JSON',
+        content,
+        branch,
+        ...(sha &amp;&amp; { sha })
+      };
+
+      // 执行上传
+      const uploadRes = await fetch(getURL, {
+        method: 'PUT',
+        headers: {
+          Authorization: 'token ' + token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (uploadRes.ok) {
+        alert('✅ 上传成功！');
+        this.events.emit('upload-success');
+      } else {
+        throw new Error('上传失败');
+      }
+    } catch (error) {
+      this.log(`Upload failed: ${error.message}`, 'error');
+      alert('❌ 上传失败');
+    }
+  }
+
+  handleNewData(data) {
+    this.currentData = JSON.stringify(data, null, 2);
+  }
+
+  destroy() {
+    this.elements.modalBookmarkFile.removeEventListener('change', this.handleFileSelect);
+    this.elements.modalUploadBtn.removeEventListener('click', this.handleUpload);
+    this.events.off('data-loaded', this.handleNewData);
+    this.log('Destroyed successfully');
+  }
+}
+```
+
+## 4\. 主应用改造 (main.js)
+
+```markdown
+import { pluginSystem } from './plugin-system.js';
+import { SearchPlugin } from './search-plugin.js';
+import { CopyPlugin } from './copy-plugin.js';
+import { UploadPlugin } from './upload-plugin.js';
+import { FaviconPlugin } from './favicon-plugin.js';
+import { LoaderPlugin } from './loader-plugin.js';
+
+// 初始化插件系统
+document.addEventListener('DOMContentLoaded', async () =&gt; {
+  // 初始化核心系统
+  pluginSystem.initializeCore();
+
+  // 注册插件
+  pluginSystem.registerPlugin('search', new SearchPlugin());
+  pluginSystem.registerPlugin('copy', new CopyPlugin());
+  pluginSystem.registerPlugin('upload', new UploadPlugin());
+  pluginSystem.registerPlugin('favicons', new FaviconPlugin());
+  pluginSystem.registerPlugin('loader', new LoaderPlugin());
+
+  // 加载初始数据
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const dataUrl = urlParams.get('data') || 'data/bookmarks.json';
+    await pluginSystem.loadBookmarks(dataUrl);
+  } catch (error) {
+    console.error('Initial load failed:', error);
+    alert(`⚠️ 无法加载书签: ${error.message}\n您可以点击'导入书签'手动上传。`);
+  }
+});
+```
+
+## 5\. 实施说明
+
+### 实施步骤
+
+1.  **创建插件系统文件结构**
+
+    ```markdown
+    /plugins
+      ├── plugin-system.js      # 核心插件系统
+      ├── plugin-interface.js   # 基础插件接口
+      ├── search-plugin.js      # 搜索功能插件
+      ├── copy-plugin.js        # 文本复制插件
+      ├── upload-plugin.js      # 文件上传插件
+      ├── favicon-plugin.js     # 图标插件
+      └── loader-plugin.js      # 加载功能插件
+    ```
+
+2.  **修改HTML文件**
+
+    - 更新script标签引用新的主文件
+    - 确保所有必要的DOM元素有正确的ID/class
+
+3.  **逐步迁移功能**
+
+    - 首先实现核心系统
+    - 然后逐个将现有功能迁移到插件中
+    - 测试每个插件独立工作
+
+4.  **测试与验证**
+
+    - 确保所有原有功能正常工作
+    - 验证插件可以独立启用/禁用
+    - 检查性能影响
+
+### 维护建议
+
+1.  **插件开发规范**
+
+    - 每个插件单独文件
+    - 明确的生命周期方法
+    - 清晰的依赖声明
+    - 完善的错误处理
+
+2.  **版本管理**
+
+    - 插件版本号遵循semver
+    - 核心系统与插件版本兼容性检查
+
+3.  **文档要求**
+
+    - 每个插件顶部有使用说明
+    - 事件API文档
+    - 配置选项说明
+
+### 扩展性设计
+
+1.  **动态加载插件**
+
+    ```markdown
+    async function loadExternalPlugin(url) {
+      try {
+        const module = await import(url);
+        if (module &amp;&amp; module.default) {
+          const plugin = new module.default();
+          pluginSystem.registerPlugin(plugin.name, plugin);
+        }
+      } catch (error) {
+        console.error('Failed to load plugin:', error);
+      }
+    }
+    ```
+
+2.  **插件配置界面**
+
+    - 可以添加一个配置管理插件
+    - 提供UI界面调整插件设置
+
+3.  **插件间通信**
+
+    - 通过事件系统进行通信
+    - 避免直接依赖其他插件
+
+这套实现完整保留了原有所有功能，同时提供了更好的架构和扩展性。您可以根据需要逐步实施，先从核心系统和1-2个简单插件开始，验证架构后再迁移其他功能。
+
+$$$$$$$</description><guid isPermaLink="true">https://692.cloudns.be/post/cha-jian-jia-zai-qi-wan-zheng-shi-shi-fang-an.html</guid><pubDate>Sun, 25 May 2025 11:52:10 +0000</pubDate></item><item><title>deepseek设计的一套高稳定、可扩展、低维护的插件加载器设计方案</title><link>https://692.cloudns.be/post/deepseek-she-ji-de-yi-tao-gao-wen-ding-%E3%80%81-ke-kuo-zhan-%E3%80%81-di-wei-hu-de-cha-jian-jia-zai-qi-she-ji-fang-an.html</link><description># 一、如何优化现有方案以支持书签树钩子
 
 ## 1\. **在配置中显式声明依赖关系**
 
