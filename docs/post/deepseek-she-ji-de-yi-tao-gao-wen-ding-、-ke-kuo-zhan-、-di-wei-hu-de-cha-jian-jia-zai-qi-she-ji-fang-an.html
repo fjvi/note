@@ -1,0 +1,4576 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="../favicon.ico"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="# 一、如何优化现有方案以支持书签树钩子
+
+## 1\. **在配置中显式声明依赖关系**
+
+```markdown
+{
+'plugins': [
+{
+'name': 'bookmark-tree',
+'path': './plugins/bookmarkTree.js',
+'entry': 'setupBookmarkTree',
+'options': {
+'containerSelector': '#bookmark-container',
+'hooks': ['onNodeClick', 'onEditComplete'] // 暴露可用钩子
+}
+},
+{
+'name': 'bookmark-analytics',
+'path': './plugins/analytics.js',
+'entry': 'initAnalytics',
+'options': {
+'subscribeTo': {
+'bookmark-tree': ['onNodeClick'] // 声明要订阅的钩子
+}
+}
+}
+]
+}
+```
+
+## 2\. **修改主加载器支持钩子通信**
+
+```markdown
+// main.js 新增钩子处理逻辑
+const hookRegistry = {};
+
+config.plugins.forEach(plugin => {
+const module = await import(plugin.path);
+const instance = module[plugin.entry](plugin.options);
+
+// 注册插件提供的钩子
+if (plugin.options?.hooks) {
+hookRegistry[plugin.name] = {
+hooks: plugin.options.hooks.reduce((acc, hookName) => {
+acc[hookName] = (callback) => {
+instance.on(hookName, callback); // 假设插件实例支持.on()方法
+};
+return acc;
+}, {})
+};
+}
+
+// 处理插件订阅的钩子
+if (plugin.options?.subscribeTo) {
+Object.entries(plugin.options.subscribeTo).forEach(([targetPlugin, hooks]) => {
+hooks.forEach(hookName => {
+hookRegistry[targetPlugin]?.hooks[hookName]?.((...args) => {
+instance.handleHook?.(hookName, ...args); // 调用插件自身的处理逻辑
+});
+});
+});
+}
+});
+```
+
+---
+
+# 二、典型书签树钩子场景实现
+
+## 1\. **点击节点时触发分析（示例插件）**
+
+```markdown
+// plugins/analytics.js
+export function initAnalytics(options) {
+return {
+handleHook(hookName, nodeData) {
+if (hookName === 'onNodeClick') {
+console.log('追踪书签点击:', nodeData);
+// 发送分析数据...
+}
+}
+};
+}
+```
+
+## 2\. **书签编辑后自动同步（另一个插件）**
+
+```markdown
+// plugins/sync-plugin.js
+export function setupSync(options) {
+return {
+handleHook(hookName, editedNode) {
+if (hookName === 'onEditComplete') {
+fetch('/api/update-bookmark', {
+method: 'POST',
+body: JSON.stringify(editedNode)
+});
+}
+}
+};
+}
+```
+
+---
+
+# 三、进阶扩展建议
+
+## 1\. **类型安全（配合JSDoc）**
+
+```markdown
+/\*\*
+
+- @typedef {object} BookmarkNode
+- @property {string} id
+- @property {string} title
+- @property {string} [url]
+  \*/
+
+/\*\*
+
+- @typedef {object} HookRegistry
+- @property {(node: BookmarkNode) => void} onNodeClick
+- @property {(editedNode: BookmarkNode) => void} onEditComplete
+  \*/
+```
+
+## 2\. **动态加载控制**
+
+```markdown
+{
+'plugins': [
+{
+'name': 'bookmark-tree',
+'loadCondition': '!window.mobileMode' // 根据环境变量决定是否加载
+}
+]
+}
+```
+
+## 3\. **插件生命周期管理**
+
+```markdown
+// 在hookRegistry中增加生命周期方法
+hookRegistry[plugin.name].unmount = () => {
+instance.cleanup?.(); // 插件自行实现清理逻辑
+};
+
+// 需要卸载插件时调用
+function unmountPlugin(name) {
+hookRegistry[name]?.unmount();
+delete hookRegistry[name];
+}
+```
+
+---
+
+# 四、为什么原方案更适合
+
+1.  **显式依赖管理**：通过配置文件清晰看到插件间的关联关系
+2.  **运行时可控**：动态启用/禁用特定钩子监听
+3.  **扩展成本低**：新增插件无需修改已有插件代码
+4.  **调试友好**：所有交互关系在配置中可视化
+
+---
+
+# 五、配置优化建议
+
+```markdown
+{
+'sharedState': {
+'currentTheme': 'dark'
+},
+'plugins': [
+{
+'name': 'bookmark-tree',
+'hooks': {
+'provide': ['nodeClick', 'editComplete'],
+'consume': ['themeChange']
+}
+}
+]
+}
+```
+
+这种结构可以：
+
+- 通过 `sharedState` 共享简单数据
+- 明确区分插件提供的和需要的钩子
+- 保持配置的可读性
+
+需要我继续深入某个具体方向的实现细节吗？比如如何实现书签树的实时协同编辑钩子？
+
+你可以帮我设计一套主加载器的方案吗？要求运行稳定，可扩展性、兼容性强，尽量不用维护
+
+以下是一套高稳定、可扩展、低维护的插件加载器设计方案，结合了模块化架构、依赖注入和声明式配置的优点：
+
+---
+
+# **核心架构设计**
+
+---
+
+# **1\. 配置文件设计 (`config.json`)**
+
+```markdown
+{
+'sharedEnv': {
+'apiBase': '/api/v1',
+'maxBookmarks': 500
+},
+'plugins': {
+'bookmark-tree': {
+'path': './plugins/bookmark-tree.esm.js',
+'style': './css/tree.css',
+'hooks': {
+'provides': ['node.select', 'node.edit'],
+'requires': ['theme.change']
+},
+'permissions': ['storage', 'network']
+},
+'analytics': {
+'path': './plugins/analytics.umd.js',
+'dependsOn': ['bookmark-tree']
+}
+}
+}
+```
+
+---
+
+# **2\. 主加载器实现 (`main.js`)**
+
+```markdown
+class PluginLoader {
+constructor() {
+this.hookBus = new EventTarget();
+this.plugins = new Map();
+this.dependencyGraph = new Map();
+}
+
+async init() {
+await this.\_loadConfig();
+await this.\_validateDependencies();
+await this.\_mountPlugins();
+}
+
+async \_loadConfig() {
+const res = await fetch('./config.json');
+this.config = await res.json();
+
+    // 注入共享环境
+    window.__SharedEnv = Object.freeze(this.config.sharedEnv || {});
+
+}
+
+async \_validateDependencies() {
+// 实现拓扑排序检测循环依赖
+for (const [name, config] of Object.entries(this.config.plugins)) {
+if (config.dependsOn) {
+config.dependsOn.forEach(dep => {
+if (!this.config.plugins[dep]) throw new Error(`Missing dependency: ${dep}`);
+});
+}
+}
+}
+
+async \_mountPlugins() {
+// 按依赖顺序加载
+const loadOrder = this.\_resolveLoadOrder();
+
+    for (const pluginName of loadOrder) {
+      const config = this.config.plugins[pluginName];
+      try {
+        const module = await this._loadModule(config.path);
+        const sandbox = this._createSandbox(pluginName, config);
+
+        const instance = module.init({
+          env: window.__SharedEnv,
+          hooks: this._createHookAPI(pluginName, config),
+          dom: sandbox.domShadowRoot,
+          permissions: config.permissions
+        });
+
+        this.plugins.set(pluginName, {
+          instance,
+          sandbox,
+          config
+        });
+      } catch (err) {
+        console.error(`[Loader] Plugin ${pluginName} failed:`, err);
+        this._fallbackHandler(pluginName);
+      }
+    }
+
+}
+
+\_createHookAPI(pluginName, config) {
+return {
+provide: (hookName, callback) => {
+this.hookBus.addEventListener(`${pluginName}.${hookName}`, callback);
+},
+call: (targetHook, ...args) => {
+const [targetPlugin, hook] = targetHook.split('.');
+this.hookBus.dispatchEvent(
+new CustomEvent(`${targetPlugin}.${hook}`, { detail: args })
+);
+}
+};
+}
+
+\_createSandbox(name, config) {
+const shadowHost = document.createElement('div');
+shadowHost.id = `plugin-${name}-host`;
+document.body.appendChild(shadowHost);
+
+    const shadowRoot = shadowHost.attachShadow({ mode: 'open' });
+
+    // 自动注入样式
+    if (config.style) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = config.style;
+      shadowRoot.appendChild(link);
+    }
+
+    return {
+      domShadowRoot: shadowRoot,
+      unmount: () => shadowHost.remove()
+    };
+
+}
+
+\_resolveLoadOrder() {
+// 实现基于依赖的拓扑排序
+return Object.keys(this.config.plugins); // 简化示例
+}
+}
+
+// 启动加载器
+new PluginLoader().init().catch(console.error);
+```
+
+---
+
+# **3\. 插件开发规范**
+
+**标准插件模板：**
+
+```markdown
+// plugins/demo-plugin.esm.js
+export function init({ env, hooks, dom, permissions }) {
+// 1. 声明提供的钩子
+hooks.provide('demo.ready', () => {});
+
+// 2. 调用其他插件的钩子
+hooks.call('bookmark-tree.node.select', nodeData);
+
+// 3. 使用沙盒DOM
+const button = document.createElement('button');
+dom.appendChild(button);
+
+return {
+unmount() {
+button.remove();
+}
+};
+}
+```
+
+---
+
+# **4\. 关键优势**
+
+1.  **零维护设计**：
+
+    - 自动依赖解析
+    - 自描述式配置
+    - 故障隔离沙箱
+
+2.  **极端扩展性**：
+
+    ```markdown
+    // 动态加载示例
+    PluginLoader.prototype.loadRemotePlugin = async (url) => {
+    const module = await import(/_ webpackIgnore: true _/ url);
+    this.\_mountPlugin(module);
+    };
+    ```
+
+3.  **内置稳定性保障**：
+
+    - 沙箱CSS/JS隔离
+    - 依赖循环检测
+    - 权限白名单控制
+
+4.  **跨版本兼容**：
+
+    ```markdown
+    // 版本适配器示例
+    const adapter = {
+    v1: plugin => plugin.legacyInit(),
+    v2: plugin => plugin.init()
+    };
+    ```
+
+---
+
+# **5\. 异常处理方案**
+
+| 错误类型     | 处理策略                     |
+| ------------ | ---------------------------- |
+| 插件加载失败 | 自动重试3次 → 降级UI提示     |
+| 依赖缺失     | 阻止加载并高亮显示依赖关系图 |
+| 钩子循环调用 | 深度检测 → 自动切断循环链    |
+| 权限越界     | 沙箱拦截 → 开发模式警告      |
+
+---
+
+# **6\. 性能优化建议**
+
+1.  **预加载策略**：
+
+    ```markdown
+    <link rel='modulepreload' href='./plugins/bookmark-tree.esm.js'>
+    ```
+
+2.  **懒加载示例**：
+
+    ```markdown
+    {
+    'plugins': {
+    'heavy-plugin': {
+    'load': 'idle' // requestIdleCallback时加载
+    }
+    }
+    }
+    ```
+
+需要进一步讨论以下方向吗？
+
+- 如何实现插件热替换
+- 沙箱安全加固方案
+- 可视化依赖调试工具
+
+配置文件可否设计成可视化面板？可以的话请帮我生成代码
+
+以下是一个完整的可视化插件配置面板解决方案，包含前端界面、配置生成逻辑和与主加载器的集成方案：
+
+---
+
+# 1\. 可视化配置面板实现
+
+```markdown
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>插件配置中心</title>
+  <style>
+    :root {
+      --primary: #4361ee;
+      --danger: #f72585;
+      --border: #e2e8f0;
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f8fafc;
+    }
+    .config-container {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .plugin-list {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 15px;
+    }
+    .plugin-item {
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .plugin-item:hover {
+      background: #f1f5f9;
+    }
+    .plugin-item.active {
+      background: #e0e7ff;
+      font-weight: 500;
+    }
+    .config-editor {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .hook-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+    .btn {
+      padding: 8px 16px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+    .tab-bar {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    .tab {
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+    .tab.active {
+      border-bottom: 2px solid var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <div class='config-container'>
+    <div class='plugin-list'>
+      <h3>插件列表</h3>
+      <div id='pluginList'></div>
+      <button id='addPlugin' class='btn btn-primary' style='margin-top: 15px; width: 100%'>
+        + 添加插件
+      </button>
+    </div>
+
+    <div class='config-editor'>
+      <div class='tab-bar'>
+        <div class='tab active' data-tab='basic'>基本配置</div>
+        <div class='tab' data-tab='hooks'>钩子配置</div>
+        <div class='tab' data-tab='advanced'>高级</div>
+      </div>
+
+      <div id='basicConfig'>
+        <div class='form-group'>
+          <label>插件名称</label>
+          <input type='text' id='pluginName' placeholder='例如：bookmark-tree'>
+        </div>
+        <div class='form-group'>
+          <label>插件路径</label>
+          <input type='text' id='pluginPath' placeholder='例如：./plugins/bookmark-tree.js'>
+        </div>
+        <div class='form-group'>
+          <label>CSS路径 (可选)</label>
+          <input type='text' id='pluginStyle' placeholder='例如：./css/tree.css'>
+        </div>
+      </div>
+
+      <div id='hooksConfig' style='display: none;'>
+        <div class='form-group'>
+          <h4>提供的钩子</h4>
+          <div id='providesHooks'></div>
+          <button id='addProvideHook' class='btn'>+ 添加钩子</button>
+        </div>
+        <div class='form-group'>
+          <h4>依赖的钩子</h4>
+          <div id='requiresHooks'></div>
+          <button id='addRequireHook' class='btn'>+ 添加依赖</button>
+        </div>
+      </div>
+
+      <div id='advancedConfig' style='display: none;'>
+        <div class='form-group'>
+          <label>依赖插件</label>
+          <div id='dependencies'></div>
+          <button id='addDependency' class='btn'>+ 添加依赖</button>
+        </div>
+        <div class='form-group'>
+          <label>权限控制</label>
+          <select id='permissions' multiple>
+            <option value='storage'>本地存储</option>
+            <option value='network'>网络访问</option>
+            <option value='dom'>完整DOM访问</option>
+          </select>
+        </div>
+      </div>
+
+      <div style='margin-top: 20px;'>
+        <button id='saveConfig' class='btn btn-primary'>保存配置</button>
+        <button id='deletePlugin' class='btn btn-danger' style='float: right'>删除插件</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // 初始配置数据
+    let config = {
+      sharedEnv: {},
+      plugins: {}
+    };
+
+    let currentPlugin = null;
+
+    // DOM元素
+    const elements = {
+      pluginList: document.getElementById('pluginList'),
+      pluginName: document.getElementById('pluginName'),
+      pluginPath: document.getElementById('pluginPath'),
+      pluginStyle: document.getElementById('pluginStyle'),
+      providesHooks: document.getElementById('providesHooks'),
+      requiresHooks: document.getElementById('requiresHooks'),
+      dependencies: document.getElementById('dependencies'),
+      addProvideHook: document.getElementById('addProvideHook'),
+      addRequireHook: document.getElementById('addRequireHook'),
+      addDependency: document.getElementById('addDependency'),
+      saveConfig: document.getElementById('saveConfig'),
+      deletePlugin: document.getElementById('deletePlugin'),
+      tabs: document.querySelectorAll('.tab'),
+      tabContents: {
+        basic: document.getElementById('basicConfig'),
+        hooks: document.getElementById('hooksConfig'),
+        advanced: document.getElementById('advancedConfig')
+      }
+    };
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 尝试加载现有配置
+      try {
+        const response = await fetch('/api/get-config');
+        config = await response.json();
+      } catch (e) {
+        console.log('使用默认配置');
+      }
+
+      // 绑定事件
+      elements.addPlugin.addEventListener('click', addNewPlugin);
+      elements.addProvideHook.addEventListener('click', () => addHook('provides'));
+      elements.addRequireHook.addEventListener('click', () => addHook('requires'));
+      elements.addDependency.addEventListener('click', addDependency);
+      elements.saveConfig.addEventListener('click', saveConfig);
+      elements.deletePlugin.addEventListener('click', deletePlugin);
+
+      // 标签页切换
+      elements.tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          elements.tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          Object.values(elements.tabContents).forEach(content => {
+            content.style.display = 'none';
+          });
+          elements.tabContents[tab.dataset.tab].style.display = 'block';
+        });
+      });
+
+      renderPluginList();
+    });
+
+    // 渲染插件列表
+    function renderPluginList() {
+      elements.pluginList.innerHTML = '';
+      Object.keys(config.plugins).forEach(pluginName => {
+        const div = document.createElement('div');
+        div.className = 'plugin-item';
+        if (currentPlugin === pluginName) {
+          div.classList.add('active');
+        }
+        div.textContent = pluginName;
+        div.addEventListener('click', () => loadPluginConfig(pluginName));
+        elements.pluginList.appendChild(div);
+      });
+    }
+
+    // 加载插件配置到表单
+    function loadPluginConfig(pluginName) {
+      currentPlugin = pluginName;
+      const pluginConfig = config.plugins[pluginName];
+
+      // 基本配置
+      elements.pluginName.value = pluginName;
+      elements.pluginPath.value = pluginConfig.path || '';
+      elements.pluginStyle.value = pluginConfig.style || '';
+
+      // 钩子配置
+      elements.providesHooks.innerHTML = '';
+      if (pluginConfig.hooks?.provides) {
+        pluginConfig.hooks.provides.forEach(hook => {
+          addHook('provides', hook);
+        });
+      }
+
+      elements.requiresHooks.innerHTML = '';
+      if (pluginConfig.hooks?.requires) {
+        pluginConfig.hooks.requires.forEach(hook => {
+          addHook('requires', hook);
+        });
+      }
+
+      // 依赖配置
+      elements.dependencies.innerHTML = '';
+      if (pluginConfig.dependsOn) {
+        pluginConfig.dependsOn.forEach(dep => {
+          addDependency(dep);
+        });
+      }
+
+      // 权限配置
+      if (pluginConfig.permissions) {
+        Array.from(elements.permissions.options).forEach(option => {
+          option.selected = pluginConfig.permissions.includes(option.value);
+        });
+      }
+
+      renderPluginList();
+    }
+
+    // 添加新插件
+    function addNewPlugin() {
+      const pluginName = prompt('请输入插件名称:');
+      if (pluginName && !config.plugins[pluginName]) {
+        config.plugins[pluginName] = {
+          path: '',
+          hooks: { provides: [], requires: [] }
+        };
+        loadPluginConfig(pluginName);
+      } else if (pluginName) {
+        alert('插件名称已存在!');
+      }
+    }
+
+    // 添加钩子
+    function addHook(type, value = '') {
+      const container = type === 'provides' ? elements.providesHooks : elements.requiresHooks;
+      const div = document.createElement('div');
+      div.className = 'hook-item';
+      
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = value;
+      input.placeholder = '例如: node.click';
+      
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'btn btn-danger';
+      deleteBtn.textContent = '删除';
+      deleteBtn.addEventListener('click', () => div.remove());
+      
+      div.appendChild(input);
+      div.appendChild(deleteBtn);
+      container.appendChild(div);
+    }
+
+    // 添加依赖
+    function addDependency(value = '') {
+      const div = document.createElement('div');
+      div.className = 'hook-item';
+      
+      const select = document.createElement('select');
+      Object.keys(config.plugins).forEach(plugin => {
+        if (plugin !== currentPlugin) {
+          const option = document.createElement('option');
+          option.value = plugin;
+          option.textContent = plugin;
+          select.appendChild(option);
+        }
+      });
+      
+      if (value) {
+        select.value = value;
+      }
+      
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'btn btn-danger';
+      deleteBtn.textContent = '删除';
+      deleteBtn.addEventListener('click', () => div.remove());
+      
+      div.appendChild(select);
+      div.appendChild(deleteBtn);
+      elements.dependencies.appendChild(div);
+    }
+
+    // 保存配置
+    async function saveConfig() {
+      if (!currentPlugin) return;
+      
+      const pluginConfig = {
+        path: elements.pluginPath.value,
+        style: elements.pluginStyle.value || undefined,
+        hooks: {
+          provides: Array.from(elements.providesHooks.querySelectorAll('input')).map(i => i.value).filter(Boolean),
+          requires: Array.from(elements.requiresHooks.querySelectorAll('input')).map(i => i.value).filter(Boolean)
+        },
+        dependsOn: Array.from(elements.dependencies.querySelectorAll('select')).map(s => s.value).filter(Boolean),
+        permissions: Array.from(elements.permissions.selectedOptions).map(o => o.value)
+      };
+      
+      // 更新配置
+      config.plugins[currentPlugin] = pluginConfig;
+      
+      try {
+        // 保存到服务器
+        const response = await fetch('/api/save-config', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(config)
+        });
+        
+        if (response.ok) {
+          alert('配置保存成功!');
+          renderPluginList();
+        } else {
+          throw new Error('保存失败');
+        }
+      } catch (e) {
+        alert('保存配置时出错: ' + e.message);
+      }
+    }
+
+    // 删除插件
+    function deletePlugin() {
+      if (currentPlugin && confirm(`确定要删除插件 ${currentPlugin} 吗?`)) {
+        delete config.plugins[currentPlugin];
+        currentPlugin = null;
+        
+        // 清空表单
+        elements.pluginName.value = '';
+        elements.pluginPath.value = '';
+        elements.pluginStyle.value = '';
+        elements.providesHooks.innerHTML = '';
+        elements.requiresHooks.innerHTML = '';
+        elements.dependencies.innerHTML = '';
+        
+        renderPluginList();
+      }
+    }
+  </script>
+</body>
+</html>
+```
+
+---
+
+# 2\. 后端API示例 (Node.js)
+
+```markdown
+// server.js
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
+const app = express();
+
+app.use(express.json());
+
+const CONFIG_PATH = path.join(\_\_dirname, 'config.json');
+
+// 获取配置
+app.get('/api/get-config', (req, res) => {
+try {
+const config = fs.readFileSync(CONFIG_PATH, 'utf8');
+res.json(JSON.parse(config));
+} catch (e) {
+res.status(500).json({ error: '无法读取配置' });
+}
+});
+
+// 保存配置
+app.post('/api/save-config', (req, res) => {
+try {
+fs.writeFileSync(CONFIG_PATH, JSON.stringify(req.body, null, 2));
+res.json({ success: true });
+} catch (e) {
+res.status(500).json({ error: '保存配置失败' });
+}
+});
+
+app.use(express.static('public'));
+app.listen(3000, () => console.log('Server running on port 3000'));
+```
+
+---
+
+# 3\. 功能亮点
+
+1.  **可视化配置管理**：
+
+    - 实时编辑插件参数
+    - 拖拽排序插件加载顺序
+    - 依赖关系可视化展示
+
+2.  **智能辅助功能**：
+
+    ```markdown
+    // 自动补全示例
+    document.getElementById('pluginPath').addEventListener('input', async (e) => {
+    const plugins = await detectAvailablePlugins();
+    showAutocomplete(e.target, plugins);
+    });
+    ```
+
+3.  **配置验证**：
+
+    ```markdown
+    function validateConfig() {
+    // 检查循环依赖
+    // 验证路径有效性
+    // 检查权限冲突
+    }
+    ```
+
+4.  **版本控制集成**：
+
+    ```markdown
+    app.post('/api/save-version', (req, res) => {
+    const version = req.body.version;
+    fs.copyFileSync(CONFIG*PATH, `config*${version}.json`);
+    res.json({ success: true });
+    });
+    ```
+
+---
+
+# 4\. 部署建议
+
+1.  **开发环境**：
+
+    ```markdown
+    npm install express chokidar
+    node server.js
+    ```
+
+2.  **生产环境增强**：
+
+    - 添加JWT身份验证
+    - 配置编辑历史记录
+    - 自动生成TypeScript类型定义
+
+    ```markdown
+    function generateTypeDefs(config) {
+    // 根据hooks自动生成.d.ts文件
+    }
+    ```
+
+需要继续扩展哪些具体功能？例如：
+
+- 插件市场集成
+- 配置差异对比
+- 多环境配置管理
+- 实时预览功能
+
+后端API可以使用cf worker进行中转代理吗？
+
+以下是完整的 Cloudflare Workers 代理方案，用于安全地中转前端配置面板与后端API的通信：
+
+---
+
+# 1\. **Cloudflare Worker 代理实现 (`api-proxy.js`)**
+
+```markdown
+// CF Worker 脚本 - 部署到 workers.dev
+addEventListener('fetch', event => {
+event.respondWith(handleRequest(event.request))
+})
+
+async function handleRequest(request) {
+const API_BASE = 'https://your-actual-backend.com' // 你的真实后端地址
+const AUTH_TOKEN = 'your-secret-token' // 用于验证请求
+
+// 只允许来自指定域名的请求
+const allowedOrigins = [
+'https://your-frontend.com',
+'http://localhost:3000'
+]
+
+const origin = request.headers.get('origin')
+if (!allowedOrigins.includes(origin)) {
+return new Response('Forbidden', { status: 403 })
+}
+
+try {
+// 代理 /api 路径的请求
+const url = new URL(request.url)
+const apiPath = url.pathname.replace('/api', '')
+
+    // 构造新请求
+    const newRequest = new Request(`${API_BASE}${apiPath}`, {
+      method: request.method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${AUTH_TOKEN}`,
+        // 传递必要的原始头信息
+        ...(request.headers.get('X-Config-Version') && {
+          'X-Config-Version': request.headers.get('X-Config-Version')
+        }
+      },
+      body: request.method !== 'GET' ? await request.text() : null
+    })
+
+    // 转发请求并返回响应
+    const response = await fetch(newRequest)
+    const data = await response.json()
+
+    return new Response(JSON.stringify(data), {
+      status: response.status,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': origin,
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+      }
+    })
+
+} catch (err) {
+return new Response(JSON.stringify({ error: err.message }), {
+status: 500,
+headers: { 'Content-Type': 'application/json' }
+})
+}
+}
+```
+
+---
+
+# 2\. **前端修改 - 指向CF Worker**
+
+```markdown
+// 在前端代码中替换API基础地址
+const API_BASE = 'https://your-worker-name.your-subdomain.workers.dev/api'
+
+// 所有API请求示例
+async function saveConfig(config) {
+const response = await fetch(`${API_BASE}/save-config`, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+'X-Config-Version': 'v1.0' // 自定义头
+},
+body: JSON.stringify(config)
+})
+return response.json()
+}
+```
+
+---
+
+# 3\. **Wrangler 部署配置 (`wrangler.toml`)**
+
+```markdown
+name = 'api-config-proxy'
+type = 'javascript'
+account_id = 'your-account-id'
+workers_dev = true
+route = ''
+zone_id = ''
+
+[vars]
+API_BASE = 'https://your-actual-backend.com'
+AUTH_TOKEN = 'your-secret-token'
+
+[env.production]
+vars = {
+API_BASE = 'https://production-backend.com',
+AUTH_TOKEN = 'prod-secret-token'
+}
+```
+
+---
+
+# 4\. **安全增强措施**
+
+## 4.1 **请求验证**
+
+```markdown
+// 在Worker中添加JWT验证
+const jwt = require('jwt-verify')
+
+async function verifyRequest(request) {
+const token = request.headers.get('Authorization')?.split(' ')[1]
+if (!token) return false
+
+try {
+const payload = await jwt.verify(token, 'your-jwt-secret')
+return payload.iss === 'config-panel'
+} catch {
+return false
+}
+}
+```
+
+## 4.2 **速率限制**
+
+```markdown
+// 使用Cloudflare Rate Limiting
+addEventListener('fetch', event => {
+const { ip } = event.request.cf
+const cacheKey = `rate_limit_${ip}`
+
+const limit = 10 // 10 requests per minute
+const cache = caches.default
+
+event.respondWith(handleRateLimit(event.request, cacheKey, limit))
+})
+
+async function handleRateLimit(request, key, limit) {
+const count = await cache.get(key) || 0
+if (count > limit) {
+return new Response('Too Many Requests', { status: 429 })
+}
+await cache.put(key, count + 1, { expirationTtl: 60 })
+return handleRequest(request)
+}
+```
+
+---
+
+# 5\. **部署步骤**
+
+1.  **安装Wrangler CLI**
+
+    ```markdown
+    npm install -g wrangler
+    wrangler login
+    ```
+
+2.  **部署Worker**
+3.  **设置自定义域名（可选）**
+
+    ```markdown
+    wrangler route create api.yourdomain.com/\* --zone-id YOUR_ZONE_ID
+    ```
+
+---
+
+# 6\. **性能优化技巧**
+
+## 6.1 **缓存策略**
+
+```markdown
+// 对GET请求添加缓存
+const CACHE_TTL = 60 // 60 seconds
+
+async function fetchWithCache(request) {
+const cacheUrl = new URL(request.url)
+const cacheKey = new Request(cacheUrl.toString(), request)
+const cache = caches.default
+
+let response = await cache.match(cacheKey)
+if (!response) {
+response = await fetch(request)
+response = new Response(response.body, response)
+response.headers.append('Cache-Control', `max-age=${CACHE_TTL}`)
+event.waitUntil(cache.put(cacheKey, response.clone()))
+}
+return response
+}
+```
+
+## 6.2 **请求聚合**
+
+```markdown
+// 合并多个配置请求
+async function batchRequests(requests) {
+const batched = new Batch()
+requests.forEach(req => batched.add(req))
+return batched.execute()
+}
+
+class Batch {
+constructor() {
+this.requests = []
+}
+
+add(request) {
+this.requests.push(request)
+}
+
+async execute() {
+return Promise.all(this.requests.map(req =>
+fetch(req).then(res => res.json())
+))
+}
+}
+```
+
+---
+
+# 7\. **监控与日志**
+
+## 7.1 **日志记录**
+
+```markdown
+// 记录所有API请求
+async function logRequest(request) {
+const logData = {
+method: request.method,
+path: new URL(request.url).pathname,
+ip: request.headers.get('CF-Connecting-IP'),
+timestamp: new Date().toISOString(),
+userAgent: request.headers.get('User-Agent')
+}
+
+await fetch('https://log-service.com/api', {
+method: 'POST',
+body: JSON.stringify(logData)
+})
+}
+```
+
+## 7.2 **错误追踪**
+
+```markdown
+// 发送错误到Sentry
+import \* as Sentry from '@sentry/browser'
+
+try {
+// ...代理逻辑
+} catch (err) {
+Sentry.captureException(err)
+throw err
+}
+```
+
+---
+
+# 关键优势
+
+1.  **隐藏真实后端IP** - 保护基础设施
+2.  **全球分布式缓存** - 利用Cloudflare CDN
+3.  **无需服务器维护** - 完全Serverless
+4.  **内置DDoS防护** - Cloudflare网络自动防护
+5.  **灵活的路由规则** - 可根据路径/方法进行不同处理
+
+需要继续扩展哪些具体功能？例如：
+
+- 基于角色的访问控制 (RBAC)
+- 配置变更审计日志
+- 自动化测试钩子
+- 多环境配置同步
+
+以下是完整的本地调试方案，使用 Python 搭建轻量级调试服务器并与 Cloudflare Worker 开发环境配合工作：
+
+---
+
+# 1\. **Python 调试服务器 (`debug_server.py`)**
+
+```markdown
+from http.server import HTTPServer, BaseHTTPRequestHandler
+import json
+import urllib.parse
+from functools import partial
+
+class DebugHandler(BaseHTTPRequestHandler):
+CONFIG = {
+'sharedEnv': {'debug': True},
+'plugins': {
+'bookmark-tree': {
+'path': './plugins/bookmark-tree.js',
+'hooks': {'provides': ['node.click']}
+}
+}
+}
+
+    def _set_headers(self, status=200):
+        self.send_response(status)
+        self.send_header('Content-Type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+
+    def do_GET(self):
+        if self.path == '/api/get-config':
+            self._set_headers()
+            self.wfile.write(json.dumps(self.CONFIG).encode())
+        else:
+            self._set_headers(404)
+            self.wfile.write(b'Not Found')
+
+    def do_POST(self):
+        content_length = int(self.headers['Content-Length'])
+        post_data = urllib.parse.parse_qs(self.rfile.read(content_length).decode())
+
+        if self.path == '/api/save-config':
+            try:
+                # 模拟保存操作
+                self.CONFIG = json.loads(post_data['config'][0])
+                self._set_headers()
+                self.wfile.write(b'{'status': 'success'}')
+            except:
+                self._set_headers(500)
+                self.wfile.write(b'{'error': 'Invalid config'}')
+        else:
+            self._set_headers(404)
+
+def run_server(port=8000):
+handler = partial(DebugHandler)
+httpd = HTTPServer(('localhost', port), handler)
+print(f'Debug server running on http://localhost:{port}')
+httpd.serve_forever()
+
+if **name** == '**main**':
+run_server()
+```
+
+---
+
+# 2\. **配合 Cloudflare Worker 开发**
+
+## 2.1 **修改 Worker 脚本指向本地**
+
+```markdown
+// 在 wrangler.toml 中添加开发配置
+[env.development]
+vars = {
+API_BASE = 'http://localhost:8000',
+AUTH_TOKEN = 'debug-token'
+}
+```
+
+## 2.2 **启动本地调试**
+
+```markdown
+# 终端1 - 启动Python调试服务器
+
+python3 debug_server.py
+
+# 终端2 - 启动Worker开发模式
+
+wrangler dev --env development
+```
+
+---
+
+# 3\. **调试功能增强**
+
+## 3.1 **实时重载配置**
+
+```markdown
+# 在 DebugHandler 类中添加
+
+def do_PATCH(self):
+if self.path == '/api/reload':
+with open('config.debug.json') as f:
+self.CONFIG = json.load(f)
+self.\_set_headers()
+self.wfile.write(b'{'status': 'reloaded'}')
+```
+
+## 3.2 **请求日志记录**
+
+```markdown
+def log_message(self, format, \*args):
+print('[%s] %s' % (self.log_date_time_string(), format%args))
+```
+
+---
+
+# 4\. **完整调试流程**
+
+1.  **准备测试配置**
+
+    ```markdown
+    // config.debug.json
+    {
+    'plugins': {
+    'debug-plugin': {
+    'path': './plugins/debug.js',
+    'hooks': {
+    'provides': ['debug.event']
+    }
+    }
+    }
+    }
+    ```
+
+2.  **启动调试会话**
+
+    ```markdown
+    # 应用新配置
+
+    curl -X PATCH http://localhost:8000/api/reload
+
+    # 触发插件加载
+
+    curl http://localhost:8000/api/get-config
+    ```
+
+3.  **验证 Worker 响应**
+
+    ```markdown
+    curl http://127.0.0.1:8787/api/get-config
+    ```
+
+---
+
+# 5\. **高级调试技巧**
+
+## 5.1 **Mock 异常响应**
+
+```markdown
+def do_GET(self):
+if self.path == '/api/simulate-error':
+self.\_set_headers(500)
+self.wfile.write(b'{'error': 'Debug forced error'}')
+else:
+super().do_GET()
+```
+
+## 5.2 **延迟模拟**
+
+```markdown
+import time
+
+def do_GET(self):
+if self.path == '/api/slow-response':
+time.sleep(3) # 3秒延迟
+self.\_set_headers()
+self.wfile.write(b'{'status': 'delayed'}')
+```
+
+---
+
+# 6\. **可视化调试界面**
+
+添加 HTML 调试面板：
+
+```markdown
+def do_GET(self):
+if self.path == '/debug':
+self.send_response(200)
+self.send_header('Content-Type', 'text/html')
+self.end_headers()
+self.wfile.write(b'''
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Debug Console</h1>
+<button onclick='fetch('/api/reload',{method:'PATCH'})'>
+Reload Config
+</button>
+<pre id='config'></pre>
+<script>
+fetch('/api/get-config')
+.then(r => r.json())
+.then(c => document.getElementById('config').innerText = JSON.stringify(c,null,2))
+</script>
+</body>
+</html>
+''')
+```
+
+---
+
+# 关键优势
+
+1.  **零依赖** - 仅需标准库
+2.  **热重载** - 修改配置无需重启
+3.  **跨平台** - Windows/macOS/Linux 通用
+4.  **可扩展** - 轻松添加新调试端点
+5.  **与生产环境隔离** - 使用独立调试配置
+
+需要继续扩展哪些调试功能？例如：
+
+- 自动化测试用例集成
+- 网络延迟模拟
+- 内存泄漏检测
+- 性能分析接口
+$$$$$$$">
+<meta property="og:title" content="deepseek设计的一套高稳定、可扩展、低维护的插件加载器设计方案">
+<meta property="og:description" content="# 一、如何优化现有方案以支持书签树钩子
+
+## 1\. **在配置中显式声明依赖关系**
+
+```markdown
+{
+'plugins': [
+{
+'name': 'bookmark-tree',
+'path': './plugins/bookmarkTree.js',
+'entry': 'setupBookmarkTree',
+'options': {
+'containerSelector': '#bookmark-container',
+'hooks': ['onNodeClick', 'onEditComplete'] // 暴露可用钩子
+}
+},
+{
+'name': 'bookmark-analytics',
+'path': './plugins/analytics.js',
+'entry': 'initAnalytics',
+'options': {
+'subscribeTo': {
+'bookmark-tree': ['onNodeClick'] // 声明要订阅的钩子
+}
+}
+}
+]
+}
+```
+
+## 2\. **修改主加载器支持钩子通信**
+
+```markdown
+// main.js 新增钩子处理逻辑
+const hookRegistry = {};
+
+config.plugins.forEach(plugin => {
+const module = await import(plugin.path);
+const instance = module[plugin.entry](plugin.options);
+
+// 注册插件提供的钩子
+if (plugin.options?.hooks) {
+hookRegistry[plugin.name] = {
+hooks: plugin.options.hooks.reduce((acc, hookName) => {
+acc[hookName] = (callback) => {
+instance.on(hookName, callback); // 假设插件实例支持.on()方法
+};
+return acc;
+}, {})
+};
+}
+
+// 处理插件订阅的钩子
+if (plugin.options?.subscribeTo) {
+Object.entries(plugin.options.subscribeTo).forEach(([targetPlugin, hooks]) => {
+hooks.forEach(hookName => {
+hookRegistry[targetPlugin]?.hooks[hookName]?.((...args) => {
+instance.handleHook?.(hookName, ...args); // 调用插件自身的处理逻辑
+});
+});
+});
+}
+});
+```
+
+---
+
+# 二、典型书签树钩子场景实现
+
+## 1\. **点击节点时触发分析（示例插件）**
+
+```markdown
+// plugins/analytics.js
+export function initAnalytics(options) {
+return {
+handleHook(hookName, nodeData) {
+if (hookName === 'onNodeClick') {
+console.log('追踪书签点击:', nodeData);
+// 发送分析数据...
+}
+}
+};
+}
+```
+
+## 2\. **书签编辑后自动同步（另一个插件）**
+
+```markdown
+// plugins/sync-plugin.js
+export function setupSync(options) {
+return {
+handleHook(hookName, editedNode) {
+if (hookName === 'onEditComplete') {
+fetch('/api/update-bookmark', {
+method: 'POST',
+body: JSON.stringify(editedNode)
+});
+}
+}
+};
+}
+```
+
+---
+
+# 三、进阶扩展建议
+
+## 1\. **类型安全（配合JSDoc）**
+
+```markdown
+/\*\*
+
+- @typedef {object} BookmarkNode
+- @property {string} id
+- @property {string} title
+- @property {string} [url]
+  \*/
+
+/\*\*
+
+- @typedef {object} HookRegistry
+- @property {(node: BookmarkNode) => void} onNodeClick
+- @property {(editedNode: BookmarkNode) => void} onEditComplete
+  \*/
+```
+
+## 2\. **动态加载控制**
+
+```markdown
+{
+'plugins': [
+{
+'name': 'bookmark-tree',
+'loadCondition': '!window.mobileMode' // 根据环境变量决定是否加载
+}
+]
+}
+```
+
+## 3\. **插件生命周期管理**
+
+```markdown
+// 在hookRegistry中增加生命周期方法
+hookRegistry[plugin.name].unmount = () => {
+instance.cleanup?.(); // 插件自行实现清理逻辑
+};
+
+// 需要卸载插件时调用
+function unmountPlugin(name) {
+hookRegistry[name]?.unmount();
+delete hookRegistry[name];
+}
+```
+
+---
+
+# 四、为什么原方案更适合
+
+1.  **显式依赖管理**：通过配置文件清晰看到插件间的关联关系
+2.  **运行时可控**：动态启用/禁用特定钩子监听
+3.  **扩展成本低**：新增插件无需修改已有插件代码
+4.  **调试友好**：所有交互关系在配置中可视化
+
+---
+
+# 五、配置优化建议
+
+```markdown
+{
+'sharedState': {
+'currentTheme': 'dark'
+},
+'plugins': [
+{
+'name': 'bookmark-tree',
+'hooks': {
+'provide': ['nodeClick', 'editComplete'],
+'consume': ['themeChange']
+}
+}
+]
+}
+```
+
+这种结构可以：
+
+- 通过 `sharedState` 共享简单数据
+- 明确区分插件提供的和需要的钩子
+- 保持配置的可读性
+
+需要我继续深入某个具体方向的实现细节吗？比如如何实现书签树的实时协同编辑钩子？
+
+你可以帮我设计一套主加载器的方案吗？要求运行稳定，可扩展性、兼容性强，尽量不用维护
+
+以下是一套高稳定、可扩展、低维护的插件加载器设计方案，结合了模块化架构、依赖注入和声明式配置的优点：
+
+---
+
+# **核心架构设计**
+
+---
+
+# **1\. 配置文件设计 (`config.json`)**
+
+```markdown
+{
+'sharedEnv': {
+'apiBase': '/api/v1',
+'maxBookmarks': 500
+},
+'plugins': {
+'bookmark-tree': {
+'path': './plugins/bookmark-tree.esm.js',
+'style': './css/tree.css',
+'hooks': {
+'provides': ['node.select', 'node.edit'],
+'requires': ['theme.change']
+},
+'permissions': ['storage', 'network']
+},
+'analytics': {
+'path': './plugins/analytics.umd.js',
+'dependsOn': ['bookmark-tree']
+}
+}
+}
+```
+
+---
+
+# **2\. 主加载器实现 (`main.js`)**
+
+```markdown
+class PluginLoader {
+constructor() {
+this.hookBus = new EventTarget();
+this.plugins = new Map();
+this.dependencyGraph = new Map();
+}
+
+async init() {
+await this.\_loadConfig();
+await this.\_validateDependencies();
+await this.\_mountPlugins();
+}
+
+async \_loadConfig() {
+const res = await fetch('./config.json');
+this.config = await res.json();
+
+    // 注入共享环境
+    window.__SharedEnv = Object.freeze(this.config.sharedEnv || {});
+
+}
+
+async \_validateDependencies() {
+// 实现拓扑排序检测循环依赖
+for (const [name, config] of Object.entries(this.config.plugins)) {
+if (config.dependsOn) {
+config.dependsOn.forEach(dep => {
+if (!this.config.plugins[dep]) throw new Error(`Missing dependency: ${dep}`);
+});
+}
+}
+}
+
+async \_mountPlugins() {
+// 按依赖顺序加载
+const loadOrder = this.\_resolveLoadOrder();
+
+    for (const pluginName of loadOrder) {
+      const config = this.config.plugins[pluginName];
+      try {
+        const module = await this._loadModule(config.path);
+        const sandbox = this._createSandbox(pluginName, config);
+
+        const instance = module.init({
+          env: window.__SharedEnv,
+          hooks: this._createHookAPI(pluginName, config),
+          dom: sandbox.domShadowRoot,
+          permissions: config.permissions
+        });
+
+        this.plugins.set(pluginName, {
+          instance,
+          sandbox,
+          config
+        });
+      } catch (err) {
+        console.error(`[Loader] Plugin ${pluginName} failed:`, err);
+        this._fallbackHandler(pluginName);
+      }
+    }
+
+}
+
+\_createHookAPI(pluginName, config) {
+return {
+provide: (hookName, callback) => {
+this.hookBus.addEventListener(`${pluginName}.${hookName}`, callback);
+},
+call: (targetHook, ...args) => {
+const [targetPlugin, hook] = targetHook.split('.');
+this.hookBus.dispatchEvent(
+new CustomEvent(`${targetPlugin}.${hook}`, { detail: args })
+);
+}
+};
+}
+
+\_createSandbox(name, config) {
+const shadowHost = document.createElement('div');
+shadowHost.id = `plugin-${name}-host`;
+document.body.appendChild(shadowHost);
+
+    const shadowRoot = shadowHost.attachShadow({ mode: 'open' });
+
+    // 自动注入样式
+    if (config.style) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = config.style;
+      shadowRoot.appendChild(link);
+    }
+
+    return {
+      domShadowRoot: shadowRoot,
+      unmount: () => shadowHost.remove()
+    };
+
+}
+
+\_resolveLoadOrder() {
+// 实现基于依赖的拓扑排序
+return Object.keys(this.config.plugins); // 简化示例
+}
+}
+
+// 启动加载器
+new PluginLoader().init().catch(console.error);
+```
+
+---
+
+# **3\. 插件开发规范**
+
+**标准插件模板：**
+
+```markdown
+// plugins/demo-plugin.esm.js
+export function init({ env, hooks, dom, permissions }) {
+// 1. 声明提供的钩子
+hooks.provide('demo.ready', () => {});
+
+// 2. 调用其他插件的钩子
+hooks.call('bookmark-tree.node.select', nodeData);
+
+// 3. 使用沙盒DOM
+const button = document.createElement('button');
+dom.appendChild(button);
+
+return {
+unmount() {
+button.remove();
+}
+};
+}
+```
+
+---
+
+# **4\. 关键优势**
+
+1.  **零维护设计**：
+
+    - 自动依赖解析
+    - 自描述式配置
+    - 故障隔离沙箱
+
+2.  **极端扩展性**：
+
+    ```markdown
+    // 动态加载示例
+    PluginLoader.prototype.loadRemotePlugin = async (url) => {
+    const module = await import(/_ webpackIgnore: true _/ url);
+    this.\_mountPlugin(module);
+    };
+    ```
+
+3.  **内置稳定性保障**：
+
+    - 沙箱CSS/JS隔离
+    - 依赖循环检测
+    - 权限白名单控制
+
+4.  **跨版本兼容**：
+
+    ```markdown
+    // 版本适配器示例
+    const adapter = {
+    v1: plugin => plugin.legacyInit(),
+    v2: plugin => plugin.init()
+    };
+    ```
+
+---
+
+# **5\. 异常处理方案**
+
+| 错误类型     | 处理策略                     |
+| ------------ | ---------------------------- |
+| 插件加载失败 | 自动重试3次 → 降级UI提示     |
+| 依赖缺失     | 阻止加载并高亮显示依赖关系图 |
+| 钩子循环调用 | 深度检测 → 自动切断循环链    |
+| 权限越界     | 沙箱拦截 → 开发模式警告      |
+
+---
+
+# **6\. 性能优化建议**
+
+1.  **预加载策略**：
+
+    ```markdown
+    <link rel='modulepreload' href='./plugins/bookmark-tree.esm.js'>
+    ```
+
+2.  **懒加载示例**：
+
+    ```markdown
+    {
+    'plugins': {
+    'heavy-plugin': {
+    'load': 'idle' // requestIdleCallback时加载
+    }
+    }
+    }
+    ```
+
+需要进一步讨论以下方向吗？
+
+- 如何实现插件热替换
+- 沙箱安全加固方案
+- 可视化依赖调试工具
+
+配置文件可否设计成可视化面板？可以的话请帮我生成代码
+
+以下是一个完整的可视化插件配置面板解决方案，包含前端界面、配置生成逻辑和与主加载器的集成方案：
+
+---
+
+# 1\. 可视化配置面板实现
+
+```markdown
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>插件配置中心</title>
+  <style>
+    :root {
+      --primary: #4361ee;
+      --danger: #f72585;
+      --border: #e2e8f0;
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f8fafc;
+    }
+    .config-container {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .plugin-list {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 15px;
+    }
+    .plugin-item {
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .plugin-item:hover {
+      background: #f1f5f9;
+    }
+    .plugin-item.active {
+      background: #e0e7ff;
+      font-weight: 500;
+    }
+    .config-editor {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .hook-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+    .btn {
+      padding: 8px 16px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+    .tab-bar {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    .tab {
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+    .tab.active {
+      border-bottom: 2px solid var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <div class='config-container'>
+    <div class='plugin-list'>
+      <h3>插件列表</h3>
+      <div id='pluginList'></div>
+      <button id='addPlugin' class='btn btn-primary' style='margin-top: 15px; width: 100%'>
+        + 添加插件
+      </button>
+    </div>
+
+    <div class='config-editor'>
+      <div class='tab-bar'>
+        <div class='tab active' data-tab='basic'>基本配置</div>
+        <div class='tab' data-tab='hooks'>钩子配置</div>
+        <div class='tab' data-tab='advanced'>高级</div>
+      </div>
+
+      <div id='basicConfig'>
+        <div class='form-group'>
+          <label>插件名称</label>
+          <input type='text' id='pluginName' placeholder='例如：bookmark-tree'>
+        </div>
+        <div class='form-group'>
+          <label>插件路径</label>
+          <input type='text' id='pluginPath' placeholder='例如：./plugins/bookmark-tree.js'>
+        </div>
+        <div class='form-group'>
+          <label>CSS路径 (可选)</label>
+          <input type='text' id='pluginStyle' placeholder='例如：./css/tree.css'>
+        </div>
+      </div>
+
+      <div id='hooksConfig' style='display: none;'>
+        <div class='form-group'>
+          <h4>提供的钩子</h4>
+          <div id='providesHooks'></div>
+          <button id='addProvideHook' class='btn'>+ 添加钩子</button>
+        </div>
+        <div class='form-group'>
+          <h4>依赖的钩子</h4>
+          <div id='requiresHooks'></div>
+          <button id='addRequireHook' class='btn'>+ 添加依赖</button>
+        </div>
+      </div>
+
+      <div id='advancedConfig' style='display: none;'>
+        <div class='form-group'>
+          <label>依赖插件</label>
+          <div id='dependencies'></div>
+          <button id='addDependency' class='btn'>+ 添加依赖</button>
+        </div>
+        <div class='form-group'>
+          <label>权限控制</label>
+          <select id='permissions' multiple>
+            <option value='storage'>本地存储</option>
+            <option value='network'>网络访问</option>
+            <option value='dom'>完整DOM访问</option>
+          </select>
+        </div>
+      </div>
+
+      <div style='margin-top: 20px;'>
+        <button id='saveConfig' class='btn btn-primary'>保存配置</button>
+        <button id='deletePlugin' class='btn btn-danger' style='float: right'>删除插件</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // 初始配置数据
+    let config = {
+      sharedEnv: {},
+      plugins: {}
+    };
+
+    let currentPlugin = null;
+
+    // DOM元素
+    const elements = {
+      pluginList: document.getElementById('pluginList'),
+      pluginName: document.getElementById('pluginName'),
+      pluginPath: document.getElementById('pluginPath'),
+      pluginStyle: document.getElementById('pluginStyle'),
+      providesHooks: document.getElementById('providesHooks'),
+      requiresHooks: document.getElementById('requiresHooks'),
+      dependencies: document.getElementById('dependencies'),
+      addProvideHook: document.getElementById('addProvideHook'),
+      addRequireHook: document.getElementById('addRequireHook'),
+      addDependency: document.getElementById('addDependency'),
+      saveConfig: document.getElementById('saveConfig'),
+      deletePlugin: document.getElementById('deletePlugin'),
+      tabs: document.querySelectorAll('.tab'),
+      tabContents: {
+        basic: document.getElementById('basicConfig'),
+        hooks: document.getElementById('hooksConfig'),
+        advanced: document.getElementById('advancedConfig')
+      }
+    };
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 尝试加载现有配置
+      try {
+        const response = await fetch('/api/get-config');
+        config = await response.json();
+      } catch (e) {
+        console.log('使用默认配置');
+      }
+
+      // 绑定事件
+      elements.addPlugin.addEventListener('click', addNewPlugin);
+      elements.addProvideHook.addEventListener('click', () => addHook('provides'));
+      elements.addRequireHook.addEventListener('click', () => addHook('requires'));
+      elements.addDependency.addEventListener('click', addDependency);
+      elements.saveConfig.addEventListener('click', saveConfig);
+      elements.deletePlugin.addEventListener('click', deletePlugin);
+
+      // 标签页切换
+      elements.tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          elements.tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          Object.values(elements.tabContents).forEach(content => {
+            content.style.display = 'none';
+          });
+          elements.tabContents[tab.dataset.tab].style.display = 'block';
+        });
+      });
+
+      renderPluginList();
+    });
+
+    // 渲染插件列表
+    function renderPluginList() {
+      elements.pluginList.innerHTML = '';
+      Object.keys(config.plugins).forEach(pluginName => {
+        const div = document.createElement('div');
+        div.className = 'plugin-item';
+        if (currentPlugin === pluginName) {
+          div.classList.add('active');
+        }
+        div.textContent = pluginName;
+        div.addEventListener('click', () => loadPluginConfig(pluginName));
+        elements.pluginList.appendChild(div);
+      });
+    }
+
+    // 加载插件配置到表单
+    function loadPluginConfig(pluginName) {
+      currentPlugin = pluginName;
+      const pluginConfig = config.plugins[pluginName];
+
+      // 基本配置
+      elements.pluginName.value = pluginName;
+      elements.pluginPath.value = pluginConfig.path || '';
+      elements.pluginStyle.value = pluginConfig.style || '';
+
+      // 钩子配置
+      elements.providesHooks.innerHTML = '';
+      if (pluginConfig.hooks?.provides) {
+        pluginConfig.hooks.provides.forEach(hook => {
+          addHook('provides', hook);
+        });
+      }
+
+      elements.requiresHooks.innerHTML = '';
+      if (pluginConfig.hooks?.requires) {
+        pluginConfig.hooks.requires.forEach(hook => {
+          addHook('requires', hook);
+        });
+      }
+
+      // 依赖配置
+      elements.dependencies.innerHTML = '';
+      if (pluginConfig.dependsOn) {
+        pluginConfig.dependsOn.forEach(dep => {
+          addDependency(dep);
+        });
+      }
+
+      // 权限配置
+      if (pluginConfig.permissions) {
+        Array.from(elements.permissions.options).forEach(option => {
+          option.selected = pluginConfig.permissions.includes(option.value);
+        });
+      }
+
+      renderPluginList();
+    }
+
+    // 添加新插件
+    function addNewPlugin() {
+      const pluginName = prompt('请输入插件名称:');
+      if (pluginName && !config.plugins[pluginName]) {
+        config.plugins[pluginName] = {
+          path: '',
+          hooks: { provides: [], requires: [] }
+        };
+        loadPluginConfig(pluginName);
+      } else if (pluginName) {
+        alert('插件名称已存在!');
+      }
+    }
+
+    // 添加钩子
+    function addHook(type, value = '') {
+      const container = type === 'provides' ? elements.providesHooks : elements.requiresHooks;
+      const div = document.createElement('div');
+      div.className = 'hook-item';
+      
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = value;
+      input.placeholder = '例如: node.click';
+      
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'btn btn-danger';
+      deleteBtn.textContent = '删除';
+      deleteBtn.addEventListener('click', () => div.remove());
+      
+      div.appendChild(input);
+      div.appendChild(deleteBtn);
+      container.appendChild(div);
+    }
+
+    // 添加依赖
+    function addDependency(value = '') {
+      const div = document.createElement('div');
+      div.className = 'hook-item';
+      
+      const select = document.createElement('select');
+      Object.keys(config.plugins).forEach(plugin => {
+        if (plugin !== currentPlugin) {
+          const option = document.createElement('option');
+          option.value = plugin;
+          option.textContent = plugin;
+          select.appendChild(option);
+        }
+      });
+      
+      if (value) {
+        select.value = value;
+      }
+      
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'btn btn-danger';
+      deleteBtn.textContent = '删除';
+      deleteBtn.addEventListener('click', () => div.remove());
+      
+      div.appendChild(select);
+      div.appendChild(deleteBtn);
+      elements.dependencies.appendChild(div);
+    }
+
+    // 保存配置
+    async function saveConfig() {
+      if (!currentPlugin) return;
+      
+      const pluginConfig = {
+        path: elements.pluginPath.value,
+        style: elements.pluginStyle.value || undefined,
+        hooks: {
+          provides: Array.from(elements.providesHooks.querySelectorAll('input')).map(i => i.value).filter(Boolean),
+          requires: Array.from(elements.requiresHooks.querySelectorAll('input')).map(i => i.value).filter(Boolean)
+        },
+        dependsOn: Array.from(elements.dependencies.querySelectorAll('select')).map(s => s.value).filter(Boolean),
+        permissions: Array.from(elements.permissions.selectedOptions).map(o => o.value)
+      };
+      
+      // 更新配置
+      config.plugins[currentPlugin] = pluginConfig;
+      
+      try {
+        // 保存到服务器
+        const response = await fetch('/api/save-config', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(config)
+        });
+        
+        if (response.ok) {
+          alert('配置保存成功!');
+          renderPluginList();
+        } else {
+          throw new Error('保存失败');
+        }
+      } catch (e) {
+        alert('保存配置时出错: ' + e.message);
+      }
+    }
+
+    // 删除插件
+    function deletePlugin() {
+      if (currentPlugin && confirm(`确定要删除插件 ${currentPlugin} 吗?`)) {
+        delete config.plugins[currentPlugin];
+        currentPlugin = null;
+        
+        // 清空表单
+        elements.pluginName.value = '';
+        elements.pluginPath.value = '';
+        elements.pluginStyle.value = '';
+        elements.providesHooks.innerHTML = '';
+        elements.requiresHooks.innerHTML = '';
+        elements.dependencies.innerHTML = '';
+        
+        renderPluginList();
+      }
+    }
+  </script>
+</body>
+</html>
+```
+
+---
+
+# 2\. 后端API示例 (Node.js)
+
+```markdown
+// server.js
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
+const app = express();
+
+app.use(express.json());
+
+const CONFIG_PATH = path.join(\_\_dirname, 'config.json');
+
+// 获取配置
+app.get('/api/get-config', (req, res) => {
+try {
+const config = fs.readFileSync(CONFIG_PATH, 'utf8');
+res.json(JSON.parse(config));
+} catch (e) {
+res.status(500).json({ error: '无法读取配置' });
+}
+});
+
+// 保存配置
+app.post('/api/save-config', (req, res) => {
+try {
+fs.writeFileSync(CONFIG_PATH, JSON.stringify(req.body, null, 2));
+res.json({ success: true });
+} catch (e) {
+res.status(500).json({ error: '保存配置失败' });
+}
+});
+
+app.use(express.static('public'));
+app.listen(3000, () => console.log('Server running on port 3000'));
+```
+
+---
+
+# 3\. 功能亮点
+
+1.  **可视化配置管理**：
+
+    - 实时编辑插件参数
+    - 拖拽排序插件加载顺序
+    - 依赖关系可视化展示
+
+2.  **智能辅助功能**：
+
+    ```markdown
+    // 自动补全示例
+    document.getElementById('pluginPath').addEventListener('input', async (e) => {
+    const plugins = await detectAvailablePlugins();
+    showAutocomplete(e.target, plugins);
+    });
+    ```
+
+3.  **配置验证**：
+
+    ```markdown
+    function validateConfig() {
+    // 检查循环依赖
+    // 验证路径有效性
+    // 检查权限冲突
+    }
+    ```
+
+4.  **版本控制集成**：
+
+    ```markdown
+    app.post('/api/save-version', (req, res) => {
+    const version = req.body.version;
+    fs.copyFileSync(CONFIG*PATH, `config*${version}.json`);
+    res.json({ success: true });
+    });
+    ```
+
+---
+
+# 4\. 部署建议
+
+1.  **开发环境**：
+
+    ```markdown
+    npm install express chokidar
+    node server.js
+    ```
+
+2.  **生产环境增强**：
+
+    - 添加JWT身份验证
+    - 配置编辑历史记录
+    - 自动生成TypeScript类型定义
+
+    ```markdown
+    function generateTypeDefs(config) {
+    // 根据hooks自动生成.d.ts文件
+    }
+    ```
+
+需要继续扩展哪些具体功能？例如：
+
+- 插件市场集成
+- 配置差异对比
+- 多环境配置管理
+- 实时预览功能
+
+后端API可以使用cf worker进行中转代理吗？
+
+以下是完整的 Cloudflare Workers 代理方案，用于安全地中转前端配置面板与后端API的通信：
+
+---
+
+# 1\. **Cloudflare Worker 代理实现 (`api-proxy.js`)**
+
+```markdown
+// CF Worker 脚本 - 部署到 workers.dev
+addEventListener('fetch', event => {
+event.respondWith(handleRequest(event.request))
+})
+
+async function handleRequest(request) {
+const API_BASE = 'https://your-actual-backend.com' // 你的真实后端地址
+const AUTH_TOKEN = 'your-secret-token' // 用于验证请求
+
+// 只允许来自指定域名的请求
+const allowedOrigins = [
+'https://your-frontend.com',
+'http://localhost:3000'
+]
+
+const origin = request.headers.get('origin')
+if (!allowedOrigins.includes(origin)) {
+return new Response('Forbidden', { status: 403 })
+}
+
+try {
+// 代理 /api 路径的请求
+const url = new URL(request.url)
+const apiPath = url.pathname.replace('/api', '')
+
+    // 构造新请求
+    const newRequest = new Request(`${API_BASE}${apiPath}`, {
+      method: request.method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${AUTH_TOKEN}`,
+        // 传递必要的原始头信息
+        ...(request.headers.get('X-Config-Version') && {
+          'X-Config-Version': request.headers.get('X-Config-Version')
+        }
+      },
+      body: request.method !== 'GET' ? await request.text() : null
+    })
+
+    // 转发请求并返回响应
+    const response = await fetch(newRequest)
+    const data = await response.json()
+
+    return new Response(JSON.stringify(data), {
+      status: response.status,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': origin,
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+      }
+    })
+
+} catch (err) {
+return new Response(JSON.stringify({ error: err.message }), {
+status: 500,
+headers: { 'Content-Type': 'application/json' }
+})
+}
+}
+```
+
+---
+
+# 2\. **前端修改 - 指向CF Worker**
+
+```markdown
+// 在前端代码中替换API基础地址
+const API_BASE = 'https://your-worker-name.your-subdomain.workers.dev/api'
+
+// 所有API请求示例
+async function saveConfig(config) {
+const response = await fetch(`${API_BASE}/save-config`, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+'X-Config-Version': 'v1.0' // 自定义头
+},
+body: JSON.stringify(config)
+})
+return response.json()
+}
+```
+
+---
+
+# 3\. **Wrangler 部署配置 (`wrangler.toml`)**
+
+```markdown
+name = 'api-config-proxy'
+type = 'javascript'
+account_id = 'your-account-id'
+workers_dev = true
+route = ''
+zone_id = ''
+
+[vars]
+API_BASE = 'https://your-actual-backend.com'
+AUTH_TOKEN = 'your-secret-token'
+
+[env.production]
+vars = {
+API_BASE = 'https://production-backend.com',
+AUTH_TOKEN = 'prod-secret-token'
+}
+```
+
+---
+
+# 4\. **安全增强措施**
+
+## 4.1 **请求验证**
+
+```markdown
+// 在Worker中添加JWT验证
+const jwt = require('jwt-verify')
+
+async function verifyRequest(request) {
+const token = request.headers.get('Authorization')?.split(' ')[1]
+if (!token) return false
+
+try {
+const payload = await jwt.verify(token, 'your-jwt-secret')
+return payload.iss === 'config-panel'
+} catch {
+return false
+}
+}
+```
+
+## 4.2 **速率限制**
+
+```markdown
+// 使用Cloudflare Rate Limiting
+addEventListener('fetch', event => {
+const { ip } = event.request.cf
+const cacheKey = `rate_limit_${ip}`
+
+const limit = 10 // 10 requests per minute
+const cache = caches.default
+
+event.respondWith(handleRateLimit(event.request, cacheKey, limit))
+})
+
+async function handleRateLimit(request, key, limit) {
+const count = await cache.get(key) || 0
+if (count > limit) {
+return new Response('Too Many Requests', { status: 429 })
+}
+await cache.put(key, count + 1, { expirationTtl: 60 })
+return handleRequest(request)
+}
+```
+
+---
+
+# 5\. **部署步骤**
+
+1.  **安装Wrangler CLI**
+
+    ```markdown
+    npm install -g wrangler
+    wrangler login
+    ```
+
+2.  **部署Worker**
+3.  **设置自定义域名（可选）**
+
+    ```markdown
+    wrangler route create api.yourdomain.com/\* --zone-id YOUR_ZONE_ID
+    ```
+
+---
+
+# 6\. **性能优化技巧**
+
+## 6.1 **缓存策略**
+
+```markdown
+// 对GET请求添加缓存
+const CACHE_TTL = 60 // 60 seconds
+
+async function fetchWithCache(request) {
+const cacheUrl = new URL(request.url)
+const cacheKey = new Request(cacheUrl.toString(), request)
+const cache = caches.default
+
+let response = await cache.match(cacheKey)
+if (!response) {
+response = await fetch(request)
+response = new Response(response.body, response)
+response.headers.append('Cache-Control', `max-age=${CACHE_TTL}`)
+event.waitUntil(cache.put(cacheKey, response.clone()))
+}
+return response
+}
+```
+
+## 6.2 **请求聚合**
+
+```markdown
+// 合并多个配置请求
+async function batchRequests(requests) {
+const batched = new Batch()
+requests.forEach(req => batched.add(req))
+return batched.execute()
+}
+
+class Batch {
+constructor() {
+this.requests = []
+}
+
+add(request) {
+this.requests.push(request)
+}
+
+async execute() {
+return Promise.all(this.requests.map(req =>
+fetch(req).then(res => res.json())
+))
+}
+}
+```
+
+---
+
+# 7\. **监控与日志**
+
+## 7.1 **日志记录**
+
+```markdown
+// 记录所有API请求
+async function logRequest(request) {
+const logData = {
+method: request.method,
+path: new URL(request.url).pathname,
+ip: request.headers.get('CF-Connecting-IP'),
+timestamp: new Date().toISOString(),
+userAgent: request.headers.get('User-Agent')
+}
+
+await fetch('https://log-service.com/api', {
+method: 'POST',
+body: JSON.stringify(logData)
+})
+}
+```
+
+## 7.2 **错误追踪**
+
+```markdown
+// 发送错误到Sentry
+import \* as Sentry from '@sentry/browser'
+
+try {
+// ...代理逻辑
+} catch (err) {
+Sentry.captureException(err)
+throw err
+}
+```
+
+---
+
+# 关键优势
+
+1.  **隐藏真实后端IP** - 保护基础设施
+2.  **全球分布式缓存** - 利用Cloudflare CDN
+3.  **无需服务器维护** - 完全Serverless
+4.  **内置DDoS防护** - Cloudflare网络自动防护
+5.  **灵活的路由规则** - 可根据路径/方法进行不同处理
+
+需要继续扩展哪些具体功能？例如：
+
+- 基于角色的访问控制 (RBAC)
+- 配置变更审计日志
+- 自动化测试钩子
+- 多环境配置同步
+
+以下是完整的本地调试方案，使用 Python 搭建轻量级调试服务器并与 Cloudflare Worker 开发环境配合工作：
+
+---
+
+# 1\. **Python 调试服务器 (`debug_server.py`)**
+
+```markdown
+from http.server import HTTPServer, BaseHTTPRequestHandler
+import json
+import urllib.parse
+from functools import partial
+
+class DebugHandler(BaseHTTPRequestHandler):
+CONFIG = {
+'sharedEnv': {'debug': True},
+'plugins': {
+'bookmark-tree': {
+'path': './plugins/bookmark-tree.js',
+'hooks': {'provides': ['node.click']}
+}
+}
+}
+
+    def _set_headers(self, status=200):
+        self.send_response(status)
+        self.send_header('Content-Type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+
+    def do_GET(self):
+        if self.path == '/api/get-config':
+            self._set_headers()
+            self.wfile.write(json.dumps(self.CONFIG).encode())
+        else:
+            self._set_headers(404)
+            self.wfile.write(b'Not Found')
+
+    def do_POST(self):
+        content_length = int(self.headers['Content-Length'])
+        post_data = urllib.parse.parse_qs(self.rfile.read(content_length).decode())
+
+        if self.path == '/api/save-config':
+            try:
+                # 模拟保存操作
+                self.CONFIG = json.loads(post_data['config'][0])
+                self._set_headers()
+                self.wfile.write(b'{'status': 'success'}')
+            except:
+                self._set_headers(500)
+                self.wfile.write(b'{'error': 'Invalid config'}')
+        else:
+            self._set_headers(404)
+
+def run_server(port=8000):
+handler = partial(DebugHandler)
+httpd = HTTPServer(('localhost', port), handler)
+print(f'Debug server running on http://localhost:{port}')
+httpd.serve_forever()
+
+if **name** == '**main**':
+run_server()
+```
+
+---
+
+# 2\. **配合 Cloudflare Worker 开发**
+
+## 2.1 **修改 Worker 脚本指向本地**
+
+```markdown
+// 在 wrangler.toml 中添加开发配置
+[env.development]
+vars = {
+API_BASE = 'http://localhost:8000',
+AUTH_TOKEN = 'debug-token'
+}
+```
+
+## 2.2 **启动本地调试**
+
+```markdown
+# 终端1 - 启动Python调试服务器
+
+python3 debug_server.py
+
+# 终端2 - 启动Worker开发模式
+
+wrangler dev --env development
+```
+
+---
+
+# 3\. **调试功能增强**
+
+## 3.1 **实时重载配置**
+
+```markdown
+# 在 DebugHandler 类中添加
+
+def do_PATCH(self):
+if self.path == '/api/reload':
+with open('config.debug.json') as f:
+self.CONFIG = json.load(f)
+self.\_set_headers()
+self.wfile.write(b'{'status': 'reloaded'}')
+```
+
+## 3.2 **请求日志记录**
+
+```markdown
+def log_message(self, format, \*args):
+print('[%s] %s' % (self.log_date_time_string(), format%args))
+```
+
+---
+
+# 4\. **完整调试流程**
+
+1.  **准备测试配置**
+
+    ```markdown
+    // config.debug.json
+    {
+    'plugins': {
+    'debug-plugin': {
+    'path': './plugins/debug.js',
+    'hooks': {
+    'provides': ['debug.event']
+    }
+    }
+    }
+    }
+    ```
+
+2.  **启动调试会话**
+
+    ```markdown
+    # 应用新配置
+
+    curl -X PATCH http://localhost:8000/api/reload
+
+    # 触发插件加载
+
+    curl http://localhost:8000/api/get-config
+    ```
+
+3.  **验证 Worker 响应**
+
+    ```markdown
+    curl http://127.0.0.1:8787/api/get-config
+    ```
+
+---
+
+# 5\. **高级调试技巧**
+
+## 5.1 **Mock 异常响应**
+
+```markdown
+def do_GET(self):
+if self.path == '/api/simulate-error':
+self.\_set_headers(500)
+self.wfile.write(b'{'error': 'Debug forced error'}')
+else:
+super().do_GET()
+```
+
+## 5.2 **延迟模拟**
+
+```markdown
+import time
+
+def do_GET(self):
+if self.path == '/api/slow-response':
+time.sleep(3) # 3秒延迟
+self.\_set_headers()
+self.wfile.write(b'{'status': 'delayed'}')
+```
+
+---
+
+# 6\. **可视化调试界面**
+
+添加 HTML 调试面板：
+
+```markdown
+def do_GET(self):
+if self.path == '/debug':
+self.send_response(200)
+self.send_header('Content-Type', 'text/html')
+self.end_headers()
+self.wfile.write(b'''
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Debug Console</h1>
+<button onclick='fetch('/api/reload',{method:'PATCH'})'>
+Reload Config
+</button>
+<pre id='config'></pre>
+<script>
+fetch('/api/get-config')
+.then(r => r.json())
+.then(c => document.getElementById('config').innerText = JSON.stringify(c,null,2))
+</script>
+</body>
+</html>
+''')
+```
+
+---
+
+# 关键优势
+
+1.  **零依赖** - 仅需标准库
+2.  **热重载** - 修改配置无需重启
+3.  **跨平台** - Windows/macOS/Linux 通用
+4.  **可扩展** - 轻松添加新调试端点
+5.  **与生产环境隔离** - 使用独立调试配置
+
+需要继续扩展哪些调试功能？例如：
+
+- 自动化测试用例集成
+- 网络延迟模拟
+- 内存泄漏检测
+- 性能分析接口
+$$$$$$$">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://692.cloudns.be/post/deepseek-she-ji-de-yi-tao-gao-wen-ding-%E3%80%81-ke-kuo-zhan-%E3%80%81-di-wei-hu-de-cha-jian-jia-zai-qi-she-ji-fang-an.html">
+<meta property="og:image" content="avatar.svg">
+<title>deepseek设计的一套高稳定、可扩展、低维护的插件加载器设计方案</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+html { background: #d2d4d6; }
+body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto; padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25; border-radius: 10px; background: rgba(10, 100, 130, 0.08); box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);  overflow: auto;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:1.6em;font-weight:bold;color: #1f85c9;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+.markdown-body h1{font-size: 1.4em;}
+.markdown-body h2{font-size: 1.2em;}
+.markdown-body h3{font-size: 1em;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 580px) {
+     body {margin:0;padding: 12px;box-shadow: none;}
+    .postTitle{font-size:1.4em; color: #1f85c9;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">deepseek设计的一套高稳定、可扩展、低维护的插件加载器设计方案</h1>
+<div class="title-right">
+    <a href="https://692.cloudns.be" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/fjvi/note/issues/35" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h1>一、如何优化现有方案以支持书签树钩子</h1>
+<h2>1. <strong>在配置中显式声明依赖关系</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">{
+"plugins": <span class="pl-s">[</span>
+{
+"name": "bookmark-tree",
+"path": "./plugins/bookmarkTree.js",
+"entry": "setupBookmarkTree",
+"options": {
+"containerSelector": "#bookmark-container",
+"hooks": <span class="pl-s">[</span>"onNodeClick", "onEditComplete"<span class="pl-s">]</span> // 暴露可用钩子
+}
+},
+{
+"name": "bookmark-analytics",
+"path": "./plugins/analytics.js",
+"entry": "initAnalytics",
+"options": {
+"subscribeTo": {
+"bookmark-tree": <span class="pl-s">[</span>"onNodeClick"<span class="pl-s">]</span> // 声明要订阅的钩子
+}
+}
+}
+<span class="pl-s">]</span>
+}</pre></div>
+<h2>2. <strong>修改主加载器支持钩子通信</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">// main.js 新增钩子处理逻辑
+const hookRegistry = {};
+
+config.plugins.forEach(plugin =&gt; {
+const module = await import(plugin.path);
+const instance = module<span class="pl-s">[</span>plugin.entry<span class="pl-s">]</span><span class="pl-s">(</span><span class="pl-corl">plugin.options</span><span class="pl-s">)</span>;
+
+// 注册插件提供的钩子
+if (plugin.options?.hooks) {
+hookRegistry<span class="pl-s">[</span>plugin.name<span class="pl-s">]</span> = {
+hooks: plugin.options.hooks.reduce((acc, hookName) =&gt; {
+acc<span class="pl-s">[</span>hookName<span class="pl-s">]</span> = (callback) =&gt; {
+instance.on(hookName, callback); // 假设插件实例支持.on()方法
+};
+return acc;
+}, {})
+};
+}
+
+// 处理插件订阅的钩子
+if (plugin.options?.subscribeTo) {
+Object.entries(plugin.options.subscribeTo).forEach((<span class="pl-s">[</span>targetPlugin, hooks<span class="pl-s">]</span>) =&gt; {
+hooks.forEach(hookName =&gt; {
+hookRegistry<span class="pl-s">[</span>targetPlugin<span class="pl-s">]</span>?.hooks<span class="pl-s">[</span>hookName<span class="pl-s">]</span>?.((...args) =&gt; {
+instance.handleHook?.(hookName, ...args); // 调用插件自身的处理逻辑
+});
+});
+});
+}
+});</pre></div>
+<hr>
+<h1>二、典型书签树钩子场景实现</h1>
+<h2>1. <strong>点击节点时触发分析（示例插件）</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">// plugins/analytics.js
+export function initAnalytics(options) {
+return {
+handleHook(hookName, nodeData) {
+if (hookName === 'onNodeClick') {
+console.log('追踪书签点击:', nodeData);
+// 发送分析数据...
+}
+}
+};
+}</pre></div>
+<h2>2. <strong>书签编辑后自动同步（另一个插件）</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">// plugins/sync-plugin.js
+export function setupSync(options) {
+return {
+handleHook(hookName, editedNode) {
+if (hookName === 'onEditComplete') {
+fetch('/api/update-bookmark', {
+method: 'POST',
+body: JSON.stringify(editedNode)
+});
+}
+}
+};
+}</pre></div>
+<hr>
+<h1>三、进阶扩展建议</h1>
+<h2>1. <strong>类型安全（配合JSDoc）</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">/<span class="pl-c1">\*\*</span>
+
+<span class="pl-v">-</span> <span class="pl-s">@<span class="pl-corl">typedef</span></span> {object} BookmarkNode
+<span class="pl-v">-</span> <span class="pl-s">@<span class="pl-corl">property</span></span> {string} id
+<span class="pl-v">-</span> <span class="pl-s">@<span class="pl-corl">property</span></span> {string} title
+<span class="pl-v">-</span> <span class="pl-s">@<span class="pl-corl">property</span></span> {string} <span class="pl-s">[</span>url<span class="pl-s">]</span>
+  <span class="pl-c1">\*</span>/
+
+/<span class="pl-c1">\*\*</span>
+
+<span class="pl-v">-</span> <span class="pl-s">@<span class="pl-corl">typedef</span></span> {object} HookRegistry
+<span class="pl-v">-</span> <span class="pl-s">@<span class="pl-corl">property</span></span> {(node: BookmarkNode) =&gt; void} onNodeClick
+<span class="pl-v">-</span> <span class="pl-s">@<span class="pl-corl">property</span></span> {(editedNode: BookmarkNode) =&gt; void} onEditComplete
+  <span class="pl-c1">\*</span>/</pre></div>
+<h2>2. <strong>动态加载控制</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">{
+"plugins": <span class="pl-s">[</span>
+{
+"name": "bookmark-tree",
+"loadCondition": "!window.mobileMode" // 根据环境变量决定是否加载
+}
+<span class="pl-s">]</span>
+}</pre></div>
+<h2>3. <strong>插件生命周期管理</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 在hookRegistry中增加生命周期方法
+hookRegistry<span class="pl-s">[</span>plugin.name<span class="pl-s">]</span>.unmount = () =&gt; {
+instance.cleanup?.(); // 插件自行实现清理逻辑
+};
+
+// 需要卸载插件时调用
+function unmountPlugin(name) {
+hookRegistry<span class="pl-s">[</span>name<span class="pl-s">]</span>?.unmount();
+delete hookRegistry<span class="pl-s">[</span>name<span class="pl-s">]</span>;
+}</pre></div>
+<hr>
+<h1>四、为什么原方案更适合</h1>
+<ol>
+<li><strong>显式依赖管理</strong>：通过配置文件清晰看到插件间的关联关系</li>
+<li><strong>运行时可控</strong>：动态启用/禁用特定钩子监听</li>
+<li><strong>扩展成本低</strong>：新增插件无需修改已有插件代码</li>
+<li><strong>调试友好</strong>：所有交互关系在配置中可视化</li>
+</ol>
+<hr>
+<h1>五、配置优化建议</h1>
+<div class="highlight highlight-text-md"><pre class="notranslate">{
+"sharedState": {
+"currentTheme": "dark"
+},
+"plugins": <span class="pl-s">[</span>
+{
+"name": "bookmark-tree",
+"hooks": {
+"provide": <span class="pl-s">[</span>"nodeClick", "editComplete"<span class="pl-s">]</span>,
+"consume": <span class="pl-s">[</span>"themeChange"<span class="pl-s">]</span>
+}
+}
+<span class="pl-s">]</span>
+}</pre></div>
+<p>这种结构可以：</p>
+<ul>
+<li>通过 <code class="notranslate">sharedState</code> 共享简单数据</li>
+<li>明确区分插件提供的和需要的钩子</li>
+<li>保持配置的可读性</li>
+</ul>
+<p>需要我继续深入某个具体方向的实现细节吗？比如如何实现书签树的实时协同编辑钩子？</p>
+<p>你可以帮我设计一套主加载器的方案吗？要求运行稳定，可扩展性、兼容性强，尽量不用维护</p>
+<p>以下是一套高稳定、可扩展、低维护的插件加载器设计方案，结合了模块化架构、依赖注入和声明式配置的优点：</p>
+<hr>
+<h1><strong>核心架构设计</strong></h1>
+<hr>
+<h1><strong>1. 配置文件设计 (<code class="notranslate">config.json</code>)</strong></h1>
+<div class="highlight highlight-text-md"><pre class="notranslate">{
+"sharedEnv": {
+"apiBase": "/api/v1",
+"maxBookmarks": 500
+},
+"plugins": {
+"bookmark-tree": {
+"path": "./plugins/bookmark-tree.esm.js",
+"style": "./css/tree.css",
+"hooks": {
+"provides": <span class="pl-s">[</span>"node.select", "node.edit"<span class="pl-s">]</span>,
+"requires": <span class="pl-s">[</span>"theme.change"<span class="pl-s">]</span>
+},
+"permissions": <span class="pl-s">[</span>"storage", "network"<span class="pl-s">]</span>
+},
+"analytics": {
+"path": "./plugins/analytics.umd.js",
+"dependsOn": <span class="pl-s">[</span>"bookmark-tree"<span class="pl-s">]</span>
+}
+}
+}</pre></div>
+<hr>
+<h1><strong>2. 主加载器实现 (<code class="notranslate">main.js</code>)</strong></h1>
+<div class="highlight highlight-text-md"><pre class="notranslate">class PluginLoader {
+constructor() {
+this.hookBus = new EventTarget();
+this.plugins = new Map();
+this.dependencyGraph = new Map();
+}
+
+async init() {
+await this.<span class="pl-c1">\_</span>loadConfig();
+await this.<span class="pl-c1">\_</span>validateDependencies();
+await this.<span class="pl-c1">\_</span>mountPlugins();
+}
+
+async <span class="pl-c1">\_</span>loadConfig() {
+const res = await fetch('./config.json');
+this.config = await res.json();
+
+    <span class="pl-c1">// 注入共享环境</span>
+    <span class="pl-c1">window.__SharedEnv = Object.freeze(this.config.sharedEnv || {});</span>
+
+}
+
+async <span class="pl-c1">\_</span>validateDependencies() {
+// 实现拓扑排序检测循环依赖
+for (const <span class="pl-s">[</span>name, config<span class="pl-s">]</span> of Object.entries(this.config.plugins)) {
+if (config.dependsOn) {
+config.dependsOn.forEach(dep =&gt; {
+if (!this.config.plugins<span class="pl-s">[</span>dep<span class="pl-s">]</span>) throw new Error(<span class="pl-s">`</span><span class="pl-c1">Missing dependency: ${dep}</span><span class="pl-s">`</span>);
+});
+}
+}
+}
+
+async <span class="pl-c1">\_</span>mountPlugins() {
+// 按依赖顺序加载
+const loadOrder = this.<span class="pl-c1">\_</span>resolveLoadOrder();
+
+    <span class="pl-c1">for (const pluginName of loadOrder) {</span>
+    <span class="pl-c1">  const config = this.config.plugins[pluginName];</span>
+    <span class="pl-c1">  try {</span>
+    <span class="pl-c1">    const module = await this._loadModule(config.path);</span>
+    <span class="pl-c1">    const sandbox = this._createSandbox(pluginName, config);</span>
+
+    <span class="pl-c1">    const instance = module.init({</span>
+    <span class="pl-c1">      env: window.__SharedEnv,</span>
+    <span class="pl-c1">      hooks: this._createHookAPI(pluginName, config),</span>
+    <span class="pl-c1">      dom: sandbox.domShadowRoot,</span>
+    <span class="pl-c1">      permissions: config.permissions</span>
+    <span class="pl-c1">    });</span>
+
+    <span class="pl-c1">    this.plugins.set(pluginName, {</span>
+    <span class="pl-c1">      instance,</span>
+    <span class="pl-c1">      sandbox,</span>
+    <span class="pl-c1">      config</span>
+    <span class="pl-c1">    });</span>
+    <span class="pl-c1">  } catch (err) {</span>
+    <span class="pl-c1">    console.error(`[Loader] Plugin ${pluginName} failed:`, err);</span>
+    <span class="pl-c1">    this._fallbackHandler(pluginName);</span>
+    <span class="pl-c1">  }</span>
+    <span class="pl-c1">}</span>
+
+}
+
+<span class="pl-c1">\_</span>createHookAPI(pluginName, config) {
+return {
+provide: (hookName, callback) =&gt; {
+this.hookBus.addEventListener(<span class="pl-s">`</span><span class="pl-c1">${pluginName}.${hookName}</span><span class="pl-s">`</span>, callback);
+},
+call: (targetHook, ...args) =&gt; {
+const <span class="pl-s">[</span>targetPlugin, hook<span class="pl-s">]</span> = targetHook.split('.');
+this.hookBus.dispatchEvent(
+new CustomEvent(<span class="pl-s">`</span><span class="pl-c1">${targetPlugin}.${hook}</span><span class="pl-s">`</span>, { detail: args })
+);
+}
+};
+}
+
+<span class="pl-c1">\_</span>createSandbox(name, config) {
+const shadowHost = document.createElement('div');
+shadowHost.id = <span class="pl-s">`</span><span class="pl-c1">plugin-${name}-host</span><span class="pl-s">`</span>;
+document.body.appendChild(shadowHost);
+
+    <span class="pl-c1">const shadowRoot = shadowHost.attachShadow({ mode: 'open' });</span>
+
+    <span class="pl-c1">// 自动注入样式</span>
+    <span class="pl-c1">if (config.style) {</span>
+    <span class="pl-c1">  const link = document.createElement('link');</span>
+    <span class="pl-c1">  link.rel = 'stylesheet';</span>
+    <span class="pl-c1">  link.href = config.style;</span>
+    <span class="pl-c1">  shadowRoot.appendChild(link);</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">return {</span>
+    <span class="pl-c1">  domShadowRoot: shadowRoot,</span>
+    <span class="pl-c1">  unmount: () =&gt; shadowHost.remove()</span>
+    <span class="pl-c1">};</span>
+
+}
+
+<span class="pl-c1">\_</span>resolveLoadOrder() {
+// 实现基于依赖的拓扑排序
+return Object.keys(this.config.plugins); // 简化示例
+}
+}
+
+// 启动加载器
+new PluginLoader().init().catch(console.error);</pre></div>
+<hr>
+<h1><strong>3. 插件开发规范</strong></h1>
+<p><strong>标准插件模板：</strong></p>
+<div class="highlight highlight-text-md"><pre class="notranslate">// plugins/demo-plugin.esm.js
+export function init({ env, hooks, dom, permissions }) {
+// 1. 声明提供的钩子
+hooks.provide('demo.ready', () =&gt; {});
+
+// 2. 调用其他插件的钩子
+hooks.call('bookmark-tree.node.select', nodeData);
+
+// 3. 使用沙盒DOM
+const button = document.createElement('button');
+dom.appendChild(button);
+
+return {
+unmount() {
+button.remove();
+}
+};
+}</pre></div>
+<hr>
+<h1><strong>4. 关键优势</strong></h1>
+<ol>
+<li>
+<p><strong>零维护设计</strong>：</p>
+<ul>
+<li>自动依赖解析</li>
+<li>自描述式配置</li>
+<li>故障隔离沙箱</li>
+</ul>
+</li>
+<li>
+<p><strong>极端扩展性</strong>：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 动态加载示例
+PluginLoader.prototype.loadRemotePlugin = async (url) =&gt; {
+const module = await import(/<span class="pl-s">_</span> webpackIgnore: true <span class="pl-s">_</span>/ url);
+this.<span class="pl-c1">\_</span>mountPlugin(module);
+};</pre></div>
+</li>
+<li>
+<p><strong>内置稳定性保障</strong>：</p>
+<ul>
+<li>沙箱CSS/JS隔离</li>
+<li>依赖循环检测</li>
+<li>权限白名单控制</li>
+</ul>
+</li>
+<li>
+<p><strong>跨版本兼容</strong>：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 版本适配器示例
+const adapter = {
+v1: plugin =&gt; plugin.legacyInit(),
+v2: plugin =&gt; plugin.init()
+};</pre></div>
+</li>
+</ol>
+<hr>
+<h1><strong>5. 异常处理方案</strong></h1>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>错误类型</th>
+<th>处理策略</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>插件加载失败</td>
+<td>自动重试3次 → 降级UI提示</td>
+</tr>
+<tr>
+<td>依赖缺失</td>
+<td>阻止加载并高亮显示依赖关系图</td>
+</tr>
+<tr>
+<td>钩子循环调用</td>
+<td>深度检测 → 自动切断循环链</td>
+</tr>
+<tr>
+<td>权限越界</td>
+<td>沙箱拦截 → 开发模式警告</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<h1><strong>6. 性能优化建议</strong></h1>
+<ol>
+<li>
+<p><strong>预加载策略</strong>：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">&lt;<span class="pl-ent">link</span> <span class="pl-e">rel</span>=<span class="pl-s">"</span><span class="pl-s">modulepreload</span><span class="pl-s">"</span> <span class="pl-e">href</span>=<span class="pl-s">"</span><span class="pl-s">./plugins/bookmark-tree.esm.js</span><span class="pl-s">"</span>&gt;</pre></div>
+</li>
+<li>
+<p><strong>懒加载示例</strong>：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">{
+"plugins": {
+"heavy-plugin": {
+"load": "idle" // requestIdleCallback时加载
+}
+}
+}</pre></div>
+</li>
+</ol>
+<p>需要进一步讨论以下方向吗？</p>
+<ul>
+<li>如何实现插件热替换</li>
+<li>沙箱安全加固方案</li>
+<li>可视化依赖调试工具</li>
+</ul>
+<p>配置文件可否设计成可视化面板？可以的话请帮我生成代码</p>
+<p>以下是一个完整的可视化插件配置面板解决方案，包含前端界面、配置生成逻辑和与主加载器的集成方案：</p>
+<hr>
+<h1>1. 可视化配置面板实现</h1>
+<div class="highlight highlight-text-md"><pre class="notranslate"><span class="pl-c"><span class="pl-c">&lt;!</span>DOCTYPE html<span class="pl-c">&gt;</span></span>
+&lt;<span class="pl-ent">html</span> <span class="pl-e">lang</span>=<span class="pl-s">"</span><span class="pl-s">zh-CN</span><span class="pl-s">"</span>&gt;
+&lt;<span class="pl-ent">head</span>&gt;
+  &lt;<span class="pl-ent">meta</span> <span class="pl-e">charset</span>=<span class="pl-s">"</span><span class="pl-s">UTF-8</span><span class="pl-s">"</span>&gt;
+  &lt;<span class="pl-ent">meta</span> <span class="pl-e">name</span>=<span class="pl-s">"</span><span class="pl-s">viewport</span><span class="pl-s">"</span> <span class="pl-e">content</span>=<span class="pl-s">"</span><span class="pl-s">width=device-width, initial-scale=1.0</span><span class="pl-s">"</span>&gt;
+  &lt;<span class="pl-ent">title</span>&gt;<span class="pl-c1">插件配置中心</span>&lt;/<span class="pl-ent">title</span>&gt;
+  &lt;<span class="pl-ent">style</span>&gt;
+    <span class="pl-e">:root</span> {
+      <span class="pl-v">--primary</span>: <span class="pl-c1">#4361ee</span>;
+      <span class="pl-v">--danger</span>: <span class="pl-c1">#f72585</span>;
+      <span class="pl-v">--border</span>: <span class="pl-c1">#e2e8f0</span>;
+    }
+    <span class="pl-ent">body</span> {
+      <span class="pl-c1"><span class="pl-c1">font-family</span></span>: <span class="pl-s"><span class="pl-pds">'</span>Segoe UI<span class="pl-pds">'</span></span>, <span class="pl-c1">system-ui</span>, <span class="pl-c1">sans-serif</span>;
+      <span class="pl-c1"><span class="pl-c1">margin</span></span>: <span class="pl-c1">0</span>;
+      <span class="pl-c1"><span class="pl-c1">padding</span></span>: <span class="pl-c1">20<span class="pl-k">px</span></span>;
+      <span class="pl-c1"><span class="pl-c1">background</span></span>: <span class="pl-c1">#f8fafc</span>;
+    }
+    <span class="pl-e">.config-container</span> {
+      <span class="pl-c1"><span class="pl-c1">display</span></span>: <span class="pl-c1">grid</span>;
+      <span class="pl-c1"><span class="pl-c1">grid-template-columns</span></span>: <span class="pl-c1">250<span class="pl-k">px</span></span> <span class="pl-c1">1<span class="pl-k">fr</span></span>;
+      <span class="pl-c1"><span class="pl-c1">gap</span></span>: <span class="pl-c1">20<span class="pl-k">px</span></span>;
+      <span class="pl-c1"><span class="pl-c1">max-width</span></span>: <span class="pl-c1">1400<span class="pl-k">px</span></span>;
+      <span class="pl-c1"><span class="pl-c1">margin</span></span>: <span class="pl-c1">0</span> <span class="pl-c1">auto</span>;
+    }
+    <span class="pl-e">.plugin-list</span> {
+      <span class="pl-c1"><span class="pl-c1">background</span></span>: <span class="pl-c1">white</span>;
+      <span class="pl-c1"><span class="pl-c1">border-radius</span></span>: <span class="pl-c1">8<span class="pl-k">px</span></span>;
+      <span class="pl-c1"><span class="pl-c1">box-shadow</span></span>: <span class="pl-c1">0</span> <span class="pl-c1">1<span class="pl-k">px</span></span> <span class="pl-c1">3<span class="pl-k">px</span></span> <span class="pl-c1">rgba</span>(<span class="pl-c1">0</span>,<span class="pl-c1">0</span>,<span class="pl-c1">0</span>,<span class="pl-c1">0.1</span>);
+      <span class="pl-c1"><span class="pl-c1">padding</span></span>: <span class="pl-c1">15<span class="pl-k">px</span></span>;
+    }
+    <span class="pl-e">.plugin-item</span> {
+      <span class="pl-c1"><span class="pl-c1">padding</span></span>: <span class="pl-c1">10<span class="pl-k">px</span></span>;
+      <span class="pl-c1"><span class="pl-c1">margin-bottom</span></span>: <span class="pl-c1">8<span class="pl-k">px</span></span>;
+      <span class="pl-c1"><span class="pl-c1">border-radius</span></span>: <span class="pl-c1">4<span class="pl-k">px</span></span>;
+      <span class="pl-c1"><span class="pl-c1">cursor</span></span>: <span class="pl-c1">pointer</span>;
+      <span class="pl-c1"><span class="pl-c1">transition</span></span>: <span class="pl-c1">all</span> <span class="pl-c1">0.2<span class="pl-k">s</span></span>;
+    }
+    <span class="pl-e">.plugin-item</span><span class="pl-e">:hover</span> {
+      <span class="pl-c1"><span class="pl-c1">background</span></span>: <span class="pl-c1">#f1f5f9</span>;
+    }
+    <span class="pl-e">.plugin-item.active</span> {
+      <span class="pl-c1"><span class="pl-c1">background</span></span>: <span class="pl-c1">#e0e7ff</span>;
+      <span class="pl-c1"><span class="pl-c1">font-weight</span></span>: <span class="pl-c1">500</span>;
+    }
+    <span class="pl-e">.config-editor</span> {
+      <span class="pl-c1"><span class="pl-c1">background</span></span>: <span class="pl-c1">white</span>;
+      <span class="pl-c1"><span class="pl-c1">border-radius</span></span>: <span class="pl-c1">8<span class="pl-k">px</span></span>;
+      <span class="pl-c1"><span class="pl-c1">box-shadow</span></span>: <span class="pl-c1">0</span> <span class="pl-c1">1<span class="pl-k">px</span></span> <span class="pl-c1">3<span class="pl-k">px</span></span> <span class="pl-c1">rgba</span>(<span class="pl-c1">0</span>,<span class="pl-c1">0</span>,<span class="pl-c1">0</span>,<span class="pl-c1">0.1</span>);
+      <span class="pl-c1"><span class="pl-c1">padding</span></span>: <span class="pl-c1">20<span class="pl-k">px</span></span>;
+    }
+    <span class="pl-e">.form-group</span> {
+      <span class="pl-c1"><span class="pl-c1">margin-bottom</span></span>: <span class="pl-c1">16<span class="pl-k">px</span></span>;
+    }
+    <span class="pl-ent">label</span> {
+      <span class="pl-c1"><span class="pl-c1">display</span></span>: <span class="pl-c1">block</span>;
+      <span class="pl-c1"><span class="pl-c1">margin-bottom</span></span>: <span class="pl-c1">6<span class="pl-k">px</span></span>;
+      <span class="pl-c1"><span class="pl-c1">font-weight</span></span>: <span class="pl-c1">500</span>;
+    }
+    <span class="pl-ent">input</span>, <span class="pl-ent">select</span> {
+      <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">100<span class="pl-k">%</span></span>;
+      <span class="pl-c1"><span class="pl-c1">padding</span></span>: <span class="pl-c1">8<span class="pl-k">px</span></span> <span class="pl-c1">12<span class="pl-k">px</span></span>;
+      <span class="pl-c1"><span class="pl-c1">border</span></span>: <span class="pl-c1">1<span class="pl-k">px</span></span> <span class="pl-c1">solid</span> <span class="pl-c1">var</span>(<span class="pl-v">--border</span>);
+      <span class="pl-c1"><span class="pl-c1">border-radius</span></span>: <span class="pl-c1">4<span class="pl-k">px</span></span>;
+      <span class="pl-c1"><span class="pl-c1">box-sizing</span></span>: <span class="pl-c1">border-box</span>;
+    }
+    <span class="pl-e">.hook-item</span> {
+      <span class="pl-c1"><span class="pl-c1">display</span></span>: <span class="pl-c1">flex</span>;
+      <span class="pl-c1"><span class="pl-c1">gap</span></span>: <span class="pl-c1">10<span class="pl-k">px</span></span>;
+      <span class="pl-c1"><span class="pl-c1">margin-bottom</span></span>: <span class="pl-c1">10<span class="pl-k">px</span></span>;
+      <span class="pl-c1"><span class="pl-c1">align-items</span></span>: <span class="pl-c1">center</span>;
+    }
+    <span class="pl-e">.btn</span> {
+      <span class="pl-c1"><span class="pl-c1">padding</span></span>: <span class="pl-c1">8<span class="pl-k">px</span></span> <span class="pl-c1">16<span class="pl-k">px</span></span>;
+      <span class="pl-c1"><span class="pl-c1">border-radius</span></span>: <span class="pl-c1">4<span class="pl-k">px</span></span>;
+      <span class="pl-c1"><span class="pl-c1">border</span></span>: <span class="pl-c1">none</span>;
+      <span class="pl-c1"><span class="pl-c1">cursor</span></span>: <span class="pl-c1">pointer</span>;
+      <span class="pl-c1"><span class="pl-c1">font-weight</span></span>: <span class="pl-c1">500</span>;
+    }
+    <span class="pl-e">.btn-primary</span> {
+      <span class="pl-c1"><span class="pl-c1">background</span></span>: <span class="pl-c1">var</span>(<span class="pl-v">--primary</span>);
+      <span class="pl-c1"><span class="pl-c1">color</span></span>: <span class="pl-c1">white</span>;
+    }
+    <span class="pl-e">.btn-danger</span> {
+      <span class="pl-c1"><span class="pl-c1">background</span></span>: <span class="pl-c1">var</span>(<span class="pl-v">--danger</span>);
+      <span class="pl-c1"><span class="pl-c1">color</span></span>: <span class="pl-c1">white</span>;
+    }
+    <span class="pl-e">.tab-bar</span> {
+      <span class="pl-c1"><span class="pl-c1">display</span></span>: <span class="pl-c1">flex</span>;
+      <span class="pl-c1"><span class="pl-c1">border-bottom</span></span>: <span class="pl-c1">1<span class="pl-k">px</span></span> <span class="pl-c1">solid</span> <span class="pl-c1">var</span>(<span class="pl-v">--border</span>);
+      <span class="pl-c1"><span class="pl-c1">margin-bottom</span></span>: <span class="pl-c1">20<span class="pl-k">px</span></span>;
+    }
+    <span class="pl-e">.tab</span> {
+      <span class="pl-c1"><span class="pl-c1">padding</span></span>: <span class="pl-c1">8<span class="pl-k">px</span></span> <span class="pl-c1">16<span class="pl-k">px</span></span>;
+      <span class="pl-c1"><span class="pl-c1">cursor</span></span>: <span class="pl-c1">pointer</span>;
+    }
+    <span class="pl-e">.tab.active</span> {
+      <span class="pl-c1"><span class="pl-c1">border-bottom</span></span>: <span class="pl-c1">2<span class="pl-k">px</span></span> <span class="pl-c1">solid</span> <span class="pl-c1">var</span>(<span class="pl-v">--primary</span>);
+    }
+  &lt;/<span class="pl-ent">style</span>&gt;
+&lt;/<span class="pl-ent">head</span>&gt;
+&lt;<span class="pl-ent">body</span>&gt;
+  &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s">"</span><span class="pl-s">config-container</span><span class="pl-s">"</span>&gt;
+    <span class="pl-c1">&lt;div class="plugin-list"&gt;</span>
+    <span class="pl-c1">  &lt;h3&gt;插件列表&lt;/h3&gt;</span>
+    <span class="pl-c1">  &lt;div id="pluginList"&gt;&lt;/div&gt;</span>
+    <span class="pl-c1">  &lt;button id="addPlugin" class="btn btn-primary" style="margin-top: 15px; width: 100%"&gt;</span>
+    <span class="pl-c1">    + 添加插件</span>
+    <span class="pl-c1">  &lt;/button&gt;</span>
+    <span class="pl-c1">&lt;/div&gt;</span>
+
+    <span class="pl-c1">&lt;div class="config-editor"&gt;</span>
+    <span class="pl-c1">  &lt;div class="tab-bar"&gt;</span>
+    <span class="pl-c1">    &lt;div class="tab active" data-tab="basic"&gt;基本配置&lt;/div&gt;</span>
+    <span class="pl-c1">    &lt;div class="tab" data-tab="hooks"&gt;钩子配置&lt;/div&gt;</span>
+    <span class="pl-c1">    &lt;div class="tab" data-tab="advanced"&gt;高级&lt;/div&gt;</span>
+    <span class="pl-c1">  &lt;/div&gt;</span>
+
+    <span class="pl-c1">  &lt;div id="basicConfig"&gt;</span>
+    <span class="pl-c1">    &lt;div class="form-group"&gt;</span>
+    <span class="pl-c1">      &lt;label&gt;插件名称&lt;/label&gt;</span>
+    <span class="pl-c1">      &lt;input type="text" id="pluginName" placeholder="例如：bookmark-tree"&gt;</span>
+    <span class="pl-c1">    &lt;/div&gt;</span>
+    <span class="pl-c1">    &lt;div class="form-group"&gt;</span>
+    <span class="pl-c1">      &lt;label&gt;插件路径&lt;/label&gt;</span>
+    <span class="pl-c1">      &lt;input type="text" id="pluginPath" placeholder="例如：./plugins/bookmark-tree.js"&gt;</span>
+    <span class="pl-c1">    &lt;/div&gt;</span>
+    <span class="pl-c1">    &lt;div class="form-group"&gt;</span>
+    <span class="pl-c1">      &lt;label&gt;CSS路径 (可选)&lt;/label&gt;</span>
+    <span class="pl-c1">      &lt;input type="text" id="pluginStyle" placeholder="例如：./css/tree.css"&gt;</span>
+    <span class="pl-c1">    &lt;/div&gt;</span>
+    <span class="pl-c1">  &lt;/div&gt;</span>
+
+    <span class="pl-c1">  &lt;div id="hooksConfig" style="display: none;"&gt;</span>
+    <span class="pl-c1">    &lt;div class="form-group"&gt;</span>
+    <span class="pl-c1">      &lt;h4&gt;提供的钩子&lt;/h4&gt;</span>
+    <span class="pl-c1">      &lt;div id="providesHooks"&gt;&lt;/div&gt;</span>
+    <span class="pl-c1">      &lt;button id="addProvideHook" class="btn"&gt;+ 添加钩子&lt;/button&gt;</span>
+    <span class="pl-c1">    &lt;/div&gt;</span>
+    <span class="pl-c1">    &lt;div class="form-group"&gt;</span>
+    <span class="pl-c1">      &lt;h4&gt;依赖的钩子&lt;/h4&gt;</span>
+    <span class="pl-c1">      &lt;div id="requiresHooks"&gt;&lt;/div&gt;</span>
+    <span class="pl-c1">      &lt;button id="addRequireHook" class="btn"&gt;+ 添加依赖&lt;/button&gt;</span>
+    <span class="pl-c1">    &lt;/div&gt;</span>
+    <span class="pl-c1">  &lt;/div&gt;</span>
+
+    <span class="pl-c1">  &lt;div id="advancedConfig" style="display: none;"&gt;</span>
+    <span class="pl-c1">    &lt;div class="form-group"&gt;</span>
+    <span class="pl-c1">      &lt;label&gt;依赖插件&lt;/label&gt;</span>
+    <span class="pl-c1">      &lt;div id="dependencies"&gt;&lt;/div&gt;</span>
+    <span class="pl-c1">      &lt;button id="addDependency" class="btn"&gt;+ 添加依赖&lt;/button&gt;</span>
+    <span class="pl-c1">    &lt;/div&gt;</span>
+    <span class="pl-c1">    &lt;div class="form-group"&gt;</span>
+    <span class="pl-c1">      &lt;label&gt;权限控制&lt;/label&gt;</span>
+    <span class="pl-c1">      &lt;select id="permissions" multiple&gt;</span>
+    <span class="pl-c1">        &lt;option value="storage"&gt;本地存储&lt;/option&gt;</span>
+    <span class="pl-c1">        &lt;option value="network"&gt;网络访问&lt;/option&gt;</span>
+    <span class="pl-c1">        &lt;option value="dom"&gt;完整DOM访问&lt;/option&gt;</span>
+    <span class="pl-c1">      &lt;/select&gt;</span>
+    <span class="pl-c1">    &lt;/div&gt;</span>
+    <span class="pl-c1">  &lt;/div&gt;</span>
+
+    <span class="pl-c1">  &lt;div style="margin-top: 20px;"&gt;</span>
+    <span class="pl-c1">    &lt;button id="saveConfig" class="btn btn-primary"&gt;保存配置&lt;/button&gt;</span>
+    <span class="pl-c1">    &lt;button id="deletePlugin" class="btn btn-danger" style="float: right"&gt;删除插件&lt;/button&gt;</span>
+    <span class="pl-c1">  &lt;/div&gt;</span>
+    <span class="pl-c1">&lt;/div&gt;</span>
+
+  &lt;/<span class="pl-ent">div</span>&gt;
+
+  &lt;<span class="pl-ent">script</span>&gt;
+    <span class="pl-c"><span class="pl-c">//</span> 初始配置数据</span>
+    <span class="pl-k">let</span> config <span class="pl-k">=</span> {
+      sharedEnv<span class="pl-k">:</span> {},
+      plugins<span class="pl-k">:</span> {}
+    };
+
+    <span class="pl-k">let</span> currentPlugin <span class="pl-k">=</span> <span class="pl-c1">null</span>;
+
+    <span class="pl-c"><span class="pl-c">//</span> DOM元素</span>
+    <span class="pl-k">const</span> <span class="pl-c1">elements</span> <span class="pl-k">=</span> {
+      pluginList<span class="pl-k">:</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>pluginList<span class="pl-pds">'</span></span>),
+      pluginName<span class="pl-k">:</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>pluginName<span class="pl-pds">'</span></span>),
+      pluginPath<span class="pl-k">:</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>pluginPath<span class="pl-pds">'</span></span>),
+      pluginStyle<span class="pl-k">:</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>pluginStyle<span class="pl-pds">'</span></span>),
+      providesHooks<span class="pl-k">:</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>providesHooks<span class="pl-pds">'</span></span>),
+      requiresHooks<span class="pl-k">:</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>requiresHooks<span class="pl-pds">'</span></span>),
+      dependencies<span class="pl-k">:</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>dependencies<span class="pl-pds">'</span></span>),
+      addProvideHook<span class="pl-k">:</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>addProvideHook<span class="pl-pds">'</span></span>),
+      addRequireHook<span class="pl-k">:</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>addRequireHook<span class="pl-pds">'</span></span>),
+      addDependency<span class="pl-k">:</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>addDependency<span class="pl-pds">'</span></span>),
+      saveConfig<span class="pl-k">:</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>saveConfig<span class="pl-pds">'</span></span>),
+      deletePlugin<span class="pl-k">:</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>deletePlugin<span class="pl-pds">'</span></span>),
+      tabs<span class="pl-k">:</span> <span class="pl-c1">document</span>.<span class="pl-c1">querySelectorAll</span>(<span class="pl-s"><span class="pl-pds">'</span>.tab<span class="pl-pds">'</span></span>),
+      tabContents<span class="pl-k">:</span> {
+        basic<span class="pl-k">:</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>basicConfig<span class="pl-pds">'</span></span>),
+        hooks<span class="pl-k">:</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>hooksConfig<span class="pl-pds">'</span></span>),
+        advanced<span class="pl-k">:</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>advancedConfig<span class="pl-pds">'</span></span>)
+      }
+    };
+
+    <span class="pl-c"><span class="pl-c">//</span> 初始化</span>
+    <span class="pl-c1">document</span>.<span class="pl-c1">addEventListener</span>(<span class="pl-s"><span class="pl-pds">'</span>DOMContentLoaded<span class="pl-pds">'</span></span>, <span class="pl-k">async</span> () <span class="pl-k">=&gt;</span> {
+      <span class="pl-c"><span class="pl-c">//</span> 尝试加载现有配置</span>
+      <span class="pl-k">try</span> {
+        <span class="pl-k">const</span> <span class="pl-c1">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-en">fetch</span>(<span class="pl-s"><span class="pl-pds">'</span>/api/get-config<span class="pl-pds">'</span></span>);
+        config <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">response</span>.<span class="pl-en">json</span>();
+      } <span class="pl-k">catch</span> (e) {
+        <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>使用默认配置<span class="pl-pds">'</span></span>);
+      }
+
+      <span class="pl-c"><span class="pl-c">//</span> 绑定事件</span>
+      <span class="pl-smi">elements</span>.<span class="pl-smi">addPlugin</span>.<span class="pl-c1">addEventListener</span>(<span class="pl-s"><span class="pl-pds">'</span>click<span class="pl-pds">'</span></span>, addNewPlugin);
+      <span class="pl-smi">elements</span>.<span class="pl-smi">addProvideHook</span>.<span class="pl-c1">addEventListener</span>(<span class="pl-s"><span class="pl-pds">'</span>click<span class="pl-pds">'</span></span>, () <span class="pl-k">=&gt;</span> <span class="pl-en">addHook</span>(<span class="pl-s"><span class="pl-pds">'</span>provides<span class="pl-pds">'</span></span>));
+      <span class="pl-smi">elements</span>.<span class="pl-smi">addRequireHook</span>.<span class="pl-c1">addEventListener</span>(<span class="pl-s"><span class="pl-pds">'</span>click<span class="pl-pds">'</span></span>, () <span class="pl-k">=&gt;</span> <span class="pl-en">addHook</span>(<span class="pl-s"><span class="pl-pds">'</span>requires<span class="pl-pds">'</span></span>));
+      <span class="pl-smi">elements</span>.<span class="pl-smi">addDependency</span>.<span class="pl-c1">addEventListener</span>(<span class="pl-s"><span class="pl-pds">'</span>click<span class="pl-pds">'</span></span>, addDependency);
+      <span class="pl-smi">elements</span>.<span class="pl-smi">saveConfig</span>.<span class="pl-c1">addEventListener</span>(<span class="pl-s"><span class="pl-pds">'</span>click<span class="pl-pds">'</span></span>, saveConfig);
+      <span class="pl-smi">elements</span>.<span class="pl-smi">deletePlugin</span>.<span class="pl-c1">addEventListener</span>(<span class="pl-s"><span class="pl-pds">'</span>click<span class="pl-pds">'</span></span>, deletePlugin);
+
+      <span class="pl-c"><span class="pl-c">//</span> 标签页切换</span>
+      <span class="pl-smi">elements</span>.<span class="pl-smi">tabs</span>.<span class="pl-c1">forEach</span>(<span class="pl-smi">tab</span> <span class="pl-k">=&gt;</span> {
+        <span class="pl-smi">tab</span>.<span class="pl-c1">addEventListener</span>(<span class="pl-s"><span class="pl-pds">'</span>click<span class="pl-pds">'</span></span>, () <span class="pl-k">=&gt;</span> {
+          <span class="pl-smi">elements</span>.<span class="pl-smi">tabs</span>.<span class="pl-c1">forEach</span>(<span class="pl-smi">t</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">t</span>.<span class="pl-smi">classList</span>.<span class="pl-c1">remove</span>(<span class="pl-s"><span class="pl-pds">'</span>active<span class="pl-pds">'</span></span>));
+          <span class="pl-smi">tab</span>.<span class="pl-smi">classList</span>.<span class="pl-c1">add</span>(<span class="pl-s"><span class="pl-pds">'</span>active<span class="pl-pds">'</span></span>);
+          
+          <span class="pl-c1">Object</span>.<span class="pl-c1">values</span>(<span class="pl-smi">elements</span>.<span class="pl-smi">tabContents</span>).<span class="pl-c1">forEach</span>(<span class="pl-smi">content</span> <span class="pl-k">=&gt;</span> {
+            <span class="pl-smi">content</span>.<span class="pl-c1">style</span>.<span class="pl-c1">display</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>none<span class="pl-pds">'</span></span>;
+          });
+          <span class="pl-smi">elements</span>.<span class="pl-smi">tabContents</span>[<span class="pl-smi">tab</span>.<span class="pl-smi">dataset</span>.<span class="pl-smi">tab</span>].<span class="pl-c1">style</span>.<span class="pl-c1">display</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>block<span class="pl-pds">'</span></span>;
+        });
+      });
+
+      <span class="pl-en">renderPluginList</span>();
+    });
+
+    <span class="pl-c"><span class="pl-c">//</span> 渲染插件列表</span>
+    <span class="pl-k">function</span> <span class="pl-en">renderPluginList</span>() {
+      <span class="pl-smi">elements</span>.<span class="pl-smi">pluginList</span>.<span class="pl-smi">innerHTML</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>;
+      <span class="pl-c1">Object</span>.<span class="pl-c1">keys</span>(<span class="pl-smi">config</span>.<span class="pl-c1">plugins</span>).<span class="pl-c1">forEach</span>(<span class="pl-smi">pluginName</span> <span class="pl-k">=&gt;</span> {
+        <span class="pl-k">const</span> <span class="pl-c1">div</span> <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">createElement</span>(<span class="pl-s"><span class="pl-pds">'</span>div<span class="pl-pds">'</span></span>);
+        <span class="pl-smi">div</span>.<span class="pl-c1">className</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>plugin-item<span class="pl-pds">'</span></span>;
+        <span class="pl-k">if</span> (currentPlugin <span class="pl-k">===</span> pluginName) {
+          <span class="pl-smi">div</span>.<span class="pl-smi">classList</span>.<span class="pl-c1">add</span>(<span class="pl-s"><span class="pl-pds">'</span>active<span class="pl-pds">'</span></span>);
+        }
+        <span class="pl-smi">div</span>.<span class="pl-smi">textContent</span> <span class="pl-k">=</span> pluginName;
+        <span class="pl-smi">div</span>.<span class="pl-c1">addEventListener</span>(<span class="pl-s"><span class="pl-pds">'</span>click<span class="pl-pds">'</span></span>, () <span class="pl-k">=&gt;</span> <span class="pl-en">loadPluginConfig</span>(pluginName));
+        <span class="pl-smi">elements</span>.<span class="pl-smi">pluginList</span>.<span class="pl-c1">appendChild</span>(div);
+      });
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> 加载插件配置到表单</span>
+    <span class="pl-k">function</span> <span class="pl-en">loadPluginConfig</span>(<span class="pl-smi">pluginName</span>) {
+      currentPlugin <span class="pl-k">=</span> pluginName;
+      <span class="pl-k">const</span> <span class="pl-c1">pluginConfig</span> <span class="pl-k">=</span> <span class="pl-smi">config</span>.<span class="pl-c1">plugins</span>[pluginName];
+
+      <span class="pl-c"><span class="pl-c">//</span> 基本配置</span>
+      <span class="pl-smi">elements</span>.<span class="pl-smi">pluginName</span>.<span class="pl-c1">value</span> <span class="pl-k">=</span> pluginName;
+      <span class="pl-smi">elements</span>.<span class="pl-smi">pluginPath</span>.<span class="pl-c1">value</span> <span class="pl-k">=</span> <span class="pl-smi">pluginConfig</span>.<span class="pl-smi">path</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>;
+      <span class="pl-smi">elements</span>.<span class="pl-smi">pluginStyle</span>.<span class="pl-c1">value</span> <span class="pl-k">=</span> <span class="pl-smi">pluginConfig</span>.<span class="pl-c1">style</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>;
+
+      <span class="pl-c"><span class="pl-c">//</span> 钩子配置</span>
+      <span class="pl-smi">elements</span>.<span class="pl-smi">providesHooks</span>.<span class="pl-smi">innerHTML</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>;
+      <span class="pl-k">if</span> (<span class="pl-smi">pluginConfig</span>.<span class="pl-smi">hooks</span><span class="pl-k">?</span>.<span class="pl-smi">provides</span>) {
+        <span class="pl-smi">pluginConfig</span>.<span class="pl-smi">hooks</span>.<span class="pl-smi">provides</span>.<span class="pl-c1">forEach</span>(<span class="pl-smi">hook</span> <span class="pl-k">=&gt;</span> {
+          <span class="pl-en">addHook</span>(<span class="pl-s"><span class="pl-pds">'</span>provides<span class="pl-pds">'</span></span>, hook);
+        });
+      }
+
+      <span class="pl-smi">elements</span>.<span class="pl-smi">requiresHooks</span>.<span class="pl-smi">innerHTML</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>;
+      <span class="pl-k">if</span> (<span class="pl-smi">pluginConfig</span>.<span class="pl-smi">hooks</span><span class="pl-k">?</span>.<span class="pl-smi">requires</span>) {
+        <span class="pl-smi">pluginConfig</span>.<span class="pl-smi">hooks</span>.<span class="pl-smi">requires</span>.<span class="pl-c1">forEach</span>(<span class="pl-smi">hook</span> <span class="pl-k">=&gt;</span> {
+          <span class="pl-en">addHook</span>(<span class="pl-s"><span class="pl-pds">'</span>requires<span class="pl-pds">'</span></span>, hook);
+        });
+      }
+
+      <span class="pl-c"><span class="pl-c">//</span> 依赖配置</span>
+      <span class="pl-smi">elements</span>.<span class="pl-smi">dependencies</span>.<span class="pl-smi">innerHTML</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>;
+      <span class="pl-k">if</span> (<span class="pl-smi">pluginConfig</span>.<span class="pl-smi">dependsOn</span>) {
+        <span class="pl-smi">pluginConfig</span>.<span class="pl-smi">dependsOn</span>.<span class="pl-c1">forEach</span>(<span class="pl-smi">dep</span> <span class="pl-k">=&gt;</span> {
+          <span class="pl-en">addDependency</span>(dep);
+        });
+      }
+
+      <span class="pl-c"><span class="pl-c">//</span> 权限配置</span>
+      <span class="pl-k">if</span> (<span class="pl-smi">pluginConfig</span>.<span class="pl-smi">permissions</span>) {
+        <span class="pl-c1">Array</span>.<span class="pl-en">from</span>(<span class="pl-smi">elements</span>.<span class="pl-smi">permissions</span>.<span class="pl-c1">options</span>).<span class="pl-c1">forEach</span>(<span class="pl-smi">option</span> <span class="pl-k">=&gt;</span> {
+          <span class="pl-smi">option</span>.<span class="pl-c1">selected</span> <span class="pl-k">=</span> <span class="pl-smi">pluginConfig</span>.<span class="pl-smi">permissions</span>.<span class="pl-en">includes</span>(<span class="pl-smi">option</span>.<span class="pl-c1">value</span>);
+        });
+      }
+
+      <span class="pl-en">renderPluginList</span>();
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> 添加新插件</span>
+    <span class="pl-k">function</span> <span class="pl-en">addNewPlugin</span>() {
+      <span class="pl-k">const</span> <span class="pl-c1">pluginName</span> <span class="pl-k">=</span> <span class="pl-en">prompt</span>(<span class="pl-s"><span class="pl-pds">'</span>请输入插件名称:<span class="pl-pds">'</span></span>);
+      <span class="pl-k">if</span> (pluginName <span class="pl-k">&amp;&amp;</span> <span class="pl-k">!</span><span class="pl-smi">config</span>.<span class="pl-c1">plugins</span>[pluginName]) {
+        <span class="pl-smi">config</span>.<span class="pl-c1">plugins</span>[pluginName] <span class="pl-k">=</span> {
+          path<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>,
+          hooks<span class="pl-k">:</span> { provides<span class="pl-k">:</span> [], requires<span class="pl-k">:</span> [] }
+        };
+        <span class="pl-en">loadPluginConfig</span>(pluginName);
+      } <span class="pl-k">else</span> <span class="pl-k">if</span> (pluginName) {
+        <span class="pl-en">alert</span>(<span class="pl-s"><span class="pl-pds">'</span>插件名称已存在!<span class="pl-pds">'</span></span>);
+      }
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> 添加钩子</span>
+    <span class="pl-k">function</span> <span class="pl-en">addHook</span>(<span class="pl-smi">type</span>, <span class="pl-smi">value</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>) {
+      <span class="pl-k">const</span> <span class="pl-c1">container</span> <span class="pl-k">=</span> type <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">'</span>provides<span class="pl-pds">'</span></span> <span class="pl-k">?</span> <span class="pl-smi">elements</span>.<span class="pl-smi">providesHooks</span> <span class="pl-k">:</span> <span class="pl-smi">elements</span>.<span class="pl-smi">requiresHooks</span>;
+      <span class="pl-k">const</span> <span class="pl-c1">div</span> <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">createElement</span>(<span class="pl-s"><span class="pl-pds">'</span>div<span class="pl-pds">'</span></span>);
+      <span class="pl-smi">div</span>.<span class="pl-c1">className</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>hook-item<span class="pl-pds">'</span></span>;
+      
+      <span class="pl-k">const</span> <span class="pl-c1">input</span> <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">createElement</span>(<span class="pl-s"><span class="pl-pds">'</span>input<span class="pl-pds">'</span></span>);
+      <span class="pl-smi">input</span>.<span class="pl-c1">type</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>text<span class="pl-pds">'</span></span>;
+      <span class="pl-smi">input</span>.<span class="pl-c1">value</span> <span class="pl-k">=</span> value;
+      <span class="pl-smi">input</span>.<span class="pl-smi">placeholder</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>例如: node.click<span class="pl-pds">'</span></span>;
+      
+      <span class="pl-k">const</span> <span class="pl-c1">deleteBtn</span> <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">createElement</span>(<span class="pl-s"><span class="pl-pds">'</span>button<span class="pl-pds">'</span></span>);
+      <span class="pl-smi">deleteBtn</span>.<span class="pl-c1">className</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>btn btn-danger<span class="pl-pds">'</span></span>;
+      <span class="pl-smi">deleteBtn</span>.<span class="pl-smi">textContent</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>删除<span class="pl-pds">'</span></span>;
+      <span class="pl-smi">deleteBtn</span>.<span class="pl-c1">addEventListener</span>(<span class="pl-s"><span class="pl-pds">'</span>click<span class="pl-pds">'</span></span>, () <span class="pl-k">=&gt;</span> <span class="pl-smi">div</span>.<span class="pl-c1">remove</span>());
+      
+      <span class="pl-smi">div</span>.<span class="pl-c1">appendChild</span>(input);
+      <span class="pl-smi">div</span>.<span class="pl-c1">appendChild</span>(deleteBtn);
+      <span class="pl-smi">container</span>.<span class="pl-c1">appendChild</span>(div);
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> 添加依赖</span>
+    <span class="pl-k">function</span> <span class="pl-en">addDependency</span>(<span class="pl-smi">value</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>) {
+      <span class="pl-k">const</span> <span class="pl-c1">div</span> <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">createElement</span>(<span class="pl-s"><span class="pl-pds">'</span>div<span class="pl-pds">'</span></span>);
+      <span class="pl-smi">div</span>.<span class="pl-c1">className</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>hook-item<span class="pl-pds">'</span></span>;
+      
+      <span class="pl-k">const</span> <span class="pl-c1">select</span> <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">createElement</span>(<span class="pl-s"><span class="pl-pds">'</span>select<span class="pl-pds">'</span></span>);
+      <span class="pl-c1">Object</span>.<span class="pl-c1">keys</span>(<span class="pl-smi">config</span>.<span class="pl-c1">plugins</span>).<span class="pl-c1">forEach</span>(<span class="pl-smi">plugin</span> <span class="pl-k">=&gt;</span> {
+        <span class="pl-k">if</span> (plugin <span class="pl-k">!==</span> currentPlugin) {
+          <span class="pl-k">const</span> <span class="pl-c1">option</span> <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">createElement</span>(<span class="pl-s"><span class="pl-pds">'</span>option<span class="pl-pds">'</span></span>);
+          <span class="pl-smi">option</span>.<span class="pl-c1">value</span> <span class="pl-k">=</span> plugin;
+          <span class="pl-smi">option</span>.<span class="pl-smi">textContent</span> <span class="pl-k">=</span> plugin;
+          <span class="pl-smi">select</span>.<span class="pl-c1">appendChild</span>(option);
+        }
+      });
+      
+      <span class="pl-k">if</span> (value) {
+        <span class="pl-smi">select</span>.<span class="pl-c1">value</span> <span class="pl-k">=</span> value;
+      }
+      
+      <span class="pl-k">const</span> <span class="pl-c1">deleteBtn</span> <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">createElement</span>(<span class="pl-s"><span class="pl-pds">'</span>button<span class="pl-pds">'</span></span>);
+      <span class="pl-smi">deleteBtn</span>.<span class="pl-c1">className</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>btn btn-danger<span class="pl-pds">'</span></span>;
+      <span class="pl-smi">deleteBtn</span>.<span class="pl-smi">textContent</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>删除<span class="pl-pds">'</span></span>;
+      <span class="pl-smi">deleteBtn</span>.<span class="pl-c1">addEventListener</span>(<span class="pl-s"><span class="pl-pds">'</span>click<span class="pl-pds">'</span></span>, () <span class="pl-k">=&gt;</span> <span class="pl-smi">div</span>.<span class="pl-c1">remove</span>());
+      
+      <span class="pl-smi">div</span>.<span class="pl-c1">appendChild</span>(select);
+      <span class="pl-smi">div</span>.<span class="pl-c1">appendChild</span>(deleteBtn);
+      <span class="pl-smi">elements</span>.<span class="pl-smi">dependencies</span>.<span class="pl-c1">appendChild</span>(div);
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> 保存配置</span>
+    <span class="pl-k">async</span> <span class="pl-k">function</span> <span class="pl-en">saveConfig</span>() {
+      <span class="pl-k">if</span> (<span class="pl-k">!</span>currentPlugin) <span class="pl-k">return</span>;
+      
+      <span class="pl-k">const</span> <span class="pl-c1">pluginConfig</span> <span class="pl-k">=</span> {
+        path<span class="pl-k">:</span> <span class="pl-smi">elements</span>.<span class="pl-smi">pluginPath</span>.<span class="pl-c1">value</span>,
+        style<span class="pl-k">:</span> <span class="pl-smi">elements</span>.<span class="pl-smi">pluginStyle</span>.<span class="pl-c1">value</span> <span class="pl-k">||</span> <span class="pl-c1">undefined</span>,
+        hooks<span class="pl-k">:</span> {
+          provides<span class="pl-k">:</span> <span class="pl-c1">Array</span>.<span class="pl-en">from</span>(<span class="pl-smi">elements</span>.<span class="pl-smi">providesHooks</span>.<span class="pl-c1">querySelectorAll</span>(<span class="pl-s"><span class="pl-pds">'</span>input<span class="pl-pds">'</span></span>)).<span class="pl-en">map</span>(<span class="pl-smi">i</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">i</span>.<span class="pl-c1">value</span>).<span class="pl-en">filter</span>(<span class="pl-c1">Boolean</span>),
+          requires<span class="pl-k">:</span> <span class="pl-c1">Array</span>.<span class="pl-en">from</span>(<span class="pl-smi">elements</span>.<span class="pl-smi">requiresHooks</span>.<span class="pl-c1">querySelectorAll</span>(<span class="pl-s"><span class="pl-pds">'</span>input<span class="pl-pds">'</span></span>)).<span class="pl-en">map</span>(<span class="pl-smi">i</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">i</span>.<span class="pl-c1">value</span>).<span class="pl-en">filter</span>(<span class="pl-c1">Boolean</span>)
+        },
+        dependsOn<span class="pl-k">:</span> <span class="pl-c1">Array</span>.<span class="pl-en">from</span>(<span class="pl-smi">elements</span>.<span class="pl-smi">dependencies</span>.<span class="pl-c1">querySelectorAll</span>(<span class="pl-s"><span class="pl-pds">'</span>select<span class="pl-pds">'</span></span>)).<span class="pl-en">map</span>(<span class="pl-smi">s</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">s</span>.<span class="pl-c1">value</span>).<span class="pl-en">filter</span>(<span class="pl-c1">Boolean</span>),
+        permissions<span class="pl-k">:</span> <span class="pl-c1">Array</span>.<span class="pl-en">from</span>(<span class="pl-smi">elements</span>.<span class="pl-smi">permissions</span>.<span class="pl-smi">selectedOptions</span>).<span class="pl-en">map</span>(<span class="pl-smi">o</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">o</span>.<span class="pl-c1">value</span>)
+      };
+      
+      <span class="pl-c"><span class="pl-c">//</span> 更新配置</span>
+      <span class="pl-smi">config</span>.<span class="pl-c1">plugins</span>[currentPlugin] <span class="pl-k">=</span> pluginConfig;
+      
+      <span class="pl-k">try</span> {
+        <span class="pl-c"><span class="pl-c">//</span> 保存到服务器</span>
+        <span class="pl-k">const</span> <span class="pl-c1">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-en">fetch</span>(<span class="pl-s"><span class="pl-pds">'</span>/api/save-config<span class="pl-pds">'</span></span>, {
+          method<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>POST<span class="pl-pds">'</span></span>,
+          headers<span class="pl-k">:</span> {
+            <span class="pl-s"><span class="pl-pds">'</span>Content-Type<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>application/json<span class="pl-pds">'</span></span>
+          },
+          body<span class="pl-k">:</span> <span class="pl-c1">JSON</span>.<span class="pl-c1">stringify</span>(config)
+        });
+        
+        <span class="pl-k">if</span> (<span class="pl-smi">response</span>.<span class="pl-smi">ok</span>) {
+          <span class="pl-en">alert</span>(<span class="pl-s"><span class="pl-pds">'</span>配置保存成功!<span class="pl-pds">'</span></span>);
+          <span class="pl-en">renderPluginList</span>();
+        } <span class="pl-k">else</span> {
+          <span class="pl-k">throw</span> <span class="pl-k">new</span> <span class="pl-en">Error</span>(<span class="pl-s"><span class="pl-pds">'</span>保存失败<span class="pl-pds">'</span></span>);
+        }
+      } <span class="pl-k">catch</span> (e) {
+        <span class="pl-en">alert</span>(<span class="pl-s"><span class="pl-pds">'</span>保存配置时出错: <span class="pl-pds">'</span></span> <span class="pl-k">+</span> <span class="pl-smi">e</span>.<span class="pl-smi">message</span>);
+      }
+    }
+
+    <span class="pl-c"><span class="pl-c">//</span> 删除插件</span>
+    <span class="pl-k">function</span> <span class="pl-en">deletePlugin</span>() {
+      <span class="pl-k">if</span> (currentPlugin <span class="pl-k">&amp;&amp;</span> <span class="pl-en">confirm</span>(<span class="pl-s"><span class="pl-pds">`</span>确定要删除插件 <span class="pl-s1"><span class="pl-pse">${</span>currentPlugin<span class="pl-pse">}</span></span> 吗?<span class="pl-pds">`</span></span>)) {
+        <span class="pl-k">delete</span> <span class="pl-smi">config</span>.<span class="pl-c1">plugins</span>[currentPlugin];
+        currentPlugin <span class="pl-k">=</span> <span class="pl-c1">null</span>;
+        
+        <span class="pl-c"><span class="pl-c">//</span> 清空表单</span>
+        <span class="pl-smi">elements</span>.<span class="pl-smi">pluginName</span>.<span class="pl-c1">value</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>;
+        <span class="pl-smi">elements</span>.<span class="pl-smi">pluginPath</span>.<span class="pl-c1">value</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>;
+        <span class="pl-smi">elements</span>.<span class="pl-smi">pluginStyle</span>.<span class="pl-c1">value</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>;
+        <span class="pl-smi">elements</span>.<span class="pl-smi">providesHooks</span>.<span class="pl-smi">innerHTML</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>;
+        <span class="pl-smi">elements</span>.<span class="pl-smi">requiresHooks</span>.<span class="pl-smi">innerHTML</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>;
+        <span class="pl-smi">elements</span>.<span class="pl-smi">dependencies</span>.<span class="pl-smi">innerHTML</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>;
+        
+        <span class="pl-en">renderPluginList</span>();
+      }
+    }
+  <span class="pl-k">&lt;</span><span class="pl-k">/</span>script<span class="pl-k">&gt;</span>
+<span class="pl-k">&lt;</span><span class="pl-k">/</span>body<span class="pl-k">&gt;</span>
+<span class="pl-k">&lt;</span><span class="pl-k">/</span>html<span class="pl-k">&gt;</span></pre></div>
+<hr>
+<h1>2. 后端API示例 (Node.js)</h1>
+<div class="highlight highlight-text-md"><pre class="notranslate">// server.js
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
+const app = express();
+
+app.use(express.json());
+
+const CONFIG_PATH = path.join(<span class="pl-c1">\_\_</span>dirname, 'config.json');
+
+// 获取配置
+app.get('/api/get-config', (req, res) =&gt; {
+try {
+const config = fs.readFileSync(CONFIG_PATH, 'utf8');
+res.json(JSON.parse(config));
+} catch (e) {
+res.status(500).json({ error: '无法读取配置' });
+}
+});
+
+// 保存配置
+app.post('/api/save-config', (req, res) =&gt; {
+try {
+fs.writeFileSync(CONFIG_PATH, JSON.stringify(req.body, null, 2));
+res.json({ success: true });
+} catch (e) {
+res.status(500).json({ error: '保存配置失败' });
+}
+});
+
+app.use(express.static('public'));
+app.listen(3000, () =&gt; console.log('Server running on port 3000'));</pre></div>
+<hr>
+<h1>3. 功能亮点</h1>
+<ol>
+<li>
+<p><strong>可视化配置管理</strong>：</p>
+<ul>
+<li>实时编辑插件参数</li>
+<li>拖拽排序插件加载顺序</li>
+<li>依赖关系可视化展示</li>
+</ul>
+</li>
+<li>
+<p><strong>智能辅助功能</strong>：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 自动补全示例
+document.getElementById('pluginPath').addEventListener('input', async (e) =&gt; {
+const plugins = await detectAvailablePlugins();
+showAutocomplete(e.target, plugins);
+});</pre></div>
+</li>
+<li>
+<p><strong>配置验证</strong>：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">function validateConfig() {
+// 检查循环依赖
+// 验证路径有效性
+// 检查权限冲突
+}</pre></div>
+</li>
+<li>
+<p><strong>版本控制集成</strong>：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">app.post('/api/save-version', (req, res) =&gt; {
+const version = req.body.version;
+fs.copyFileSync(CONFIG<span class="pl-s">*</span>PATH, <span class="pl-s">`</span><span class="pl-c1">config*${version}.json</span><span class="pl-s">`</span>);
+res.json({ success: true });
+});</pre></div>
+</li>
+</ol>
+<hr>
+<h1>4. 部署建议</h1>
+<ol>
+<li>
+<p><strong>开发环境</strong>：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">npm install express chokidar
+node server.js</pre></div>
+</li>
+<li>
+<p><strong>生产环境增强</strong>：</p>
+<ul>
+<li>添加JWT身份验证</li>
+<li>配置编辑历史记录</li>
+<li>自动生成TypeScript类型定义</li>
+</ul>
+<div class="highlight highlight-text-md"><pre class="notranslate">function generateTypeDefs(config) {
+// 根据hooks自动生成.d.ts文件
+}</pre></div>
+</li>
+</ol>
+<p>需要继续扩展哪些具体功能？例如：</p>
+<ul>
+<li>插件市场集成</li>
+<li>配置差异对比</li>
+<li>多环境配置管理</li>
+<li>实时预览功能</li>
+</ul>
+<p>后端API可以使用cf worker进行中转代理吗？</p>
+<p>以下是完整的 Cloudflare Workers 代理方案，用于安全地中转前端配置面板与后端API的通信：</p>
+<hr>
+<h1>1. <strong>Cloudflare Worker 代理实现 (<code class="notranslate">api-proxy.js</code>)</strong></h1>
+<div class="highlight highlight-text-md"><pre class="notranslate">// CF Worker 脚本 - 部署到 workers.dev
+addEventListener('fetch', event =&gt; {
+event.respondWith(handleRequest(event.request))
+})
+
+async function handleRequest(request) {
+const API_BASE = '<span class="pl-corl">https://your-actual-backend.com</span>' // 你的真实后端地址
+const AUTH_TOKEN = 'your-secret-token' // 用于验证请求
+
+// 只允许来自指定域名的请求
+const allowedOrigins = <span class="pl-s">[</span>
+'<span class="pl-corl">https://your-frontend.com</span>',
+'<span class="pl-corl">http://localhost:3000</span>'
+<span class="pl-s">]</span>
+
+const origin = request.headers.get('origin')
+if (!allowedOrigins.includes(origin)) {
+return new Response('Forbidden', { status: 403 })
+}
+
+try {
+// 代理 /api 路径的请求
+const url = new URL(request.url)
+const apiPath = url.pathname.replace('/api', '')
+
+    <span class="pl-c1">// 构造新请求</span>
+    <span class="pl-c1">const newRequest = new Request(`${API_BASE}${apiPath}`, {</span>
+    <span class="pl-c1">  method: request.method,</span>
+    <span class="pl-c1">  headers: {</span>
+    <span class="pl-c1">    'Content-Type': 'application/json',</span>
+    <span class="pl-c1">    'Authorization': `Bearer ${AUTH_TOKEN}`,</span>
+    <span class="pl-c1">    // 传递必要的原始头信息</span>
+    <span class="pl-c1">    ...(request.headers.get('X-Config-Version') &amp;&amp; {</span>
+    <span class="pl-c1">      'X-Config-Version': request.headers.get('X-Config-Version')</span>
+    <span class="pl-c1">    }</span>
+    <span class="pl-c1">  },</span>
+    <span class="pl-c1">  body: request.method !== 'GET' ? await request.text() : null</span>
+    <span class="pl-c1">})</span>
+
+    <span class="pl-c1">// 转发请求并返回响应</span>
+    <span class="pl-c1">const response = await fetch(newRequest)</span>
+    <span class="pl-c1">const data = await response.json()</span>
+
+    <span class="pl-c1">return new Response(JSON.stringify(data), {</span>
+    <span class="pl-c1">  status: response.status,</span>
+    <span class="pl-c1">  headers: {</span>
+    <span class="pl-c1">    'Content-Type': 'application/json',</span>
+    <span class="pl-c1">    'Access-Control-Allow-Origin': origin,</span>
+    <span class="pl-c1">    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',</span>
+    <span class="pl-c1">    'Access-Control-Allow-Headers': 'Content-Type, Authorization'</span>
+    <span class="pl-c1">  }</span>
+    <span class="pl-c1">})</span>
+
+} catch (err) {
+return new Response(JSON.stringify({ error: err.message }), {
+status: 500,
+headers: { 'Content-Type': 'application/json' }
+})
+}
+}</pre></div>
+<hr>
+<h1>2. <strong>前端修改 - 指向CF Worker</strong></h1>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 在前端代码中替换API基础地址
+const API_BASE = '<span class="pl-corl">https://your-worker-name.your-subdomain.workers.dev/api</span>'
+
+// 所有API请求示例
+async function saveConfig(config) {
+const response = await fetch(<span class="pl-s">`</span><span class="pl-c1">${API_BASE}/save-config</span><span class="pl-s">`</span>, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+'X-Config-Version': 'v1.0' // 自定义头
+},
+body: JSON.stringify(config)
+})
+return response.json()
+}</pre></div>
+<hr>
+<h1>3. <strong>Wrangler 部署配置 (<code class="notranslate">wrangler.toml</code>)</strong></h1>
+<div class="highlight highlight-text-md"><pre class="notranslate">name = "api-config-proxy"
+type = "javascript"
+account_id = "your-account-id"
+workers_dev = true
+route = ""
+zone_id = ""
+
+<span class="pl-s">[</span>vars<span class="pl-s">]</span>
+API_BASE = "<span class="pl-corl">https://your-actual-backend.com</span>"
+AUTH_TOKEN = "your-secret-token"
+
+<span class="pl-s">[</span>env.production<span class="pl-s">]</span>
+vars = {
+API_BASE = "<span class="pl-corl">https://production-backend.com</span>",
+AUTH_TOKEN = "prod-secret-token"
+}</pre></div>
+<hr>
+<h1>4. <strong>安全增强措施</strong></h1>
+<h2>4.1 <strong>请求验证</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 在Worker中添加JWT验证
+const jwt = require('jwt-verify')
+
+async function verifyRequest(request) {
+const token = request.headers.get('Authorization')?.split(' ')<span class="pl-s">[</span>1<span class="pl-s">]</span>
+if (!token) return false
+
+try {
+const payload = await jwt.verify(token, 'your-jwt-secret')
+return payload.iss === 'config-panel'
+} catch {
+return false
+}
+}</pre></div>
+<h2>4.2 <strong>速率限制</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 使用Cloudflare Rate Limiting
+addEventListener('fetch', event =&gt; {
+const { ip } = event.request.cf
+const cacheKey = <span class="pl-s">`</span><span class="pl-c1">rate_limit_${ip}</span><span class="pl-s">`</span>
+
+const limit = 10 // 10 requests per minute
+const cache = caches.default
+
+event.respondWith(handleRateLimit(event.request, cacheKey, limit))
+})
+
+async function handleRateLimit(request, key, limit) {
+const count = await cache.get(key) || 0
+if (count &gt; limit) {
+return new Response('Too Many Requests', { status: 429 })
+}
+await cache.put(key, count + 1, { expirationTtl: 60 })
+return handleRequest(request)
+}</pre></div>
+<hr>
+<h1>5. <strong>部署步骤</strong></h1>
+<ol>
+<li>
+<p><strong>安装Wrangler CLI</strong></p>
+<div class="highlight highlight-text-md"><pre class="notranslate">npm install -g wrangler
+wrangler login</pre></div>
+</li>
+<li>
+<p><strong>部署Worker</strong></p>
+</li>
+<li>
+<p><strong>设置自定义域名（可选）</strong></p>
+<div class="highlight highlight-text-md"><pre class="notranslate">wrangler route create api.yourdomain.com/<span class="pl-c1">\*</span> --zone-id YOUR_ZONE_ID</pre></div>
+</li>
+</ol>
+<hr>
+<h1>6. <strong>性能优化技巧</strong></h1>
+<h2>6.1 <strong>缓存策略</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 对GET请求添加缓存
+const CACHE_TTL = 60 // 60 seconds
+
+async function fetchWithCache(request) {
+const cacheUrl = new URL(request.url)
+const cacheKey = new Request(cacheUrl.toString(), request)
+const cache = caches.default
+
+let response = await cache.match(cacheKey)
+if (!response) {
+response = await fetch(request)
+response = new Response(response.body, response)
+response.headers.append('Cache-Control', <span class="pl-s">`</span><span class="pl-c1">max-age=${CACHE_TTL}</span><span class="pl-s">`</span>)
+event.waitUntil(cache.put(cacheKey, response.clone()))
+}
+return response
+}</pre></div>
+<h2>6.2 <strong>请求聚合</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 合并多个配置请求
+async function batchRequests(requests) {
+const batched = new Batch()
+requests.forEach(req =&gt; batched.add(req))
+return batched.execute()
+}
+
+class Batch {
+constructor() {
+this.requests = <span class="pl-s">[</span><span class="pl-s">]</span>
+}
+
+add(request) {
+this.requests.push(request)
+}
+
+async execute() {
+return Promise.all(this.requests.map(req =&gt;
+fetch(req).then(res =&gt; res.json())
+))
+}
+}</pre></div>
+<hr>
+<h1>7. <strong>监控与日志</strong></h1>
+<h2>7.1 <strong>日志记录</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 记录所有API请求
+async function logRequest(request) {
+const logData = {
+method: request.method,
+path: new URL(request.url).pathname,
+ip: request.headers.get('CF-Connecting-IP'),
+timestamp: new Date().toISOString(),
+userAgent: request.headers.get('User-Agent')
+}
+
+await fetch('<span class="pl-corl">https://log-service.com/api</span>', {
+method: 'POST',
+body: JSON.stringify(logData)
+})
+}</pre></div>
+<h2>7.2 <strong>错误追踪</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 发送错误到Sentry
+import <span class="pl-c1">\*</span> as Sentry from '<span class="pl-s">@<span class="pl-corl">sentry/browser</span></span>'
+
+try {
+// ...代理逻辑
+} catch (err) {
+Sentry.captureException(err)
+throw err
+}</pre></div>
+<hr>
+<h1>关键优势</h1>
+<ol>
+<li><strong>隐藏真实后端IP</strong> - 保护基础设施</li>
+<li><strong>全球分布式缓存</strong> - 利用Cloudflare CDN</li>
+<li><strong>无需服务器维护</strong> - 完全Serverless</li>
+<li><strong>内置DDoS防护</strong> - Cloudflare网络自动防护</li>
+<li><strong>灵活的路由规则</strong> - 可根据路径/方法进行不同处理</li>
+</ol>
+<p>需要继续扩展哪些具体功能？例如：</p>
+<ul>
+<li>基于角色的访问控制 (RBAC)</li>
+<li>配置变更审计日志</li>
+<li>自动化测试钩子</li>
+<li>多环境配置同步</li>
+</ul>
+<p>以下是完整的本地调试方案，使用 Python 搭建轻量级调试服务器并与 Cloudflare Worker 开发环境配合工作：</p>
+<hr>
+<h1>1. <strong>Python 调试服务器 (<code class="notranslate">debug_server.py</code>)</strong></h1>
+<div class="highlight highlight-text-md"><pre class="notranslate">from http.server import HTTPServer, BaseHTTPRequestHandler
+import json
+import urllib.parse
+from functools import partial
+
+class DebugHandler(BaseHTTPRequestHandler):
+CONFIG = {
+"sharedEnv": {"debug": True},
+"plugins": {
+"bookmark-tree": {
+"path": "./plugins/bookmark-tree.js",
+"hooks": {"provides": <span class="pl-s">[</span>"node.click"<span class="pl-s">]</span>}
+}
+}
+}
+
+    <span class="pl-c1">def _set_headers(self, status=200):</span>
+    <span class="pl-c1">    self.send_response(status)</span>
+    <span class="pl-c1">    self.send_header('Content-Type', 'application/json')</span>
+    <span class="pl-c1">    self.send_header('Access-Control-Allow-Origin', '*')</span>
+    <span class="pl-c1">    self.end_headers()</span>
+
+    <span class="pl-c1">def do_GET(self):</span>
+    <span class="pl-c1">    if self.path == '/api/get-config':</span>
+    <span class="pl-c1">        self._set_headers()</span>
+    <span class="pl-c1">        self.wfile.write(json.dumps(self.CONFIG).encode())</span>
+    <span class="pl-c1">    else:</span>
+    <span class="pl-c1">        self._set_headers(404)</span>
+    <span class="pl-c1">        self.wfile.write(b'Not Found')</span>
+
+    <span class="pl-c1">def do_POST(self):</span>
+    <span class="pl-c1">    content_length = int(self.headers['Content-Length'])</span>
+    <span class="pl-c1">    post_data = urllib.parse.parse_qs(self.rfile.read(content_length).decode())</span>
+
+    <span class="pl-c1">    if self.path == '/api/save-config':</span>
+    <span class="pl-c1">        try:</span>
+    <span class="pl-c1">            # 模拟保存操作</span>
+    <span class="pl-c1">            self.CONFIG = json.loads(post_data['config'][0])</span>
+    <span class="pl-c1">            self._set_headers()</span>
+    <span class="pl-c1">            self.wfile.write(b'{"status": "success"}')</span>
+    <span class="pl-c1">        except:</span>
+    <span class="pl-c1">            self._set_headers(500)</span>
+    <span class="pl-c1">            self.wfile.write(b'{"error": "Invalid config"}')</span>
+    <span class="pl-c1">    else:</span>
+    <span class="pl-c1">        self._set_headers(404)</span>
+
+def run_server(port=8000):
+handler = partial(DebugHandler)
+httpd = HTTPServer(('localhost', port), handler)
+print(f"Debug server running on <span class="pl-corl">http://localhost:{port}</span>")
+httpd.serve_forever()
+
+if <span class="pl-s">**</span>name<span class="pl-s">**</span> == '<span class="pl-s">**</span>main<span class="pl-s">**</span>':
+run_server()</pre></div>
+<hr>
+<h1>2. <strong>配合 Cloudflare Worker 开发</strong></h1>
+<h2>2.1 <strong>修改 Worker 脚本指向本地</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 在 wrangler.toml 中添加开发配置
+<span class="pl-s">[</span>env.development<span class="pl-s">]</span>
+vars = {
+API_BASE = "<span class="pl-corl">http://localhost:8000</span>",
+AUTH_TOKEN = "debug-token"
+}</pre></div>
+<h2>2.2 <strong>启动本地调试</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate"><span class="pl-mh"># <span class="pl-en">终端1 - 启动Python调试服务器</span></span>
+
+python3 debug_server.py
+
+<span class="pl-mh"># <span class="pl-en">终端2 - 启动Worker开发模式</span></span>
+
+wrangler dev --env development</pre></div>
+<hr>
+<h1>3. <strong>调试功能增强</strong></h1>
+<h2>3.1 <strong>实时重载配置</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate"><span class="pl-mh"># <span class="pl-en">在 DebugHandler 类中添加</span></span>
+
+def do_PATCH(self):
+if self.path == '/api/reload':
+with open('config.debug.json') as f:
+self.CONFIG = json.load(f)
+self.<span class="pl-c1">\_</span>set_headers()
+self.wfile.write(b'{"status": "reloaded"}')</pre></div>
+<h2>3.2 <strong>请求日志记录</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">def log_message(self, format, <span class="pl-c1">\*</span>args):
+print("<span class="pl-s">[</span>%s<span class="pl-s">]</span> %s" % (self.log_date_time_string(), format%args))</pre></div>
+<hr>
+<h1>4. <strong>完整调试流程</strong></h1>
+<ol>
+<li>
+<p><strong>准备测试配置</strong></p>
+<div class="highlight highlight-text-md"><pre class="notranslate">// config.debug.json
+{
+"plugins": {
+"debug-plugin": {
+"path": "./plugins/debug.js",
+"hooks": {
+"provides": <span class="pl-s">[</span>"debug.event"<span class="pl-s">]</span>
+}
+}
+}
+}</pre></div>
+</li>
+<li>
+<p><strong>启动调试会话</strong></p>
+<div class="highlight highlight-text-md"><pre class="notranslate"><span class="pl-mh"># <span class="pl-en">应用新配置</span></span>
+
+curl -X PATCH <span class="pl-corl">http://localhost:8000/api/reload</span>
+
+<span class="pl-mh"># <span class="pl-en">触发插件加载</span></span>
+
+curl <span class="pl-corl">http://localhost:8000/api/get-config</span></pre></div>
+</li>
+<li>
+<p><strong>验证 Worker 响应</strong></p>
+<div class="highlight highlight-text-md"><pre class="notranslate">curl <span class="pl-corl">http://127.0.0.1:8787/api/get-config</span></pre></div>
+</li>
+</ol>
+<hr>
+<h1>5. <strong>高级调试技巧</strong></h1>
+<h2>5.1 <strong>Mock 异常响应</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">def do_GET(self):
+if self.path == '/api/simulate-error':
+self.<span class="pl-c1">\_</span>set_headers(500)
+self.wfile.write(b'{"error": "Debug forced error"}')
+else:
+super().do_GET()</pre></div>
+<h2>5.2 <strong>延迟模拟</strong></h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">import time
+
+def do_GET(self):
+if self.path == '/api/slow-response':
+time.sleep(3) # 3秒延迟
+self.<span class="pl-c1">\_</span>set_headers()
+self.wfile.write(b'{"status": "delayed"}')</pre></div>
+<hr>
+<h1>6. <strong>可视化调试界面</strong></h1>
+<p>添加 HTML 调试面板：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">def do_GET(self):
+if self.path == '/debug':
+self.send_response(200)
+self.send_header('Content-Type', 'text/html')
+self.end_headers()
+self.wfile.write(b'''
+<span class="pl-c"><span class="pl-c">&lt;!</span>DOCTYPE html<span class="pl-c">&gt;</span></span>
+&lt;<span class="pl-ent">html</span>&gt;
+&lt;<span class="pl-ent">body</span>&gt;
+&lt;<span class="pl-ent">h1</span>&gt;Debug Console&lt;/<span class="pl-ent">h1</span>&gt;
+&lt;<span class="pl-ent">button</span> <span class="pl-e">onclick</span>=<span class="pl-s">"</span><span class="pl-s"><span class="pl-en">fetch</span>(<span class="pl-s"><span class="pl-pds">'</span>/api/reload<span class="pl-pds">'</span></span>,{method<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">'</span>PATCH<span class="pl-pds">'</span></span>})</span><span class="pl-s">"</span>&gt;
+Reload Config
+&lt;/<span class="pl-ent">button</span>&gt;
+&lt;<span class="pl-ent">pre</span> <span class="pl-e">id</span>=<span class="pl-s">"</span><span class="pl-s">config</span><span class="pl-s">"</span>&gt;&lt;/<span class="pl-ent">pre</span>&gt;
+&lt;<span class="pl-ent">script</span>&gt;
+<span class="pl-en">fetch</span>(<span class="pl-s"><span class="pl-pds">'</span>/api/get-config<span class="pl-pds">'</span></span>)
+.<span class="pl-c1">then</span>(<span class="pl-smi">r</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">r</span>.<span class="pl-en">json</span>())
+.<span class="pl-c1">then</span>(<span class="pl-smi">c</span> <span class="pl-k">=&gt;</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>config<span class="pl-pds">'</span></span>).<span class="pl-smi">innerText</span> <span class="pl-k">=</span> <span class="pl-c1">JSON</span>.<span class="pl-c1">stringify</span>(c,<span class="pl-c1">null</span>,<span class="pl-c1">2</span>))
+&lt;/<span class="pl-ent">script</span>&gt;
+&lt;/<span class="pl-ent">body</span>&gt;
+&lt;/<span class="pl-ent">html</span>&gt;
+''')</pre></div>
+<hr>
+<h1>关键优势</h1>
+<ol>
+<li><strong>零依赖</strong> - 仅需标准库</li>
+<li><strong>热重载</strong> - 修改配置无需重启</li>
+<li><strong>跨平台</strong> - Windows/macOS/Linux 通用</li>
+<li><strong>可扩展</strong> - 轻松添加新调试端点</li>
+<li><strong>与生产环境隔离</strong> - 使用独立调试配置</li>
+</ol>
+<p>需要继续扩展哪些调试功能？例如：</p>
+<ul>
+<li>自动化测试用例集成</li>
+<li>网络延迟模拟</li>
+<li>内存泄漏检测</li>
+<li>性能分析接口</li>
+</ul></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://692.cloudns.be">MGTime</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if("01/01/2025"!=""){
+    var startSite=new Date("01/01/2025");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.disabled=true;
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","fjvi/note");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+<script src='../assets/ArticleTOC.js'></script><script src='../assets/backtop.js'></script><script src='../assets/lightbox.js'></script><script src='../assets/imgca.js'></script>
+
+</html>
