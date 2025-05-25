@@ -18,7 +18,7 @@
 
 创建 `plugin-system.js` 文件：
 
-```markdown
+```md
 class EventEmitter {
   constructor() {
     this.listeners = new Map();
@@ -153,7 +153,7 @@ export const pluginSystem = new PluginSystem();
 
 创建 `plugin-interface.js` 文件：
 
-```markdown
+```md
 export class BasePlugin {
   constructor() {
     if (new.target === BasePlugin) {
@@ -192,7 +192,7 @@ export class BasePlugin {
 
 ### 搜索插件 (search-plugin.js)
 
-```markdown
+```md
 import { BasePlugin } from './plugin-interface.js';
 
 export class SearchPlugin extends BasePlugin {
@@ -318,7 +318,7 @@ export class SearchPlugin extends BasePlugin {
 
 ### 文本复制插件 (copy-plugin.js)
 
-```markdown
+```md
 import { BasePlugin } from './plugin-interface.js';
 
 export class CopyPlugin extends BasePlugin {
@@ -404,7 +404,7 @@ export class CopyPlugin extends BasePlugin {
 
 ### 文件上传插件 (upload-plugin.js)
 
-```markdown
+```md
 import { BasePlugin } from './plugin-interface.js';
 
 export class UploadPlugin extends BasePlugin {
@@ -517,7 +517,7 @@ export class UploadPlugin extends BasePlugin {
 
 ## 4\. 主应用改造 (main.js)
 
-```markdown
+```md
 import { pluginSystem } from './plugin-system.js';
 import { SearchPlugin } from './search-plugin.js';
 import { CopyPlugin } from './copy-plugin.js';
@@ -555,7 +555,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 1.  **创建插件系统文件结构**
 
-    ```markdown
+    ```md
     /plugins
       ├── plugin-system.js      # 核心插件系统
       ├── plugin-interface.js   # 基础插件接口
@@ -607,7 +607,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 1.  **动态加载插件**
 
-    ```markdown
+    ```md
     async function loadExternalPlugin(url) {
       try {
         const module = await import(url);
@@ -632,7 +632,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     - 避免直接依赖其他插件
 
 这套实现完整保留了原有所有功能，同时提供了更好的架构和扩展性。您可以根据需要逐步实施，先从核心系统和1-2个简单插件开始，验证架构后再迁移其他功能。
-
 $$$$$$$">
 <meta property="og:title" content="插件加载器完整实施方案">
 <meta property="og:description" content="## 插件加载器完整实施方案
@@ -643,7 +642,7 @@ $$$$$$$">
 
 创建 `plugin-system.js` 文件：
 
-```markdown
+```md
 class EventEmitter {
   constructor() {
     this.listeners = new Map();
@@ -778,7 +777,7 @@ export const pluginSystem = new PluginSystem();
 
 创建 `plugin-interface.js` 文件：
 
-```markdown
+```md
 export class BasePlugin {
   constructor() {
     if (new.target === BasePlugin) {
@@ -817,7 +816,7 @@ export class BasePlugin {
 
 ### 搜索插件 (search-plugin.js)
 
-```markdown
+```md
 import { BasePlugin } from './plugin-interface.js';
 
 export class SearchPlugin extends BasePlugin {
@@ -943,7 +942,7 @@ export class SearchPlugin extends BasePlugin {
 
 ### 文本复制插件 (copy-plugin.js)
 
-```markdown
+```md
 import { BasePlugin } from './plugin-interface.js';
 
 export class CopyPlugin extends BasePlugin {
@@ -1029,7 +1028,7 @@ export class CopyPlugin extends BasePlugin {
 
 ### 文件上传插件 (upload-plugin.js)
 
-```markdown
+```md
 import { BasePlugin } from './plugin-interface.js';
 
 export class UploadPlugin extends BasePlugin {
@@ -1142,7 +1141,7 @@ export class UploadPlugin extends BasePlugin {
 
 ## 4\. 主应用改造 (main.js)
 
-```markdown
+```md
 import { pluginSystem } from './plugin-system.js';
 import { SearchPlugin } from './search-plugin.js';
 import { CopyPlugin } from './copy-plugin.js';
@@ -1180,7 +1179,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 1.  **创建插件系统文件结构**
 
-    ```markdown
+    ```md
     /plugins
       ├── plugin-system.js      # 核心插件系统
       ├── plugin-interface.js   # 基础插件接口
@@ -1232,7 +1231,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 1.  **动态加载插件**
 
-    ```markdown
+    ```md
     async function loadExternalPlugin(url) {
       try {
         const module = await import(url);
@@ -1257,7 +1256,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     - 避免直接依赖其他插件
 
 这套实现完整保留了原有所有功能，同时提供了更好的架构和扩展性。您可以根据需要逐步实施，先从核心系统和1-2个简单插件开始，验证架构后再迁移其他功能。
-
 $$$$$$$">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://692.cloudns.be/post/cha-jian-jia-zai-qi-wan-zheng-shi-shi-fang-an.html">

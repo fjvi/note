@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTime</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTime</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Sun, 25 May 2025 11:52:43 +0000</lastBuildDate><managingEditor>MGTime</managingEditor><ttl>60</ttl><webMaster>MGTime</webMaster><item><title>插件加载器完整实施方案</title><link>https://692.cloudns.be/post/cha-jian-jia-zai-qi-wan-zheng-shi-shi-fang-an.html</link><description>## 插件加载器完整实施方案
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTime</title><link>https://692.cloudns.be</link><description>My good time-我的好时光！</description><copyright>MGTime</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be</link></image><lastBuildDate>Sun, 25 May 2025 11:56:10 +0000</lastBuildDate><managingEditor>MGTime</managingEditor><ttl>60</ttl><webMaster>MGTime</webMaster><item><title>插件加载器完整实施方案</title><link>https://692.cloudns.be/post/cha-jian-jia-zai-qi-wan-zheng-shi-shi-fang-an.html</link><description>## 插件加载器完整实施方案
 
 下面我将提供完整的代码实现方案，包括核心系统、插件接口和现有功能的插件化改造。
 
@@ -7,7 +7,7 @@
 
 创建 `plugin-system.js` 文件：
 
-```markdown
+```md
 class EventEmitter {
   constructor() {
     this.listeners = new Map();
@@ -142,7 +142,7 @@ export const pluginSystem = new PluginSystem();
 
 创建 `plugin-interface.js` 文件：
 
-```markdown
+```md
 export class BasePlugin {
   constructor() {
     if (new.target === BasePlugin) {
@@ -181,7 +181,7 @@ export class BasePlugin {
 
 ### 搜索插件 (search-plugin.js)
 
-```markdown
+```md
 import { BasePlugin } from './plugin-interface.js';
 
 export class SearchPlugin extends BasePlugin {
@@ -307,7 +307,7 @@ export class SearchPlugin extends BasePlugin {
 
 ### 文本复制插件 (copy-plugin.js)
 
-```markdown
+```md
 import { BasePlugin } from './plugin-interface.js';
 
 export class CopyPlugin extends BasePlugin {
@@ -393,7 +393,7 @@ export class CopyPlugin extends BasePlugin {
 
 ### 文件上传插件 (upload-plugin.js)
 
-```markdown
+```md
 import { BasePlugin } from './plugin-interface.js';
 
 export class UploadPlugin extends BasePlugin {
@@ -506,7 +506,7 @@ export class UploadPlugin extends BasePlugin {
 
 ## 4\. 主应用改造 (main.js)
 
-```markdown
+```md
 import { pluginSystem } from './plugin-system.js';
 import { SearchPlugin } from './search-plugin.js';
 import { CopyPlugin } from './copy-plugin.js';
@@ -544,7 +544,7 @@ document.addEventListener('DOMContentLoaded', async () =&gt; {
 
 1.  **创建插件系统文件结构**
 
-    ```markdown
+    ```md
     /plugins
       ├── plugin-system.js      # 核心插件系统
       ├── plugin-interface.js   # 基础插件接口
@@ -596,7 +596,7 @@ document.addEventListener('DOMContentLoaded', async () =&gt; {
 
 1.  **动态加载插件**
 
-    ```markdown
+    ```md
     async function loadExternalPlugin(url) {
       try {
         const module = await import(url);
@@ -621,7 +621,6 @@ document.addEventListener('DOMContentLoaded', async () =&gt; {
     - 避免直接依赖其他插件
 
 这套实现完整保留了原有所有功能，同时提供了更好的架构和扩展性。您可以根据需要逐步实施，先从核心系统和1-2个简单插件开始，验证架构后再迁移其他功能。
-
 $$$$$$$</description><guid isPermaLink="true">https://692.cloudns.be/post/cha-jian-jia-zai-qi-wan-zheng-shi-shi-fang-an.html</guid><pubDate>Sun, 25 May 2025 11:52:10 +0000</pubDate></item><item><title>deepseek设计的一套高稳定、可扩展、低维护的插件加载器设计方案</title><link>https://692.cloudns.be/post/deepseek-she-ji-de-yi-tao-gao-wen-ding-%E3%80%81-ke-kuo-zhan-%E3%80%81-di-wei-hu-de-cha-jian-jia-zai-qi-she-ji-fang-an.html</link><description># 一、如何优化现有方案以支持书签树钩子
 
 ## 1\. **在配置中显式声明依赖关系**
