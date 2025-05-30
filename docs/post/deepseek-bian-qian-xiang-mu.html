@@ -1,0 +1,3409 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="../favicon.ico"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="要实现 **本地存储便签 + GitHub 同步** 以及 **层级化折叠的便签结构**，可以结合 **浏览器本地存储（LocalStorage/IndexedDB）** 和 **GitHub API**，并使用类似书签的 **树形结构 + 折叠逻辑**。以下是完整方案：
+
+---
+
+## **1\. 便签本地存储 + GitHub 同步**
+
+### **(1) 本地存储（LocalStorage/IndexedDB）**
+
+使用 `localStorage` 存储便签数据（适合小型数据）：
+
+```markdown
+// 保存便签到 localStorage
+function saveNotesToLocal(notes) {
+  localStorage.setItem('notes', JSON.stringify(notes));
+}
+
+// 从 localStorage 加载便签
+function loadNotesFromLocal() {
+  const notes = localStorage.getItem('notes');
+  return notes ? JSON.parse(notes) : [];
+}
+```
+
+**（如果数据量大，改用 `IndexedDB` 存储）**
+
+---
+
+### **(2) GitHub 同步**
+
+使用 **GitHub API** 或 **GitHub Pages + 手动同步**：
+
+#### **方案 A：GitHub API（自动同步）**
+
+```markdown
+async function syncToGitHub(notes, repoPath = 'data/notes.json') {
+  const token = 'YOUR_GITHUB_TOKEN'; // 个人访问令牌
+  const repo = 'your-username/your-repo';
+  const url = `https://api.github.com/repos/${repo}/contents/${repoPath}`;
+
+  // 获取文件 SHA（如果已存在）
+  const { sha } = await fetch(url, {
+    headers: { Authorization: `token ${token}` },
+  }).then(res => res.json());
+
+  // 更新文件
+  await fetch(url, {
+    method: 'PUT',
+    headers: { Authorization: `token ${token}` },
+    body: JSON.stringify({
+      message: 'Update notes',
+      content: btoa(JSON.stringify(notes)), // Base64 编码
+      sha, // 用于覆盖现有文件
+    }),
+  });
+}
+```
+
+#### **方案 B：GitHub Pages + 手动下载/上传**
+
+1.  在 GitHub 仓库存储 `notes.json`
+2.  用户手动点击 **'导出到 GitHub'** 上传
+3.  手动点击 **'从 GitHub 导入'** 下载
+
+---
+
+## **2\. 层级化便签结构（类似书签）**
+
+### **(1) 数据结构**
+
+```markdown
+const notes = [
+  {
+    id: '1',
+    title: '工作',
+    type: 'folder',
+    children: [
+      {
+        id: '1-1',
+        title: '项目A',
+        type: 'note',
+        content: '待办事项...',
+      },
+      {
+        id: '1-2',
+        title: '会议记录',
+        type: 'folder',
+        children: [...],
+      },
+    ],
+    isOpen: true, // 控制折叠
+  },
+  {
+    id: '2',
+    title: '个人',
+    type: 'folder',
+    isOpen: false,
+    children: [...],
+  },
+];
+```
+
+### **(2) 折叠逻辑（类似书签）**
+
+**HTML 结构**：
+
+```markdown
+<div class='note-tree'>
+  <div class='note-folder' data-id='1'>
+    <div class='folder-header' onclick='toggleFolder('1')'>
+      <span>📁 工作</span>
+      <span class='toggle-icon'>▶</span>
+    </div>
+    <div class='folder-children'>
+      <!-- 子便签或文件夹 -->
+    </div>
+  </div>
+</div>
+```
+
+**CSS 折叠动画**：
+
+```markdown
+.note-folder .folder-children {
+  display: none;
+  padding-left: 20px;
+}
+
+.note-folder.open .folder-children {
+  display: block;
+}
+
+.note-folder.open .toggle-icon {
+  transform: rotate(90deg);
+}
+```
+
+**JavaScript 折叠控制**：
+
+```markdown
+function toggleFolder(id) {
+  const folder = document.querySelector(`.note-folder[data-id='${id}']`);
+  folder.classList.toggle('open');
+
+  // 更新数据中的 isOpen 状态
+  updateNoteInData(id, { isOpen: folder.classList.contains('open') });
+}
+```
+
+### **(3) 折叠排斥逻辑（兄弟级/子孙级）**
+
+```markdown
+function closeSiblingsAndChildren(folderId) {
+  // 关闭所有兄弟文件夹
+  const parentFolder = document.querySelector(`.note-folder[data-id='${folderId}']`).parentElement.closest('.note-folder');
+  if (parentFolder) {
+    parentFolder.querySelectorAll('.note-folder').forEach(f => {
+      if (f.dataset.id !== folderId) {
+        f.classList.remove('open');
+      }
+    });
+  }
+
+  // 关闭所有子文件夹
+  document.querySelectorAll(`.note-folder[data-id^='${folderId}-']`).forEach(f => {
+    f.classList.remove('open');
+  });
+}
+```
+
+---
+
+## **3\. 完整流程**
+
+1.  **用户操作**：
+
+    - 新增/编辑便签 → 保存到 `localStorage`
+    - 点击 **'同步到 GitHub'** → 调用 `syncToGitHub()`
+    - 点击文件夹 → 折叠/展开，并排斥兄弟级和子级
+
+2.  **初始化加载**：
+
+    ```markdown
+    // 从 localStorage 或 GitHub 加载数据
+    let notes = loadNotesFromLocal();
+    renderNoteTree(notes);
+    ```
+
+3.  **GitHub 同步**：
+
+    - 用户手动触发同步
+    - 或设置定时自动同步（需考虑冲突处理）
+
+---
+
+## **4\. 额外优化**
+
+- **冲突处理**：如果本地和远程数据不同，提示用户选择版本
+- **离线模式**：优先使用 `localStorage`，联网时再同步
+- **IndexedDB**：如果数据量较大，改用 IndexedDB 存储
+
+---
+
+### **最终效果**
+
+✅ **本地存储**（刷新不丢失）  
+✅ **GitHub 同步**（跨设备访问）  
+✅ **层级化便签**（文件夹 + 折叠）  
+✅ **智能折叠**（排斥兄弟/子级）
+
+你可以基于这个方案实现一个完整的 **便签管理应用**！ 🚀
+
+# 可以生成修改后的notesPlugin完整代码吗？
+
+## 完整 Notes Plugin 代码（GitHub API 同步）
+
+下面是一个完整的便签插件实现，包含本地存储、GitHub 同步、层级化结构和折叠功能。
+
+## 1\. HTML 结构 (index.html)
+
+```markdown
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>智能便签管理</title>
+    <link rel='stylesheet' href='style.css'>
+</head>
+<body>
+    <div id='app-container'>
+        <!-- 顶部工具栏 -->
+        <div id='top-toolbar'>
+            <div class='header-left'>
+                <img id='logo' src='icon.png' alt='Logo'>
+                <h1>智能便签</h1>
+            </div>
+            <div class='header-right'>
+                <button id='add-folder-btn' class='toolbar-button'>📁 新建文件夹</button>
+                <button id='add-note-btn' class='toolbar-button'>📝 新建便签</button>
+                <button id='sync-github-btn' class='toolbar-button'>🔄 同步到 GitHub</button>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <main>
+            <section class='active'>
+                <div id='notes-container'>
+                    <!-- 便签树将在这里渲染 -->
+                </div>
+            </section>
+        </main>
+
+        <!-- 底部工具栏 -->
+        <div id='bottom-toolbar'>
+            <div class='footer-tabs'>
+                <button class='tab-button active'>📋 所有便签</button>
+                <button class='tab-button'>⭐ 收藏</button>
+            </div>
+        </div>
+
+        <!-- 编辑模态框 -->
+        <div id='edit-modal' class='modal hidden'>
+            <div class='modal-content'>
+                <h2>编辑便签</h2>
+                <input type='text' id='edit-title' placeholder='标题'>
+                <textarea id='edit-content' placeholder='内容...'></textarea>
+                <div class='modal-actions'>
+                    <button id='save-edit-btn'>保存</button>
+                    <button id='cancel-edit-btn'>取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src='notesPlugin.js'></script>
+</body>
+</html>
+```
+
+## 2\. CSS 样式 (style.css)
+
+```markdown
+/* 基础样式 */
+body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+#app-container {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 工具栏样式 */
+#top-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 30px;
+    background-color: #333;
+    color: white;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.header-left, .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+#logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.toolbar-button {
+    border: none;
+    color: #ddd;
+    background: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.toolbar-button:hover {
+    background-color: #444;
+}
+
+#bottom-toolbar {
+    padding: 8px 0;
+    background-color: #333;
+    margin-top: auto;
+}
+
+.footer-tabs {
+    display: flex;
+    justify-content: center;
+}
+
+.tab-button {
+    border: none;
+    color: #ddd;
+    background: none;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.tab-button.active {
+    color: white;
+    font-weight: bold;
+}
+
+/* 便签树样式 */
+#notes-container {
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.note-item {
+    margin-bottom: 10px;
+}
+
+.folder-header {
+    padding: 8px 12px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+}
+
+.folder-header:hover {
+    background-color: #e0e0e0;
+}
+
+.folder-header .toggle-icon {
+    transition: transform 0.2s;
+}
+
+.folder-header.open .toggle-icon {
+    transform: rotate(90deg);
+}
+
+.folder-children {
+    padding-left: 20px;
+    display: none;
+}
+
+.folder-item.open > .folder-children {
+    display: block;
+}
+
+.note-content {
+    padding: 8px 12px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    margin-top: 4px;
+    cursor: pointer;
+}
+
+.note-content:hover {
+    background-color: #f0f0f0;
+}
+
+/* 模态框样式 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-actions button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#save-edit-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#cancel-edit-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.hidden {
+    display: none !important;
+}
+```
+
+## 3\. JavaScript 实现 (notesPlugin.js)
+
+```markdown
+class NotesPlugin {
+    constructor() {
+        this.notes = [];
+        this.currentEditId = null;
+        this.githubToken = null;
+        this.githubRepo = null;
+        this.githubFilePath = 'data/notes.json';
+
+        this.initElements();
+        this.loadNotes();
+        this.renderNotes();
+        this.setupEventListeners();
+    }
+
+    initElements() {
+        this.notesContainer = document.getElementById('notes-container');
+        this.addFolderBtn = document.getElementById('add-folder-btn');
+        this.addNoteBtn = document.getElementById('add-note-btn');
+        this.syncGithubBtn = document.getElementById('sync-github-btn');
+        this.editModal = document.getElementById('edit-modal');
+        this.editTitle = document.getElementById('edit-title');
+        this.editContent = document.getElementById('edit-content');
+        this.saveEditBtn = document.getElementById('save-edit-btn');
+        this.cancelEditBtn = document.getElementById('cancel-edit-btn');
+    }
+
+    setupEventListeners() {
+        this.addFolderBtn.addEventListener('click', () => this.addNewFolder());
+        this.addNoteBtn.addEventListener('click', () => this.addNewNote());
+        this.syncGithubBtn.addEventListener('click', () => this.syncWithGitHub());
+        this.saveEditBtn.addEventListener('click', () => this.saveEdit());
+        this.cancelEditBtn.addEventListener('click', () => this.closeEditModal());
+
+        // 首次使用时设置 GitHub 信息
+        if (!localStorage.getItem('githubConfigured')) {
+            this.promptGitHubConfig();
+        }
+    }
+
+    promptGitHubConfig() {
+        const token = prompt('请输入 GitHub 个人访问令牌 (Personal Access Token):');
+        const repo = prompt('请输入 GitHub 仓库 (格式: username/repo):');
+
+        if (token && repo) {
+            this.githubToken = token;
+            this.githubRepo = repo;
+            localStorage.setItem('githubToken', token);
+            localStorage.setItem('githubRepo', repo);
+            localStorage.setItem('githubConfigured', 'true');
+            alert('GitHub 配置已保存！');
+        }
+    }
+
+    // 数据存储方法
+    loadNotes() {
+        // 从 localStorage 加载
+        const localNotes = localStorage.getItem('notes');
+        if (localNotes) {
+            this.notes = JSON.parse(localNotes);
+            return;
+        }
+
+        // 初始化示例数据
+        this.notes = [
+            {
+                id: '1',
+                title: '工作',
+                type: 'folder',
+                children: [
+                    {
+                        id: '1-1',
+                        title: '项目A',
+                        type: 'note',
+                        content: '项目A的任务列表...'
+                    }
+                ],
+                isOpen: true
+            },
+            {
+                id: '2',
+                title: '个人',
+                type: 'folder',
+                children: [],
+                isOpen: false
+            }
+        ];
+
+        this.saveNotesToLocal();
+    }
+
+    saveNotesToLocal() {
+        localStorage.setItem('notes', JSON.stringify(this.notes));
+    }
+
+    // GitHub 同步方法
+    async syncWithGitHub() {
+        if (!this.githubToken || !this.githubRepo) {
+            this.promptGitHubConfig();
+            return;
+        }
+
+        try {
+            // 1. 尝试获取现有文件 SHA
+            const sha = await this.getGitHubFileSHA();
+
+            // 2. 上传新内容
+            await this.uploadToGitHub(sha);
+
+            alert('同步到 GitHub 成功！');
+        } catch (error) {
+            console.error('同步失败:', error);
+            alert(`同步失败: ${error.message}`);
+        }
+    }
+
+    async getGitHubFileSHA() {
+        const url = `https://api.github.com/repos/${this.githubRepo}/contents/${this.githubFilePath}`;
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': `token ${this.githubToken}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+
+        if (response.status === 404) {
+            return null; // 文件不存在
+        }
+
+        if (!response.ok) {
+            throw new Error(`获取文件信息失败: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.sha;
+    }
+
+    async uploadToGitHub(sha) {
+        const url = `https://api.github.com/repos/${this.githubRepo}/contents/${this.githubFilePath}`;
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(this.notes, null, 2)));
+
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${this.githubToken}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: 'Update notes via web app',
+                content: content,
+                sha: sha || undefined
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`上传失败: ${response.status}`);
+        }
+    }
+
+    // 便签操作方法
+    addNewFolder(parentId = null) {
+        const newFolder = {
+            id: this.generateId(parentId),
+            title: '新建文件夹',
+            type: 'folder',
+            children: [],
+            isOpen: true
+        };
+
+        if (parentId) {
+            const parent = this.findNoteById(parentId);
+            if (parent && parent.type === 'folder') {
+                parent.children.push(newFolder);
+            }
+        } else {
+            this.notes.push(newFolder);
+        }
+
+        this.saveAndRender();
+        this.editNote(newFolder.id);
+    }
+
+    addNewNote(parentId = null) {
+        const newNote = {
+            id: this.generateId(parentId),
+            title: '新建便签',
+            type: 'note',
+            content: ''
+        };
+
+        if (parentId) {
+            const parent = this.findNoteById(parentId);
+            if (parent && parent.type === 'folder') {
+                parent.children.push(newNote);
+            }
+        } else {
+            this.notes.push(newNote);
+        }
+
+        this.saveAndRender();
+        this.editNote(newNote.id);
+    }
+
+    generateId(parentId = null) {
+        const timestamp = Date.now().toString(36);
+        const random = Math.random().toString(36).substring(2, 6);
+        return parentId ? `${parentId}-${timestamp}${random}` : `${timestamp}${random}`;
+    }
+
+    findNoteById(id, notes = this.notes) {
+        for (const note of notes) {
+            if (note.id === id) return note;
+            if (note.type === 'folder' && note.children) {
+                const found = this.findNoteById(id, note.children);
+                if (found) return found;
+            }
+        }
+        return null;
+    }
+
+    // 渲染方法
+    renderNotes() {
+        this.notesContainer.innerHTML = '';
+        this.notes.forEach(note => this.renderNoteItem(note));
+    }
+
+    renderNoteItem(note, depth = 0) {
+        const item = document.createElement('div');
+        item.className = `note-item ${note.type}-item`;
+        item.dataset.id = note.id;
+
+        if (note.type === 'folder') {
+            item.innerHTML = `
+                <div class='folder-header ${note.isOpen ? 'open' : ''}' onclick='notesPlugin.toggleFolder('${note.id}')'>
+                    <span class='toggle-icon'>▶</span>
+                    <span class='folder-title'>📁 ${note.title}</span>
+                    <button class='add-note-btn' onclick='notesPlugin.addNewNote('${note.id}'); event.stopPropagation()'>+</button>
+                    <button class='edit-btn' onclick='notesPlugin.editNote('${note.id}'); event.stopPropagation()'>✏️</button>
+                    <button class='delete-btn' onclick='notesPlugin.deleteNote('${note.id}'); event.stopPropagation()'>🗑️</button>
+                </div>
+                <div class='folder-children' style='display: ${note.isOpen ? 'block' : 'none'}'>
+                    ${note.children.map(child => this.renderNoteItem(child, depth + 1).outerHTML).join('')}
+                </div>
+            `;
+        } else {
+            item.innerHTML = `
+                <div class='note-content' onclick='notesPlugin.editNote('${note.id}')'>
+                    <strong>📝 ${note.title}</strong>
+                    <p>${note.content.substring(0, 50)}${note.content.length > 50 ? '...' : ''}</p>
+                </div>
+            `;
+        }
+
+        return item;
+    }
+
+    // 交互方法
+    toggleFolder(id) {
+        const note = this.findNoteById(id);
+        if (note && note.type === 'folder') {
+            note.isOpen = !note.isOpen;
+            this.saveAndRender();
+        }
+    }
+
+    editNote(id) {
+        const note = this.findNoteById(id);
+        if (!note) return;
+
+        this.currentEditId = id;
+        this.editTitle.value = note.title;
+        this.editContent.value = note.type === 'note' ? note.content : '';
+        this.editModal.classList.remove('hidden');
+    }
+
+    saveEdit() {
+        const note = this.findNoteById(this.currentEditId);
+        if (!note) return;
+
+        note.title = this.editTitle.value;
+        if (note.type === 'note') {
+            note.content = this.editContent.value;
+        }
+
+        this.closeEditModal();
+        this.saveAndRender();
+    }
+
+    closeEditModal() {
+        this.editModal.classList.add('hidden');
+        this.currentEditId = null;
+    }
+
+    deleteNote(id) {
+        if (!confirm('确定要删除这个项目吗？')) return;
+
+        // 从根数组或父文件夹中删除
+        const deleteFromArray = (array) => {
+            const index = array.findIndex(n => n.id === id);
+            if (index !== -1) {
+                array.splice(index, 1);
+                return true;
+            }
+
+            for (const item of array) {
+                if (item.type === 'folder' && item.children) {
+                    if (deleteFromArray(item.children)) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        };
+
+        if (deleteFromArray(this.notes)) {
+            this.saveAndRender();
+        }
+    }
+
+    saveAndRender() {
+        this.saveNotesToLocal();
+        this.renderNotes();
+    }
+}
+
+// 初始化插件
+const notesPlugin = new NotesPlugin();
+window.notesPlugin = notesPlugin; // 暴露给全局以便HTML调用
+```
+
+## 功能说明
+
+1.  **本地存储**：
+
+    - 使用 `localStorage` 保存便签数据
+    - 支持文件夹和便签两种类型
+    - 自动保存所有更改
+
+2.  **GitHub 同步**：
+
+    - 使用 GitHub API 同步数据
+    - 需要配置 GitHub 个人访问令牌和仓库
+    - 自动处理文件创建和更新
+
+3.  **层级结构**：
+
+    - 支持无限层级嵌套
+    - 文件夹可以包含其他文件夹或便签
+    - 每个项目有唯一 ID
+
+4.  **折叠功能**：
+
+    - 点击文件夹标题切换展开/折叠状态
+    - 保存折叠状态
+    - 支持在文件夹内新建项目
+
+5.  **编辑功能**：
+
+    - 双击项目或点击编辑按钮打开编辑模态框
+    - 实时保存更改
+
+6.  **UI 交互**：
+
+    - 响应式设计
+    - 清晰的视觉层次
+    - 操作按钮直观
+
+## 使用说明
+
+1.  首次使用时需要配置 GitHub 信息（令牌和仓库）
+2.  点击'新建文件夹'或'新建便签'添加项目
+3.  点击文件夹标题展开/折叠
+4.  点击便签内容进行编辑
+5.  使用'同步到 GitHub'按钮手动同步数据
+
+这个实现提供了完整的便签管理功能，适合个人使用或小型团队协作。
+
+这是独立项目还是可以融入原来书签项目的插件？具体如何使用？
+
+这个实现既可以作为独立项目运行，也可以作为插件集成到原有的书签管理项目中。以下是具体的使用方式和集成方法：
+
+---
+
+## **1\. 作为独立项目使用**
+
+### **使用步骤**
+
+1.  **创建项目文件**：
+
+    - `index.html` (主页面)
+    - `style.css` (样式)
+    - `notesPlugin.js` (核心逻辑)
+    - `icon.png` (可选，工具栏图标)
+
+2.  **直接运行**：
+
+    - 打开 `index.html` 即可在浏览器中使用
+    - 数据会保存在浏览器的 `localStorage` 中
+
+3.  **配置 GitHub 同步**：
+
+    - 首次使用时，输入 GitHub 个人访问令牌和仓库信息
+    - 之后点击 '同步到 GitHub' 按钮手动同步
+
+---
+
+## **2\. 作为插件集成到原有书签项目**
+
+### **集成步骤**
+
+#### **(1) 文件合并**
+
+1.  **CSS 整合**：
+
+    - 将 `style.css` 中的样式合并到原项目的 CSS 文件中
+    - 注意避免类名冲突（可以添加前缀如 `.notes-`）
+
+2.  **HTML 结构**：
+
+    - 在原项目的 HTML 中添加便签的容器：
+
+    ```markdown
+    <section id='notes-section'>
+      <div id='notes-container'></div>
+      <!-- 原有书签内容 -->
+    </section>
+    ```
+
+3.  **JavaScript 集成**：
+
+    - 将 `notesPlugin.js` 合并到原项目的 JS 中
+    - 或者作为模块导入：
+
+    ```markdown
+    import NotesPlugin from './notesPlugin.js';
+    const notesPlugin = new NotesPlugin();
+    ```
+
+#### **(2) 功能整合**
+
+1.  **共享数据存储**：
+
+    - 如果原项目已使用 `localStorage`，可以合并存储结构：
+
+    ```markdown
+    // 示例合并后的数据结构
+    const appData = {
+      bookmarks: [...], // 原有书签数据
+      notes: [...]     // 新便签数据
+    };
+    ```
+
+2.  **UI 整合**：
+
+    - 在原有工具栏添加便签相关按钮：
+
+    ```markdown
+    <button id='show-notes-btn'>📝 便签</button>
+    ```
+
+    - 通过事件切换显示：
+
+    ```markdown
+    document.getElementById('show-notes-btn').addEventListener('click', () => {
+      document.getElementById('bookmarks-section').classList.add('hidden');
+      document.getElementById('notes-section').classList.remove('hidden');
+    });
+    ```
+
+#### **(3) 同步逻辑复用**
+
+- 如果原项目已有 GitHub 同步功能，可以复用 API 调用逻辑：
+
+```markdown
+// 共享同步方法
+async function syncAllToGitHub() {
+  await syncBookmarks(); // 原有书签同步
+  await notesPlugin.syncWithGitHub(); // 便签同步
+}
+```
+
+---
+
+## **3\. 关键集成点**
+
+### **(1) 数据隔离**
+
+- **独立存储**（推荐初学者）：
+
+  ```markdown
+  // 便签数据独立存储
+  localStorage.setItem('notes', JSON.stringify(notes));
+  // 书签数据独立存储
+  localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  ```
+
+- **统一存储**（进阶）：
+
+  ```markdown
+  const allData = {
+    version: 1,
+    bookmarks: [...],
+    notes: [...]
+  };
+  localStorage.setItem('appData', JSON.stringify(allData));
+  ```
+
+### **(2) 样式冲突处理**
+
+在原有 CSS 中添加命名空间：
+
+```markdown
+/* 便签专属样式 */
+.notes-container { /*...*/ }
+.notes-folder-header { /*...*/ }
+
+/* 书签专属样式 */
+.bookmarks-container { /*...*/ }
+```
+
+### **(3) 交互逻辑**
+
+- **切换标签页**：
+
+  ```markdown
+  function showTab(tabName) {
+    // 隐藏所有
+    document.querySelectorAll('main > section').forEach(s => {
+      s.classList.remove('active');
+    });
+    // 显示目标
+    document.getElementById(`${tabName}-section`).classList.add('active');
+  }
+  ```
+
+- **共享 GitHub 配置**：
+
+  ```markdown
+  // 从原项目读取配置
+  notesPlugin.githubToken = bookmarkApp.githubToken;
+  notesPlugin.githubRepo = bookmarkApp.githubRepo;
+  ```
+
+---
+
+## **4\. 使用场景示例**
+
+### **场景1：快速独立使用**
+
+1.  下载三个文件（HTML/CSS/JS）
+2.  直接打开 `index.html`
+3.  开始记录便签，数据保存在本地
+
+### **场景2：集成到书签项目**
+
+1.  将便签代码合并到原项目
+2.  添加切换按钮：
+
+    ```markdown
+    <div class='tab-buttons'>
+      <button onclick='showTab('bookmarks')'>书签</button>
+      <button onclick='showTab('notes')'>便签</button>
+    </div>
+    ```
+
+3.  实现数据同步联动
+
+---
+
+## **5\. 注意事项**
+
+1.  **GitHub API 限制**：
+
+    - 个人访问令牌需要 `repo` 权限
+    - 每小时最多 60 次 API 调用（未认证）
+
+2.  **移动端适配**：
+
+    - 确保折叠按钮大小适合触摸操作
+    - 添加响应式布局：
+
+    ```markdown
+    @media (max-width: 600px) {
+      .folder-header { padding: 12px; }
+    }
+    ```
+
+3.  **数据备份**：
+
+    - 即使使用 GitHub 同步，也建议定期导出本地备份
+
+4.  **冲突处理**：
+
+    - 如果多设备同时编辑，建议实现简单的 '最后修改优先' 策略
+
+---
+
+通过以上方式，你可以灵活选择独立使用便签功能，或将其无缝集成到原有书签管理系统中。两种方式均保留了完整的层级结构和 GitHub 同步能力。
+$$$$$$$">
+<meta property="og:title" content="deepseek便签项目">
+<meta property="og:description" content="要实现 **本地存储便签 + GitHub 同步** 以及 **层级化折叠的便签结构**，可以结合 **浏览器本地存储（LocalStorage/IndexedDB）** 和 **GitHub API**，并使用类似书签的 **树形结构 + 折叠逻辑**。以下是完整方案：
+
+---
+
+## **1\. 便签本地存储 + GitHub 同步**
+
+### **(1) 本地存储（LocalStorage/IndexedDB）**
+
+使用 `localStorage` 存储便签数据（适合小型数据）：
+
+```markdown
+// 保存便签到 localStorage
+function saveNotesToLocal(notes) {
+  localStorage.setItem('notes', JSON.stringify(notes));
+}
+
+// 从 localStorage 加载便签
+function loadNotesFromLocal() {
+  const notes = localStorage.getItem('notes');
+  return notes ? JSON.parse(notes) : [];
+}
+```
+
+**（如果数据量大，改用 `IndexedDB` 存储）**
+
+---
+
+### **(2) GitHub 同步**
+
+使用 **GitHub API** 或 **GitHub Pages + 手动同步**：
+
+#### **方案 A：GitHub API（自动同步）**
+
+```markdown
+async function syncToGitHub(notes, repoPath = 'data/notes.json') {
+  const token = 'YOUR_GITHUB_TOKEN'; // 个人访问令牌
+  const repo = 'your-username/your-repo';
+  const url = `https://api.github.com/repos/${repo}/contents/${repoPath}`;
+
+  // 获取文件 SHA（如果已存在）
+  const { sha } = await fetch(url, {
+    headers: { Authorization: `token ${token}` },
+  }).then(res => res.json());
+
+  // 更新文件
+  await fetch(url, {
+    method: 'PUT',
+    headers: { Authorization: `token ${token}` },
+    body: JSON.stringify({
+      message: 'Update notes',
+      content: btoa(JSON.stringify(notes)), // Base64 编码
+      sha, // 用于覆盖现有文件
+    }),
+  });
+}
+```
+
+#### **方案 B：GitHub Pages + 手动下载/上传**
+
+1.  在 GitHub 仓库存储 `notes.json`
+2.  用户手动点击 **'导出到 GitHub'** 上传
+3.  手动点击 **'从 GitHub 导入'** 下载
+
+---
+
+## **2\. 层级化便签结构（类似书签）**
+
+### **(1) 数据结构**
+
+```markdown
+const notes = [
+  {
+    id: '1',
+    title: '工作',
+    type: 'folder',
+    children: [
+      {
+        id: '1-1',
+        title: '项目A',
+        type: 'note',
+        content: '待办事项...',
+      },
+      {
+        id: '1-2',
+        title: '会议记录',
+        type: 'folder',
+        children: [...],
+      },
+    ],
+    isOpen: true, // 控制折叠
+  },
+  {
+    id: '2',
+    title: '个人',
+    type: 'folder',
+    isOpen: false,
+    children: [...],
+  },
+];
+```
+
+### **(2) 折叠逻辑（类似书签）**
+
+**HTML 结构**：
+
+```markdown
+<div class='note-tree'>
+  <div class='note-folder' data-id='1'>
+    <div class='folder-header' onclick='toggleFolder('1')'>
+      <span>📁 工作</span>
+      <span class='toggle-icon'>▶</span>
+    </div>
+    <div class='folder-children'>
+      <!-- 子便签或文件夹 -->
+    </div>
+  </div>
+</div>
+```
+
+**CSS 折叠动画**：
+
+```markdown
+.note-folder .folder-children {
+  display: none;
+  padding-left: 20px;
+}
+
+.note-folder.open .folder-children {
+  display: block;
+}
+
+.note-folder.open .toggle-icon {
+  transform: rotate(90deg);
+}
+```
+
+**JavaScript 折叠控制**：
+
+```markdown
+function toggleFolder(id) {
+  const folder = document.querySelector(`.note-folder[data-id='${id}']`);
+  folder.classList.toggle('open');
+
+  // 更新数据中的 isOpen 状态
+  updateNoteInData(id, { isOpen: folder.classList.contains('open') });
+}
+```
+
+### **(3) 折叠排斥逻辑（兄弟级/子孙级）**
+
+```markdown
+function closeSiblingsAndChildren(folderId) {
+  // 关闭所有兄弟文件夹
+  const parentFolder = document.querySelector(`.note-folder[data-id='${folderId}']`).parentElement.closest('.note-folder');
+  if (parentFolder) {
+    parentFolder.querySelectorAll('.note-folder').forEach(f => {
+      if (f.dataset.id !== folderId) {
+        f.classList.remove('open');
+      }
+    });
+  }
+
+  // 关闭所有子文件夹
+  document.querySelectorAll(`.note-folder[data-id^='${folderId}-']`).forEach(f => {
+    f.classList.remove('open');
+  });
+}
+```
+
+---
+
+## **3\. 完整流程**
+
+1.  **用户操作**：
+
+    - 新增/编辑便签 → 保存到 `localStorage`
+    - 点击 **'同步到 GitHub'** → 调用 `syncToGitHub()`
+    - 点击文件夹 → 折叠/展开，并排斥兄弟级和子级
+
+2.  **初始化加载**：
+
+    ```markdown
+    // 从 localStorage 或 GitHub 加载数据
+    let notes = loadNotesFromLocal();
+    renderNoteTree(notes);
+    ```
+
+3.  **GitHub 同步**：
+
+    - 用户手动触发同步
+    - 或设置定时自动同步（需考虑冲突处理）
+
+---
+
+## **4\. 额外优化**
+
+- **冲突处理**：如果本地和远程数据不同，提示用户选择版本
+- **离线模式**：优先使用 `localStorage`，联网时再同步
+- **IndexedDB**：如果数据量较大，改用 IndexedDB 存储
+
+---
+
+### **最终效果**
+
+✅ **本地存储**（刷新不丢失）  
+✅ **GitHub 同步**（跨设备访问）  
+✅ **层级化便签**（文件夹 + 折叠）  
+✅ **智能折叠**（排斥兄弟/子级）
+
+你可以基于这个方案实现一个完整的 **便签管理应用**！ 🚀
+
+# 可以生成修改后的notesPlugin完整代码吗？
+
+## 完整 Notes Plugin 代码（GitHub API 同步）
+
+下面是一个完整的便签插件实现，包含本地存储、GitHub 同步、层级化结构和折叠功能。
+
+## 1\. HTML 结构 (index.html)
+
+```markdown
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>智能便签管理</title>
+    <link rel='stylesheet' href='style.css'>
+</head>
+<body>
+    <div id='app-container'>
+        <!-- 顶部工具栏 -->
+        <div id='top-toolbar'>
+            <div class='header-left'>
+                <img id='logo' src='icon.png' alt='Logo'>
+                <h1>智能便签</h1>
+            </div>
+            <div class='header-right'>
+                <button id='add-folder-btn' class='toolbar-button'>📁 新建文件夹</button>
+                <button id='add-note-btn' class='toolbar-button'>📝 新建便签</button>
+                <button id='sync-github-btn' class='toolbar-button'>🔄 同步到 GitHub</button>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <main>
+            <section class='active'>
+                <div id='notes-container'>
+                    <!-- 便签树将在这里渲染 -->
+                </div>
+            </section>
+        </main>
+
+        <!-- 底部工具栏 -->
+        <div id='bottom-toolbar'>
+            <div class='footer-tabs'>
+                <button class='tab-button active'>📋 所有便签</button>
+                <button class='tab-button'>⭐ 收藏</button>
+            </div>
+        </div>
+
+        <!-- 编辑模态框 -->
+        <div id='edit-modal' class='modal hidden'>
+            <div class='modal-content'>
+                <h2>编辑便签</h2>
+                <input type='text' id='edit-title' placeholder='标题'>
+                <textarea id='edit-content' placeholder='内容...'></textarea>
+                <div class='modal-actions'>
+                    <button id='save-edit-btn'>保存</button>
+                    <button id='cancel-edit-btn'>取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src='notesPlugin.js'></script>
+</body>
+</html>
+```
+
+## 2\. CSS 样式 (style.css)
+
+```markdown
+/* 基础样式 */
+body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+#app-container {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 工具栏样式 */
+#top-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 30px;
+    background-color: #333;
+    color: white;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.header-left, .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+#logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.toolbar-button {
+    border: none;
+    color: #ddd;
+    background: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.toolbar-button:hover {
+    background-color: #444;
+}
+
+#bottom-toolbar {
+    padding: 8px 0;
+    background-color: #333;
+    margin-top: auto;
+}
+
+.footer-tabs {
+    display: flex;
+    justify-content: center;
+}
+
+.tab-button {
+    border: none;
+    color: #ddd;
+    background: none;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.tab-button.active {
+    color: white;
+    font-weight: bold;
+}
+
+/* 便签树样式 */
+#notes-container {
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.note-item {
+    margin-bottom: 10px;
+}
+
+.folder-header {
+    padding: 8px 12px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+}
+
+.folder-header:hover {
+    background-color: #e0e0e0;
+}
+
+.folder-header .toggle-icon {
+    transition: transform 0.2s;
+}
+
+.folder-header.open .toggle-icon {
+    transform: rotate(90deg);
+}
+
+.folder-children {
+    padding-left: 20px;
+    display: none;
+}
+
+.folder-item.open > .folder-children {
+    display: block;
+}
+
+.note-content {
+    padding: 8px 12px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    margin-top: 4px;
+    cursor: pointer;
+}
+
+.note-content:hover {
+    background-color: #f0f0f0;
+}
+
+/* 模态框样式 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-actions button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#save-edit-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#cancel-edit-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.hidden {
+    display: none !important;
+}
+```
+
+## 3\. JavaScript 实现 (notesPlugin.js)
+
+```markdown
+class NotesPlugin {
+    constructor() {
+        this.notes = [];
+        this.currentEditId = null;
+        this.githubToken = null;
+        this.githubRepo = null;
+        this.githubFilePath = 'data/notes.json';
+
+        this.initElements();
+        this.loadNotes();
+        this.renderNotes();
+        this.setupEventListeners();
+    }
+
+    initElements() {
+        this.notesContainer = document.getElementById('notes-container');
+        this.addFolderBtn = document.getElementById('add-folder-btn');
+        this.addNoteBtn = document.getElementById('add-note-btn');
+        this.syncGithubBtn = document.getElementById('sync-github-btn');
+        this.editModal = document.getElementById('edit-modal');
+        this.editTitle = document.getElementById('edit-title');
+        this.editContent = document.getElementById('edit-content');
+        this.saveEditBtn = document.getElementById('save-edit-btn');
+        this.cancelEditBtn = document.getElementById('cancel-edit-btn');
+    }
+
+    setupEventListeners() {
+        this.addFolderBtn.addEventListener('click', () => this.addNewFolder());
+        this.addNoteBtn.addEventListener('click', () => this.addNewNote());
+        this.syncGithubBtn.addEventListener('click', () => this.syncWithGitHub());
+        this.saveEditBtn.addEventListener('click', () => this.saveEdit());
+        this.cancelEditBtn.addEventListener('click', () => this.closeEditModal());
+
+        // 首次使用时设置 GitHub 信息
+        if (!localStorage.getItem('githubConfigured')) {
+            this.promptGitHubConfig();
+        }
+    }
+
+    promptGitHubConfig() {
+        const token = prompt('请输入 GitHub 个人访问令牌 (Personal Access Token):');
+        const repo = prompt('请输入 GitHub 仓库 (格式: username/repo):');
+
+        if (token && repo) {
+            this.githubToken = token;
+            this.githubRepo = repo;
+            localStorage.setItem('githubToken', token);
+            localStorage.setItem('githubRepo', repo);
+            localStorage.setItem('githubConfigured', 'true');
+            alert('GitHub 配置已保存！');
+        }
+    }
+
+    // 数据存储方法
+    loadNotes() {
+        // 从 localStorage 加载
+        const localNotes = localStorage.getItem('notes');
+        if (localNotes) {
+            this.notes = JSON.parse(localNotes);
+            return;
+        }
+
+        // 初始化示例数据
+        this.notes = [
+            {
+                id: '1',
+                title: '工作',
+                type: 'folder',
+                children: [
+                    {
+                        id: '1-1',
+                        title: '项目A',
+                        type: 'note',
+                        content: '项目A的任务列表...'
+                    }
+                ],
+                isOpen: true
+            },
+            {
+                id: '2',
+                title: '个人',
+                type: 'folder',
+                children: [],
+                isOpen: false
+            }
+        ];
+
+        this.saveNotesToLocal();
+    }
+
+    saveNotesToLocal() {
+        localStorage.setItem('notes', JSON.stringify(this.notes));
+    }
+
+    // GitHub 同步方法
+    async syncWithGitHub() {
+        if (!this.githubToken || !this.githubRepo) {
+            this.promptGitHubConfig();
+            return;
+        }
+
+        try {
+            // 1. 尝试获取现有文件 SHA
+            const sha = await this.getGitHubFileSHA();
+
+            // 2. 上传新内容
+            await this.uploadToGitHub(sha);
+
+            alert('同步到 GitHub 成功！');
+        } catch (error) {
+            console.error('同步失败:', error);
+            alert(`同步失败: ${error.message}`);
+        }
+    }
+
+    async getGitHubFileSHA() {
+        const url = `https://api.github.com/repos/${this.githubRepo}/contents/${this.githubFilePath}`;
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': `token ${this.githubToken}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+
+        if (response.status === 404) {
+            return null; // 文件不存在
+        }
+
+        if (!response.ok) {
+            throw new Error(`获取文件信息失败: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.sha;
+    }
+
+    async uploadToGitHub(sha) {
+        const url = `https://api.github.com/repos/${this.githubRepo}/contents/${this.githubFilePath}`;
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(this.notes, null, 2)));
+
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${this.githubToken}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: 'Update notes via web app',
+                content: content,
+                sha: sha || undefined
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`上传失败: ${response.status}`);
+        }
+    }
+
+    // 便签操作方法
+    addNewFolder(parentId = null) {
+        const newFolder = {
+            id: this.generateId(parentId),
+            title: '新建文件夹',
+            type: 'folder',
+            children: [],
+            isOpen: true
+        };
+
+        if (parentId) {
+            const parent = this.findNoteById(parentId);
+            if (parent && parent.type === 'folder') {
+                parent.children.push(newFolder);
+            }
+        } else {
+            this.notes.push(newFolder);
+        }
+
+        this.saveAndRender();
+        this.editNote(newFolder.id);
+    }
+
+    addNewNote(parentId = null) {
+        const newNote = {
+            id: this.generateId(parentId),
+            title: '新建便签',
+            type: 'note',
+            content: ''
+        };
+
+        if (parentId) {
+            const parent = this.findNoteById(parentId);
+            if (parent && parent.type === 'folder') {
+                parent.children.push(newNote);
+            }
+        } else {
+            this.notes.push(newNote);
+        }
+
+        this.saveAndRender();
+        this.editNote(newNote.id);
+    }
+
+    generateId(parentId = null) {
+        const timestamp = Date.now().toString(36);
+        const random = Math.random().toString(36).substring(2, 6);
+        return parentId ? `${parentId}-${timestamp}${random}` : `${timestamp}${random}`;
+    }
+
+    findNoteById(id, notes = this.notes) {
+        for (const note of notes) {
+            if (note.id === id) return note;
+            if (note.type === 'folder' && note.children) {
+                const found = this.findNoteById(id, note.children);
+                if (found) return found;
+            }
+        }
+        return null;
+    }
+
+    // 渲染方法
+    renderNotes() {
+        this.notesContainer.innerHTML = '';
+        this.notes.forEach(note => this.renderNoteItem(note));
+    }
+
+    renderNoteItem(note, depth = 0) {
+        const item = document.createElement('div');
+        item.className = `note-item ${note.type}-item`;
+        item.dataset.id = note.id;
+
+        if (note.type === 'folder') {
+            item.innerHTML = `
+                <div class='folder-header ${note.isOpen ? 'open' : ''}' onclick='notesPlugin.toggleFolder('${note.id}')'>
+                    <span class='toggle-icon'>▶</span>
+                    <span class='folder-title'>📁 ${note.title}</span>
+                    <button class='add-note-btn' onclick='notesPlugin.addNewNote('${note.id}'); event.stopPropagation()'>+</button>
+                    <button class='edit-btn' onclick='notesPlugin.editNote('${note.id}'); event.stopPropagation()'>✏️</button>
+                    <button class='delete-btn' onclick='notesPlugin.deleteNote('${note.id}'); event.stopPropagation()'>🗑️</button>
+                </div>
+                <div class='folder-children' style='display: ${note.isOpen ? 'block' : 'none'}'>
+                    ${note.children.map(child => this.renderNoteItem(child, depth + 1).outerHTML).join('')}
+                </div>
+            `;
+        } else {
+            item.innerHTML = `
+                <div class='note-content' onclick='notesPlugin.editNote('${note.id}')'>
+                    <strong>📝 ${note.title}</strong>
+                    <p>${note.content.substring(0, 50)}${note.content.length > 50 ? '...' : ''}</p>
+                </div>
+            `;
+        }
+
+        return item;
+    }
+
+    // 交互方法
+    toggleFolder(id) {
+        const note = this.findNoteById(id);
+        if (note && note.type === 'folder') {
+            note.isOpen = !note.isOpen;
+            this.saveAndRender();
+        }
+    }
+
+    editNote(id) {
+        const note = this.findNoteById(id);
+        if (!note) return;
+
+        this.currentEditId = id;
+        this.editTitle.value = note.title;
+        this.editContent.value = note.type === 'note' ? note.content : '';
+        this.editModal.classList.remove('hidden');
+    }
+
+    saveEdit() {
+        const note = this.findNoteById(this.currentEditId);
+        if (!note) return;
+
+        note.title = this.editTitle.value;
+        if (note.type === 'note') {
+            note.content = this.editContent.value;
+        }
+
+        this.closeEditModal();
+        this.saveAndRender();
+    }
+
+    closeEditModal() {
+        this.editModal.classList.add('hidden');
+        this.currentEditId = null;
+    }
+
+    deleteNote(id) {
+        if (!confirm('确定要删除这个项目吗？')) return;
+
+        // 从根数组或父文件夹中删除
+        const deleteFromArray = (array) => {
+            const index = array.findIndex(n => n.id === id);
+            if (index !== -1) {
+                array.splice(index, 1);
+                return true;
+            }
+
+            for (const item of array) {
+                if (item.type === 'folder' && item.children) {
+                    if (deleteFromArray(item.children)) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        };
+
+        if (deleteFromArray(this.notes)) {
+            this.saveAndRender();
+        }
+    }
+
+    saveAndRender() {
+        this.saveNotesToLocal();
+        this.renderNotes();
+    }
+}
+
+// 初始化插件
+const notesPlugin = new NotesPlugin();
+window.notesPlugin = notesPlugin; // 暴露给全局以便HTML调用
+```
+
+## 功能说明
+
+1.  **本地存储**：
+
+    - 使用 `localStorage` 保存便签数据
+    - 支持文件夹和便签两种类型
+    - 自动保存所有更改
+
+2.  **GitHub 同步**：
+
+    - 使用 GitHub API 同步数据
+    - 需要配置 GitHub 个人访问令牌和仓库
+    - 自动处理文件创建和更新
+
+3.  **层级结构**：
+
+    - 支持无限层级嵌套
+    - 文件夹可以包含其他文件夹或便签
+    - 每个项目有唯一 ID
+
+4.  **折叠功能**：
+
+    - 点击文件夹标题切换展开/折叠状态
+    - 保存折叠状态
+    - 支持在文件夹内新建项目
+
+5.  **编辑功能**：
+
+    - 双击项目或点击编辑按钮打开编辑模态框
+    - 实时保存更改
+
+6.  **UI 交互**：
+
+    - 响应式设计
+    - 清晰的视觉层次
+    - 操作按钮直观
+
+## 使用说明
+
+1.  首次使用时需要配置 GitHub 信息（令牌和仓库）
+2.  点击'新建文件夹'或'新建便签'添加项目
+3.  点击文件夹标题展开/折叠
+4.  点击便签内容进行编辑
+5.  使用'同步到 GitHub'按钮手动同步数据
+
+这个实现提供了完整的便签管理功能，适合个人使用或小型团队协作。
+
+这是独立项目还是可以融入原来书签项目的插件？具体如何使用？
+
+这个实现既可以作为独立项目运行，也可以作为插件集成到原有的书签管理项目中。以下是具体的使用方式和集成方法：
+
+---
+
+## **1\. 作为独立项目使用**
+
+### **使用步骤**
+
+1.  **创建项目文件**：
+
+    - `index.html` (主页面)
+    - `style.css` (样式)
+    - `notesPlugin.js` (核心逻辑)
+    - `icon.png` (可选，工具栏图标)
+
+2.  **直接运行**：
+
+    - 打开 `index.html` 即可在浏览器中使用
+    - 数据会保存在浏览器的 `localStorage` 中
+
+3.  **配置 GitHub 同步**：
+
+    - 首次使用时，输入 GitHub 个人访问令牌和仓库信息
+    - 之后点击 '同步到 GitHub' 按钮手动同步
+
+---
+
+## **2\. 作为插件集成到原有书签项目**
+
+### **集成步骤**
+
+#### **(1) 文件合并**
+
+1.  **CSS 整合**：
+
+    - 将 `style.css` 中的样式合并到原项目的 CSS 文件中
+    - 注意避免类名冲突（可以添加前缀如 `.notes-`）
+
+2.  **HTML 结构**：
+
+    - 在原项目的 HTML 中添加便签的容器：
+
+    ```markdown
+    <section id='notes-section'>
+      <div id='notes-container'></div>
+      <!-- 原有书签内容 -->
+    </section>
+    ```
+
+3.  **JavaScript 集成**：
+
+    - 将 `notesPlugin.js` 合并到原项目的 JS 中
+    - 或者作为模块导入：
+
+    ```markdown
+    import NotesPlugin from './notesPlugin.js';
+    const notesPlugin = new NotesPlugin();
+    ```
+
+#### **(2) 功能整合**
+
+1.  **共享数据存储**：
+
+    - 如果原项目已使用 `localStorage`，可以合并存储结构：
+
+    ```markdown
+    // 示例合并后的数据结构
+    const appData = {
+      bookmarks: [...], // 原有书签数据
+      notes: [...]     // 新便签数据
+    };
+    ```
+
+2.  **UI 整合**：
+
+    - 在原有工具栏添加便签相关按钮：
+
+    ```markdown
+    <button id='show-notes-btn'>📝 便签</button>
+    ```
+
+    - 通过事件切换显示：
+
+    ```markdown
+    document.getElementById('show-notes-btn').addEventListener('click', () => {
+      document.getElementById('bookmarks-section').classList.add('hidden');
+      document.getElementById('notes-section').classList.remove('hidden');
+    });
+    ```
+
+#### **(3) 同步逻辑复用**
+
+- 如果原项目已有 GitHub 同步功能，可以复用 API 调用逻辑：
+
+```markdown
+// 共享同步方法
+async function syncAllToGitHub() {
+  await syncBookmarks(); // 原有书签同步
+  await notesPlugin.syncWithGitHub(); // 便签同步
+}
+```
+
+---
+
+## **3\. 关键集成点**
+
+### **(1) 数据隔离**
+
+- **独立存储**（推荐初学者）：
+
+  ```markdown
+  // 便签数据独立存储
+  localStorage.setItem('notes', JSON.stringify(notes));
+  // 书签数据独立存储
+  localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  ```
+
+- **统一存储**（进阶）：
+
+  ```markdown
+  const allData = {
+    version: 1,
+    bookmarks: [...],
+    notes: [...]
+  };
+  localStorage.setItem('appData', JSON.stringify(allData));
+  ```
+
+### **(2) 样式冲突处理**
+
+在原有 CSS 中添加命名空间：
+
+```markdown
+/* 便签专属样式 */
+.notes-container { /*...*/ }
+.notes-folder-header { /*...*/ }
+
+/* 书签专属样式 */
+.bookmarks-container { /*...*/ }
+```
+
+### **(3) 交互逻辑**
+
+- **切换标签页**：
+
+  ```markdown
+  function showTab(tabName) {
+    // 隐藏所有
+    document.querySelectorAll('main > section').forEach(s => {
+      s.classList.remove('active');
+    });
+    // 显示目标
+    document.getElementById(`${tabName}-section`).classList.add('active');
+  }
+  ```
+
+- **共享 GitHub 配置**：
+
+  ```markdown
+  // 从原项目读取配置
+  notesPlugin.githubToken = bookmarkApp.githubToken;
+  notesPlugin.githubRepo = bookmarkApp.githubRepo;
+  ```
+
+---
+
+## **4\. 使用场景示例**
+
+### **场景1：快速独立使用**
+
+1.  下载三个文件（HTML/CSS/JS）
+2.  直接打开 `index.html`
+3.  开始记录便签，数据保存在本地
+
+### **场景2：集成到书签项目**
+
+1.  将便签代码合并到原项目
+2.  添加切换按钮：
+
+    ```markdown
+    <div class='tab-buttons'>
+      <button onclick='showTab('bookmarks')'>书签</button>
+      <button onclick='showTab('notes')'>便签</button>
+    </div>
+    ```
+
+3.  实现数据同步联动
+
+---
+
+## **5\. 注意事项**
+
+1.  **GitHub API 限制**：
+
+    - 个人访问令牌需要 `repo` 权限
+    - 每小时最多 60 次 API 调用（未认证）
+
+2.  **移动端适配**：
+
+    - 确保折叠按钮大小适合触摸操作
+    - 添加响应式布局：
+
+    ```markdown
+    @media (max-width: 600px) {
+      .folder-header { padding: 12px; }
+    }
+    ```
+
+3.  **数据备份**：
+
+    - 即使使用 GitHub 同步，也建议定期导出本地备份
+
+4.  **冲突处理**：
+
+    - 如果多设备同时编辑，建议实现简单的 '最后修改优先' 策略
+
+---
+
+通过以上方式，你可以灵活选择独立使用便签功能，或将其无缝集成到原有书签管理系统中。两种方式均保留了完整的层级结构和 GitHub 同步能力。
+$$$$$$$">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://692.cloudns.be//post/deepseek-bian-qian-xiang-mu.html">
+<meta property="og:image" content="avatar.svg">
+<title>deepseek便签项目</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+html { background: #d2d4d6; }
+body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto; padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25; border-radius: 10px; background: rgba(10, 100, 130, 0.08); box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);  overflow: auto;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:1.6em;font-weight:bold;color: #1f85c9;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+.markdown-body h1{font-size: 1.4em;}
+.markdown-body h2{font-size: 1.2em;}
+.markdown-body h3{font-size: 1em;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 580px) {
+     body {margin:0;padding: 12px;box-shadow: none;}
+    .postTitle{font-size:1.4em; color: #1f85c9;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">deepseek便签项目</h1>
+<div class="title-right">
+    <a href="https://692.cloudns.be/" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/fjvi/note/issues/37" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p>要实现 <strong>本地存储便签 + GitHub 同步</strong> 以及 <strong>层级化折叠的便签结构</strong>，可以结合 <strong>浏览器本地存储（LocalStorage/IndexedDB）</strong> 和 <strong>GitHub API</strong>，并使用类似书签的 <strong>树形结构 + 折叠逻辑</strong>。以下是完整方案：</p>
+<hr>
+<h2><strong>1. 便签本地存储 + GitHub 同步</strong></h2>
+<h3><strong>(1) 本地存储（LocalStorage/IndexedDB）</strong></h3>
+<p>使用 <code class="notranslate">localStorage</code> 存储便签数据（适合小型数据）：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 保存便签到 localStorage
+function saveNotesToLocal(notes) {
+  localStorage.setItem('notes', JSON.stringify(notes));
+}
+
+// 从 localStorage 加载便签
+function loadNotesFromLocal() {
+  const notes = localStorage.getItem('notes');
+  return notes ? JSON.parse(notes) : <span class="pl-s">[</span><span class="pl-s">]</span>;
+}</pre></div>
+<p><strong>（如果数据量大，改用 <code class="notranslate">IndexedDB</code> 存储）</strong></p>
+<hr>
+<h3><strong>(2) GitHub 同步</strong></h3>
+<p>使用 <strong>GitHub API</strong> 或 <strong>GitHub Pages + 手动同步</strong>：</p>
+<h4><strong>方案 A：GitHub API（自动同步）</strong></h4>
+<div class="highlight highlight-text-md"><pre class="notranslate">async function syncToGitHub(notes, repoPath = "data/notes.json") {
+  const token = "YOUR_GITHUB_TOKEN"; // 个人访问令牌
+  const repo = "your-username/your-repo";
+  const url = <span class="pl-s">`</span><span class="pl-c1">https://api.github.com/repos/${repo}/contents/${repoPath}</span><span class="pl-s">`</span>;
+
+  // 获取文件 SHA（如果已存在）
+  const { sha } = await fetch(url, {
+    headers: { Authorization: <span class="pl-s">`</span><span class="pl-c1">token ${token}</span><span class="pl-s">`</span> },
+  }).then(res =&gt; res.json());
+
+  // 更新文件
+  await fetch(url, {
+    method: "PUT",
+    headers: { Authorization: <span class="pl-s">`</span><span class="pl-c1">token ${token}</span><span class="pl-s">`</span> },
+    body: JSON.stringify({
+      message: "Update notes",
+      content: btoa(JSON.stringify(notes)), // Base64 编码
+      sha, // 用于覆盖现有文件
+    }),
+  });
+}</pre></div>
+<h4><strong>方案 B：GitHub Pages + 手动下载/上传</strong></h4>
+<ol>
+<li>在 GitHub 仓库存储 <code class="notranslate">notes.json</code></li>
+<li>用户手动点击 <strong>"导出到 GitHub"</strong> 上传</li>
+<li>手动点击 <strong>"从 GitHub 导入"</strong> 下载</li>
+</ol>
+<hr>
+<h2><strong>2. 层级化便签结构（类似书签）</strong></h2>
+<h3><strong>(1) 数据结构</strong></h3>
+<div class="highlight highlight-text-md"><pre class="notranslate">const notes = <span class="pl-s">[</span>
+  {
+    id: "1",
+    title: "工作",
+    type: "folder",
+    children: <span class="pl-s">[</span>
+      {
+        id: "1-1",
+        title: "项目A",
+        type: "note",
+        content: "待办事项...",
+      },
+      {
+        id: "1-2",
+        title: "会议记录",
+        type: "folder",
+        children: <span class="pl-s">[</span>...<span class="pl-s">]</span>,
+      },
+    <span class="pl-s">]</span>,
+    isOpen: true, // 控制折叠
+  },
+  {
+    id: "2",
+    title: "个人",
+    type: "folder",
+    isOpen: false,
+    children: <span class="pl-s">[</span>...<span class="pl-s">]</span>,
+  },
+<span class="pl-s">]</span>;</pre></div>
+<h3><strong>(2) 折叠逻辑（类似书签）</strong></h3>
+<p><strong>HTML 结构</strong>：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">&lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s">"</span><span class="pl-s">note-tree</span><span class="pl-s">"</span>&gt;
+  &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s">"</span><span class="pl-s">note-folder</span><span class="pl-s">"</span> <span class="pl-e">data-id</span>=<span class="pl-s">"</span><span class="pl-s">1</span><span class="pl-s">"</span>&gt;
+    <span class="pl-c1">&lt;div class="folder-header" onclick="toggleFolder('1')"&gt;</span>
+    <span class="pl-c1">  &lt;span&gt;📁 工作&lt;/span&gt;</span>
+    <span class="pl-c1">  &lt;span class="toggle-icon"&gt;▶&lt;/span&gt;</span>
+    <span class="pl-c1">&lt;/div&gt;</span>
+    <span class="pl-c1">&lt;div class="folder-children"&gt;</span>
+    <span class="pl-c1">  &lt;!-- 子便签或文件夹 --&gt;</span>
+    <span class="pl-c1">&lt;/div&gt;</span>
+  &lt;/<span class="pl-ent">div</span>&gt;
+&lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+<p><strong>CSS 折叠动画</strong>：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">.note-folder .folder-children {
+  display: none;
+  padding-left: 20px;
+}
+
+.note-folder.open .folder-children {
+  display: block;
+}
+
+.note-folder.open .toggle-icon {
+  transform: rotate(90deg);
+}</pre></div>
+<p><strong>JavaScript 折叠控制</strong>：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">function toggleFolder(id) {
+  const folder = document.querySelector(<span class="pl-s">`</span><span class="pl-c1">.note-folder[data-id="${id}"]</span><span class="pl-s">`</span>);
+  folder.classList.toggle("open");
+
+  // 更新数据中的 isOpen 状态
+  updateNoteInData(id, { isOpen: folder.classList.contains("open") });
+}</pre></div>
+<h3><strong>(3) 折叠排斥逻辑（兄弟级/子孙级）</strong></h3>
+<div class="highlight highlight-text-md"><pre class="notranslate">function closeSiblingsAndChildren(folderId) {
+  // 关闭所有兄弟文件夹
+  const parentFolder = document.querySelector(<span class="pl-s">`</span><span class="pl-c1">.note-folder[data-id="${folderId}"]</span><span class="pl-s">`</span>).parentElement.closest('.note-folder');
+  if (parentFolder) {
+    parentFolder.querySelectorAll('.note-folder').forEach(f =&gt; {
+      if (f.dataset.id !== folderId) {
+        f.classList.remove("open");
+      }
+    });
+  }
+
+  // 关闭所有子文件夹
+  document.querySelectorAll(<span class="pl-s">`</span><span class="pl-c1">.note-folder[data-id^="${folderId}-"]</span><span class="pl-s">`</span>).forEach(f =&gt; {
+    f.classList.remove("open");
+  });
+}</pre></div>
+<hr>
+<h2><strong>3. 完整流程</strong></h2>
+<ol>
+<li>
+<p><strong>用户操作</strong>：</p>
+<ul>
+<li>新增/编辑便签 → 保存到 <code class="notranslate">localStorage</code></li>
+<li>点击 <strong>"同步到 GitHub"</strong> → 调用 <code class="notranslate">syncToGitHub()</code></li>
+<li>点击文件夹 → 折叠/展开，并排斥兄弟级和子级</li>
+</ul>
+</li>
+<li>
+<p><strong>初始化加载</strong>：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 从 localStorage 或 GitHub 加载数据
+let notes = loadNotesFromLocal();
+renderNoteTree(notes);</pre></div>
+</li>
+<li>
+<p><strong>GitHub 同步</strong>：</p>
+<ul>
+<li>用户手动触发同步</li>
+<li>或设置定时自动同步（需考虑冲突处理）</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2><strong>4. 额外优化</strong></h2>
+<ul>
+<li><strong>冲突处理</strong>：如果本地和远程数据不同，提示用户选择版本</li>
+<li><strong>离线模式</strong>：优先使用 <code class="notranslate">localStorage</code>，联网时再同步</li>
+<li><strong>IndexedDB</strong>：如果数据量较大，改用 IndexedDB 存储</li>
+</ul>
+<hr>
+<h3><strong>最终效果</strong></h3>
+<p>✅ <strong>本地存储</strong>（刷新不丢失）<br>
+✅ <strong>GitHub 同步</strong>（跨设备访问）<br>
+✅ <strong>层级化便签</strong>（文件夹 + 折叠）<br>
+✅ <strong>智能折叠</strong>（排斥兄弟/子级）</p>
+<p>你可以基于这个方案实现一个完整的 <strong>便签管理应用</strong>！ 🚀</p>
+<h1>可以生成修改后的notesPlugin完整代码吗？</h1>
+<h2>完整 Notes Plugin 代码（GitHub API 同步）</h2>
+<p>下面是一个完整的便签插件实现，包含本地存储、GitHub 同步、层级化结构和折叠功能。</p>
+<h2>1. HTML 结构 (index.html)</h2>
+<div class="highlight highlight-text-md"><pre class="notranslate"><span class="pl-c"><span class="pl-c">&lt;!</span>DOCTYPE html<span class="pl-c">&gt;</span></span>
+&lt;<span class="pl-ent">html</span> <span class="pl-e">lang</span>=<span class="pl-s">"</span><span class="pl-s">zh-CN</span><span class="pl-s">"</span>&gt;
+&lt;<span class="pl-ent">head</span>&gt;
+    <span class="pl-c1">&lt;meta charset="UTF-8"&gt;</span>
+    <span class="pl-c1">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span>
+    <span class="pl-c1">&lt;title&gt;智能便签管理&lt;/title&gt;</span>
+    <span class="pl-c1">&lt;link rel="stylesheet" href="style.css"&gt;</span>
+&lt;/<span class="pl-ent">head</span>&gt;
+&lt;<span class="pl-ent">body</span>&gt;
+    <span class="pl-c1">&lt;div id="app-container"&gt;</span>
+    <span class="pl-c1">    &lt;!-- 顶部工具栏 --&gt;</span>
+    <span class="pl-c1">    &lt;div id="top-toolbar"&gt;</span>
+    <span class="pl-c1">        &lt;div class="header-left"&gt;</span>
+    <span class="pl-c1">            &lt;img id="logo" src="icon.png" alt="Logo"&gt;</span>
+    <span class="pl-c1">            &lt;h1&gt;智能便签&lt;/h1&gt;</span>
+    <span class="pl-c1">        &lt;/div&gt;</span>
+    <span class="pl-c1">        &lt;div class="header-right"&gt;</span>
+    <span class="pl-c1">            &lt;button id="add-folder-btn" class="toolbar-button"&gt;📁 新建文件夹&lt;/button&gt;</span>
+    <span class="pl-c1">            &lt;button id="add-note-btn" class="toolbar-button"&gt;📝 新建便签&lt;/button&gt;</span>
+    <span class="pl-c1">            &lt;button id="sync-github-btn" class="toolbar-button"&gt;🔄 同步到 GitHub&lt;/button&gt;</span>
+    <span class="pl-c1">        &lt;/div&gt;</span>
+    <span class="pl-c1">    &lt;/div&gt;</span>
+
+    <span class="pl-c1">    &lt;!-- 主内容区 --&gt;</span>
+    <span class="pl-c1">    &lt;main&gt;</span>
+    <span class="pl-c1">        &lt;section class="active"&gt;</span>
+    <span class="pl-c1">            &lt;div id="notes-container"&gt;</span>
+    <span class="pl-c1">                &lt;!-- 便签树将在这里渲染 --&gt;</span>
+    <span class="pl-c1">            &lt;/div&gt;</span>
+    <span class="pl-c1">        &lt;/section&gt;</span>
+    <span class="pl-c1">    &lt;/main&gt;</span>
+
+    <span class="pl-c1">    &lt;!-- 底部工具栏 --&gt;</span>
+    <span class="pl-c1">    &lt;div id="bottom-toolbar"&gt;</span>
+    <span class="pl-c1">        &lt;div class="footer-tabs"&gt;</span>
+    <span class="pl-c1">            &lt;button class="tab-button active"&gt;📋 所有便签&lt;/button&gt;</span>
+    <span class="pl-c1">            &lt;button class="tab-button"&gt;⭐ 收藏&lt;/button&gt;</span>
+    <span class="pl-c1">        &lt;/div&gt;</span>
+    <span class="pl-c1">    &lt;/div&gt;</span>
+
+    <span class="pl-c1">    &lt;!-- 编辑模态框 --&gt;</span>
+    <span class="pl-c1">    &lt;div id="edit-modal" class="modal hidden"&gt;</span>
+    <span class="pl-c1">        &lt;div class="modal-content"&gt;</span>
+    <span class="pl-c1">            &lt;h2&gt;编辑便签&lt;/h2&gt;</span>
+    <span class="pl-c1">            &lt;input type="text" id="edit-title" placeholder="标题"&gt;</span>
+    <span class="pl-c1">            &lt;textarea id="edit-content" placeholder="内容..."&gt;&lt;/textarea&gt;</span>
+    <span class="pl-c1">            &lt;div class="modal-actions"&gt;</span>
+    <span class="pl-c1">                &lt;button id="save-edit-btn"&gt;保存&lt;/button&gt;</span>
+    <span class="pl-c1">                &lt;button id="cancel-edit-btn"&gt;取消&lt;/button&gt;</span>
+    <span class="pl-c1">            &lt;/div&gt;</span>
+    <span class="pl-c1">        &lt;/div&gt;</span>
+    <span class="pl-c1">    &lt;/div&gt;</span>
+    <span class="pl-c1">&lt;/div&gt;</span>
+
+    <span class="pl-c1">&lt;script src="notesPlugin.js"&gt;&lt;/script&gt;</span>
+&lt;/<span class="pl-ent">body</span>&gt;
+&lt;/<span class="pl-ent">html</span>&gt;</pre></div>
+<h2>2. CSS 样式 (style.css)</h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">/<span class="pl-s">*</span> 基础样式 <span class="pl-s">*</span>/
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background-color: #f5f5f5;
+    color: <span class="pl-s">#<span class="pl-corl">333</span></span>;
+    margin: 0;
+    padding: 0;
+}
+
+#app-container {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/<span class="pl-s">*</span> 工具栏样式 <span class="pl-s">*</span>/
+#top-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 30px;
+    background-color: <span class="pl-s">#<span class="pl-corl">333</span></span>;
+    color: white;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.header-left, .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+#logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.toolbar-button {
+    border: none;
+    color: #ddd;
+    background: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.toolbar-button<span class="pl-s">:</span><span class="pl-en">hover</span> {
+    background-color: <span class="pl-s">#<span class="pl-corl">444</span></span>;
+}
+
+#bottom-toolbar {
+    padding: 8px 0;
+    background-color: <span class="pl-s">#<span class="pl-corl">333</span></span>;
+    margin-top: auto;
+}
+
+.footer-tabs {
+    display: flex;
+    justify-content: center;
+}
+
+.tab-button {
+    border: none;
+    color: #ddd;
+    background: none;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.tab-button.active {
+    color: white;
+    font-weight: bold;
+}
+
+/<span class="pl-s">*</span> 便签树样式 <span class="pl-s">*</span>/
+#notes-container {
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.note-item {
+    margin-bottom: 10px;
+}
+
+.folder-header {
+    padding: 8px 12px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+}
+
+.folder-header<span class="pl-s">:</span><span class="pl-en">hover</span> {
+    background-color: #e0e0e0;
+}
+
+.folder-header .toggle-icon {
+    transition: transform 0.2s;
+}
+
+.folder-header.open .toggle-icon {
+    transform: rotate(90deg);
+}
+
+.folder-children {
+    padding-left: 20px;
+    display: none;
+}
+
+.folder-item.open &gt; .folder-children {
+    display: block;
+}
+
+.note-content {
+    padding: 8px 12px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    margin-top: 4px;
+    cursor: pointer;
+}
+
+.note-content<span class="pl-s">:</span><span class="pl-en">hover</span> {
+    background-color: #f0f0f0;
+}
+
+/<span class="pl-s">*</span> 模态框样式 <span class="pl-s">*</span>/
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-actions button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#save-edit-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#cancel-edit-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.hidden {
+    display: none !important;
+}</pre></div>
+<h2>3. JavaScript 实现 (notesPlugin.js)</h2>
+<div class="highlight highlight-text-md"><pre class="notranslate">class NotesPlugin {
+    constructor() {
+        this.notes = <span class="pl-s">[</span><span class="pl-s">]</span>;
+        this.currentEditId = null;
+        this.githubToken = null;
+        this.githubRepo = null;
+        this.githubFilePath = 'data/notes.json';
+
+    <span class="pl-c1">    this.initElements();</span>
+    <span class="pl-c1">    this.loadNotes();</span>
+    <span class="pl-c1">    this.renderNotes();</span>
+    <span class="pl-c1">    this.setupEventListeners();</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">initElements() {</span>
+    <span class="pl-c1">    this.notesContainer = document.getElementById('notes-container');</span>
+    <span class="pl-c1">    this.addFolderBtn = document.getElementById('add-folder-btn');</span>
+    <span class="pl-c1">    this.addNoteBtn = document.getElementById('add-note-btn');</span>
+    <span class="pl-c1">    this.syncGithubBtn = document.getElementById('sync-github-btn');</span>
+    <span class="pl-c1">    this.editModal = document.getElementById('edit-modal');</span>
+    <span class="pl-c1">    this.editTitle = document.getElementById('edit-title');</span>
+    <span class="pl-c1">    this.editContent = document.getElementById('edit-content');</span>
+    <span class="pl-c1">    this.saveEditBtn = document.getElementById('save-edit-btn');</span>
+    <span class="pl-c1">    this.cancelEditBtn = document.getElementById('cancel-edit-btn');</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">setupEventListeners() {</span>
+    <span class="pl-c1">    this.addFolderBtn.addEventListener('click', () =&gt; this.addNewFolder());</span>
+    <span class="pl-c1">    this.addNoteBtn.addEventListener('click', () =&gt; this.addNewNote());</span>
+    <span class="pl-c1">    this.syncGithubBtn.addEventListener('click', () =&gt; this.syncWithGitHub());</span>
+    <span class="pl-c1">    this.saveEditBtn.addEventListener('click', () =&gt; this.saveEdit());</span>
+    <span class="pl-c1">    this.cancelEditBtn.addEventListener('click', () =&gt; this.closeEditModal());</span>
+
+    <span class="pl-c1">    // 首次使用时设置 GitHub 信息</span>
+    <span class="pl-c1">    if (!localStorage.getItem('githubConfigured')) {</span>
+    <span class="pl-c1">        this.promptGitHubConfig();</span>
+    <span class="pl-c1">    }</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">promptGitHubConfig() {</span>
+    <span class="pl-c1">    const token = prompt('请输入 GitHub 个人访问令牌 (Personal Access Token):');</span>
+    <span class="pl-c1">    const repo = prompt('请输入 GitHub 仓库 (格式: username/repo):');</span>
+
+    <span class="pl-c1">    if (token &amp;&amp; repo) {</span>
+    <span class="pl-c1">        this.githubToken = token;</span>
+    <span class="pl-c1">        this.githubRepo = repo;</span>
+    <span class="pl-c1">        localStorage.setItem('githubToken', token);</span>
+    <span class="pl-c1">        localStorage.setItem('githubRepo', repo);</span>
+    <span class="pl-c1">        localStorage.setItem('githubConfigured', 'true');</span>
+    <span class="pl-c1">        alert('GitHub 配置已保存！');</span>
+    <span class="pl-c1">    }</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">// 数据存储方法</span>
+    <span class="pl-c1">loadNotes() {</span>
+    <span class="pl-c1">    // 从 localStorage 加载</span>
+    <span class="pl-c1">    const localNotes = localStorage.getItem('notes');</span>
+    <span class="pl-c1">    if (localNotes) {</span>
+    <span class="pl-c1">        this.notes = JSON.parse(localNotes);</span>
+    <span class="pl-c1">        return;</span>
+    <span class="pl-c1">    }</span>
+
+    <span class="pl-c1">    // 初始化示例数据</span>
+    <span class="pl-c1">    this.notes = [</span>
+    <span class="pl-c1">        {</span>
+    <span class="pl-c1">            id: '1',</span>
+    <span class="pl-c1">            title: '工作',</span>
+    <span class="pl-c1">            type: 'folder',</span>
+    <span class="pl-c1">            children: [</span>
+    <span class="pl-c1">                {</span>
+    <span class="pl-c1">                    id: '1-1',</span>
+    <span class="pl-c1">                    title: '项目A',</span>
+    <span class="pl-c1">                    type: 'note',</span>
+    <span class="pl-c1">                    content: '项目A的任务列表...'</span>
+    <span class="pl-c1">                }</span>
+    <span class="pl-c1">            ],</span>
+    <span class="pl-c1">            isOpen: true</span>
+    <span class="pl-c1">        },</span>
+    <span class="pl-c1">        {</span>
+    <span class="pl-c1">            id: '2',</span>
+    <span class="pl-c1">            title: '个人',</span>
+    <span class="pl-c1">            type: 'folder',</span>
+    <span class="pl-c1">            children: [],</span>
+    <span class="pl-c1">            isOpen: false</span>
+    <span class="pl-c1">        }</span>
+    <span class="pl-c1">    ];</span>
+
+    <span class="pl-c1">    this.saveNotesToLocal();</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">saveNotesToLocal() {</span>
+    <span class="pl-c1">    localStorage.setItem('notes', JSON.stringify(this.notes));</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">// GitHub 同步方法</span>
+    <span class="pl-c1">async syncWithGitHub() {</span>
+    <span class="pl-c1">    if (!this.githubToken || !this.githubRepo) {</span>
+    <span class="pl-c1">        this.promptGitHubConfig();</span>
+    <span class="pl-c1">        return;</span>
+    <span class="pl-c1">    }</span>
+
+    <span class="pl-c1">    try {</span>
+    <span class="pl-c1">        // 1. 尝试获取现有文件 SHA</span>
+    <span class="pl-c1">        const sha = await this.getGitHubFileSHA();</span>
+
+    <span class="pl-c1">        // 2. 上传新内容</span>
+    <span class="pl-c1">        await this.uploadToGitHub(sha);</span>
+
+    <span class="pl-c1">        alert('同步到 GitHub 成功！');</span>
+    <span class="pl-c1">    } catch (error) {</span>
+    <span class="pl-c1">        console.error('同步失败:', error);</span>
+    <span class="pl-c1">        alert(`同步失败: ${error.message}`);</span>
+    <span class="pl-c1">    }</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">async getGitHubFileSHA() {</span>
+    <span class="pl-c1">    const url = `https://api.github.com/repos/${this.githubRepo}/contents/${this.githubFilePath}`;</span>
+    <span class="pl-c1">    const response = await fetch(url, {</span>
+    <span class="pl-c1">        headers: {</span>
+    <span class="pl-c1">            'Authorization': `token ${this.githubToken}`,</span>
+    <span class="pl-c1">            'Accept': 'application/vnd.github.v3+json'</span>
+    <span class="pl-c1">        }</span>
+    <span class="pl-c1">    });</span>
+
+    <span class="pl-c1">    if (response.status === 404) {</span>
+    <span class="pl-c1">        return null; // 文件不存在</span>
+    <span class="pl-c1">    }</span>
+
+    <span class="pl-c1">    if (!response.ok) {</span>
+    <span class="pl-c1">        throw new Error(`获取文件信息失败: ${response.status}`);</span>
+    <span class="pl-c1">    }</span>
+
+    <span class="pl-c1">    const data = await response.json();</span>
+    <span class="pl-c1">    return data.sha;</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">async uploadToGitHub(sha) {</span>
+    <span class="pl-c1">    const url = `https://api.github.com/repos/${this.githubRepo}/contents/${this.githubFilePath}`;</span>
+    <span class="pl-c1">    const content = btoa(unescape(encodeURIComponent(JSON.stringify(this.notes, null, 2)));</span>
+
+    <span class="pl-c1">    const response = await fetch(url, {</span>
+    <span class="pl-c1">        method: 'PUT',</span>
+    <span class="pl-c1">        headers: {</span>
+    <span class="pl-c1">            'Authorization': `token ${this.githubToken}`,</span>
+    <span class="pl-c1">            'Accept': 'application/vnd.github.v3+json',</span>
+    <span class="pl-c1">            'Content-Type': 'application/json'</span>
+    <span class="pl-c1">        },</span>
+    <span class="pl-c1">        body: JSON.stringify({</span>
+    <span class="pl-c1">            message: 'Update notes via web app',</span>
+    <span class="pl-c1">            content: content,</span>
+    <span class="pl-c1">            sha: sha || undefined</span>
+    <span class="pl-c1">        })</span>
+    <span class="pl-c1">    });</span>
+
+    <span class="pl-c1">    if (!response.ok) {</span>
+    <span class="pl-c1">        throw new Error(`上传失败: ${response.status}`);</span>
+    <span class="pl-c1">    }</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">// 便签操作方法</span>
+    <span class="pl-c1">addNewFolder(parentId = null) {</span>
+    <span class="pl-c1">    const newFolder = {</span>
+    <span class="pl-c1">        id: this.generateId(parentId),</span>
+    <span class="pl-c1">        title: '新建文件夹',</span>
+    <span class="pl-c1">        type: 'folder',</span>
+    <span class="pl-c1">        children: [],</span>
+    <span class="pl-c1">        isOpen: true</span>
+    <span class="pl-c1">    };</span>
+
+    <span class="pl-c1">    if (parentId) {</span>
+    <span class="pl-c1">        const parent = this.findNoteById(parentId);</span>
+    <span class="pl-c1">        if (parent &amp;&amp; parent.type === 'folder') {</span>
+    <span class="pl-c1">            parent.children.push(newFolder);</span>
+    <span class="pl-c1">        }</span>
+    <span class="pl-c1">    } else {</span>
+    <span class="pl-c1">        this.notes.push(newFolder);</span>
+    <span class="pl-c1">    }</span>
+
+    <span class="pl-c1">    this.saveAndRender();</span>
+    <span class="pl-c1">    this.editNote(newFolder.id);</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">addNewNote(parentId = null) {</span>
+    <span class="pl-c1">    const newNote = {</span>
+    <span class="pl-c1">        id: this.generateId(parentId),</span>
+    <span class="pl-c1">        title: '新建便签',</span>
+    <span class="pl-c1">        type: 'note',</span>
+    <span class="pl-c1">        content: ''</span>
+    <span class="pl-c1">    };</span>
+
+    <span class="pl-c1">    if (parentId) {</span>
+    <span class="pl-c1">        const parent = this.findNoteById(parentId);</span>
+    <span class="pl-c1">        if (parent &amp;&amp; parent.type === 'folder') {</span>
+    <span class="pl-c1">            parent.children.push(newNote);</span>
+    <span class="pl-c1">        }</span>
+    <span class="pl-c1">    } else {</span>
+    <span class="pl-c1">        this.notes.push(newNote);</span>
+    <span class="pl-c1">    }</span>
+
+    <span class="pl-c1">    this.saveAndRender();</span>
+    <span class="pl-c1">    this.editNote(newNote.id);</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">generateId(parentId = null) {</span>
+    <span class="pl-c1">    const timestamp = Date.now().toString(36);</span>
+    <span class="pl-c1">    const random = Math.random().toString(36).substring(2, 6);</span>
+    <span class="pl-c1">    return parentId ? `${parentId}-${timestamp}${random}` : `${timestamp}${random}`;</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">findNoteById(id, notes = this.notes) {</span>
+    <span class="pl-c1">    for (const note of notes) {</span>
+    <span class="pl-c1">        if (note.id === id) return note;</span>
+    <span class="pl-c1">        if (note.type === 'folder' &amp;&amp; note.children) {</span>
+    <span class="pl-c1">            const found = this.findNoteById(id, note.children);</span>
+    <span class="pl-c1">            if (found) return found;</span>
+    <span class="pl-c1">        }</span>
+    <span class="pl-c1">    }</span>
+    <span class="pl-c1">    return null;</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">// 渲染方法</span>
+    <span class="pl-c1">renderNotes() {</span>
+    <span class="pl-c1">    this.notesContainer.innerHTML = '';</span>
+    <span class="pl-c1">    this.notes.forEach(note =&gt; this.renderNoteItem(note));</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">renderNoteItem(note, depth = 0) {</span>
+    <span class="pl-c1">    const item = document.createElement('div');</span>
+    <span class="pl-c1">    item.className = `note-item ${note.type}-item`;</span>
+    <span class="pl-c1">    item.dataset.id = note.id;</span>
+
+    <span class="pl-c1">    if (note.type === 'folder') {</span>
+    <span class="pl-c1">        item.innerHTML = `</span>
+    <span class="pl-c1">            &lt;div class="folder-header ${note.isOpen ? 'open' : ''}" onclick="notesPlugin.toggleFolder('${note.id}')"&gt;</span>
+    <span class="pl-c1">                &lt;span class="toggle-icon"&gt;▶&lt;/span&gt;</span>
+    <span class="pl-c1">                &lt;span class="folder-title"&gt;📁 ${note.title}&lt;/span&gt;</span>
+    <span class="pl-c1">                &lt;button class="add-note-btn" onclick="notesPlugin.addNewNote('${note.id}'); event.stopPropagation()"&gt;+&lt;/button&gt;</span>
+    <span class="pl-c1">                &lt;button class="edit-btn" onclick="notesPlugin.editNote('${note.id}'); event.stopPropagation()"&gt;✏️&lt;/button&gt;</span>
+    <span class="pl-c1">                &lt;button class="delete-btn" onclick="notesPlugin.deleteNote('${note.id}'); event.stopPropagation()"&gt;🗑️&lt;/button&gt;</span>
+    <span class="pl-c1">            &lt;/div&gt;</span>
+    <span class="pl-c1">            &lt;div class="folder-children" style="display: ${note.isOpen ? 'block' : 'none'}"&gt;</span>
+    <span class="pl-c1">                ${note.children.map(child =&gt; this.renderNoteItem(child, depth + 1).outerHTML).join('')}</span>
+    <span class="pl-c1">            &lt;/div&gt;</span>
+    <span class="pl-c1">        `;</span>
+    <span class="pl-c1">    } else {</span>
+    <span class="pl-c1">        item.innerHTML = `</span>
+    <span class="pl-c1">            &lt;div class="note-content" onclick="notesPlugin.editNote('${note.id}')"&gt;</span>
+    <span class="pl-c1">                &lt;strong&gt;📝 ${note.title}&lt;/strong&gt;</span>
+    <span class="pl-c1">                &lt;p&gt;${note.content.substring(0, 50)}${note.content.length &gt; 50 ? '...' : ''}&lt;/p&gt;</span>
+    <span class="pl-c1">            &lt;/div&gt;</span>
+    <span class="pl-c1">        `;</span>
+    <span class="pl-c1">    }</span>
+
+    <span class="pl-c1">    return item;</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">// 交互方法</span>
+    <span class="pl-c1">toggleFolder(id) {</span>
+    <span class="pl-c1">    const note = this.findNoteById(id);</span>
+    <span class="pl-c1">    if (note &amp;&amp; note.type === 'folder') {</span>
+    <span class="pl-c1">        note.isOpen = !note.isOpen;</span>
+    <span class="pl-c1">        this.saveAndRender();</span>
+    <span class="pl-c1">    }</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">editNote(id) {</span>
+    <span class="pl-c1">    const note = this.findNoteById(id);</span>
+    <span class="pl-c1">    if (!note) return;</span>
+
+    <span class="pl-c1">    this.currentEditId = id;</span>
+    <span class="pl-c1">    this.editTitle.value = note.title;</span>
+    <span class="pl-c1">    this.editContent.value = note.type === 'note' ? note.content : '';</span>
+    <span class="pl-c1">    this.editModal.classList.remove('hidden');</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">saveEdit() {</span>
+    <span class="pl-c1">    const note = this.findNoteById(this.currentEditId);</span>
+    <span class="pl-c1">    if (!note) return;</span>
+
+    <span class="pl-c1">    note.title = this.editTitle.value;</span>
+    <span class="pl-c1">    if (note.type === 'note') {</span>
+    <span class="pl-c1">        note.content = this.editContent.value;</span>
+    <span class="pl-c1">    }</span>
+
+    <span class="pl-c1">    this.closeEditModal();</span>
+    <span class="pl-c1">    this.saveAndRender();</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">closeEditModal() {</span>
+    <span class="pl-c1">    this.editModal.classList.add('hidden');</span>
+    <span class="pl-c1">    this.currentEditId = null;</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">deleteNote(id) {</span>
+    <span class="pl-c1">    if (!confirm('确定要删除这个项目吗？')) return;</span>
+
+    <span class="pl-c1">    // 从根数组或父文件夹中删除</span>
+    <span class="pl-c1">    const deleteFromArray = (array) =&gt; {</span>
+    <span class="pl-c1">        const index = array.findIndex(n =&gt; n.id === id);</span>
+    <span class="pl-c1">        if (index !== -1) {</span>
+    <span class="pl-c1">            array.splice(index, 1);</span>
+    <span class="pl-c1">            return true;</span>
+    <span class="pl-c1">        }</span>
+
+    <span class="pl-c1">        for (const item of array) {</span>
+    <span class="pl-c1">            if (item.type === 'folder' &amp;&amp; item.children) {</span>
+    <span class="pl-c1">                if (deleteFromArray(item.children)) {</span>
+    <span class="pl-c1">                    return true;</span>
+    <span class="pl-c1">                }</span>
+    <span class="pl-c1">            }</span>
+    <span class="pl-c1">        }</span>
+
+    <span class="pl-c1">        return false;</span>
+    <span class="pl-c1">    };</span>
+
+    <span class="pl-c1">    if (deleteFromArray(this.notes)) {</span>
+    <span class="pl-c1">        this.saveAndRender();</span>
+    <span class="pl-c1">    }</span>
+    <span class="pl-c1">}</span>
+
+    <span class="pl-c1">saveAndRender() {</span>
+    <span class="pl-c1">    this.saveNotesToLocal();</span>
+    <span class="pl-c1">    this.renderNotes();</span>
+    <span class="pl-c1">}</span>
+}
+
+// 初始化插件
+const notesPlugin = new NotesPlugin();
+window.notesPlugin = notesPlugin; // 暴露给全局以便HTML调用</pre></div>
+<h2>功能说明</h2>
+<ol>
+<li>
+<p><strong>本地存储</strong>：</p>
+<ul>
+<li>使用 <code class="notranslate">localStorage</code> 保存便签数据</li>
+<li>支持文件夹和便签两种类型</li>
+<li>自动保存所有更改</li>
+</ul>
+</li>
+<li>
+<p><strong>GitHub 同步</strong>：</p>
+<ul>
+<li>使用 GitHub API 同步数据</li>
+<li>需要配置 GitHub 个人访问令牌和仓库</li>
+<li>自动处理文件创建和更新</li>
+</ul>
+</li>
+<li>
+<p><strong>层级结构</strong>：</p>
+<ul>
+<li>支持无限层级嵌套</li>
+<li>文件夹可以包含其他文件夹或便签</li>
+<li>每个项目有唯一 ID</li>
+</ul>
+</li>
+<li>
+<p><strong>折叠功能</strong>：</p>
+<ul>
+<li>点击文件夹标题切换展开/折叠状态</li>
+<li>保存折叠状态</li>
+<li>支持在文件夹内新建项目</li>
+</ul>
+</li>
+<li>
+<p><strong>编辑功能</strong>：</p>
+<ul>
+<li>双击项目或点击编辑按钮打开编辑模态框</li>
+<li>实时保存更改</li>
+</ul>
+</li>
+<li>
+<p><strong>UI 交互</strong>：</p>
+<ul>
+<li>响应式设计</li>
+<li>清晰的视觉层次</li>
+<li>操作按钮直观</li>
+</ul>
+</li>
+</ol>
+<h2>使用说明</h2>
+<ol>
+<li>首次使用时需要配置 GitHub 信息（令牌和仓库）</li>
+<li>点击"新建文件夹"或"新建便签"添加项目</li>
+<li>点击文件夹标题展开/折叠</li>
+<li>点击便签内容进行编辑</li>
+<li>使用"同步到 GitHub"按钮手动同步数据</li>
+</ol>
+<p>这个实现提供了完整的便签管理功能，适合个人使用或小型团队协作。</p>
+<p>这是独立项目还是可以融入原来书签项目的插件？具体如何使用？</p>
+<p>这个实现既可以作为独立项目运行，也可以作为插件集成到原有的书签管理项目中。以下是具体的使用方式和集成方法：</p>
+<hr>
+<h2><strong>1. 作为独立项目使用</strong></h2>
+<h3><strong>使用步骤</strong></h3>
+<ol>
+<li>
+<p><strong>创建项目文件</strong>：</p>
+<ul>
+<li><code class="notranslate">index.html</code> (主页面)</li>
+<li><code class="notranslate">style.css</code> (样式)</li>
+<li><code class="notranslate">notesPlugin.js</code> (核心逻辑)</li>
+<li><code class="notranslate">icon.png</code> (可选，工具栏图标)</li>
+</ul>
+</li>
+<li>
+<p><strong>直接运行</strong>：</p>
+<ul>
+<li>打开 <code class="notranslate">index.html</code> 即可在浏览器中使用</li>
+<li>数据会保存在浏览器的 <code class="notranslate">localStorage</code> 中</li>
+</ul>
+</li>
+<li>
+<p><strong>配置 GitHub 同步</strong>：</p>
+<ul>
+<li>首次使用时，输入 GitHub 个人访问令牌和仓库信息</li>
+<li>之后点击 "同步到 GitHub" 按钮手动同步</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2><strong>2. 作为插件集成到原有书签项目</strong></h2>
+<h3><strong>集成步骤</strong></h3>
+<h4><strong>(1) 文件合并</strong></h4>
+<ol>
+<li>
+<p><strong>CSS 整合</strong>：</p>
+<ul>
+<li>将 <code class="notranslate">style.css</code> 中的样式合并到原项目的 CSS 文件中</li>
+<li>注意避免类名冲突（可以添加前缀如 <code class="notranslate">.notes-</code>）</li>
+</ul>
+</li>
+<li>
+<p><strong>HTML 结构</strong>：</p>
+<ul>
+<li>在原项目的 HTML 中添加便签的容器：</li>
+</ul>
+<div class="highlight highlight-text-md"><pre class="notranslate">&lt;<span class="pl-ent">section</span> <span class="pl-e">id</span>=<span class="pl-s">"</span><span class="pl-s">notes-section</span><span class="pl-s">"</span>&gt;
+  &lt;<span class="pl-ent">div</span> <span class="pl-e">id</span>=<span class="pl-s">"</span><span class="pl-s">notes-container</span><span class="pl-s">"</span>&gt;&lt;/<span class="pl-ent">div</span>&gt;
+  <span class="pl-c"><span class="pl-c">&lt;!--</span> 原有书签内容 <span class="pl-c">--&gt;</span></span>
+&lt;/<span class="pl-ent">section</span>&gt;</pre></div>
+</li>
+<li>
+<p><strong>JavaScript 集成</strong>：</p>
+<ul>
+<li>将 <code class="notranslate">notesPlugin.js</code> 合并到原项目的 JS 中</li>
+<li>或者作为模块导入：</li>
+</ul>
+<div class="highlight highlight-text-md"><pre class="notranslate">import NotesPlugin from './notesPlugin.js';
+const notesPlugin = new NotesPlugin();</pre></div>
+</li>
+</ol>
+<h4><strong>(2) 功能整合</strong></h4>
+<ol>
+<li>
+<p><strong>共享数据存储</strong>：</p>
+<ul>
+<li>如果原项目已使用 <code class="notranslate">localStorage</code>，可以合并存储结构：</li>
+</ul>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 示例合并后的数据结构
+const appData = {
+  bookmarks: <span class="pl-s">[</span>...<span class="pl-s">]</span>, // 原有书签数据
+  notes: <span class="pl-s">[</span>...<span class="pl-s">]</span>     // 新便签数据
+};</pre></div>
+</li>
+<li>
+<p><strong>UI 整合</strong>：</p>
+<ul>
+<li>在原有工具栏添加便签相关按钮：</li>
+</ul>
+<div class="highlight highlight-text-md"><pre class="notranslate">&lt;<span class="pl-ent">button</span> <span class="pl-e">id</span>=<span class="pl-s">"</span><span class="pl-s">show-notes-btn</span><span class="pl-s">"</span>&gt;📝 便签&lt;/<span class="pl-ent">button</span>&gt;</pre></div>
+<ul>
+<li>通过事件切换显示：</li>
+</ul>
+<div class="highlight highlight-text-md"><pre class="notranslate">document.getElementById('show-notes-btn').addEventListener('click', () =&gt; {
+  document.getElementById('bookmarks-section').classList.add('hidden');
+  document.getElementById('notes-section').classList.remove('hidden');
+});</pre></div>
+</li>
+</ol>
+<h4><strong>(3) 同步逻辑复用</strong></h4>
+<ul>
+<li>如果原项目已有 GitHub 同步功能，可以复用 API 调用逻辑：</li>
+</ul>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 共享同步方法
+async function syncAllToGitHub() {
+  await syncBookmarks(); // 原有书签同步
+  await notesPlugin.syncWithGitHub(); // 便签同步
+}</pre></div>
+<hr>
+<h2><strong>3. 关键集成点</strong></h2>
+<h3><strong>(1) 数据隔离</strong></h3>
+<ul>
+<li>
+<p><strong>独立存储</strong>（推荐初学者）：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 便签数据独立存储
+localStorage.setItem('notes', JSON.stringify(notes));
+// 书签数据独立存储
+localStorage.setItem('bookmarks', JSON.stringify(bookmarks));</pre></div>
+</li>
+<li>
+<p><strong>统一存储</strong>（进阶）：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">const allData = {
+  version: 1,
+  bookmarks: <span class="pl-s">[</span>...<span class="pl-s">]</span>,
+  notes: <span class="pl-s">[</span>...<span class="pl-s">]</span>
+};
+localStorage.setItem('appData', JSON.stringify(allData));</pre></div>
+</li>
+</ul>
+<h3><strong>(2) 样式冲突处理</strong></h3>
+<p>在原有 CSS 中添加命名空间：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">/<span class="pl-s">*</span> 便签专属样式 <span class="pl-s">*</span>/
+.notes-container { /<span class="pl-s">*</span>...<span class="pl-s">*</span>/ }
+.notes-folder-header { /<span class="pl-s">*</span>...<span class="pl-s">*</span>/ }
+
+/<span class="pl-s">*</span> 书签专属样式 <span class="pl-s">*</span>/
+.bookmarks-container { /<span class="pl-s">*</span>...<span class="pl-s">*</span>/ }</pre></div>
+<h3><strong>(3) 交互逻辑</strong></h3>
+<ul>
+<li>
+<p><strong>切换标签页</strong>：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">function showTab(tabName) {
+  // 隐藏所有
+  document.querySelectorAll('main &gt; section').forEach(s =&gt; {
+    s.classList.remove('active');
+  });
+  // 显示目标
+  document.getElementById(<span class="pl-s">`</span><span class="pl-c1">${tabName}-section</span><span class="pl-s">`</span>).classList.add('active');
+}</pre></div>
+</li>
+<li>
+<p><strong>共享 GitHub 配置</strong>：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">// 从原项目读取配置
+notesPlugin.githubToken = bookmarkApp.githubToken;
+notesPlugin.githubRepo = bookmarkApp.githubRepo;</pre></div>
+</li>
+</ul>
+<hr>
+<h2><strong>4. 使用场景示例</strong></h2>
+<h3><strong>场景1：快速独立使用</strong></h3>
+<ol>
+<li>下载三个文件（HTML/CSS/JS）</li>
+<li>直接打开 <code class="notranslate">index.html</code></li>
+<li>开始记录便签，数据保存在本地</li>
+</ol>
+<h3><strong>场景2：集成到书签项目</strong></h3>
+<ol>
+<li>
+<p>将便签代码合并到原项目</p>
+</li>
+<li>
+<p>添加切换按钮：</p>
+<div class="highlight highlight-text-md"><pre class="notranslate">&lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s">"</span><span class="pl-s">tab-buttons</span><span class="pl-s">"</span>&gt;
+  &lt;<span class="pl-ent">button</span> <span class="pl-e">onclick</span>=<span class="pl-s">"</span><span class="pl-s"><span class="pl-en">showTab</span>(<span class="pl-s"><span class="pl-pds">'</span>bookmarks<span class="pl-pds">'</span></span>)</span><span class="pl-s">"</span>&gt;书签&lt;/<span class="pl-ent">button</span>&gt;
+  &lt;<span class="pl-ent">button</span> <span class="pl-e">onclick</span>=<span class="pl-s">"</span><span class="pl-s"><span class="pl-en">showTab</span>(<span class="pl-s"><span class="pl-pds">'</span>notes<span class="pl-pds">'</span></span>)</span><span class="pl-s">"</span>&gt;便签&lt;/<span class="pl-ent">button</span>&gt;
+&lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+</li>
+<li>
+<p>实现数据同步联动</p>
+</li>
+</ol>
+<hr>
+<h2><strong>5. 注意事项</strong></h2>
+<ol>
+<li>
+<p><strong>GitHub API 限制</strong>：</p>
+<ul>
+<li>个人访问令牌需要 <code class="notranslate">repo</code> 权限</li>
+<li>每小时最多 60 次 API 调用（未认证）</li>
+</ul>
+</li>
+<li>
+<p><strong>移动端适配</strong>：</p>
+<ul>
+<li>确保折叠按钮大小适合触摸操作</li>
+<li>添加响应式布局：</li>
+</ul>
+<div class="highlight highlight-text-md"><pre class="notranslate"><span class="pl-s">@<span class="pl-corl">media</span></span> (max-width: 600px) {
+  .folder-header { padding: 12px; }
+}</pre></div>
+</li>
+<li>
+<p><strong>数据备份</strong>：</p>
+<ul>
+<li>即使使用 GitHub 同步，也建议定期导出本地备份</li>
+</ul>
+</li>
+<li>
+<p><strong>冲突处理</strong>：</p>
+<ul>
+<li>如果多设备同时编辑，建议实现简单的 "最后修改优先" 策略</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p>通过以上方式，你可以灵活选择独立使用便签功能，或将其无缝集成到原有书签管理系统中。两种方式均保留了完整的层级结构和 GitHub 同步能力。</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://692.cloudns.be/">MGTime</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if("01/01/2025"!=""){
+    var startSite=new Date("01/01/2025");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.disabled=true;
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","fjvi/note");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+<script src='../assets/ArticleTOC.js'></script><script src='../assets/backtop.js'></script><script src='../assets/lightbox.js'></script><script src='../assets/imgca.js'></script>
+
+</html>
