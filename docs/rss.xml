@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTime</title><link>https://692.cloudns.be/</link><description>My good time-我的好时光！</description><copyright>MGTime</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be/</link></image><lastBuildDate>Fri, 30 May 2025 20:49:32 +0000</lastBuildDate><managingEditor>MGTime</managingEditor><ttl>60</ttl><webMaster>MGTime</webMaster><item><title>deepseek便签项目</title><link>https://692.cloudns.be//post/deepseek-bian-qian-xiang-mu.html</link><description>要实现 **本地存储便签 + GitHub 同步** 以及 **层级化折叠的便签结构**，可以结合 **浏览器本地存储（LocalStorage/IndexedDB）** 和 **GitHub API**，并使用类似书签的 **树形结构 + 折叠逻辑**。以下是完整方案：
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTime</title><link>https://692.cloudns.be/</link><description>My good time-我的好时光！</description><copyright>MGTime</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://692.cloudns.be/</link></image><lastBuildDate>Sun, 07 Sep 2025 05:34:27 +0000</lastBuildDate><managingEditor>MGTime</managingEditor><ttl>60</ttl><webMaster>MGTime</webMaster><item><title>deepseek便签项目</title><link>https://692.cloudns.be//post/deepseek-bian-qian-xiang-mu.html</link><description>要实现 **本地存储便签 + GitHub 同步** 以及 **层级化折叠的便签结构**，可以结合 **浏览器本地存储（LocalStorage/IndexedDB）** 和 **GitHub API**，并使用类似书签的 **树形结构 + 折叠逻辑**。以下是完整方案：
 
 ---
 
@@ -7316,12 +7316,16 @@ cmcc.090227.xyz#移动官方优选
 ------
 # 常用的优选官方域名
 www.visa.com.hk
-www.gov.se
+www.visa.com.sg
 www.visa.com.tw
 icook.hk
+icook.tw
+ali.055500.xyz
+www.visakorea.com
+www.visa.co.jp
+www.gov.se
 time.is
 skk.moe
-icook.tw
 japan.com
 www.gov.ua
 malaysia.com
@@ -7330,9 +7334,6 @@ ip.sb
 www.gco.gov.qa
 singapore.com
 shopify.com
-www.visa.com.sg
-www.visakorea.com
-www.visa.co.jp
 &gt; [更多](https://raw.githubusercontent.com/6889692/wiki/main/domain.txt)
 
 ![Image](https://github.com/user-attachments/assets/97c78606-2885-4da7-adb0-e247b59f2cf5)
@@ -7354,6 +7355,7 @@ cf.zhetengsha.eu.org
 
 ------
 # 第三方维护的优选反代域名
+bpb.yousef.isegaro.com
 cdn-all.xn--b6gac.eu.org
 cdn.xn--b6gac.eu.org
 cdn-b100.xn--b6gac.eu.org 
@@ -7390,6 +7392,7 @@ https://stock.hostmonit.com/CloudFlareYes
 &gt; HTTPS支持端口：443，2053，2083，2087，2096，8443。
 
 ------
+
 ## 我精选的反代IP：
 47.76.37.57 #HK
 38.55.97.137 #HK

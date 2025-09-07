@@ -6,12 +6,16 @@ cmcc.090227.xyz#移动官方优选
 ------
 # 常用的优选官方域名
 www.visa.com.hk
-www.gov.se
+www.visa.com.sg
 www.visa.com.tw
 icook.hk
+icook.tw
+ali.055500.xyz
+www.visakorea.com
+www.visa.co.jp
+www.gov.se
 time.is
 skk.moe
-icook.tw
 japan.com
 www.gov.ua
 malaysia.com
@@ -20,9 +24,6 @@ ip.sb
 www.gco.gov.qa
 singapore.com
 shopify.com
-www.visa.com.sg
-www.visakorea.com
-www.visa.co.jp
 > [更多](https://raw.githubusercontent.com/6889692/wiki/main/domain.txt)
 
 ![Image](https://github.com/user-attachments/assets/97c78606-2885-4da7-adb0-e247b59f2cf5)
@@ -44,6 +45,7 @@ cf.zhetengsha.eu.org
 
 ------
 # 第三方维护的优选反代域名
+bpb.yousef.isegaro.com
 cdn-all.xn--b6gac.eu.org
 cdn.xn--b6gac.eu.org
 cdn-b100.xn--b6gac.eu.org 
@@ -80,6 +82,7 @@ https://stock.hostmonit.com/CloudFlareYes
 > HTTPS支持端口：443，2053，2083，2087，2096，8443。
 
 ------
+
 ## 我精选的反代IP：
 47.76.37.57 #HK
 38.55.97.137 #HK
