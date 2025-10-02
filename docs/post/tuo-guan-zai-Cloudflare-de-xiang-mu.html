@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="../favicon.ico"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="# 托管在Cloudflare的项目
+⛅️ 精选的 Cloudflare 工具、开源项目、指南、博客和其他资源列表。
+
+## 图床
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [cf-image-hosting](https://github.com/ifyour/cf-image-hosting) | 在 Telegraph 上免费无限制地托管图像，部署在 Cloudflare 上。 |  | 维护中 |
+| [img-mom](https://github.com/beilunyang/img-mom) | 基于 Cloudflare Workers 运行时构建，轻量使用完全免费，支持多种图床（Telegram/Cloudflare R2/Backblaze B2等），快速部署。使用 Wrangler 可快速实现自部署 | | 维护中 |
+| [workers-image-hosting](https://github.com/iiop123/workers-image-hosting) | 基于 Cloudflare Workers，数据存储于 KV 的图床 | | 维护中 |
+| [Telegraph-Image](https://github.com/cf-pages/Telegraph-Image) | 免费图片托管解决方案，Flickr/imgur 替代品。使用 Cloudflare Pages 和 Telegraph。 |  | 维护中 |
+| [cloudflare-worker-image](https://github.com/ccbikai/cloudflare-worker-image) | 使用 Cloudflare Worker 处理图片，依赖 Photon，支持缩放、剪裁、水印、滤镜等功能。 | | 维护中 |
+| [tgState](https://github.com/csznet/tgState) | 使用 Telegram 作为存储的文件外链系统，不限制文件大小和格式。 |  | 维护中 |
+| [telegraph-Image](https://github.com/x-dr/telegraph-Image) | 一个图床。 |  | 维护中 |
+| [roim-picx](https://github.com/roimdev/roim-picx) | 基于 Cloudflare Pages 和 R2 实现的免费图床。 | | 维护中 |
+| [CloudFlare-ImgBed](https://github.com/MarSeventh/CloudFlare-ImgBed) | 基于 Cloudflare 和 Telegraph 的免费图床，本仓库基于  ，是原项目前端页面的重制版。开源、清晰、美观、动画丝滑、玩法多样！ |  | 维护中 |
+
+## 网站分析
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| counterscale | 简单的 Web 分析跟踪器和仪表板，类似 umami，可自行托管，低成本。 | https://github.com/benvinegar/counterscale | 维护中 |
+
+## 邮箱
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [vmail](https://github.com/oiov/vmail) | 开源临时邮箱工具，支持收发邮件。 |  | 维护中 |
+| [smail](https://github.com/akazwz/smail) | 临时邮箱服务 |  | 维护中 |
+| [Email.ML](https://email.ml/) | 运行在 Cloudflare 网络中的临时邮箱 | | 未开源 |
+| [cloudflare_temp_email](https://github.com/dreamhunter2333/cloudflare_temp_email) | 使用 Cloudflare 免费服务搭建临时邮箱，D1 作为数据库，支持多国语言及自动回复功能，支持附件 IMAP SMTP |  | 维护中 |
+| [mail2telegram](https://github.com/TBXark/mail2telegram) | 基于 Cloudflare Email Routing Worker 的 Telegram Bot，将邮件转换为 Telegram 消息，支持无限临时邮箱地址。 | | 维护中 |
+| [AuthInbox](https://github.com/TooonyChen/AuthInbox) | 自建开源多邮箱验证码接码平台，基于 Cloudflare 免费服务，自动处理邮件验证码，支持 Bark 实时通知。 | | 维护中 |
+
+## 博客
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [cloudflare-workers-blog](https://github.com/gdtool/cloudflare-workers-blog) | 运行在 Cloudflare Workers 上的博客程序，使用 Cloudflare KV 作为数据库，无其他依赖，兼顾静态和动态博客。 |  | 维护中 |
+| [microfeed](https://github.com/microfeed/microfeed) | 在 Cloudflare 上自托管的轻量级内容管理系统 (CMS)，支持多种内容发布格式。 |  | 维护中 |
+| [emaction.frontend](https://github.com/emaction/emaction.frontend) | 基于 Cloudflare D1 实现的 GitHub 风格 Reactions 点赞功能（前端）。 |  | 维护中 |
+| [emaction.backend](https://github.com/emaction/emaction.backend) | 基于 Cloudflare D1 实现的 GitHub 风格 Reactions 点赞功能（后端）。 |  | 维护中 |
+| [serverless-cloud-notepad](https://github.com/s0urcelab/serverless-cloud-notepad) | 基于 Cloudflare Worker 实现的 Serverless 云笔记。 |  | 维护中 |
+
+## 脚手架
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [nextflare](https://github.com/ccbikai/nextflare) | Next.js App 运行于 Cloudflare，集成 Lemon Squeezy。 |  | 维护中 |
+
+## 短链
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [short](https://github.com/igengdu/short/) | 使用 Cloudflare Pages 创建的 URL 缩短器。 |  | 维护中 |
+| [short](https://github.com/x-dr/short) | 使用 Cloudflare Pages 创建的 URL 缩短器。 |  | 维护中 |
+| [linklet](https://github.com/harrisonwang/linklet) | 基于 API 模式的 URL 缩短器，使用场景更多。 |  | 维护中 |
+| [Url-Shorten-Worker](https://github.com/crazypeace/Url-Shorten-Worker) | 支持自定义短链，秘密路径访问，集成多功能（短链、网络记事本、图床）。 |  | 维护中 |
+| [Url-Shorten-Worker](https://github.com/horsemail/Url-Shorten-Worker) | crazypeace 分支的 fork，增加管理员用户、正则匹配、环境变量配置等。 |  | 维护中 |
+| [CloudFlare-Pages-UrlShorten](https://github.com/Jiaocz/CloudFlare-Pages-UrlShorten) | 多功能 URL 短链工具。 | | 维护中 |
+| [Url-Shorten-Worker](https://github.com/Monopink/Url-Shorten-Worker/) | 优化页面，增加管理员用户和访客身份，支持正则表达式匹配和环境变量配置。 |  | 维护中 |
+| [CloudflareWorker-KV-UrlShort](https://github.com/Ai-Yolo/CloudflareWorker-KV-UrlShort) | 支持自定义首页、菜单短链、文本和网页分享 URL。 | | 维护中 |
+| [Sink](https://github.com/ccbikai/Sink) | 完全运行于 Cloudflare 的简单快速安全链接缩短器，具备分析功能和控制台面板。 |  | 维护中 |
+| [short](https://github.com/molikai-work/short) | 基于 x-dr/short，新增短链密码、管理、Turnstile 验证、黑名单域名、多域名配置等。 |  | 维护中 |
+
+## 网站分析
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [analytics_with_cloudflare](https://github.com/yestool/analytics_with_cloudflare) | 免费开源网页访客计数器，基于 Cloudflare Worker 和 D1 数据库，实现功能与“不蒜子”类似。 |  | 维护中 |
+| [counterscale](https://github.com/benvinegar/counterscale) | 简单的 Web 分析跟踪器和仪表板，类似 umami，可自行托管，低成本。 |  | 维护中 |
+| [HanAnalytics](https://github.com/uxiaohan/HanAnalytics) | 部署在 Cloudflare Pages 上的简易网络分析跟踪器，支持设备、来源、国家等数据查看，支持密码访问和域名白名单。 | | 维护中 |
+
+## 隧道
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [Cloudflared-web](https://github.com/WisdomSky/Cloudflared-web) | Docker 镜像，集成 cloudflared CLI 和简单 Web UI，方便启动/停止 Cloudflare 隧道。 | | 维护中 |
+
+## 加速
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [gh-proxy](https://github.com/hunshcn/gh-proxy) | github release、archive 及项目文件加速，支持 clone，含 Cloudflare Workers 无服务器版本和 Python 版本。 |  | 维护中 |
+| [gh-proxy](https://github.com/crazypeace/gh-proxy) | github release、archive 及项目文件加速，支持 api.github.com, git.io。 |  | 维护中 |
+| [cf-proxy-ex](https://github.com/1234567Yang/cf-proxy-ex) | Cloudflare 超级代理，支持 Duckduckgo 代理、OpenAI/ChatGPT 代理、Github 加速等。 |  | 维护中 |
+| [cloudflare-docker-proxy](https://github.com/ciiiii/cloudflare-docker-proxy) | 在 Cloudflare Worker 上运行的 Docker Hub 注册代理。 | | 维护中 |
+| [CF-Workers-docker.io](https://github.com/cmliu/CF-Workers-docker.io) | 基于 Cloudflare Workers 的 Docker 镜像代理工具，解决访问限制和加速访问问题。 |  | 维护中 |
+
+## 文件分享
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [pastebin-worker](https://github.com/SharzyL/pastebin-worker) | 部署在 Cloudflare Workers 上的开源 Pastebin，支持文本/文件分享，支持密码和删除时间设置。 |  | 维护中 |
+| [FileWorker](https://github.com/yllhwa/FileWorker) | 运行在 Cloudflare Worker 上的在线剪贴板/文件共享。 | | 维护中 |
+| [cf-files-sharing](https://github.com/joyance-professional/cf-files-sharing) | 利用 Cloudflare Workers 全球加速优势，实现支持密码保护的文件分享，集成 D1 数据库和 R2 存储。 | | 维护中 |
+
+## 测速
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [CloudflareSpeedTest](https://github.com/XIU2/CloudflareSpeedTest) | 帮助选择适合中国内地的 Cloudflare IP，降低延迟和丢包。 | | 维护中 |
+| [SpeedTest](https://speed.cloudflare.com/) | 官方 SpeedTest 工具。 | | 运行中 |
+
+## 监控
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [UptimeFlare](https://github.com/lyc8503/UptimeFlare) | 基于 Cloudflare Worker 的无服务器站点监控工具，支持多协议端口监控，全球多城市地理位置特定检查，自定义请求和响应校验。 | | 维护中 |
+| [cf-workers-status-page](https://github.com/eidam/cf-workers-status-page) | 监控网站状态，展示历史记录，状态变化时通过 Slack 通知，基于 Cloudflare Workers、CRON 和 KV。 |  | 维护中 |
+
+## 文章
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [workers](https://igdux.com/workers) | Cloudflare Workers 优秀项目收集。 | | 有效中 |
+| [accelerate-and-secure-with-cloudflared](https://nova.moe/accelerate-and-secure-with-cloudflared/) | 教你使用 Cloudflare Argo Tunnel(cloudflared) 加速和保护网站。 | | 有效中 |
+| [jsonbin](https://www.owenyoung.com/blog/jsonbin/) | 在 Cloudflare Workers 部署 JSON as a Storage 服务。 | | 有效中 |
+| [cronbin](https://www.owenyoung.com/blog/cronbin/) | 在 Cloudflare Workers 部署带 Dashboard 的 Cron 服务。 | | 有效中 |
+| [using-cloudflare-worker-proxy-google](https://xiaowangye.org/posts/using-cloudflare-worker-proxy-google/) | 使用 Cloudflare Worker 代理 Google 站点。 | | 有效中 |
+| [Use-Cloudflare-Zero-Trust-protect-your-web-applications](https://jiapan.me/2023/Use-Cloudflare-Zero-Trust-protect-your-web-applications/) | 使用 Cloudflare Zero Trust 保护 Web 应用。 | | 有效中 |
+| [Nextjs-app-router-with-cloudflare-r2](https://juejin.cn/post/7306723921717166131) | 如何在 Next.js 13 的 app/ 目录中使用 Cloudflare R2 存储。 | | 有效中 |
+| [cloudflare-webssh-zerotrust](https://josephcz.xyz/technology/network/cloudflare-webssh-zerotrust/) | 使用 Cloudflare ZeroTrust 搭建 WebSSH。 | | 有效中 |
+| [免费的 CAPTCHA 替代品](https://www.cloudflare.com/zh-cn/products/turnstile/) | 官方出品，免费的 CAPTCHA 替代品。 | | 有效中 |
+| [通过 Cloudflare 页面函数向 Telegram 发消息](https://liujiacai.net/blog/2024/05/07/telegram-bot-functions/) | 利用页面函数作为 GitHub Webhook 地址，将事件转发到 Telegram 频道。 | | 有效中 |
+| [使用Cloudflare Workers制作博客AI摘要](https://mabbs.github.io/2024/07/03/ai-summary.html) | 使用 Cloudflare Workers + Workers AI + D1 数据库实现博客 AI 摘要。 | | 有效中 |
+
+## 其他
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [silk-privacy-pass-client](https://chrome.google.com/webstore/detail/silk-privacy-pass-client/ajhmfdgkijocedmfjonnpjfojldioehi) | Cloudflare 官方插件，解决频繁人机验证问题。 | | 维护中 |
+| [WARP-Clash-API](https://github.com/vvbbnn00/WARP-Clash-API) | 通过订阅使用 WARP+，支持 Clash、Shadowrocket，内置流量刷取和 IP 选优，支持 Docker compose 一键部署。 | | 维护中 |
+| [ip-api](https://github.com/ccbikai/ip-api) | 利用 Cloudflare Workers 快速搭建 IP 地址和地理位置信息接口。 |  | 维护中 |
+| [ChatGPT-Telegram-Workers](https://github.com/TBXark/ChatGPT-Telegram-Workers) | 轻松部署 Cloudflare Workers 上的 Telegram ChatGPT 机器人，带详细教程。 | | 维护中 |
+| [RSSWorker](https://github.com/yllhwa/RSSWorker) | 轻量级 RSS 订阅工具，部署于 Cloudflare Worker。 | | 维护中 |
+| [deeplx-for-cloudflare](https://github.com/ifyour/deeplx-for-cloudflare) | 在 Cloudflare 部署 DeepLX 翻译服务。 |  | 维护中 |
+| [Cloudflare-No-Tracked](https://github.com/fwqaaq/Cloudflare-No-Tracked) | 去除 B 站、小红书跟踪链接，支持 Telegram bot 版本。 |  | 维护中 |
+| [dnschecker](https://dnschecker.org/) | Cloudflare 官方推荐的域名解析检测工具。 | | 有效中 |
+| [blockedinchina](https://www.comparitech.com/privacy-security-tools/blockedinchina/) | Cloudflare 官方推荐的检测域名是否被墙工具。 | | 有效中 |
+| [prisma-with-cloudflare-d1](https://www.prisma.io/docs/orm/overview/databases/cloudflare-d1) | 介绍如何使用 Prisma 与 Cloudflare D1 数据库交互。 | | 有效中 |
+| [cohere2openai-cf-worker](https://github.com/ckt1031/cohere2openai-cf-worker) | Cloudflare Worker 将 Cohere API 转换为 OpenAI API，易部署。 | | 维护中 |
+| [cohere2openai](https://github.com/beanqi/cohere2openai) | Cloudflare Worker 将 Cohere API 转换为 OpenAI API。 | | 维护中 |
+| [locnode](https://github.com/minlearn/locnode) | 自建轻量联合社区，首款能在 Cloudflare 运行的轻量联合社区。 |  | 维护中 |
+| [Siri Ultra](https://github.com/fatwang2/siri-ultra) | 运行于 Cloudflare Workers 的助手，支持任意 LLM 模型。 | | 维护中 |
+| [cobalt page function](https://github.com/jiacai2050/blog-snippets/blob/main/cloudflare/cobalt.js) | 利用页面函数调用 cobalt 接口，获取视频下载地址。 |  | 维护中 |
+| [CloudFlare Radar](https://radar.cloudflare.com/scan) | 查看网站技术栈。 | | 维护中 |
+| [wr.do](https://github.com/oiov/wr.do) | 基于 Cloudflare 的多租户 DNS 分发系统，免费提供 DNS 解析和短链接生成。 | https://wr.do | 维护中 |
+| [cloudflare-proxy-sites](https://github.com/seadfeng/cloudflare-proxy-sites) | Cloudflare Workers web proxy，支持二级域名访问。 |  | 维护中 |
+| [sublink-worker](https://github.com/7Sageer/sublink-worker) | 部署在 Cloudflare Worker 上的轻量级代理节点订阅转换工具，支持多协议订阅链接转换和自定义规则。 | | 维护中 |
+
+## 教程
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [cloudflare-quickstart](https://github.com/zgimszhd61/cloudflare-quickstart) | Cloudflare Workers 快速入门指南。 | | 更新中 |
+| [cloudflare-tunnel](https://dmesg.app/cloudflare) | 关于使用 Cloudflare Zero Trust 创建大内网及解决被墙服务器问题的技术博客。 | | 更新中 |
+| [cloudflare-worker-gmail-resend-enterprise-email](https://cleanclip.cc/zh/developer/cloudflare-worker-gmail-resend-enterprise-email) | Cloudflare + Gmail + Resend 十分钟搭建免费企业邮箱。 | | 更新中 |$$$$$$$">
+<meta property="og:title" content="托管在Cloudflare的项目">
+<meta property="og:description" content="# 托管在Cloudflare的项目
+⛅️ 精选的 Cloudflare 工具、开源项目、指南、博客和其他资源列表。
+
+## 图床
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [cf-image-hosting](https://github.com/ifyour/cf-image-hosting) | 在 Telegraph 上免费无限制地托管图像，部署在 Cloudflare 上。 |  | 维护中 |
+| [img-mom](https://github.com/beilunyang/img-mom) | 基于 Cloudflare Workers 运行时构建，轻量使用完全免费，支持多种图床（Telegram/Cloudflare R2/Backblaze B2等），快速部署。使用 Wrangler 可快速实现自部署 | | 维护中 |
+| [workers-image-hosting](https://github.com/iiop123/workers-image-hosting) | 基于 Cloudflare Workers，数据存储于 KV 的图床 | | 维护中 |
+| [Telegraph-Image](https://github.com/cf-pages/Telegraph-Image) | 免费图片托管解决方案，Flickr/imgur 替代品。使用 Cloudflare Pages 和 Telegraph。 |  | 维护中 |
+| [cloudflare-worker-image](https://github.com/ccbikai/cloudflare-worker-image) | 使用 Cloudflare Worker 处理图片，依赖 Photon，支持缩放、剪裁、水印、滤镜等功能。 | | 维护中 |
+| [tgState](https://github.com/csznet/tgState) | 使用 Telegram 作为存储的文件外链系统，不限制文件大小和格式。 |  | 维护中 |
+| [telegraph-Image](https://github.com/x-dr/telegraph-Image) | 一个图床。 |  | 维护中 |
+| [roim-picx](https://github.com/roimdev/roim-picx) | 基于 Cloudflare Pages 和 R2 实现的免费图床。 | | 维护中 |
+| [CloudFlare-ImgBed](https://github.com/MarSeventh/CloudFlare-ImgBed) | 基于 Cloudflare 和 Telegraph 的免费图床，本仓库基于  ，是原项目前端页面的重制版。开源、清晰、美观、动画丝滑、玩法多样！ |  | 维护中 |
+
+## 网站分析
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| counterscale | 简单的 Web 分析跟踪器和仪表板，类似 umami，可自行托管，低成本。 | https://github.com/benvinegar/counterscale | 维护中 |
+
+## 邮箱
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [vmail](https://github.com/oiov/vmail) | 开源临时邮箱工具，支持收发邮件。 |  | 维护中 |
+| [smail](https://github.com/akazwz/smail) | 临时邮箱服务 |  | 维护中 |
+| [Email.ML](https://email.ml/) | 运行在 Cloudflare 网络中的临时邮箱 | | 未开源 |
+| [cloudflare_temp_email](https://github.com/dreamhunter2333/cloudflare_temp_email) | 使用 Cloudflare 免费服务搭建临时邮箱，D1 作为数据库，支持多国语言及自动回复功能，支持附件 IMAP SMTP |  | 维护中 |
+| [mail2telegram](https://github.com/TBXark/mail2telegram) | 基于 Cloudflare Email Routing Worker 的 Telegram Bot，将邮件转换为 Telegram 消息，支持无限临时邮箱地址。 | | 维护中 |
+| [AuthInbox](https://github.com/TooonyChen/AuthInbox) | 自建开源多邮箱验证码接码平台，基于 Cloudflare 免费服务，自动处理邮件验证码，支持 Bark 实时通知。 | | 维护中 |
+
+## 博客
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [cloudflare-workers-blog](https://github.com/gdtool/cloudflare-workers-blog) | 运行在 Cloudflare Workers 上的博客程序，使用 Cloudflare KV 作为数据库，无其他依赖，兼顾静态和动态博客。 |  | 维护中 |
+| [microfeed](https://github.com/microfeed/microfeed) | 在 Cloudflare 上自托管的轻量级内容管理系统 (CMS)，支持多种内容发布格式。 |  | 维护中 |
+| [emaction.frontend](https://github.com/emaction/emaction.frontend) | 基于 Cloudflare D1 实现的 GitHub 风格 Reactions 点赞功能（前端）。 |  | 维护中 |
+| [emaction.backend](https://github.com/emaction/emaction.backend) | 基于 Cloudflare D1 实现的 GitHub 风格 Reactions 点赞功能（后端）。 |  | 维护中 |
+| [serverless-cloud-notepad](https://github.com/s0urcelab/serverless-cloud-notepad) | 基于 Cloudflare Worker 实现的 Serverless 云笔记。 |  | 维护中 |
+
+## 脚手架
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [nextflare](https://github.com/ccbikai/nextflare) | Next.js App 运行于 Cloudflare，集成 Lemon Squeezy。 |  | 维护中 |
+
+## 短链
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [short](https://github.com/igengdu/short/) | 使用 Cloudflare Pages 创建的 URL 缩短器。 |  | 维护中 |
+| [short](https://github.com/x-dr/short) | 使用 Cloudflare Pages 创建的 URL 缩短器。 |  | 维护中 |
+| [linklet](https://github.com/harrisonwang/linklet) | 基于 API 模式的 URL 缩短器，使用场景更多。 |  | 维护中 |
+| [Url-Shorten-Worker](https://github.com/crazypeace/Url-Shorten-Worker) | 支持自定义短链，秘密路径访问，集成多功能（短链、网络记事本、图床）。 |  | 维护中 |
+| [Url-Shorten-Worker](https://github.com/horsemail/Url-Shorten-Worker) | crazypeace 分支的 fork，增加管理员用户、正则匹配、环境变量配置等。 |  | 维护中 |
+| [CloudFlare-Pages-UrlShorten](https://github.com/Jiaocz/CloudFlare-Pages-UrlShorten) | 多功能 URL 短链工具。 | | 维护中 |
+| [Url-Shorten-Worker](https://github.com/Monopink/Url-Shorten-Worker/) | 优化页面，增加管理员用户和访客身份，支持正则表达式匹配和环境变量配置。 |  | 维护中 |
+| [CloudflareWorker-KV-UrlShort](https://github.com/Ai-Yolo/CloudflareWorker-KV-UrlShort) | 支持自定义首页、菜单短链、文本和网页分享 URL。 | | 维护中 |
+| [Sink](https://github.com/ccbikai/Sink) | 完全运行于 Cloudflare 的简单快速安全链接缩短器，具备分析功能和控制台面板。 |  | 维护中 |
+| [short](https://github.com/molikai-work/short) | 基于 x-dr/short，新增短链密码、管理、Turnstile 验证、黑名单域名、多域名配置等。 |  | 维护中 |
+
+## 网站分析
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [analytics_with_cloudflare](https://github.com/yestool/analytics_with_cloudflare) | 免费开源网页访客计数器，基于 Cloudflare Worker 和 D1 数据库，实现功能与“不蒜子”类似。 |  | 维护中 |
+| [counterscale](https://github.com/benvinegar/counterscale) | 简单的 Web 分析跟踪器和仪表板，类似 umami，可自行托管，低成本。 |  | 维护中 |
+| [HanAnalytics](https://github.com/uxiaohan/HanAnalytics) | 部署在 Cloudflare Pages 上的简易网络分析跟踪器，支持设备、来源、国家等数据查看，支持密码访问和域名白名单。 | | 维护中 |
+
+## 隧道
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [Cloudflared-web](https://github.com/WisdomSky/Cloudflared-web) | Docker 镜像，集成 cloudflared CLI 和简单 Web UI，方便启动/停止 Cloudflare 隧道。 | | 维护中 |
+
+## 加速
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [gh-proxy](https://github.com/hunshcn/gh-proxy) | github release、archive 及项目文件加速，支持 clone，含 Cloudflare Workers 无服务器版本和 Python 版本。 |  | 维护中 |
+| [gh-proxy](https://github.com/crazypeace/gh-proxy) | github release、archive 及项目文件加速，支持 api.github.com, git.io。 |  | 维护中 |
+| [cf-proxy-ex](https://github.com/1234567Yang/cf-proxy-ex) | Cloudflare 超级代理，支持 Duckduckgo 代理、OpenAI/ChatGPT 代理、Github 加速等。 |  | 维护中 |
+| [cloudflare-docker-proxy](https://github.com/ciiiii/cloudflare-docker-proxy) | 在 Cloudflare Worker 上运行的 Docker Hub 注册代理。 | | 维护中 |
+| [CF-Workers-docker.io](https://github.com/cmliu/CF-Workers-docker.io) | 基于 Cloudflare Workers 的 Docker 镜像代理工具，解决访问限制和加速访问问题。 |  | 维护中 |
+
+## 文件分享
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [pastebin-worker](https://github.com/SharzyL/pastebin-worker) | 部署在 Cloudflare Workers 上的开源 Pastebin，支持文本/文件分享，支持密码和删除时间设置。 |  | 维护中 |
+| [FileWorker](https://github.com/yllhwa/FileWorker) | 运行在 Cloudflare Worker 上的在线剪贴板/文件共享。 | | 维护中 |
+| [cf-files-sharing](https://github.com/joyance-professional/cf-files-sharing) | 利用 Cloudflare Workers 全球加速优势，实现支持密码保护的文件分享，集成 D1 数据库和 R2 存储。 | | 维护中 |
+
+## 测速
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [CloudflareSpeedTest](https://github.com/XIU2/CloudflareSpeedTest) | 帮助选择适合中国内地的 Cloudflare IP，降低延迟和丢包。 | | 维护中 |
+| [SpeedTest](https://speed.cloudflare.com/) | 官方 SpeedTest 工具。 | | 运行中 |
+
+## 监控
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [UptimeFlare](https://github.com/lyc8503/UptimeFlare) | 基于 Cloudflare Worker 的无服务器站点监控工具，支持多协议端口监控，全球多城市地理位置特定检查，自定义请求和响应校验。 | | 维护中 |
+| [cf-workers-status-page](https://github.com/eidam/cf-workers-status-page) | 监控网站状态，展示历史记录，状态变化时通过 Slack 通知，基于 Cloudflare Workers、CRON 和 KV。 |  | 维护中 |
+
+## 文章
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [workers](https://igdux.com/workers) | Cloudflare Workers 优秀项目收集。 | | 有效中 |
+| [accelerate-and-secure-with-cloudflared](https://nova.moe/accelerate-and-secure-with-cloudflared/) | 教你使用 Cloudflare Argo Tunnel(cloudflared) 加速和保护网站。 | | 有效中 |
+| [jsonbin](https://www.owenyoung.com/blog/jsonbin/) | 在 Cloudflare Workers 部署 JSON as a Storage 服务。 | | 有效中 |
+| [cronbin](https://www.owenyoung.com/blog/cronbin/) | 在 Cloudflare Workers 部署带 Dashboard 的 Cron 服务。 | | 有效中 |
+| [using-cloudflare-worker-proxy-google](https://xiaowangye.org/posts/using-cloudflare-worker-proxy-google/) | 使用 Cloudflare Worker 代理 Google 站点。 | | 有效中 |
+| [Use-Cloudflare-Zero-Trust-protect-your-web-applications](https://jiapan.me/2023/Use-Cloudflare-Zero-Trust-protect-your-web-applications/) | 使用 Cloudflare Zero Trust 保护 Web 应用。 | | 有效中 |
+| [Nextjs-app-router-with-cloudflare-r2](https://juejin.cn/post/7306723921717166131) | 如何在 Next.js 13 的 app/ 目录中使用 Cloudflare R2 存储。 | | 有效中 |
+| [cloudflare-webssh-zerotrust](https://josephcz.xyz/technology/network/cloudflare-webssh-zerotrust/) | 使用 Cloudflare ZeroTrust 搭建 WebSSH。 | | 有效中 |
+| [免费的 CAPTCHA 替代品](https://www.cloudflare.com/zh-cn/products/turnstile/) | 官方出品，免费的 CAPTCHA 替代品。 | | 有效中 |
+| [通过 Cloudflare 页面函数向 Telegram 发消息](https://liujiacai.net/blog/2024/05/07/telegram-bot-functions/) | 利用页面函数作为 GitHub Webhook 地址，将事件转发到 Telegram 频道。 | | 有效中 |
+| [使用Cloudflare Workers制作博客AI摘要](https://mabbs.github.io/2024/07/03/ai-summary.html) | 使用 Cloudflare Workers + Workers AI + D1 数据库实现博客 AI 摘要。 | | 有效中 |
+
+## 其他
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [silk-privacy-pass-client](https://chrome.google.com/webstore/detail/silk-privacy-pass-client/ajhmfdgkijocedmfjonnpjfojldioehi) | Cloudflare 官方插件，解决频繁人机验证问题。 | | 维护中 |
+| [WARP-Clash-API](https://github.com/vvbbnn00/WARP-Clash-API) | 通过订阅使用 WARP+，支持 Clash、Shadowrocket，内置流量刷取和 IP 选优，支持 Docker compose 一键部署。 | | 维护中 |
+| [ip-api](https://github.com/ccbikai/ip-api) | 利用 Cloudflare Workers 快速搭建 IP 地址和地理位置信息接口。 |  | 维护中 |
+| [ChatGPT-Telegram-Workers](https://github.com/TBXark/ChatGPT-Telegram-Workers) | 轻松部署 Cloudflare Workers 上的 Telegram ChatGPT 机器人，带详细教程。 | | 维护中 |
+| [RSSWorker](https://github.com/yllhwa/RSSWorker) | 轻量级 RSS 订阅工具，部署于 Cloudflare Worker。 | | 维护中 |
+| [deeplx-for-cloudflare](https://github.com/ifyour/deeplx-for-cloudflare) | 在 Cloudflare 部署 DeepLX 翻译服务。 |  | 维护中 |
+| [Cloudflare-No-Tracked](https://github.com/fwqaaq/Cloudflare-No-Tracked) | 去除 B 站、小红书跟踪链接，支持 Telegram bot 版本。 |  | 维护中 |
+| [dnschecker](https://dnschecker.org/) | Cloudflare 官方推荐的域名解析检测工具。 | | 有效中 |
+| [blockedinchina](https://www.comparitech.com/privacy-security-tools/blockedinchina/) | Cloudflare 官方推荐的检测域名是否被墙工具。 | | 有效中 |
+| [prisma-with-cloudflare-d1](https://www.prisma.io/docs/orm/overview/databases/cloudflare-d1) | 介绍如何使用 Prisma 与 Cloudflare D1 数据库交互。 | | 有效中 |
+| [cohere2openai-cf-worker](https://github.com/ckt1031/cohere2openai-cf-worker) | Cloudflare Worker 将 Cohere API 转换为 OpenAI API，易部署。 | | 维护中 |
+| [cohere2openai](https://github.com/beanqi/cohere2openai) | Cloudflare Worker 将 Cohere API 转换为 OpenAI API。 | | 维护中 |
+| [locnode](https://github.com/minlearn/locnode) | 自建轻量联合社区，首款能在 Cloudflare 运行的轻量联合社区。 |  | 维护中 |
+| [Siri Ultra](https://github.com/fatwang2/siri-ultra) | 运行于 Cloudflare Workers 的助手，支持任意 LLM 模型。 | | 维护中 |
+| [cobalt page function](https://github.com/jiacai2050/blog-snippets/blob/main/cloudflare/cobalt.js) | 利用页面函数调用 cobalt 接口，获取视频下载地址。 |  | 维护中 |
+| [CloudFlare Radar](https://radar.cloudflare.com/scan) | 查看网站技术栈。 | | 维护中 |
+| [wr.do](https://github.com/oiov/wr.do) | 基于 Cloudflare 的多租户 DNS 分发系统，免费提供 DNS 解析和短链接生成。 | https://wr.do | 维护中 |
+| [cloudflare-proxy-sites](https://github.com/seadfeng/cloudflare-proxy-sites) | Cloudflare Workers web proxy，支持二级域名访问。 |  | 维护中 |
+| [sublink-worker](https://github.com/7Sageer/sublink-worker) | 部署在 Cloudflare Worker 上的轻量级代理节点订阅转换工具，支持多协议订阅链接转换和自定义规则。 | | 维护中 |
+
+## 教程
+
+| 名称 | 特性 | 在线地址 | 状态 |
+| --- | --- | --- | --- |
+| [cloudflare-quickstart](https://github.com/zgimszhd61/cloudflare-quickstart) | Cloudflare Workers 快速入门指南。 | | 更新中 |
+| [cloudflare-tunnel](https://dmesg.app/cloudflare) | 关于使用 Cloudflare Zero Trust 创建大内网及解决被墙服务器问题的技术博客。 | | 更新中 |
+| [cloudflare-worker-gmail-resend-enterprise-email](https://cleanclip.cc/zh/developer/cloudflare-worker-gmail-resend-enterprise-email) | Cloudflare + Gmail + Resend 十分钟搭建免费企业邮箱。 | | 更新中 |$$$$$$$">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mgt.xx.kg//post/tuo-guan-zai-Cloudflare-de-xiang-mu.html">
+<meta property="og:image" content="avatar.svg">
+<title>托管在Cloudflare的项目</title>
+
+
+
+</head>
+<style>
+html { background: #d2d4d6; }
+body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto; padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25; border-radius: 10px; background: rgba(10, 100, 130, 0.08); box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);  overflow: auto;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:1.6em;font-weight:bold;color: #1f85c9;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+.markdown-body h1{font-size: 1.4em;}
+.markdown-body h2{font-size: 1.2em;}
+.markdown-body h3{font-size: 1em;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 580px) {
+     body {margin:0;padding: 12px;box-shadow: none;}
+    .postTitle{font-size:1.4em; color: #1f85c9;}
+}
+
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">托管在Cloudflare的项目</h1>
+<div class="title-right">
+    <a href="https://mgt.xx.kg/" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/fjvi/note/issues/38" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h1>托管在Cloudflare的项目</h1>
+<p>⛅️ 精选的 Cloudflare 工具、开源项目、指南、博客和其他资源列表。</p>
+<h2>图床</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>名称</th>
+<th>特性</th>
+<th>在线地址</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/ifyour/cf-image-hosting">cf-image-hosting</a></td>
+<td>在 Telegraph 上免费无限制地托管图像，部署在 Cloudflare 上。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/beilunyang/img-mom">img-mom</a></td>
+<td>基于 Cloudflare Workers 运行时构建，轻量使用完全免费，支持多种图床（Telegram/Cloudflare R2/Backblaze B2等），快速部署。使用 Wrangler 可快速实现自部署</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/iiop123/workers-image-hosting">workers-image-hosting</a></td>
+<td>基于 Cloudflare Workers，数据存储于 KV 的图床</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/cf-pages/Telegraph-Image">Telegraph-Image</a></td>
+<td>免费图片托管解决方案，Flickr/imgur 替代品。使用 Cloudflare Pages 和 Telegraph。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/ccbikai/cloudflare-worker-image">cloudflare-worker-image</a></td>
+<td>使用 Cloudflare Worker 处理图片，依赖 Photon，支持缩放、剪裁、水印、滤镜等功能。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/csznet/tgState">tgState</a></td>
+<td>使用 Telegram 作为存储的文件外链系统，不限制文件大小和格式。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/x-dr/telegraph-Image">telegraph-Image</a></td>
+<td>一个图床。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/roimdev/roim-picx">roim-picx</a></td>
+<td>基于 Cloudflare Pages 和 R2 实现的免费图床。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/MarSeventh/CloudFlare-ImgBed">CloudFlare-ImgBed</a></td>
+<td>基于 Cloudflare 和 Telegraph 的免费图床，本仓库基于  ，是原项目前端页面的重制版。开源、清晰、美观、动画丝滑、玩法多样！</td>
+<td></td>
+<td>维护中</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2>网站分析</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>名称</th>
+<th>特性</th>
+<th>在线地址</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>counterscale</td>
+<td>简单的 Web 分析跟踪器和仪表板，类似 umami，可自行托管，低成本。</td>
+<td><a href="https://github.com/benvinegar/counterscale">https://github.com/benvinegar/counterscale</a></td>
+<td>维护中</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2>邮箱</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>名称</th>
+<th>特性</th>
+<th>在线地址</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/oiov/vmail">vmail</a></td>
+<td>开源临时邮箱工具，支持收发邮件。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/akazwz/smail">smail</a></td>
+<td>临时邮箱服务</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://email.ml/" rel="nofollow">Email.ML</a></td>
+<td>运行在 Cloudflare 网络中的临时邮箱</td>
+<td></td>
+<td>未开源</td>
+</tr>
+<tr>
+<td><a href="https://github.com/dreamhunter2333/cloudflare_temp_email">cloudflare_temp_email</a></td>
+<td>使用 Cloudflare 免费服务搭建临时邮箱，D1 作为数据库，支持多国语言及自动回复功能，支持附件 IMAP SMTP</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/TBXark/mail2telegram">mail2telegram</a></td>
+<td>基于 Cloudflare Email Routing Worker 的 Telegram Bot，将邮件转换为 Telegram 消息，支持无限临时邮箱地址。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/TooonyChen/AuthInbox">AuthInbox</a></td>
+<td>自建开源多邮箱验证码接码平台，基于 Cloudflare 免费服务，自动处理邮件验证码，支持 Bark 实时通知。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2>博客</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>名称</th>
+<th>特性</th>
+<th>在线地址</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/gdtool/cloudflare-workers-blog">cloudflare-workers-blog</a></td>
+<td>运行在 Cloudflare Workers 上的博客程序，使用 Cloudflare KV 作为数据库，无其他依赖，兼顾静态和动态博客。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/microfeed/microfeed">microfeed</a></td>
+<td>在 Cloudflare 上自托管的轻量级内容管理系统 (CMS)，支持多种内容发布格式。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/emaction/emaction.frontend">emaction.frontend</a></td>
+<td>基于 Cloudflare D1 实现的 GitHub 风格 Reactions 点赞功能（前端）。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/emaction/emaction.backend">emaction.backend</a></td>
+<td>基于 Cloudflare D1 实现的 GitHub 风格 Reactions 点赞功能（后端）。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/s0urcelab/serverless-cloud-notepad">serverless-cloud-notepad</a></td>
+<td>基于 Cloudflare Worker 实现的 Serverless 云笔记。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2>脚手架</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>名称</th>
+<th>特性</th>
+<th>在线地址</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/ccbikai/nextflare">nextflare</a></td>
+<td>Next.js App 运行于 Cloudflare，集成 Lemon Squeezy。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2>短链</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>名称</th>
+<th>特性</th>
+<th>在线地址</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/igengdu/short/">short</a></td>
+<td>使用 Cloudflare Pages 创建的 URL 缩短器。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/x-dr/short">short</a></td>
+<td>使用 Cloudflare Pages 创建的 URL 缩短器。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/harrisonwang/linklet">linklet</a></td>
+<td>基于 API 模式的 URL 缩短器，使用场景更多。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/crazypeace/Url-Shorten-Worker">Url-Shorten-Worker</a></td>
+<td>支持自定义短链，秘密路径访问，集成多功能（短链、网络记事本、图床）。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/horsemail/Url-Shorten-Worker">Url-Shorten-Worker</a></td>
+<td>crazypeace 分支的 fork，增加管理员用户、正则匹配、环境变量配置等。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Jiaocz/CloudFlare-Pages-UrlShorten">CloudFlare-Pages-UrlShorten</a></td>
+<td>多功能 URL 短链工具。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Monopink/Url-Shorten-Worker/">Url-Shorten-Worker</a></td>
+<td>优化页面，增加管理员用户和访客身份，支持正则表达式匹配和环境变量配置。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Ai-Yolo/CloudflareWorker-KV-UrlShort">CloudflareWorker-KV-UrlShort</a></td>
+<td>支持自定义首页、菜单短链、文本和网页分享 URL。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/ccbikai/Sink">Sink</a></td>
+<td>完全运行于 Cloudflare 的简单快速安全链接缩短器，具备分析功能和控制台面板。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/molikai-work/short">short</a></td>
+<td>基于 x-dr/short，新增短链密码、管理、Turnstile 验证、黑名单域名、多域名配置等。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2>网站分析</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>名称</th>
+<th>特性</th>
+<th>在线地址</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/yestool/analytics_with_cloudflare">analytics_with_cloudflare</a></td>
+<td>免费开源网页访客计数器，基于 Cloudflare Worker 和 D1 数据库，实现功能与“不蒜子”类似。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/benvinegar/counterscale">counterscale</a></td>
+<td>简单的 Web 分析跟踪器和仪表板，类似 umami，可自行托管，低成本。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/uxiaohan/HanAnalytics">HanAnalytics</a></td>
+<td>部署在 Cloudflare Pages 上的简易网络分析跟踪器，支持设备、来源、国家等数据查看，支持密码访问和域名白名单。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2>隧道</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>名称</th>
+<th>特性</th>
+<th>在线地址</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/WisdomSky/Cloudflared-web">Cloudflared-web</a></td>
+<td>Docker 镜像，集成 cloudflared CLI 和简单 Web UI，方便启动/停止 Cloudflare 隧道。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2>加速</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>名称</th>
+<th>特性</th>
+<th>在线地址</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/hunshcn/gh-proxy">gh-proxy</a></td>
+<td>github release、archive 及项目文件加速，支持 clone，含 Cloudflare Workers 无服务器版本和 Python 版本。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/crazypeace/gh-proxy">gh-proxy</a></td>
+<td>github release、archive 及项目文件加速，支持 api.github.com, git.io。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/1234567Yang/cf-proxy-ex">cf-proxy-ex</a></td>
+<td>Cloudflare 超级代理，支持 Duckduckgo 代理、OpenAI/ChatGPT 代理、Github 加速等。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/ciiiii/cloudflare-docker-proxy">cloudflare-docker-proxy</a></td>
+<td>在 Cloudflare Worker 上运行的 Docker Hub 注册代理。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/cmliu/CF-Workers-docker.io">CF-Workers-docker.io</a></td>
+<td>基于 Cloudflare Workers 的 Docker 镜像代理工具，解决访问限制和加速访问问题。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2>文件分享</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>名称</th>
+<th>特性</th>
+<th>在线地址</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/SharzyL/pastebin-worker">pastebin-worker</a></td>
+<td>部署在 Cloudflare Workers 上的开源 Pastebin，支持文本/文件分享，支持密码和删除时间设置。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yllhwa/FileWorker">FileWorker</a></td>
+<td>运行在 Cloudflare Worker 上的在线剪贴板/文件共享。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/joyance-professional/cf-files-sharing">cf-files-sharing</a></td>
+<td>利用 Cloudflare Workers 全球加速优势，实现支持密码保护的文件分享，集成 D1 数据库和 R2 存储。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2>测速</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>名称</th>
+<th>特性</th>
+<th>在线地址</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/XIU2/CloudflareSpeedTest">CloudflareSpeedTest</a></td>
+<td>帮助选择适合中国内地的 Cloudflare IP，降低延迟和丢包。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://speed.cloudflare.com/" rel="nofollow">SpeedTest</a></td>
+<td>官方 SpeedTest 工具。</td>
+<td></td>
+<td>运行中</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2>监控</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>名称</th>
+<th>特性</th>
+<th>在线地址</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/lyc8503/UptimeFlare">UptimeFlare</a></td>
+<td>基于 Cloudflare Worker 的无服务器站点监控工具，支持多协议端口监控，全球多城市地理位置特定检查，自定义请求和响应校验。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/eidam/cf-workers-status-page">cf-workers-status-page</a></td>
+<td>监控网站状态，展示历史记录，状态变化时通过 Slack 通知，基于 Cloudflare Workers、CRON 和 KV。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2>文章</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>名称</th>
+<th>特性</th>
+<th>在线地址</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://igdux.com/workers" rel="nofollow">workers</a></td>
+<td>Cloudflare Workers 优秀项目收集。</td>
+<td></td>
+<td>有效中</td>
+</tr>
+<tr>
+<td><a href="https://nova.moe/accelerate-and-secure-with-cloudflared/" rel="nofollow">accelerate-and-secure-with-cloudflared</a></td>
+<td>教你使用 Cloudflare Argo Tunnel(cloudflared) 加速和保护网站。</td>
+<td></td>
+<td>有效中</td>
+</tr>
+<tr>
+<td><a href="https://www.owenyoung.com/blog/jsonbin/" rel="nofollow">jsonbin</a></td>
+<td>在 Cloudflare Workers 部署 JSON as a Storage 服务。</td>
+<td></td>
+<td>有效中</td>
+</tr>
+<tr>
+<td><a href="https://www.owenyoung.com/blog/cronbin/" rel="nofollow">cronbin</a></td>
+<td>在 Cloudflare Workers 部署带 Dashboard 的 Cron 服务。</td>
+<td></td>
+<td>有效中</td>
+</tr>
+<tr>
+<td><a href="https://xiaowangye.org/posts/using-cloudflare-worker-proxy-google/" rel="nofollow">using-cloudflare-worker-proxy-google</a></td>
+<td>使用 Cloudflare Worker 代理 Google 站点。</td>
+<td></td>
+<td>有效中</td>
+</tr>
+<tr>
+<td><a href="https://jiapan.me/2023/Use-Cloudflare-Zero-Trust-protect-your-web-applications/" rel="nofollow">Use-Cloudflare-Zero-Trust-protect-your-web-applications</a></td>
+<td>使用 Cloudflare Zero Trust 保护 Web 应用。</td>
+<td></td>
+<td>有效中</td>
+</tr>
+<tr>
+<td><a href="https://juejin.cn/post/7306723921717166131" rel="nofollow">Nextjs-app-router-with-cloudflare-r2</a></td>
+<td>如何在 Next.js 13 的 app/ 目录中使用 Cloudflare R2 存储。</td>
+<td></td>
+<td>有效中</td>
+</tr>
+<tr>
+<td><a href="https://josephcz.xyz/technology/network/cloudflare-webssh-zerotrust/" rel="nofollow">cloudflare-webssh-zerotrust</a></td>
+<td>使用 Cloudflare ZeroTrust 搭建 WebSSH。</td>
+<td></td>
+<td>有效中</td>
+</tr>
+<tr>
+<td><a href="https://www.cloudflare.com/zh-cn/products/turnstile/" rel="nofollow">免费的 CAPTCHA 替代品</a></td>
+<td>官方出品，免费的 CAPTCHA 替代品。</td>
+<td></td>
+<td>有效中</td>
+</tr>
+<tr>
+<td><a href="https://liujiacai.net/blog/2024/05/07/telegram-bot-functions/" rel="nofollow">通过 Cloudflare 页面函数向 Telegram 发消息</a></td>
+<td>利用页面函数作为 GitHub Webhook 地址，将事件转发到 Telegram 频道。</td>
+<td></td>
+<td>有效中</td>
+</tr>
+<tr>
+<td><a href="https://mabbs.github.io/2024/07/03/ai-summary.html" rel="nofollow">使用Cloudflare Workers制作博客AI摘要</a></td>
+<td>使用 Cloudflare Workers + Workers AI + D1 数据库实现博客 AI 摘要。</td>
+<td></td>
+<td>有效中</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2>其他</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>名称</th>
+<th>特性</th>
+<th>在线地址</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://chrome.google.com/webstore/detail/silk-privacy-pass-client/ajhmfdgkijocedmfjonnpjfojldioehi" rel="nofollow">silk-privacy-pass-client</a></td>
+<td>Cloudflare 官方插件，解决频繁人机验证问题。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/vvbbnn00/WARP-Clash-API">WARP-Clash-API</a></td>
+<td>通过订阅使用 WARP+，支持 Clash、Shadowrocket，内置流量刷取和 IP 选优，支持 Docker compose 一键部署。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/ccbikai/ip-api">ip-api</a></td>
+<td>利用 Cloudflare Workers 快速搭建 IP 地址和地理位置信息接口。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/TBXark/ChatGPT-Telegram-Workers">ChatGPT-Telegram-Workers</a></td>
+<td>轻松部署 Cloudflare Workers 上的 Telegram ChatGPT 机器人，带详细教程。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yllhwa/RSSWorker">RSSWorker</a></td>
+<td>轻量级 RSS 订阅工具，部署于 Cloudflare Worker。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/ifyour/deeplx-for-cloudflare">deeplx-for-cloudflare</a></td>
+<td>在 Cloudflare 部署 DeepLX 翻译服务。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/fwqaaq/Cloudflare-No-Tracked">Cloudflare-No-Tracked</a></td>
+<td>去除 B 站、小红书跟踪链接，支持 Telegram bot 版本。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://dnschecker.org/" rel="nofollow">dnschecker</a></td>
+<td>Cloudflare 官方推荐的域名解析检测工具。</td>
+<td></td>
+<td>有效中</td>
+</tr>
+<tr>
+<td><a href="https://www.comparitech.com/privacy-security-tools/blockedinchina/" rel="nofollow">blockedinchina</a></td>
+<td>Cloudflare 官方推荐的检测域名是否被墙工具。</td>
+<td></td>
+<td>有效中</td>
+</tr>
+<tr>
+<td><a href="https://www.prisma.io/docs/orm/overview/databases/cloudflare-d1" rel="nofollow">prisma-with-cloudflare-d1</a></td>
+<td>介绍如何使用 Prisma 与 Cloudflare D1 数据库交互。</td>
+<td></td>
+<td>有效中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/ckt1031/cohere2openai-cf-worker">cohere2openai-cf-worker</a></td>
+<td>Cloudflare Worker 将 Cohere API 转换为 OpenAI API，易部署。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/beanqi/cohere2openai">cohere2openai</a></td>
+<td>Cloudflare Worker 将 Cohere API 转换为 OpenAI API。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/minlearn/locnode">locnode</a></td>
+<td>自建轻量联合社区，首款能在 Cloudflare 运行的轻量联合社区。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/fatwang2/siri-ultra">Siri Ultra</a></td>
+<td>运行于 Cloudflare Workers 的助手，支持任意 LLM 模型。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/jiacai2050/blog-snippets/blob/main/cloudflare/cobalt.js">cobalt page function</a></td>
+<td>利用页面函数调用 cobalt 接口，获取视频下载地址。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://radar.cloudflare.com/scan" rel="nofollow">CloudFlare Radar</a></td>
+<td>查看网站技术栈。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/oiov/wr.do">wr.do</a></td>
+<td>基于 Cloudflare 的多租户 DNS 分发系统，免费提供 DNS 解析和短链接生成。</td>
+<td><a href="https://wr.do" rel="nofollow">https://wr.do</a></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/seadfeng/cloudflare-proxy-sites">cloudflare-proxy-sites</a></td>
+<td>Cloudflare Workers web proxy，支持二级域名访问。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+<tr>
+<td><a href="https://github.com/7Sageer/sublink-worker">sublink-worker</a></td>
+<td>部署在 Cloudflare Worker 上的轻量级代理节点订阅转换工具，支持多协议订阅链接转换和自定义规则。</td>
+<td></td>
+<td>维护中</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<h2>教程</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>名称</th>
+<th>特性</th>
+<th>在线地址</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/zgimszhd61/cloudflare-quickstart">cloudflare-quickstart</a></td>
+<td>Cloudflare Workers 快速入门指南。</td>
+<td></td>
+<td>更新中</td>
+</tr>
+<tr>
+<td><a href="https://dmesg.app/cloudflare" rel="nofollow">cloudflare-tunnel</a></td>
+<td>关于使用 Cloudflare Zero Trust 创建大内网及解决被墙服务器问题的技术博客。</td>
+<td></td>
+<td>更新中</td>
+</tr>
+<tr>
+<td><a href="https://cleanclip.cc/zh/developer/cloudflare-worker-gmail-resend-enterprise-email" rel="nofollow">cloudflare-worker-gmail-resend-enterprise-email</a></td>
+<td>Cloudflare + Gmail + Resend 十分钟搭建免费企业邮箱。</td>
+<td></td>
+<td>更新中</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://mgt.xx.kg/">MGTime</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if("01/01/2025"!=""){
+    var startSite=new Date("01/01/2025");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.disabled=true;
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","fjvi/note");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+
+
+</script>
+<script src='../assets/ArticleTOC.js'></script><script src='../assets/backtop.js'></script><script src='../assets/lightbox.js'></script><script src='../assets/imgca.js'></script>
+
+</html>
