@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="../favicon.ico"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="## ✅ NavBox项目图标管理系统介绍
+
+### 🚀 **智能多级获取策略**
+
+- **Google服务** - 快速主流覆盖
+- **网站直接获取** - 补全缺失图标
+- **DuckDuckGo** - 最终保障
+- **KV缓存** - 极速重复访问
+
+### 🎨 **优雅的备用方案**
+
+- **彩色尾字母** - 美观的备用图标
+- **暖色系配色** - 舒适的视觉效果
+- **emoji支持** - 完整的字符兼容
+
+### ⚡ **性能优化**
+
+- **全球CDN加速**
+- **浏览器缓存**
+- **KV内存缓存**
+
+## 📊 系统优势：
+
+1.  **高覆盖率** - 三重保障几乎覆盖所有网站
+2.  **快速响应** - 缓存机制确保极速加载
+3.  **优雅降级** - 永远不会显示破碎图标
+4.  **易于维护** - 清晰的代码结构
+
+## 🎯 下一步建议：
+
+当您有时间时，可以考虑：
+
+- 添加图标获取成功率统计
+- 实现图标手动刷新功能
+- 添加批量预加载优化
+
+**现在您的导航网站已经是一个图标覆盖全面、用户体验优秀的完整产品了！**
+
+有任何新需求或问题，随时找我！祝使用愉快！ 😊
+
+kv读取次数会算入账号的worker总次数吗
+
+**不会！** KV 读取次数是独立计算的，不算入 Worker 执行次数。
+
+## Cloudflare 计费分离：
+
+### 🔢 **独立计数：**
+
+- **Workers 执行次数**：每次 Functions/Worker 调用
+- **KV 读取次数**：每次 `env.ICON_CACHE.get()` 调用
+- **KV 写入次数**：每次 `env.ICON_CACHE.put()` 调用
+- **KV 删除次数**：每次 `env.ICON_CACHE.delete()` 调用
+
+### 📊 **免费额度：**
+
+```markdown
+Workers: 每天 100,000 次请求
+KV 读取: 每天 100,000 次
+KV 写入: 每天 1,000 次
+KV 删除: 每天 1,000 次
+存储空间: 1 GB
+```
+
+## 您的使用情况分析：
+
+### 当前优化后的流程：
+
+```markdown
+用户访问 → Functions执行(1次) → KV读取(1次) →
+├─ 缓存命中 → 直接返回（只有1次KV读取）
+├─ 缓存未命中 → 外部获取 → KV写入(1次) → 返回
+```
+
+### 实际消耗估算：
+
+假设每天 1,000 次访问：
+
+- **Workers 执行**：≈ 1,000 次
+- **KV 读取**：≈ 1,000 次
+- **KV 写入**：只在新图标时发生 ≈ 10-50 次
+
+### 对比免费额度：
+
+```markdown
+Workers: 1,000 / 100,000 = 1% 使用率
+KV读取: 1,000 / 100,000 = 1% 使用率
+KV写入: 50 / 1,000 = 5% 使用率
+```
+
+## 💡 结论：
+
+**完全在免费额度内！** 您的使用量距离限制还很远，可以放心使用。
+
+即使流量增长10倍，也还在免费范围内！🎯$$$$$$$">
+<meta property="og:title" content="NavBox项目图标管理系统介绍">
+<meta property="og:description" content="## ✅ NavBox项目图标管理系统介绍
+
+### 🚀 **智能多级获取策略**
+
+- **Google服务** - 快速主流覆盖
+- **网站直接获取** - 补全缺失图标
+- **DuckDuckGo** - 最终保障
+- **KV缓存** - 极速重复访问
+
+### 🎨 **优雅的备用方案**
+
+- **彩色尾字母** - 美观的备用图标
+- **暖色系配色** - 舒适的视觉效果
+- **emoji支持** - 完整的字符兼容
+
+### ⚡ **性能优化**
+
+- **全球CDN加速**
+- **浏览器缓存**
+- **KV内存缓存**
+
+## 📊 系统优势：
+
+1.  **高覆盖率** - 三重保障几乎覆盖所有网站
+2.  **快速响应** - 缓存机制确保极速加载
+3.  **优雅降级** - 永远不会显示破碎图标
+4.  **易于维护** - 清晰的代码结构
+
+## 🎯 下一步建议：
+
+当您有时间时，可以考虑：
+
+- 添加图标获取成功率统计
+- 实现图标手动刷新功能
+- 添加批量预加载优化
+
+**现在您的导航网站已经是一个图标覆盖全面、用户体验优秀的完整产品了！**
+
+有任何新需求或问题，随时找我！祝使用愉快！ 😊
+
+kv读取次数会算入账号的worker总次数吗
+
+**不会！** KV 读取次数是独立计算的，不算入 Worker 执行次数。
+
+## Cloudflare 计费分离：
+
+### 🔢 **独立计数：**
+
+- **Workers 执行次数**：每次 Functions/Worker 调用
+- **KV 读取次数**：每次 `env.ICON_CACHE.get()` 调用
+- **KV 写入次数**：每次 `env.ICON_CACHE.put()` 调用
+- **KV 删除次数**：每次 `env.ICON_CACHE.delete()` 调用
+
+### 📊 **免费额度：**
+
+```markdown
+Workers: 每天 100,000 次请求
+KV 读取: 每天 100,000 次
+KV 写入: 每天 1,000 次
+KV 删除: 每天 1,000 次
+存储空间: 1 GB
+```
+
+## 您的使用情况分析：
+
+### 当前优化后的流程：
+
+```markdown
+用户访问 → Functions执行(1次) → KV读取(1次) →
+├─ 缓存命中 → 直接返回（只有1次KV读取）
+├─ 缓存未命中 → 外部获取 → KV写入(1次) → 返回
+```
+
+### 实际消耗估算：
+
+假设每天 1,000 次访问：
+
+- **Workers 执行**：≈ 1,000 次
+- **KV 读取**：≈ 1,000 次
+- **KV 写入**：只在新图标时发生 ≈ 10-50 次
+
+### 对比免费额度：
+
+```markdown
+Workers: 1,000 / 100,000 = 1% 使用率
+KV读取: 1,000 / 100,000 = 1% 使用率
+KV写入: 50 / 1,000 = 5% 使用率
+```
+
+## 💡 结论：
+
+**完全在免费额度内！** 您的使用量距离限制还很远，可以放心使用。
+
+即使流量增长10倍，也还在免费范围内！🎯$$$$$$$">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mgt.xx.kg/post/NavBox-xiang-mu-tu-biao-guan-li-xi-tong-jie-shao.html">
+<meta property="og:image" content="avatar.svg">
+<title>NavBox项目图标管理系统介绍</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+html { background: #d2d4d6; }
+body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto; padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25; border-radius: 10px; background: rgba(10, 100, 130, 0.08); box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);  overflow: auto;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:1.6em;font-weight:bold;color: #1f85c9;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+.markdown-body h1{font-size: 1.4em;}
+.markdown-body h2{font-size: 1.2em;}
+.markdown-body h3{font-size: 1em;}
+#footer {margin-top: 30px; text-align: center; font-size: small;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 580px) {
+     body {margin:0;padding: 12px;box-shadow: none;}
+    .postTitle{font-size:1.4em; color: #1f85c9;}
+}
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">NavBox项目图标管理系统介绍</h1>
+<div class="title-right">
+    <a href="https://mgt.xx.kg" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/fjvi/note/issues/39" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h2>✅ NavBox项目图标管理系统介绍</h2>
+<h3>🚀 <strong>智能多级获取策略</strong></h3>
+<ul>
+<li><strong>Google服务</strong> - 快速主流覆盖</li>
+<li><strong>网站直接获取</strong> - 补全缺失图标</li>
+<li><strong>DuckDuckGo</strong> - 最终保障</li>
+<li><strong>KV缓存</strong> - 极速重复访问</li>
+</ul>
+<h3>🎨 <strong>优雅的备用方案</strong></h3>
+<ul>
+<li><strong>彩色尾字母</strong> - 美观的备用图标</li>
+<li><strong>暖色系配色</strong> - 舒适的视觉效果</li>
+<li><strong>emoji支持</strong> - 完整的字符兼容</li>
+</ul>
+<h3>⚡ <strong>性能优化</strong></h3>
+<ul>
+<li><strong>全球CDN加速</strong></li>
+<li><strong>浏览器缓存</strong></li>
+<li><strong>KV内存缓存</strong></li>
+</ul>
+<h2>📊 系统优势：</h2>
+<ol>
+<li><strong>高覆盖率</strong> - 三重保障几乎覆盖所有网站</li>
+<li><strong>快速响应</strong> - 缓存机制确保极速加载</li>
+<li><strong>优雅降级</strong> - 永远不会显示破碎图标</li>
+<li><strong>易于维护</strong> - 清晰的代码结构</li>
+</ol>
+<h2>🎯 下一步建议：</h2>
+<p>当您有时间时，可以考虑：</p>
+<ul>
+<li>添加图标获取成功率统计</li>
+<li>实现图标手动刷新功能</li>
+<li>添加批量预加载优化</li>
+</ul>
+<p><strong>现在您的导航网站已经是一个图标覆盖全面、用户体验优秀的完整产品了！</strong></p>
+<p>有任何新需求或问题，随时找我！祝使用愉快！ 😊</p>
+<p>kv读取次数会算入账号的worker总次数吗</p>
+<p><strong>不会！</strong> KV 读取次数是独立计算的，不算入 Worker 执行次数。</p>
+<h2>Cloudflare 计费分离：</h2>
+<h3>🔢 <strong>独立计数：</strong></h3>
+<ul>
+<li><strong>Workers 执行次数</strong>：每次 Functions/Worker 调用</li>
+<li><strong>KV 读取次数</strong>：每次 <code class="notranslate">env.ICON_CACHE.get()</code> 调用</li>
+<li><strong>KV 写入次数</strong>：每次 <code class="notranslate">env.ICON_CACHE.put()</code> 调用</li>
+<li><strong>KV 删除次数</strong>：每次 <code class="notranslate">env.ICON_CACHE.delete()</code> 调用</li>
+</ul>
+<h3>📊 <strong>免费额度：</strong></h3>
+<div class="highlight highlight-text-md"><pre class="notranslate">Workers: 每天 100,000 次请求
+KV 读取: 每天 100,000 次
+KV 写入: 每天 1,000 次
+KV 删除: 每天 1,000 次
+存储空间: 1 GB</pre></div>
+<h2>您的使用情况分析：</h2>
+<h3>当前优化后的流程：</h3>
+<div class="highlight highlight-text-md"><pre class="notranslate">用户访问 → Functions执行(1次) → KV读取(1次) →
+├─ 缓存命中 → 直接返回（只有1次KV读取）
+├─ 缓存未命中 → 外部获取 → KV写入(1次) → 返回</pre></div>
+<h3>实际消耗估算：</h3>
+<p>假设每天 1,000 次访问：</p>
+<ul>
+<li><strong>Workers 执行</strong>：≈ 1,000 次</li>
+<li><strong>KV 读取</strong>：≈ 1,000 次</li>
+<li><strong>KV 写入</strong>：只在新图标时发生 ≈ 10-50 次</li>
+</ul>
+<h3>对比免费额度：</h3>
+<div class="highlight highlight-text-md"><pre class="notranslate">Workers: 1,000 / 100,000 = 1% 使用率
+KV读取: 1,000 / 100,000 = 1% 使用率
+KV写入: 50 / 1,000 = 5% 使用率</pre></div>
+<h2>💡 结论：</h2>
+<p><strong>完全在免费额度内！</strong> 您的使用量距离限制还很远，可以放心使用。</p>
+<p>即使流量增长10倍，也还在免费范围内！🎯</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://mgt.xx.kg">MGTime</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if("01/01/2025"!=""){
+    var startSite=new Date("01/01/2025");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.disabled=true;
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","fjvi/note");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
+
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
+
+</script>
+<script src='../assets/ArticleTOC.js'></script><script src='../assets/backtop.js'></script><script src='../assets/lightbox.js'></script><script src='../assets/imgca.js'></script>
+
+</html>

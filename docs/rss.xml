@@ -1,5 +1,98 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTime</title><link>https://mgt.xx.kg</link><description>My good time-我的好时光！</description><copyright>MGTime</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://mgt.xx.kg</link></image><lastBuildDate>Sun, 05 Oct 2025 18:23:37 +0000</lastBuildDate><managingEditor>MGTime</managingEditor><ttl>60</ttl><webMaster>MGTime</webMaster><item><title>托管在Cloudflare的项目</title><link>https://mgt.xx.kg/post/tuo-guan-zai-Cloudflare-de-xiang-mu.html</link><description># 托管在Cloudflare的项目
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTime</title><link>https://mgt.xx.kg</link><description>My good time-我的好时光！</description><copyright>MGTime</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://mgt.xx.kg</link></image><lastBuildDate>Sat, 18 Oct 2025 08:32:48 +0000</lastBuildDate><managingEditor>MGTime</managingEditor><ttl>60</ttl><webMaster>MGTime</webMaster><item><title>NavBox项目图标管理系统介绍</title><link>https://mgt.xx.kg/post/NavBox-xiang-mu-tu-biao-guan-li-xi-tong-jie-shao.html</link><description>## ✅ NavBox项目图标管理系统介绍
+
+### 🚀 **智能多级获取策略**
+
+- **Google服务** - 快速主流覆盖
+- **网站直接获取** - 补全缺失图标
+- **DuckDuckGo** - 最终保障
+- **KV缓存** - 极速重复访问
+
+### 🎨 **优雅的备用方案**
+
+- **彩色尾字母** - 美观的备用图标
+- **暖色系配色** - 舒适的视觉效果
+- **emoji支持** - 完整的字符兼容
+
+### ⚡ **性能优化**
+
+- **全球CDN加速**
+- **浏览器缓存**
+- **KV内存缓存**
+
+## 📊 系统优势：
+
+1.  **高覆盖率** - 三重保障几乎覆盖所有网站
+2.  **快速响应** - 缓存机制确保极速加载
+3.  **优雅降级** - 永远不会显示破碎图标
+4.  **易于维护** - 清晰的代码结构
+
+## 🎯 下一步建议：
+
+当您有时间时，可以考虑：
+
+- 添加图标获取成功率统计
+- 实现图标手动刷新功能
+- 添加批量预加载优化
+
+**现在您的导航网站已经是一个图标覆盖全面、用户体验优秀的完整产品了！**
+
+有任何新需求或问题，随时找我！祝使用愉快！ 😊
+
+kv读取次数会算入账号的worker总次数吗
+
+**不会！** KV 读取次数是独立计算的，不算入 Worker 执行次数。
+
+## Cloudflare 计费分离：
+
+### 🔢 **独立计数：**
+
+- **Workers 执行次数**：每次 Functions/Worker 调用
+- **KV 读取次数**：每次 `env.ICON_CACHE.get()` 调用
+- **KV 写入次数**：每次 `env.ICON_CACHE.put()` 调用
+- **KV 删除次数**：每次 `env.ICON_CACHE.delete()` 调用
+
+### 📊 **免费额度：**
+
+```markdown
+Workers: 每天 100,000 次请求
+KV 读取: 每天 100,000 次
+KV 写入: 每天 1,000 次
+KV 删除: 每天 1,000 次
+存储空间: 1 GB
+```
+
+## 您的使用情况分析：
+
+### 当前优化后的流程：
+
+```markdown
+用户访问 → Functions执行(1次) → KV读取(1次) →
+├─ 缓存命中 → 直接返回（只有1次KV读取）
+├─ 缓存未命中 → 外部获取 → KV写入(1次) → 返回
+```
+
+### 实际消耗估算：
+
+假设每天 1,000 次访问：
+
+- **Workers 执行**：≈ 1,000 次
+- **KV 读取**：≈ 1,000 次
+- **KV 写入**：只在新图标时发生 ≈ 10-50 次
+
+### 对比免费额度：
+
+```markdown
+Workers: 1,000 / 100,000 = 1% 使用率
+KV读取: 1,000 / 100,000 = 1% 使用率
+KV写入: 50 / 1,000 = 5% 使用率
+```
+
+## 💡 结论：
+
+**完全在免费额度内！** 您的使用量距离限制还很远，可以放心使用。
+
+即使流量增长10倍，也还在免费范围内！🎯$$$$$$$</description><guid isPermaLink="true">https://mgt.xx.kg/post/NavBox-xiang-mu-tu-biao-guan-li-xi-tong-jie-shao.html</guid><pubDate>Sat, 18 Oct 2025 08:32:16 +0000</pubDate></item><item><title>托管在Cloudflare的项目</title><link>https://mgt.xx.kg/post/tuo-guan-zai-Cloudflare-de-xiang-mu.html</link><description># 托管在Cloudflare的项目
 ⛅️ 精选的 Cloudflare 工具、开源项目、指南、博客和其他资源列表。
 
 ## 图床
