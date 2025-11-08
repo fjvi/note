@@ -13,6 +13,5 @@ document.getElementById('countrycode').options.add(option, 0);
 在验证网页按F12进入开发者模式，选择控制台(Consol)选项，填入如下代码，按回车
 
 ```
-<option value="+1">United States +1</option>
 <option value="+86">China +86</option>
 ```
