@@ -1,5 +1,22 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTime</title><link>https://mgt.xx.kg</link><description>My good time-我的好时光！</description><copyright>MGTime</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://mgt.xx.kg</link></image><lastBuildDate>Sat, 08 Nov 2025 16:59:12 +0000</lastBuildDate><managingEditor>MGTime</managingEditor><ttl>60</ttl><webMaster>MGTime</webMaster><item><title>Github没有中国区+86的解决办法</title><link>https://mgt.xx.kg/post/Github-mei-you-zhong-guo-qu-%2B86-de-jie-jue-ban-fa.html</link><description>#### Github没有中国区+86的解决办法
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>MGTime</title><link>https://mgt.xx.kg</link><description>My good time-我的好时光！</description><copyright>MGTime</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>avatar.svg</url><title>avatar</title><link>https://mgt.xx.kg</link></image><lastBuildDate>Sun, 09 Nov 2025 16:18:39 +0000</lastBuildDate><managingEditor>MGTime</managingEditor><ttl>60</ttl><webMaster>MGTime</webMaster><item><title>免费图库</title><link>https://mgt.xx.kg/post/mian-fei-tu-ku.html</link><description># 免费图库
+
+下面都是图库网站，提供免费的商业级高清晰度图片下载。
+
+- [Unsplash](https://unsplash.com/)
+- [Pexels](https://www.pexels.com/)
+- [Gratisography](https://gratisography.com/)
+- [picjumbo](https://picjumbo.com/)
+- [Pixabay](https://pixabay.com/)
+- [Canva](https://www.canva.com/photos/free/)
+- [reshot](https://www.reshot.com/)
+- [rawpixel](https://www.rawpixel.com/)
+- [Morguefile](https://morguefile.com/)
+- [pxhere](https://pxhere.com/)
+- [ISO Republic](https://isorepublic.com/)
+- [Free Stock Photos](https://taken.photos/)
+- [泼辣有图](http://www.polayoutu.com)
+$$$$$$$</description><guid isPermaLink="true">https://mgt.xx.kg/post/mian-fei-tu-ku.html</guid><pubDate>Sun, 09 Nov 2025 16:18:11 +0000</pubDate></item><item><title>Github没有中国区+86的解决办法</title><link>https://mgt.xx.kg/post/Github-mei-you-zhong-guo-qu-%2B86-de-jie-jue-ban-fa.html</link><description>#### Github没有中国区+86的解决办法
 
 方法1.  在验证网页按F12进入开发者模式，选择控制台(Consol)选项，填入如下代码，按回车。
 
