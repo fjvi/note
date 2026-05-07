@@ -41,8 +41,8 @@ function toggleTOC() {
        tocElement.classList.toggle('show');
        tocIcon.classList.toggle('active');
        tocIcon.innerHTML = tocElement.classList.contains('show') 
-           : '<svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>'
-           ? '<svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>';
+           ? '<svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>'
+           : '<svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>';
    }
 }
 
@@ -75,10 +75,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
        .toc {
            position: fixed;
-           top: 20px;
+           bottom: 80px;
            right: 20px;
            width: 250px;
-           max-height: 80vh;
+           max-height: 70vh;
            background-color: var(--toc-bg);
            border: 1px solid var(--toc-border);
            border-radius: 6px;
@@ -86,8 +86,8 @@ document.addEventListener("DOMContentLoaded", function() {
            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
            overflow-y: auto;
            z-index: 1000;
-           opacity: 1;
-           visibility: visible;
+           opacity: 0;
+           visibility: hidden;
            transform: translateY(20px);
            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
            backdrop-filter: blur(5px);
