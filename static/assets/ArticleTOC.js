@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function() {
            overflow-y: auto;
            z-index: 1000;
            opacity: 1;
-           visibility: hidden;
+           visibility: visible;
            transform: translateY(20px);
            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
            backdrop-filter: blur(5px);
