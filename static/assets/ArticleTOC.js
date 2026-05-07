@@ -92,9 +92,9 @@ document.addEventListener("DOMContentLoaded", function() {
            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
            backdrop-filter: blur(5px);
        }
-       .toc.close {
-           opacity: 0;
-           visibility: hidden;
+       .toc.show {
+           opacity: 1;
+           visibility: visible;
            transform: translateY(0);
        }
        .toc a {
