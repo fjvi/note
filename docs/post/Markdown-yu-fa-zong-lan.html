@@ -10,54 +10,49 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="markdown测试页面
-============
+<meta name="description" content="# Markdown语法总览
+[original](https://mgt.xx.kg/post/Markdown-yu-fa-zong-lan.html)
 
-[](https://blog.meekdai.com/ '首页')[](https://github.com/Meekdai/meekdai.github.io/issues/4 'Issue')[](https://blog.meekdai.com/post/markdown-ce-shi-ye-mian.html '切换主题')
+## markdown测试页面
 
 这是一个markdown格式的测试页面，也是个人经常会使用的格式记录。
 
-Static Badge
-------------
+## Static Badge
 
-```md
+```
 ![](https://img.shields.io/badge/参考页面-orange)
 ```
 
-[![](https://camo.githubusercontent.com/d807703912e2569aebe8076458386a85b94e6d197e973b1326b2084f4d51c249/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2545352538462538322545382538302538332545392541312542352545392539442541322d6f72616e6765)](https://camo.githubusercontent.com/d807703912e2569aebe8076458386a85b94e6d197e973b1326b2084f4d51c249/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2545352538462538322545382538302538332545392541312542352545392539442541322d6f72616e6765)
+[![](https://images.weserv.nl/?url=https%3A%2F%2Fcamo.githubusercontent.com%2Fd807703912e2569aebe8076458386a85b94e6d197e973b1326b2084f4d51c249%2F68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2545352538462538322545382538302538332545392541312542352545392539442541322d6f72616e6765)](https://camo.githubusercontent.com/d807703912e2569aebe8076458386a85b94e6d197e973b1326b2084f4d51c249/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2545352538462538322545382538302538332545392541312542352545392539442541322d6f72616e6765)
 
-标题
---
+## 标题
 
-```md
+```
 # H1
 ## H2
 ### H3
 #### H4
 ```
 
-强调
---
+## 强调
 
-```md
+```
 今天的天气真好啊，可以吃**冰激凌**吗？
 ```
 
-今天的天气真好啊，可以吃**冰激凌**吗？
+今天的天气真好啊，可以吃 **冰激凌** 吗？
 
-删除横线
-----
+## 删除横线
 
-```md
+```
 今天的天气真好啊，可以吃~~冰激凌~~吗？
 ```
 
-今天的天气真好啊，可以吃~冰激凌~吗？
+今天的天气真好啊，可以吃 冰激凌 吗？
 
-列表
---
+## 列表
 
-```md
+```
 1. 看电视
 2. 吃饭
 3. 睡觉
@@ -71,12 +66,11 @@ Static Badge
 2.  吃饭
 3.  睡觉
 
-*   乒乓球
-*   篮球
-*   羽毛球
+-   乒乓球
+-   篮球
+-   羽毛球
 
-代码高亮
-----
+## 代码高亮
 
 \`\`\`python  
 import request  
@@ -86,7 +80,7 @@ time.sleep\_ms(1000)
 print('Hello World')  
 \`\`\`
 
-```python
+```
 import request
 import time
 
@@ -94,31 +88,26 @@ time.sleep_ms(1000)
 print('Hello World')
 ```
 
-链接
---
+## 链接
 
-```md
+```
 [我的博客](https://meekdai.github.io)
 ```
 
 [我的博客](https://meekdai.github.io/)
 
-图片
---
+## 图片
 
-```md
+```
 ![这是我的头像PNG](https://fjvi.github.io/note/favicon.ico)
 ![这是我的头像SVG](https://fjvi.github.io/note/favicon.ico)
 ```
 
-![这是我的头像PNG](https://fjvi.github.io/note/favicon.ico)
+[![这是我的头像SVG](https://camo.githubusercontent.com/4b47cbd8727290be3af77a90b8a4f214763173cf6e26d9736150a33dc295e257/68747470733a2f2f666a76692e6769746875622e696f2f6e6f74652f66617669636f6e2e69636f)](https://fjvi.github.io/note/favicon.ico)
 
-[![这是我的头像SVG](https://fjvi.github.io/note/favicon.ico)](https://fjvi.github.io/note/favicon.ico)
+## 表格
 
-表格
---
-
-```md
+```
 | Table Heading 1 | Table Heading 2 | Center align    | Right align     | Table Heading 5 |
 | :-------------- | :-------------- | :-------------: | --------------: | :-------------- |
 | Item 1          | Item 2          | Item 3          | Item 4          | Item 5          |
@@ -132,34 +121,31 @@ print('Hello World')
 | Item 1 | Item 2 | Item 3 | Item 4 | Item 5 |
 | Item 1 | Item 2 | Item 3 | Item 4 | Item 5 |
 
-水平线
----
+## 水平线
 
-```md
+```
 ---
 我在2个水平线中间
 ***
 ```
 
-* * *
+---
 
 我在2个水平线中间
 
-* * *
+---
 
-引用
---
+## 引用
 
-```md
-> 落霞与孤鹜齐飞，秋水共长天一色。《滕王阁序》--王勃 
+```
+> 落霞与孤鹜齐飞，秋水共长天一色。《滕王阁序》--王勃
 ```
 
 > 落霞与孤鹜齐飞，秋水共长天一色。《滕王阁序》--王勃
 
-对比
---
+## 对比
 
-```diff
+```
 + this text is highlighted in green
 - this text is highlighted in red
 ```
@@ -169,13 +155,11 @@ print('Hello World')
 + this text is highlighted in green
 - this text is highlighted in red
 \`\`\`
-
 ```
 
-字体颜色
-----
+## 字体颜色
 
-```css
+```
 Some text in green! 123
 ```
 
@@ -183,14 +167,13 @@ Some text in green! 123
 \`\`\`CSS
 Some text in green! 123
 \`\`\`
-
 ```
 
-```p4
+```
 Some text in blue! 123
 ```
 
-```mint
+```
 Some text in blue with additional keyword highlighting! 123
 ```
 
@@ -202,10 +185,9 @@ Some text in blue! 123
 \`\`\`Mint
 Some text in blue with additional keyword highlighting! 123
 \`\`\`
-
 ```
 
-```json
+```
 Some text highlighted in red! 123
 ```
 
@@ -213,41 +195,39 @@ Some text highlighted in red! 123
 \`\`\`JSON
 Some text highlighted in red! 123
 \`\`\`
-
 ```
 
-HTML tricks
------------
+## HTML tricks
 
 Monospaced text
 
-```html
+```
 <samp>Monospaced text</samp>
 ```
 
-* * *
+---
 
 Underlined text
 
-```html
+```
 <ins>Underlined text</ins>
 ```
 
-* * *
+---
 
-<table role='table'><tbody><tr><td>Boxed text</td></tr></tbody></table>
+Boxed text
 
-```html
+```
 <table><tr><td>Boxed text</td></tr></table>
 ```
 
-* * *
+---
 
 Item summary with dropdown
 
-Dropdown content (supports **markdown** ~yay!~)
+Dropdown content (supports **markdown** yay!)
 
-```json
+```
 {
   awesome: 'true'
 }
@@ -265,121 +245,105 @@ Dropdown content (supports \*\*markdown\*\* ~~yay!~~)
 }
 \`\`\`
 </details>
-
 ```
 
-* * *
+---
 
 **_Italic-bold_**
 
 ```
 __*Italic-bold*__
-
 ```
 
-* * *
+---
 
 SuperscriptTM
 
 ```
 Superscript<sup>TM</sup>
-
 ```
 
-* * *
+---
 
-Superscript-italic_tm_
+Superscript-italic\_tm\_
 
 ```
 Superscript-italic<sup>*tm*</sup>
-
 ```
 
-* * *
+---
 
 Subscriptx
 
 ```
 Subscript<sub>x</sub>
-
 ```
 
-* * *
+---
 
-Subscript-bold**min**
+Subscript-bold **min**
 
 ```
 Subscript-bold<sub>**min**</sub>
-
 ```
 
-* * *
+---
 
-~**_Italic-bold-strikethrough_**~
+**_Italic-bold-strikethrough_**
 
 ```
 ~~__*Italic-bold-strikethrough*__~~
-
 ```
 
-参考
---
+## 参考
 
 更多GitHub Markdown 语法参考：
-
-1.  [https://github.com/Olwiba/Kickass-markdown/](https://github.com/Olwiba/Kickass-markdown/)
-2.  [https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax](https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
 
 ❤️ 转载文章请注明出处，谢谢！❤️$$$$$$$">
 <meta property="og:title" content="Markdown语法总览">
-<meta property="og:description" content="markdown测试页面
-============
+<meta property="og:description" content="# Markdown语法总览
+[original](https://mgt.xx.kg/post/Markdown-yu-fa-zong-lan.html)
 
-[](https://blog.meekdai.com/ '首页')[](https://github.com/Meekdai/meekdai.github.io/issues/4 'Issue')[](https://blog.meekdai.com/post/markdown-ce-shi-ye-mian.html '切换主题')
+## markdown测试页面
 
 这是一个markdown格式的测试页面，也是个人经常会使用的格式记录。
 
-Static Badge
-------------
+## Static Badge
 
-```md
+```
 ![](https://img.shields.io/badge/参考页面-orange)
 ```
 
-[![](https://camo.githubusercontent.com/d807703912e2569aebe8076458386a85b94e6d197e973b1326b2084f4d51c249/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2545352538462538322545382538302538332545392541312542352545392539442541322d6f72616e6765)](https://camo.githubusercontent.com/d807703912e2569aebe8076458386a85b94e6d197e973b1326b2084f4d51c249/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2545352538462538322545382538302538332545392541312542352545392539442541322d6f72616e6765)
+[![](https://images.weserv.nl/?url=https%3A%2F%2Fcamo.githubusercontent.com%2Fd807703912e2569aebe8076458386a85b94e6d197e973b1326b2084f4d51c249%2F68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2545352538462538322545382538302538332545392541312542352545392539442541322d6f72616e6765)](https://camo.githubusercontent.com/d807703912e2569aebe8076458386a85b94e6d197e973b1326b2084f4d51c249/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2545352538462538322545382538302538332545392541312542352545392539442541322d6f72616e6765)
 
-标题
---
+## 标题
 
-```md
+```
 # H1
 ## H2
 ### H3
 #### H4
 ```
 
-强调
---
+## 强调
 
-```md
+```
 今天的天气真好啊，可以吃**冰激凌**吗？
 ```
 
-今天的天气真好啊，可以吃**冰激凌**吗？
+今天的天气真好啊，可以吃 **冰激凌** 吗？
 
-删除横线
-----
+## 删除横线
 
-```md
+```
 今天的天气真好啊，可以吃~~冰激凌~~吗？
 ```
 
-今天的天气真好啊，可以吃~冰激凌~吗？
+今天的天气真好啊，可以吃 冰激凌 吗？
 
-列表
---
+## 列表
 
-```md
+```
 1. 看电视
 2. 吃饭
 3. 睡觉
@@ -393,12 +357,11 @@ Static Badge
 2.  吃饭
 3.  睡觉
 
-*   乒乓球
-*   篮球
-*   羽毛球
+-   乒乓球
+-   篮球
+-   羽毛球
 
-代码高亮
-----
+## 代码高亮
 
 \`\`\`python  
 import request  
@@ -408,7 +371,7 @@ time.sleep\_ms(1000)
 print('Hello World')  
 \`\`\`
 
-```python
+```
 import request
 import time
 
@@ -416,31 +379,26 @@ time.sleep_ms(1000)
 print('Hello World')
 ```
 
-链接
---
+## 链接
 
-```md
+```
 [我的博客](https://meekdai.github.io)
 ```
 
 [我的博客](https://meekdai.github.io/)
 
-图片
---
+## 图片
 
-```md
+```
 ![这是我的头像PNG](https://fjvi.github.io/note/favicon.ico)
 ![这是我的头像SVG](https://fjvi.github.io/note/favicon.ico)
 ```
 
-![这是我的头像PNG](https://fjvi.github.io/note/favicon.ico)
+[![这是我的头像SVG](https://camo.githubusercontent.com/4b47cbd8727290be3af77a90b8a4f214763173cf6e26d9736150a33dc295e257/68747470733a2f2f666a76692e6769746875622e696f2f6e6f74652f66617669636f6e2e69636f)](https://fjvi.github.io/note/favicon.ico)
 
-[![这是我的头像SVG](https://fjvi.github.io/note/favicon.ico)](https://fjvi.github.io/note/favicon.ico)
+## 表格
 
-表格
---
-
-```md
+```
 | Table Heading 1 | Table Heading 2 | Center align    | Right align     | Table Heading 5 |
 | :-------------- | :-------------- | :-------------: | --------------: | :-------------- |
 | Item 1          | Item 2          | Item 3          | Item 4          | Item 5          |
@@ -454,34 +412,31 @@ print('Hello World')
 | Item 1 | Item 2 | Item 3 | Item 4 | Item 5 |
 | Item 1 | Item 2 | Item 3 | Item 4 | Item 5 |
 
-水平线
----
+## 水平线
 
-```md
+```
 ---
 我在2个水平线中间
 ***
 ```
 
-* * *
+---
 
 我在2个水平线中间
 
-* * *
+---
 
-引用
---
+## 引用
 
-```md
-> 落霞与孤鹜齐飞，秋水共长天一色。《滕王阁序》--王勃 
+```
+> 落霞与孤鹜齐飞，秋水共长天一色。《滕王阁序》--王勃
 ```
 
 > 落霞与孤鹜齐飞，秋水共长天一色。《滕王阁序》--王勃
 
-对比
---
+## 对比
 
-```diff
+```
 + this text is highlighted in green
 - this text is highlighted in red
 ```
@@ -491,13 +446,11 @@ print('Hello World')
 + this text is highlighted in green
 - this text is highlighted in red
 \`\`\`
-
 ```
 
-字体颜色
-----
+## 字体颜色
 
-```css
+```
 Some text in green! 123
 ```
 
@@ -505,14 +458,13 @@ Some text in green! 123
 \`\`\`CSS
 Some text in green! 123
 \`\`\`
-
 ```
 
-```p4
+```
 Some text in blue! 123
 ```
 
-```mint
+```
 Some text in blue with additional keyword highlighting! 123
 ```
 
@@ -524,10 +476,9 @@ Some text in blue! 123
 \`\`\`Mint
 Some text in blue with additional keyword highlighting! 123
 \`\`\`
-
 ```
 
-```json
+```
 Some text highlighted in red! 123
 ```
 
@@ -535,41 +486,39 @@ Some text highlighted in red! 123
 \`\`\`JSON
 Some text highlighted in red! 123
 \`\`\`
-
 ```
 
-HTML tricks
------------
+## HTML tricks
 
 Monospaced text
 
-```html
+```
 <samp>Monospaced text</samp>
 ```
 
-* * *
+---
 
 Underlined text
 
-```html
+```
 <ins>Underlined text</ins>
 ```
 
-* * *
+---
 
-<table role='table'><tbody><tr><td>Boxed text</td></tr></tbody></table>
+Boxed text
 
-```html
+```
 <table><tr><td>Boxed text</td></tr></table>
 ```
 
-* * *
+---
 
 Item summary with dropdown
 
-Dropdown content (supports **markdown** ~yay!~)
+Dropdown content (supports **markdown** yay!)
 
-```json
+```
 {
   awesome: 'true'
 }
@@ -587,77 +536,66 @@ Dropdown content (supports \*\*markdown\*\* ~~yay!~~)
 }
 \`\`\`
 </details>
-
 ```
 
-* * *
+---
 
 **_Italic-bold_**
 
 ```
 __*Italic-bold*__
-
 ```
 
-* * *
+---
 
 SuperscriptTM
 
 ```
 Superscript<sup>TM</sup>
-
 ```
 
-* * *
+---
 
-Superscript-italic_tm_
+Superscript-italic\_tm\_
 
 ```
 Superscript-italic<sup>*tm*</sup>
-
 ```
 
-* * *
+---
 
 Subscriptx
 
 ```
 Subscript<sub>x</sub>
-
 ```
 
-* * *
+---
 
-Subscript-bold**min**
+Subscript-bold **min**
 
 ```
 Subscript-bold<sub>**min**</sub>
-
 ```
 
-* * *
+---
 
-~**_Italic-bold-strikethrough_**~
+**_Italic-bold-strikethrough_**
 
 ```
 ~~__*Italic-bold-strikethrough*__~~
-
 ```
 
-参考
---
+## 参考
 
 更多GitHub Markdown 语法参考：
-
-1.  [https://github.com/Olwiba/Kickass-markdown/](https://github.com/Olwiba/Kickass-markdown/)
-2.  [https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax](https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
 
 ❤️ 转载文章请注明出处，谢谢！❤️$$$$$$$">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://mgt.xx.kg/post/Markdown-yu-fa-zong-lan.html">
 <meta property="og:image" content="avatar.svg">
 <title>Markdown语法总览</title>
-<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
 
 
 </head>
@@ -711,7 +649,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto;
         </svg>
     </a>
     
-    <a href="https://github.com/fjvi/note/issues/3" target="_blank" class="btn btn-invisible circle" title="Issue">
+    <a href="https://github.com/fjvi/note/issues/45" target="_blank" class="btn btn-invisible circle" title="Issue">
         <svg class="octicon" width="16" height="16">
             <path id="pathIssue" fill-rule="evenodd"></path>
         </svg>
@@ -727,31 +665,37 @@ body{box-sizing: border-box;min-width: 200px;max-width: 960px;margin: 30px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><h1>markdown测试页面</h1>
-<p><a href="https://blog.meekdai.com/" title="首页" rel="nofollow"></a><a href="https://github.com/Meekdai/meekdai.github.io/issues/4" title="Issue" data-hovercard-type="issue" data-hovercard-url="/Meekdai/meekdai.github.io/issues/4/hovercard"></a><a href="https://blog.meekdai.com/post/markdown-ce-shi-ye-mian.html" title="切换主题" rel="nofollow"></a></p>
+<div class="markdown-body" id="postBody"><h1>Markdown语法总览</h1>
+<p><a href="https://mgt.xx.kg/post/Markdown-yu-fa-zong-lan.html" rel="nofollow">original</a></p>
+<h2>markdown测试页面</h2>
 <p>这是一个markdown格式的测试页面，也是个人经常会使用的格式记录。</p>
 <h2>Static Badge</h2>
-<div class="highlight highlight-text-md"><pre class="notranslate"><span class="pl-s">![</span><span class="pl-s">]</span><span class="pl-s">(</span><span class="pl-corl">https://img.shields.io/badge/参考页面-orange</span><span class="pl-s">)</span></pre></div>
-<p><a href="https://camo.githubusercontent.com/d807703912e2569aebe8076458386a85b94e6d197e973b1326b2084f4d51c249/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2545352538462538322545382538302538332545392541312542352545392539442541322d6f72616e6765" rel="nofollow"><img src="https://camo.githubusercontent.com/d807703912e2569aebe8076458386a85b94e6d197e973b1326b2084f4d51c249/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2545352538462538322545382538302538332545392541312542352545392539442541322d6f72616e6765" alt="" style="max-width: 100%;"></a></p>
+<pre class="notranslate"><code class="notranslate">![](https://img.shields.io/badge/参考页面-orange)
+</code></pre>
+<p><a href="https://camo.githubusercontent.com/d807703912e2569aebe8076458386a85b94e6d197e973b1326b2084f4d51c249/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2545352538462538322545382538302538332545392541312542352545392539442541322d6f72616e6765" rel="nofollow"><img src="https://camo.githubusercontent.com/ef958cf5c1158493607796cb85f59d89d8d9548f99d78c32cba2d7b64f000cf7/68747470733a2f2f696d616765732e7765736572762e6e6c2f3f75726c3d687474707325334125324625324663616d6f2e67697468756275736572636f6e74656e742e636f6d25324664383037373033393132653235363961656265383037363435383338366138356239346536643139376539373362313332366232303834663464353163323439253246363837343734373037333361326632663639366436373265373336383639363536633634373332653639366632663632363136343637363532663235343533353235333834363235333833323235343533383235333833303235333833333235343533393235343133313235343233353235343533393235333934343235343133323264366637323631366536373635" alt="" data-canonical-src="https://images.weserv.nl/?url=https%3A%2F%2Fcamo.githubusercontent.com%2Fd807703912e2569aebe8076458386a85b94e6d197e973b1326b2084f4d51c249%2F68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2545352538462538322545382538302538332545392541312542352545392539442541322d6f72616e6765" style="max-width: 100%;"></a></p>
 <h2>标题</h2>
-<div class="highlight highlight-text-md"><pre class="notranslate"><span class="pl-mh"># <span class="pl-en">H1</span></span>
-<span class="pl-mh">## <span class="pl-en">H2</span></span>
-<span class="pl-mh">### <span class="pl-en">H3</span></span>
-<span class="pl-mh">#### <span class="pl-en">H4</span></span></pre></div>
+<pre class="notranslate"><code class="notranslate"># H1
+## H2
+### H3
+#### H4
+</code></pre>
 <h2>强调</h2>
-<div class="highlight highlight-text-md"><pre class="notranslate">今天的天气真好啊，可以吃<span class="pl-s">**</span>冰激凌<span class="pl-s">**</span>吗？</pre></div>
-<p>今天的天气真好啊，可以吃<strong>冰激凌</strong>吗？</p>
+<pre class="notranslate"><code class="notranslate">今天的天气真好啊，可以吃**冰激凌**吗？
+</code></pre>
+<p>今天的天气真好啊，可以吃 <strong>冰激凌</strong> 吗？</p>
 <h2>删除横线</h2>
-<div class="highlight highlight-text-md"><pre class="notranslate">今天的天气真好啊，可以吃<span class="pl-s">~~</span>冰激凌<span class="pl-s">~~</span>吗？</pre></div>
-<p>今天的天气真好啊，可以吃<del>冰激凌</del>吗？</p>
+<pre class="notranslate"><code class="notranslate">今天的天气真好啊，可以吃~~冰激凌~~吗？
+</code></pre>
+<p>今天的天气真好啊，可以吃 冰激凌 吗？</p>
 <h2>列表</h2>
-<div class="highlight highlight-text-md"><pre class="notranslate"><span class="pl-s">1</span><span class="pl-v">.</span> 看电视
-<span class="pl-s">2</span><span class="pl-v">.</span> 吃饭
-<span class="pl-s">3</span><span class="pl-v">.</span> 睡觉
+<pre class="notranslate"><code class="notranslate">1. 看电视
+2. 吃饭
+3. 睡觉
 
-<span class="pl-v">-</span> 乒乓球
-<span class="pl-v">-</span> 篮球
-<span class="pl-v">-</span> 羽毛球</pre></div>
+- 乒乓球
+- 篮球
+- 羽毛球
+</code></pre>
 <ol>
 <li>看电视</li>
 <li>吃饭</li>
@@ -769,25 +713,28 @@ import time</p>
 <p>time.sleep_ms(1000)<br>
 print("Hello World")<br>
 ```</p>
-<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">import</span> <span class="pl-s1">request</span>
-<span class="pl-k">import</span> <span class="pl-s1">time</span>
+<pre class="notranslate"><code class="notranslate">import request
+import time
 
-<span class="pl-s1">time</span>.<span class="pl-c1">sleep_ms</span>(<span class="pl-c1">1000</span>)
-<span class="pl-en">print</span>(<span class="pl-s">"Hello World"</span>)</pre></div>
+time.sleep_ms(1000)
+print("Hello World")
+</code></pre>
 <h2>链接</h2>
-<div class="highlight highlight-text-md"><pre class="notranslate"><span class="pl-s">[</span>我的博客<span class="pl-s">]</span><span class="pl-s">(</span><span class="pl-corl">https://meekdai.github.io</span><span class="pl-s">)</span></pre></div>
+<pre class="notranslate"><code class="notranslate">[我的博客](https://meekdai.github.io)
+</code></pre>
 <p><a href="https://meekdai.github.io/" rel="nofollow">我的博客</a></p>
 <h2>图片</h2>
-<div class="highlight highlight-text-md"><pre class="notranslate"><span class="pl-s">![</span>这是我的头像PNG<span class="pl-s">]</span><span class="pl-s">(</span><span class="pl-corl">https://fjvi.github.io/note/favicon.ico</span><span class="pl-s">)</span>
-<span class="pl-s">![</span>这是我的头像SVG<span class="pl-s">]</span><span class="pl-s">(</span><span class="pl-corl">https://fjvi.github.io/note/favicon.ico</span><span class="pl-s">)</span></pre></div>
-<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/4b47cbd8727290be3af77a90b8a4f214763173cf6e26d9736150a33dc295e257/68747470733a2f2f666a76692e6769746875622e696f2f6e6f74652f66617669636f6e2e69636f"><img src="https://camo.githubusercontent.com/4b47cbd8727290be3af77a90b8a4f214763173cf6e26d9736150a33dc295e257/68747470733a2f2f666a76692e6769746875622e696f2f6e6f74652f66617669636f6e2e69636f" alt="这是我的头像PNG" data-canonical-src="https://fjvi.github.io/note/favicon.ico" style="max-width: 100%;"></a></p>
-<p><a href="https://fjvi.github.io/note/favicon.ico" rel="nofollow"><img src="https://camo.githubusercontent.com/4b47cbd8727290be3af77a90b8a4f214763173cf6e26d9736150a33dc295e257/68747470733a2f2f666a76692e6769746875622e696f2f6e6f74652f66617669636f6e2e69636f" alt="这是我的头像SVG" data-canonical-src="https://fjvi.github.io/note/favicon.ico" style="max-width: 100%;"></a></p>
+<pre class="notranslate"><code class="notranslate">![这是我的头像PNG](https://fjvi.github.io/note/favicon.ico)
+![这是我的头像SVG](https://fjvi.github.io/note/favicon.ico)
+</code></pre>
+<p><a href="https://fjvi.github.io/note/favicon.ico" rel="nofollow"><img src="https://camo.githubusercontent.com/4b47cbd8727290be3af77a90b8a4f214763173cf6e26d9736150a33dc295e257/68747470733a2f2f666a76692e6769746875622e696f2f6e6f74652f66617669636f6e2e69636f" alt="这是我的头像SVG" style="max-width: 100%;"></a></p>
 <h2>表格</h2>
-<div class="highlight highlight-text-md"><pre class="notranslate"><span class="pl-ml">|</span> Table Heading 1 <span class="pl-ml">|</span> Table Heading 2 <span class="pl-ml">|</span> Center align    <span class="pl-ml">|</span> Right align     <span class="pl-ml">|</span> Table Heading 5 <span class="pl-ml">|</span>
-<span class="pl-ml">|</span> :-------------- <span class="pl-ml">|</span> :-------------- <span class="pl-ml">|</span> :-------------: <span class="pl-ml">|</span> --------------: <span class="pl-ml">|</span> :-------------- <span class="pl-ml">|</span>
-<span class="pl-ml">|</span> Item 1          <span class="pl-ml">|</span> Item 2          <span class="pl-ml">|</span> Item 3          <span class="pl-ml">|</span> Item 4          <span class="pl-ml">|</span> Item 5          <span class="pl-ml">|</span>
-<span class="pl-ml">|</span> Item 1          <span class="pl-ml">|</span> Item 2          <span class="pl-ml">|</span> Item 3          <span class="pl-ml">|</span> Item 4          <span class="pl-ml">|</span> Item 5          <span class="pl-ml">|</span>
-<span class="pl-ml">|</span> Item 1          <span class="pl-ml">|</span> Item 2          <span class="pl-ml">|</span> Item 3          <span class="pl-ml">|</span> Item 4          <span class="pl-ml">|</span> Item 5          <span class="pl-ml">|</span></pre></div>
+<pre class="notranslate"><code class="notranslate">| Table Heading 1 | Table Heading 2 | Center align    | Right align     | Table Heading 5 |
+| :-------------- | :-------------- | :-------------: | --------------: | :-------------- |
+| Item 1          | Item 2          | Item 3          | Item 4          | Item 5          |
+| Item 1          | Item 2          | Item 3          | Item 4          | Item 5          |
+| Item 1          | Item 2          | Item 3          | Item 4          | Item 5          |
+</code></pre>
 <markdown-accessiblity-table><table role="table">
 <thead>
 <tr>
@@ -823,35 +770,39 @@ print("Hello World")<br>
 </tbody>
 </table></markdown-accessiblity-table>
 <h2>水平线</h2>
-<div class="highlight highlight-text-md"><pre class="notranslate"><span class="pl-s">---</span>
-<span class="pl-s">我在2个水平线中间</span>
-<span class="pl-s">***</span></pre></div>
+<pre class="notranslate"><code class="notranslate">---
+我在2个水平线中间
+***
+</code></pre>
 <hr>
 <p>我在2个水平线中间</p>
 <hr>
 <h2>引用</h2>
-<div class="highlight highlight-text-md"><pre class="notranslate"><span class="pl-ent"><span class="pl-ent">&gt; </span>落霞与孤鹜齐飞，秋水共长天一色。《滕王阁序》--王勃 </span></pre></div>
+<pre class="notranslate"><code class="notranslate">&gt; 落霞与孤鹜齐飞，秋水共长天一色。《滕王阁序》--王勃
+</code></pre>
 <blockquote>
 <p>落霞与孤鹜齐飞，秋水共长天一色。《滕王阁序》--王勃</p>
 </blockquote>
 <h2>对比</h2>
-<div class="highlight highlight-source-diff"><pre class="notranslate"><span class="pl-mi1"><span class="pl-mi1">+</span> this text is highlighted in green</span>
-<span class="pl-md"><span class="pl-md">-</span> this text is highlighted in red</span></pre></div>
+<pre class="notranslate"><code class="notranslate">+ this text is highlighted in green
+- this text is highlighted in red
+</code></pre>
 <pre class="notranslate"><code class="notranslate">\`\`\`diff
 + this text is highlighted in green
 - this text is highlighted in red
 \`\`\`
-
 </code></pre>
 <h2>字体颜色</h2>
-<div class="highlight highlight-source-css"><pre class="notranslate"><span class="pl-ent">Some</span> <span class="pl-ent">text</span> <span class="pl-ent">in</span> <span class="pl-ent">green</span>! 123</pre></div>
+<pre class="notranslate"><code class="notranslate">Some text in green! 123
+</code></pre>
 <pre class="notranslate"><code class="notranslate">\`\`\`CSS
 Some text in green! 123
 \`\`\`
-
 </code></pre>
-<div class="highlight highlight-source-p4"><pre class="notranslate"><span class="pl-c1">Some</span> <span class="pl-c1">text</span> <span class="pl-c1">in</span> <span class="pl-c1">blue</span>! <span class="pl-c1">123</span></pre></div>
-<div class="highlight highlight-source-mint"><pre class="notranslate"><span class="pl-en">Some</span> <span class="pl-c1">text</span> <span class="pl-c1">in</span> <span class="pl-c1">blue</span> <span class="pl-k">with</span> <span class="pl-c1">additional</span> <span class="pl-c1">keyword</span> <span class="pl-c1">highlighting</span>! <span class="pl-c1">123</span></pre></div>
+<pre class="notranslate"><code class="notranslate">Some text in blue! 123
+</code></pre>
+<pre class="notranslate"><code class="notranslate">Some text in blue with additional keyword highlighting! 123
+</code></pre>
 <pre class="notranslate"><code class="notranslate">\`\`\`P4
 Some text in blue! 123
 \`\`\`
@@ -859,29 +810,32 @@ Some text in blue! 123
 \`\`\`Mint
 Some text in blue with additional keyword highlighting! 123
 \`\`\`
-
 </code></pre>
-<div class="highlight highlight-source-json"><pre class="notranslate"><span class="pl-ii">Some text highlighted in red! 123</span></pre></div>
+<pre class="notranslate"><code class="notranslate">Some text highlighted in red! 123
+</code></pre>
 <pre class="notranslate"><code class="notranslate">\`\`\`JSON
 Some text highlighted in red! 123
 \`\`\`
-
 </code></pre>
 <h2>HTML tricks</h2>
 <p>Monospaced text</p>
-<div class="highlight highlight-text-html-basic"><pre class="notranslate"><span class="pl-kos">&lt;</span><span class="pl-ent">samp</span><span class="pl-kos">&gt;</span>Monospaced text<span class="pl-kos">&lt;/</span><span class="pl-ent">samp</span><span class="pl-kos">&gt;</span></pre></div>
+<pre class="notranslate"><code class="notranslate">&lt;samp&gt;Monospaced text&lt;/samp&gt;
+</code></pre>
 <hr>
 <p>Underlined text</p>
-<div class="highlight highlight-text-html-basic"><pre class="notranslate"><span class="pl-kos">&lt;</span><span class="pl-ent">ins</span><span class="pl-kos">&gt;</span>Underlined text<span class="pl-kos">&lt;/</span><span class="pl-ent">ins</span><span class="pl-kos">&gt;</span></pre></div>
+<pre class="notranslate"><code class="notranslate">&lt;ins&gt;Underlined text&lt;/ins&gt;
+</code></pre>
 <hr>
-<markdown-accessiblity-table><table role="table"><tbody><tr><td>Boxed text</td></tr></tbody></table></markdown-accessiblity-table>
-<div class="highlight highlight-text-html-basic"><pre class="notranslate"><span class="pl-kos">&lt;</span><span class="pl-ent">table</span><span class="pl-kos">&gt;</span><span class="pl-kos">&lt;</span><span class="pl-ent">tr</span><span class="pl-kos">&gt;</span><span class="pl-kos">&lt;</span><span class="pl-ent">td</span><span class="pl-kos">&gt;</span>Boxed text<span class="pl-kos">&lt;/</span><span class="pl-ent">td</span><span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">tr</span><span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">table</span><span class="pl-kos">&gt;</span></pre></div>
+<p>Boxed text</p>
+<pre class="notranslate"><code class="notranslate">&lt;table&gt;&lt;tr&gt;&lt;td&gt;Boxed text&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+</code></pre>
 <hr>
 <p>Item summary with dropdown</p>
-<p>Dropdown content (supports <strong>markdown</strong> <del>yay!</del>)</p>
-<div class="highlight highlight-source-json"><pre class="notranslate">{
-  <span class="pl-ii">awesome: "true"</span>
-}</pre></div>
+<p>Dropdown content (supports <strong>markdown</strong> yay!)</p>
+<pre class="notranslate"><code class="notranslate">{
+  awesome: "true"
+}
+</code></pre>
 <pre class="notranslate"><code class="notranslate">&lt;details&gt;
 &lt;summary&gt;Item summary with dropdown&lt;/summary&gt;
 
@@ -893,44 +847,33 @@ Dropdown content (supports \*\*markdown\*\* ~~yay!~~)
 }
 \`\`\`
 &lt;/details&gt;
-
 </code></pre>
 <hr>
 <p><strong><em>Italic-bold</em></strong></p>
 <pre class="notranslate"><code class="notranslate">__*Italic-bold*__
-
 </code></pre>
 <hr>
 <p>SuperscriptTM</p>
 <pre class="notranslate"><code class="notranslate">Superscript&lt;sup&gt;TM&lt;/sup&gt;
-
 </code></pre>
 <hr>
 <p>Superscript-italic_tm_</p>
 <pre class="notranslate"><code class="notranslate">Superscript-italic&lt;sup&gt;*tm*&lt;/sup&gt;
-
 </code></pre>
 <hr>
 <p>Subscriptx</p>
 <pre class="notranslate"><code class="notranslate">Subscript&lt;sub&gt;x&lt;/sub&gt;
-
 </code></pre>
 <hr>
-<p>Subscript-bold<strong>min</strong></p>
+<p>Subscript-bold <strong>min</strong></p>
 <pre class="notranslate"><code class="notranslate">Subscript-bold&lt;sub&gt;**min**&lt;/sub&gt;
-
 </code></pre>
 <hr>
-<p><del><strong><em>Italic-bold-strikethrough</em></strong></del></p>
+<p><strong><em>Italic-bold-strikethrough</em></strong></p>
 <pre class="notranslate"><code class="notranslate">~~__*Italic-bold-strikethrough*__~~
-
 </code></pre>
 <h2>参考</h2>
 <p>更多GitHub Markdown 语法参考：</p>
-<ol>
-<li><a href="https://github.com/Olwiba/Kickass-markdown/">https://github.com/Olwiba/Kickass-markdown/</a></li>
-<li><a href="https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax">https://docs.github.com/zh/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax</a></li>
-</ol>
 <p>❤️ 转载文章请注明出处，谢谢！❤️</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
